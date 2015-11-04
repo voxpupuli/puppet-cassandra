@@ -90,6 +90,7 @@ class cassandra::opscenter (
     $logging_log_path                               = undef,
     $logging_max_rotate                             = undef,
     $logging_resource_usage_interval                = undef,
+    $orbited_longpoll                               = undef,
     $repair_service_alert_on_repair_failure         = undef,
     $repair_service_cluster_stabilization_period    = undef,
     $repair_service_error_logging_window            = undef,
@@ -495,6 +496,13 @@ class cassandra::opscenter (
     section => 'hadoop',
     setting => 'base_job_tracker_proxy_port',
     value   => $hadoop_base_job_tracker_proxy_port
+  }
+  
+  cassandra::opscenter::setting { 'labs orbited_longpoll':
+    path    => $config_file,
+    section => 'labs',
+    setting => 'orbited_longpoll',
+    value   => $orbited_longpoll
   }
 
   cassandra::opscenter::setting { 'ldap admin_group_name':
