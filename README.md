@@ -1297,6 +1297,13 @@ set as the stomp_interface setting in
 which connects the agent to an OpsCenter instance.
 Default value *undef*
 
+##### `local_interface`
+If the value is changed from the default of *undef* then this is what is
+set as the local_interface setting in
+**/var/lib/datastax-agent/conf/address.yaml**
+which is the address there the local cassandra will be contacted.
+Default value *undef*
+
 ### Class: cassandra::datastax_repo
 
 An optional class that will allow a suitable repository to be configured
