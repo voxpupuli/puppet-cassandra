@@ -7,7 +7,7 @@ HOSTS:
     hypervisor: docker
     docker_cmd: '["/sbin/init"]'
     docker_image_commands:
-      - 'yum -y install gcc tar'
+      - 'yum -y install gcc tar systemd-container initscripts'
 CONFIG:
   type: foss
   log_level: info
