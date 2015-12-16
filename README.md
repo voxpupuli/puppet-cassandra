@@ -2641,3 +2641,9 @@ request to restart the service if the datastax-agent package is upgraded
 [#136](https://github.com/locp/cassandra/issues/136) with some excellent
 help and advice from [@al4](https://github.com/al4).  Thanks to both
 Mladen and Alex for your feedback and constructive collaboration.
+
+* Allowing the setting of the local_interface for the DataStax agent
+  configuration was submitted via a pull request
+  (see [#144](https://github.com/locp/cassandra/pull/144)) by
+  [@Mike-Petersen](https://github.com/Mike-Petersen).
+  

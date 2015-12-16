@@ -1,5 +1,24 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2015-12-16 - Release 1.10.0 ([diff](https://github.com/locp/cassandra/compare/1.9.2...1.10.0))
+
+### Summary
+
+A feature release.
+
+### Features
+
+* Added the ability to allow setting the local_interface for the DataStax
+  agent configuration.
+
+### Bugfixes
+
+* N/A
+
+### Improvements
+
+* N/A
+
 ##2015-11-21 - Release 1.9.2 ([diff](https://github.com/locp/cassandra/compare/1.9.1...1.9.2))
 
 ### Summary
