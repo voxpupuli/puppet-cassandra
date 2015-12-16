@@ -62,6 +62,7 @@ class cassandra::opscenter (
     $service_enable                                 = true,
     $service_ensure                                 = 'running',
     $service_name                                   = 'opscenterd',
+    $service_provider                               = 'init',
     $ldap_admin_group_name                          = undef,
     $ldap_connection_timeout                        = undef,
     $ldap_debug_ssl                                 = undef,
@@ -142,9 +143,10 @@ class cassandra::opscenter (
   }
 
   service { 'opscenterd':
-    ensure => $service_ensure,
-    name   => $service_name,
-    enable => $service_enable,
+    ensure   => $service_ensure,
+    name     => $service_name,
+    enable   => $service_enable,
+    provider => $service_provider
   }
 
   cassandra::opscenter::setting { 'agents agent_certfile':

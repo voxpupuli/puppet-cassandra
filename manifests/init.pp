@@ -139,6 +139,7 @@ class cassandra (
   $service_enable                                       = true,
   $service_ensure                                       = 'running',
   $service_name                                         = 'cassandra',
+  $service_provider                                     = 'init',
   $service_refresh                                      = true,
   $snapshot_before_compaction                           = false,
   $snitch_properties_file
@@ -262,6 +263,7 @@ class cassandra (
         ensure    => $service_ensure,
         name      => $service_name,
         enable    => $service_enable,
+        provider  => $service_provider,
         subscribe => [
           File[$commitlog_directory],
           File[$config_file],
@@ -274,9 +276,10 @@ class cassandra (
       }
     } else {
       service { 'cassandra':
-        ensure => $service_ensure,
-        name   => $service_name,
-        enable => $service_enable
+        ensure   => $service_ensure,
+        name     => $service_name,
+        enable   => $service_enable,
+        provider => $service_provider
       }
     }
   }

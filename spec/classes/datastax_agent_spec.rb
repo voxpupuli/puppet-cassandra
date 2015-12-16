@@ -8,15 +8,16 @@ describe 'cassandra::datastax_agent' do
     it { should have_resource_count(4) }
     it {
       should contain_class('cassandra::datastax_agent').only_with(
-        'defaults_file'   => '/etc/default/datastax-agent',
+        'defaults_file'    => '/etc/default/datastax-agent',
         #'java_home'       => nil,
-        'package_ensure'  => 'present',
-        'package_name'    => 'datastax-agent',
-        'service_ensure'  => 'running',
-        'service_enable'  => true,
-        'service_name'    => 'datastax-agent',
-        'stomp_interface' => nil,
-        'local_interface' => nil,
+        'package_ensure'   => 'present',
+        'package_name'     => 'datastax-agent',
+        'service_ensure'   => 'running',
+        'service_enable'   => true,
+        'service_name'     => 'datastax-agent',
+        'service_provider' => 'init',
+        'stomp_interface'  => nil,
+        'local_interface'  => nil,
       )
     }
     it {
