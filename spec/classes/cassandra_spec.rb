@@ -35,10 +35,6 @@ describe 'cassandra' do
     }
 
     it {
-      should contain_exec("/sbin/chkconfig --add cassandra")
-    }
-
-    it {
       should contain_class('cassandra').only_with(
         'authenticator' => 'AllowAllAuthenticator',
         'authorizer' => 'AllowAllAuthorizer',
@@ -120,7 +116,7 @@ describe 'cassandra' do
         'service_enable' => true,
         'service_ensure' => 'running',
         'service_name' => 'cassandra',
-        'service_provider' => 'init',
+        #'service_provider' => nil,
         'service_refresh' => true,
         'snapshot_before_compaction' => false,
         'snitch_properties_file' => 'cassandra-rackdc.properties',
@@ -168,7 +164,8 @@ describe 'cassandra' do
         :config_file_mode        => '0755',
         :config_path             => '/etc/cassandra',
         :fail_on_non_supported_os => false,
-        :package_name            => 'cassandra'
+        :package_name            => 'cassandra',
+        :service_provider        => 'base'
       }
     end
 
@@ -177,7 +174,11 @@ describe 'cassandra' do
         'mode' => '0755'
       })
     }
-    it { should have_resource_count(9) }
+
+    it {
+      should contain_service('cassandra').with(:provider => 'base')}
+
+    it { should have_resource_count(8) }
   end
 
   context 'Test the dc and rack properties.' do
@@ -257,23 +258,6 @@ describe 'cassandra' do
       should contain_service('cassandra').that_subscribes_to('Ini_setting[rackdc.properties.dc]') 
       should contain_service('cassandra').that_subscribes_to('Ini_setting[rackdc.properties.rack]') 
       should contain_service('cassandra').that_subscribes_to('Package[cassandra]') 
-    }
-  end
-
-  context 'Ensure chkconfig hack is not run if service provider is not init.' do
-    let :facts do
-      {
-        :osfamily => 'Debian'
-      }
-    end
-
-    let :params do
-      {
-        :service_provider => 'redhat'
-      }
-    end
-    it {
-      should_not contain_exec("/sbin/chkconfig --add cassandra")
     }
   end
 end

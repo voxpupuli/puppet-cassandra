@@ -8,7 +8,7 @@ class cassandra::datastax_agent (
   $service_ensure      = 'running',
   $service_enable      = true,
   $service_name        = 'datastax-agent',
-  $service_provider    = 'init',
+  $service_provider    = undef,
   $stomp_interface     = undef,
   $local_interface     = undef,
   ){
@@ -64,9 +64,14 @@ class cassandra::datastax_agent (
     }
   }
 
+  if $service_provider != undef {
+    System {
+      provider => $service_provider
+    }
+  }
+
   service { $service_name:
     ensure   => $service_ensure,
     enable   => $service_enable,
-    provider => $service_provider
   }
 }

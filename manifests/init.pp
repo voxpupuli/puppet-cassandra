@@ -139,7 +139,7 @@ class cassandra (
   $service_enable                                       = true,
   $service_ensure                                       = 'running',
   $service_name                                         = 'cassandra',
-  $service_provider                                     = 'init',
+  $service_provider                                     = undef,
   $service_refresh                                      = true,
   $snapshot_before_compaction                           = false,
   $snitch_properties_file
@@ -257,11 +257,9 @@ class cassandra (
   }
 
   if $package_ensure != 'absent' and $package_ensure != 'purged' {
-    if $::cassandra::service_provider == 'init' {
-      exec { "/sbin/chkconfig --add ${service_name}":
-        unless  => "/sbin/chkconfig --list ${service_name}",
-        require => Package[$cassandra_pkg],
-        before  => Service['cassandra']
+    if $::cassandra::service_provider != undef {
+      Service {
+        provider => $::cassandra::service_provider
       }
     }
 
@@ -270,7 +268,6 @@ class cassandra (
         ensure    => $service_ensure,
         name      => $service_name,
         enable    => $service_enable,
-        provider  => $::cassandra::service_provider,
         subscribe => [
           File[$commitlog_directory],
           File[$config_file],
@@ -286,7 +283,6 @@ class cassandra (
         ensure   => $service_ensure,
         name     => $service_name,
         enable   => $service_enable,
-        provider => $::cassandra::service_provider
       }
     }
   }
