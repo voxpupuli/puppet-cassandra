@@ -15,7 +15,7 @@ describe 'cassandra::datastax_agent' do
         'service_ensure'   => 'running',
         'service_enable'   => true,
         'service_name'     => 'datastax-agent',
-        'service_provider' => 'init',
+        #'service_provider' => nil,
         'stomp_interface'  => nil,
         'local_interface'  => nil,
       )
