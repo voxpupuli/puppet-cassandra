@@ -116,12 +116,6 @@ A basic example is as follows:
 
 ### Upgrading
 
-#### Changes in 1.10.0
-
-The default provider for the cassandra, DataStax Agent and OpsCenter services
-has been set to 'init'.  This can be set with the `service_provider`
-parameter for the respective classes.
-
 #### Changes in 1.9.2
 
 Now that Cassandra 3 is available from the DataStax repositories, there is
@@ -1180,8 +1174,9 @@ The name of the service that runs the Cassandra software.
 Default value 'cassandra'
 
 ##### `service_provider`
-The name of the provider that runs the service.
-Default value 'init'
+The name of the provider that runs the service.  If left as *undef* then the OS family specific default will
+be used, otherwise the specified value will be used instead.
+Default value *undef*
 
 ##### `service_refresh`
 If set to true, changes to the Cassandra config file or the data directories
@@ -1301,8 +1296,9 @@ Is passed to the service reference.
 Default value 'datastax-agent'
 
 ##### `service_provider`
-The name of the provider that runs the service.
-Default value 'init'
+The name of the provider that runs the service.  If left as *undef* then the OS family specific default will
+be used, otherwise the specified value will be used instead.
+Default value *undef*
 
 ##### `stomp_interface`
 If the value is changed from the default of *undef* then this is what is
@@ -2248,8 +2244,9 @@ The name of the service that runs the OpsCenter software.
 Default value 'opscenterd'
 
 ##### `service_provider`
-The name of the provider that runs the service.
-Default value 'init'
+The name of the provider that runs the service.  If left as *undef* then the OS family specific default will
+be used, otherwise the specified value will be used instead.
+Default value *undef*
 
 ##### `spark_base_master_proxy_port`
 This sets the base_master_proxy_port setting in the spark section of the
