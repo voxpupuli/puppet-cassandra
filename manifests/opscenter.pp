@@ -149,9 +149,9 @@ class cassandra::opscenter (
   }
 
   service { 'opscenterd':
-    ensure   => $service_ensure,
-    name     => $service_name,
-    enable   => $service_enable,
+    ensure => $service_ensure,
+    name   => $service_name,
+    enable => $service_enable,
   }
 
   cassandra::opscenter::setting { 'agents agent_certfile':
