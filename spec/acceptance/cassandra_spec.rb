@@ -19,10 +19,10 @@ describe 'cassandra class' do
   cassandra_install_pp = <<-EOS
     if $::osfamily == 'RedHat' {
         $version = '2.2.3-1'
-        $service_provider = 'init'
+        $svc_provider = 'init'
     } else {
         $version = '2.2.3'
-        $service_provider = undef
+        $svc_provider = undef
     }
 
     class { 'cassandra':
@@ -31,7 +31,7 @@ describe 'cassandra class' do
       commitlog_directory_mode    => '0770',
       data_file_directories_mode  => '0770',
       saved_caches_directory_mode => '0770',
-      service_provider            => $service_provider
+      service_provider            => $svc_provider
     }
   EOS
 
@@ -48,10 +48,10 @@ describe 'cassandra class' do
   optutils_install_pp = <<-EOS
     if $::osfamily == 'RedHat' {
         $version = '2.2.3-1'
-        $service_provider = 'init'
+        $svc_provider = 'init'
     } else {
         $version = '2.2.3'
-        $service_provider = undef
+        $svc_provider = undef
     }
 
     class { 'cassandra':
@@ -59,7 +59,7 @@ describe 'cassandra class' do
       commitlog_directory_mode    => '0770',
       data_file_directories_mode  => '0770',
       saved_caches_directory_mode => '0770',
-      service_provider            => $service_provider
+      service_provider            => $svc_provider
     }
 
     class { 'cassandra::optutils':
@@ -79,9 +79,9 @@ describe 'cassandra class' do
 
   datastax_agent_install_pp = <<-EOS
     if $::osfamily == 'RedHat' {
-        $service_provider = 'init'
+        $svc_provider = 'init'
     } else {
-        $service_provider = undef
+        $svc_provider = undef
     }
 
     class { 'cassandra':
@@ -89,7 +89,7 @@ describe 'cassandra class' do
       commitlog_directory_mode    => '0770',
       data_file_directories_mode  => '0770',
       saved_caches_directory_mode => '0770',
-      service_provider            => $service_provider
+      service_provider            => $svc_provider
     }
     include '::cassandra::datastax_agent'
   EOS
@@ -125,9 +125,9 @@ describe 'cassandra class' do
 
   firewall_config_pp = <<-EOS
     if $::osfamily == 'RedHat' {
-        $service_provider = 'init'
+        $svc_provider = 'init'
     } else {
-        $service_provider = undef
+        $svc_provider = undef
     }
 
     class { 'cassandra':
@@ -135,7 +135,7 @@ describe 'cassandra class' do
       commitlog_directory_mode    => '0770',
       data_file_directories_mode  => '0770',
       saved_caches_directory_mode => '0770'
-      service_provider            => $service_provider
+      service_provider            => $svc_provider
     }
 
     include '::cassandra::optutils'
