@@ -17,7 +17,7 @@ bundle install --without development
 status=0
 
 for node in $( bundle exec rake beaker_nodes ); do
-  BEAKER_set=$node bundle exec rake beaker
+  BEAKER_debug=on BEAKER_set=$node bundle exec rake beaker
 
   if [ $? != 0 ]; then
     status=1
