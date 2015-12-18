@@ -186,14 +186,12 @@ class cassandra (
         $cassandra_pkg = $package_name
       }
 
-      if $::operatingsystemmajrelease == 7 {
+      if $::operatingsystemmajrelease == 7 and
+      $::cassandra::service_provider == 'init' {
         exec { "/sbin/chkconfig --add ${service_name}":
           unless  => "/sbin/chkconfig --list ${service_name}",
           require => Package[$cassandra_pkg],
           before  => Service['cassandra']
-        } ->
-        exec { "/sbin/chkconfig ${service_name} off":
-          refreshonly => true,
         }
       }
     }
