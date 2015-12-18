@@ -17,12 +17,16 @@ describe 'cassandra class' do
   end
 
   cassandra_install_pp = <<-EOS
-    if $::osfamily == 'RedHat' {
-        $version = '2.2.3-1'
+    if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == 7 {
         $svc_provider = 'init'
     } else {
-        $version = '2.2.3'
         $svc_provider = undef
+    }
+
+    if $::osfamily == 'RedHat' {
+        $version = '2.2.3-1'
+    } else {
+        $version = '2.2.3'
     }
 
     class { 'cassandra':
@@ -46,12 +50,16 @@ describe 'cassandra class' do
   end
 
   optutils_install_pp = <<-EOS
-    if $::osfamily == 'RedHat' {
-        $version = '2.2.3-1'
+    if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == 7 {
         $svc_provider = 'init'
     } else {
-        $version = '2.2.3'
         $svc_provider = undef
+    }
+
+    if $::osfamily == 'RedHat' {
+        $version = '2.2.3-1'
+    } else {
+        $version = '2.2.3'
     }
 
     class { 'cassandra':
@@ -78,7 +86,7 @@ describe 'cassandra class' do
   end
 
   datastax_agent_install_pp = <<-EOS
-    if $::osfamily == 'RedHat' {
+    if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == 7 {
         $svc_provider = 'init'
     } else {
         $svc_provider = undef
@@ -124,7 +132,7 @@ describe 'cassandra class' do
   end
 
   firewall_config_pp = <<-EOS
-    if $::osfamily == 'RedHat' {
+    if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == 7 {
         $svc_provider = 'init'
     } else {
         $svc_provider = undef
