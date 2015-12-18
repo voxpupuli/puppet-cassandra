@@ -48,6 +48,8 @@ A Puppet module to install and manage Cassandra, DataStax Agent & OpsCenter
 * On Ubuntu systems, optionally replace ```/etc/init.d/cassandra``` with a
   workaround for 
   [CASSANDRA-9822](https://issues.apache.org/jira/browse/CASSANDRA-9822).
+* On CentOS 7 when the `init` service provider is used, then cassandra
+  is added as a system service.
 
 #### What the cassandra::datastax_agent class affects
 
