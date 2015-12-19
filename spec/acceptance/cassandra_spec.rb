@@ -24,9 +24,9 @@ describe 'cassandra class' do
     }
 
     if $::osfamily == 'RedHat' {
-        $version = '2.2.3-1'
+        $version = '2.2.4-1'
     } else {
-        $version = '2.2.3'
+        $version = '2.2.4'
     }
 
     class { 'cassandra':
@@ -57,9 +57,9 @@ describe 'cassandra class' do
     }
 
     if $::osfamily == 'RedHat' {
-        $version = '2.2.3-1'
+        $version = '2.2.4-1'
     } else {
-        $version = '2.2.3'
+        $version = '2.2.4'
     }
 
     class { 'cassandra':
