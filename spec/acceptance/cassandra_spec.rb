@@ -18,9 +18,9 @@ describe 'cassandra class' do
 
   cassandra_install_pp = <<-EOS
     if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == 7 {
-        $svc_provider = 'init'
+        $service_systemd = true
     } else {
-        $svc_provider = undef
+        $service_systemd = false
     }
 
     if $::osfamily == 'RedHat' {
@@ -35,7 +35,7 @@ describe 'cassandra class' do
       commitlog_directory_mode    => '0770',
       data_file_directories_mode  => '0770',
       saved_caches_directory_mode => '0770',
-      service_provider            => $svc_provider
+      service_systemd             => $service_systemd
     }
   EOS
 
@@ -50,12 +50,6 @@ describe 'cassandra class' do
   end
 
   optutils_install_pp = <<-EOS
-    if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == 7 {
-        $svc_provider = 'init'
-    } else {
-        $svc_provider = undef
-    }
-
     if $::osfamily == 'RedHat' {
         $version = '2.2.4-1'
     } else {
@@ -67,7 +61,6 @@ describe 'cassandra class' do
       commitlog_directory_mode    => '0770',
       data_file_directories_mode  => '0770',
       saved_caches_directory_mode => '0770',
-      service_provider            => $svc_provider
     }
 
     class { 'cassandra::optutils':
@@ -86,18 +79,11 @@ describe 'cassandra class' do
   end
 
   datastax_agent_install_pp = <<-EOS
-    if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == 7 {
-        $svc_provider = 'init'
-    } else {
-        $svc_provider = undef
-    }
-
     class { 'cassandra':
       cassandra_9822              => true,
       commitlog_directory_mode    => '0770',
       data_file_directories_mode  => '0770',
       saved_caches_directory_mode => '0770',
-      service_provider            => $svc_provider
     }
     include '::cassandra::datastax_agent'
   EOS
@@ -132,18 +118,11 @@ describe 'cassandra class' do
   end
 
   firewall_config_pp = <<-EOS
-    if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == 7 {
-        $svc_provider = 'init'
-    } else {
-        $svc_provider = undef
-    }
-
     class { 'cassandra':
       cassandra_9822              => true,
       commitlog_directory_mode    => '0770',
       data_file_directories_mode  => '0770',
       saved_caches_directory_mode => '0770',
-      service_provider            => $svc_provider
     }
 
     include '::cassandra::optutils'

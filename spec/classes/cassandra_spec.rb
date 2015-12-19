@@ -118,6 +118,7 @@ describe 'cassandra' do
         'service_name' => 'cassandra',
         #'service_provider' => nil,
         'service_refresh' => true,
+        'service_systemd' => false,
         'snapshot_before_compaction' => false,
         'snitch_properties_file' => 'cassandra-rackdc.properties',
         'ssl_storage_port' => 7001,

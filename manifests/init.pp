@@ -141,6 +141,7 @@ class cassandra (
   $service_name                                         = 'cassandra',
   $service_provider                                     = undef,
   $service_refresh                                      = true,
+  $service_systemd                                      = false,
   $snapshot_before_compaction                           = false,
   $snitch_properties_file
     = 'cassandra-rackdc.properties',
@@ -228,6 +229,17 @@ class cassandra (
 
   package { $cassandra_pkg:
     ensure => $package_ensure,
+  }
+
+  if $service_systemd == true {
+    file { "/usr/lib/systemd/system/${service_name}.service":
+      ensure => present,
+      owner   => 'root',
+      group   => 'root',
+      content => template('cassandra/cassandra.service.erb'),
+      mode    => '0644',
+      before  => Package[$cassandra_pkg],
+    }
   }
 
   $config_file = "${cfg_path}/cassandra.yaml"

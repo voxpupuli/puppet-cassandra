@@ -44,12 +44,14 @@ A Puppet module to install and manage Cassandra, DataStax Agent & OpsCenter
 * Installs the Cassandra package (default **cassandra22** on Red Hat and
   **cassandra** on Debian).
 * Configures settings in *${config_path}/cassandra.yaml*.
+* On CentOS 7 if the `init` service provider is used, then cassandra
+  is added as a system service.
 * Optionally ensures that the Cassandra service is enabled and running.
 * On Ubuntu systems, optionally replace ```/etc/init.d/cassandra``` with a
   workaround for 
   [CASSANDRA-9822](https://issues.apache.org/jira/browse/CASSANDRA-9822).
-* On CentOS 7 when the `init` service provider is used, then cassandra
-  is added as a system service.
+* Optionally creates a file /usr/lib/systemd/system/cassandra.service to
+  improve service interaction.
 
 #### What the cassandra::datastax_agent class affects
 
@@ -129,9 +131,9 @@ the documentation for cassandra::package_name below for details.
 
 ```puppet
  if $::osfamily == 'RedHat' {
-   $version = '2.2.3-1'
+   $version = '2.2.4-1'
  } else {
-   $version = '2.2.3'
+   $version = '2.2.4'
  }
 
  class { 'cassandra':
@@ -1186,6 +1188,13 @@ will ensure that Cassandra service is refreshed after the changes.  Setting
 this flag to false will disable this behaviour, therefore allowing the changes
 to be made but allow the user to control when the service is restarted.
 Default value true
+
+##### `service_systemd`
+If set to true then a systemd service file called
+/usr/lib/systemd/system/${*service_name*}.service will be added to the node with
+basic settings to ensure that the Cassandra service interacts with systemd
+better.
+Default value false
 
 ##### `snapshot_before_compaction`
 This is passed to the

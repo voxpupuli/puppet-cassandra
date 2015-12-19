@@ -1,0 +1,22 @@
+# Managed by Puppet.  Changes are likely to be overwritten.
+
+[Unit]
+Description=Cassandra
+After=network.target
+
+[Service]
+PIDFile=/var/run/<%= @service_name %>/<%= @service_name %>.pid
+User=cassandra
+Group=cassandra
+ExecStart=/usr/sbin/cassandra -f -p /var/run/<%= @service_name %>/<%= @service_name %>.pid
+StandardOutput=journal
+StandardError=journal
+LimitNOFILE=100000
+LimitMEMLOCK=infinity
+LimitNPROC=32768
+LimitAS=infinity
+Restart=always
+
+
+[Install]
+WantedBy=multi-user.target
