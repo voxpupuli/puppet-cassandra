@@ -179,7 +179,7 @@ describe 'cassandra' do
     it {
       should contain_service('cassandra').with(:provider => 'base')}
 
-    it { should have_resource_count(8) }
+    it { should have_resource_count(9) }
   end
 
   context 'Test the dc and rack properties.' do

@@ -233,7 +233,7 @@ class cassandra (
 
   if $service_systemd == true {
     file { "/usr/lib/systemd/system/${service_name}.service":
-      ensure => present,
+      ensure  => present,
       owner   => 'root',
       group   => 'root',
       content => template('cassandra/cassandra.service.erb'),
@@ -253,28 +253,26 @@ class cassandra (
     require => Package[$cassandra_pkg],
   }
 
-  file { $commitlog_directory:
-    ensure  => directory,
-    owner   => 'cassandra',
-    group   => 'cassandra',
-    mode    => $commitlog_directory_mode,
-    require => Package[$cassandra_pkg]
+  if ! defined( File[$commitlog_directory] ) {
+    file { $commitlog_directory:
+      ensure  => directory,
+      owner   => 'cassandra',
+      group   => 'cassandra',
+      mode    => $commitlog_directory_mode,
+      require => Package[$cassandra_pkg]
+    }
   }
 
-  file { $data_file_directories:
-    ensure  => directory,
-    owner   => 'cassandra',
-    group   => 'cassandra',
-    mode    => $data_file_directories_mode,
-    require => Package[$cassandra_pkg]
-  }
+  cassandra::data_directory { $data_file_directories: }
 
-  file { $saved_caches_directory:
-    ensure  => directory,
-    owner   => 'cassandra',
-    group   => 'cassandra',
-    mode    => $saved_caches_directory_mode,
-    require => Package[$cassandra_pkg]
+  if ! defined( File[$saved_caches_directory] ) {
+    file { $saved_caches_directory:
+      ensure  => directory,
+      owner   => 'cassandra',
+      group   => 'cassandra',
+      mode    => $saved_caches_directory_mode,
+      require => Package[$cassandra_pkg]
+    }
   }
 
   if $package_ensure != 'absent' and $package_ensure != 'purged' {
