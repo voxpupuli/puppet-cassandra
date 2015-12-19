@@ -49,6 +49,51 @@ describe 'cassandra class' do
     end
   end
 
+  Gene_Michtchenko_pp = <<-EOS
+    if $::osfamily == 'RedHat' {
+        $version = '2.2.4-1'
+    } else {
+        $version = '2.2.4'
+    }
+
+    file { "commit_log_dir":
+      path   => '/opt/data/commitlog',
+      ensure => directory,
+      mode   => '775',
+      owner  => 'cassandra',
+      group  => 'cassandra',
+    }
+
+    $data_dirs = [ '/opt/data/cassandra/data1', '/opt/data/cassandra/data2' ]
+
+    file { $data_dirs:
+      ensure => directory,
+      mode   => '775',
+      owner  => 'cassandra',
+      group  => 'cassandra',
+    }
+
+    class { 'cassandra':
+      package_ensure              => $version,
+      cassandra_9822              => true,
+      commitlog_directory         => '/opt/data/commitlog',
+      commitlog_directory_mode    => '0770',
+      data_file_directories       => $data_dirs,
+      data_file_directories_mode  => '0770',
+      saved_caches_directory_mode => '0770',
+    }
+  EOS
+
+  describe 'Can data directories be specified outside of module.' do
+    it 'should work with no errors' do
+      apply_manifest(Gene_Michtchenko_pp, :catch_failures => true)
+    end
+    it 'check code is idempotent' do
+      expect(apply_manifest(Gene_Michtchenko_pp,
+        :catch_failures => true).exit_code).to be_zero
+    end
+  end
+
   optutils_install_pp = <<-EOS
     if $::osfamily == 'RedHat' {
         $version = '2.2.4-1'
