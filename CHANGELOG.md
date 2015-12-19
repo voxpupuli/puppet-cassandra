@@ -1,15 +1,19 @@
 # Change Log for Puppet Module locp-cassandra
 
-##2015-12-16 - Release 1.10.0 ([diff](https://github.com/locp/cassandra/compare/1.9.2...1.10.0))
+##2015-12-18 - Release 1.10.0 ([diff](https://github.com/locp/cassandra/compare/1.9.2...1.10.0))
 
 ### Summary
 
-A feature release.
+A feature release with minor improvements.
 
 ### Features
 
 * Added the ability to allow setting the local_interface for the DataStax
   agent configuration.
+* Allow the service provider to be specified for the Cassandra, DataStax
+  agent and OpsCenter with the service_provider parameter.
+* Optionally allow a systemd system file be inserted with the
+  cassandra::service_systemd parameter.
 
 ### Bugfixes
 
