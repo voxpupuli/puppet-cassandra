@@ -64,6 +64,14 @@ describe 'cassandra class' do
       group  => 'cassandra',
     }
 
+    file { "saved_caches_dir":
+      path   => '/opt/data/caches',
+      ensure => directory,
+      mode   => '775',
+      owner  => 'cassandra',
+      group  => 'cassandra',
+    }
+
     $data_dirs = [ '/opt/data/cassandra/data1', '/opt/data/cassandra/data2' ]
 
     file { $data_dirs:
@@ -80,6 +88,7 @@ describe 'cassandra class' do
       commitlog_directory_mode    => '0770',
       data_file_directories       => $data_dirs,
       data_file_directories_mode  => '0770',
+      saved_caches_directory      => '/opt/data/caches',
       saved_caches_directory_mode => '0770',
     }
   EOS
