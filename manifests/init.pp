@@ -139,7 +139,9 @@ class cassandra (
   $service_enable                                       = true,
   $service_ensure                                       = 'running',
   $service_name                                         = 'cassandra',
+  $service_provider                                     = undef,
   $service_refresh                                      = true,
+  $service_systemd                                      = false,
   $snapshot_before_compaction                           = false,
   $snitch_properties_file
     = 'cassandra-rackdc.properties',
@@ -184,6 +186,15 @@ class cassandra (
       } else {
         $cassandra_pkg = $package_name
       }
+
+      if $::operatingsystemmajrelease == 7 and
+      $::cassandra::service_provider == 'init' {
+        exec { "/sbin/chkconfig --add ${service_name}":
+          unless  => "/sbin/chkconfig --list ${service_name}",
+          require => Package[$cassandra_pkg],
+          before  => Service['cassandra']
+        }
+      }
     }
     'Debian': {
       if $config_path == undef {
@@ -218,6 +229,17 @@ class cassandra (
 
   package { $cassandra_pkg:
     ensure => $package_ensure,
+  }
+
+  if $service_systemd == true {
+    file { "/usr/lib/systemd/system/${service_name}.service":
+      ensure => present,
+      owner   => 'root',
+      group   => 'root',
+      content => template('cassandra/cassandra.service.erb'),
+      mode    => '0644',
+      before  => Package[$cassandra_pkg],
+    }
   }
 
   $config_file = "${cfg_path}/cassandra.yaml"
@@ -255,8 +277,13 @@ class cassandra (
     require => Package[$cassandra_pkg]
   }
 
-  if $package_ensure != 'absent'
-  and $package_ensure != 'purged' {
+  if $package_ensure != 'absent' and $package_ensure != 'purged' {
+    if $::cassandra::service_provider != undef {
+      Service {
+        provider => $::cassandra::service_provider
+      }
+    }
+
     if $service_refresh == true {
       service { 'cassandra':
         ensure    => $service_ensure,
@@ -276,7 +303,7 @@ class cassandra (
       service { 'cassandra':
         ensure => $service_ensure,
         name   => $service_name,
-        enable => $service_enable
+        enable => $service_enable,
       }
     }
   }

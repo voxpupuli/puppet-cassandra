@@ -17,10 +17,16 @@ describe 'cassandra class' do
   end
 
   cassandra_install_pp = <<-EOS
-    if $::osfamily == 'RedHat' {
-        $version = '2.2.3-1'
+    if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == 7 {
+        $service_systemd = true
     } else {
-        $version = '2.2.3'
+        $service_systemd = false
+    }
+
+    if $::osfamily == 'RedHat' {
+        $version = '2.2.4-1'
+    } else {
+        $version = '2.2.4'
     }
 
     class { 'cassandra':
@@ -28,7 +34,8 @@ describe 'cassandra class' do
       cassandra_9822              => true,
       commitlog_directory_mode    => '0770',
       data_file_directories_mode  => '0770',
-      saved_caches_directory_mode => '0770'
+      saved_caches_directory_mode => '0770',
+      service_systemd             => $service_systemd
     }
   EOS
 
@@ -44,16 +51,16 @@ describe 'cassandra class' do
 
   optutils_install_pp = <<-EOS
     if $::osfamily == 'RedHat' {
-        $version = '2.2.3-1'
+        $version = '2.2.4-1'
     } else {
-        $version = '2.2.3'
+        $version = '2.2.4'
     }
 
     class { 'cassandra':
       cassandra_9822              => true,
       commitlog_directory_mode    => '0770',
       data_file_directories_mode  => '0770',
-      saved_caches_directory_mode => '0770'
+      saved_caches_directory_mode => '0770',
     }
 
     class { 'cassandra::optutils':
@@ -76,7 +83,7 @@ describe 'cassandra class' do
       cassandra_9822              => true,
       commitlog_directory_mode    => '0770',
       data_file_directories_mode  => '0770',
-      saved_caches_directory_mode => '0770'
+      saved_caches_directory_mode => '0770',
     }
     include '::cassandra::datastax_agent'
   EOS
@@ -115,8 +122,9 @@ describe 'cassandra class' do
       cassandra_9822              => true,
       commitlog_directory_mode    => '0770',
       data_file_directories_mode  => '0770',
-      saved_caches_directory_mode => '0770'
+      saved_caches_directory_mode => '0770',
     }
+
     include '::cassandra::optutils'
     include '::cassandra::datastax_agent'
     include '::cassandra::opscenter'
@@ -154,8 +162,10 @@ describe 'cassandra class' do
     it { is_expected.to be_enabled }
   end
 
-# Release 1.9.2 will be making changes so these checks are currently redundant.
-#
+#############################################################################
+# Disabled for the release of 1.10.0 because of the change from systemd to
+# init for the service provider.
+#############################################################################
 #  check_against_previous_version_pp = <<-EOS
 #    include cassandra
 #  EOS

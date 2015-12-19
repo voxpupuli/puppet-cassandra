@@ -116,7 +116,9 @@ describe 'cassandra' do
         'service_enable' => true,
         'service_ensure' => 'running',
         'service_name' => 'cassandra',
+        #'service_provider' => nil,
         'service_refresh' => true,
+        'service_systemd' => false,
         'snapshot_before_compaction' => false,
         'snitch_properties_file' => 'cassandra-rackdc.properties',
         'ssl_storage_port' => 7001,
@@ -163,7 +165,8 @@ describe 'cassandra' do
         :config_file_mode        => '0755',
         :config_path             => '/etc/cassandra',
         :fail_on_non_supported_os => false,
-        :package_name            => 'cassandra'
+        :package_name            => 'cassandra',
+        :service_provider        => 'base'
       }
     end
 
@@ -172,6 +175,10 @@ describe 'cassandra' do
         'mode' => '0755'
       })
     }
+
+    it {
+      should contain_service('cassandra').with(:provider => 'base')}
+
     it { should have_resource_count(8) }
   end
 

@@ -1,13 +1,16 @@
 # Install and configure the optional DataStax agent.
 class cassandra::datastax_agent (
-  $defaults_file   = '/etc/default/datastax-agent',
-  $java_home       = undef,
-  $package_ensure  = 'present',
-  $package_name    = 'datastax-agent',
-  $service_ensure  = 'running',
-  $service_enable  = true,
-  $service_name    = 'datastax-agent',
-  $stomp_interface = undef,
+  $defaults_file       = '/etc/default/datastax-agent',
+  $address_config_file = '/var/lib/datastax-agent/conf/address.yaml',
+  $java_home           = undef,
+  $package_ensure      = 'present',
+  $package_name        = 'datastax-agent',
+  $service_ensure      = 'running',
+  $service_enable      = true,
+  $service_name        = 'datastax-agent',
+  $service_provider    = undef,
+  $stomp_interface     = undef,
+  $local_interface     = undef,
   ){
   package { $package_name:
     ensure  => $package_ensure,
@@ -23,11 +26,28 @@ class cassandra::datastax_agent (
 
   ini_setting { 'stomp_interface':
     ensure            => $ensure,
-    path              => '/var/lib/datastax-agent/conf/address.yaml',
+    path              => $address_config_file,
     section           => '',
     key_val_separator => ': ',
     setting           => 'stomp_interface',
     value             => $stomp_interface,
+    require           => Package[$package_name],
+    notify            => Service[$service_name]
+  }
+
+  if $local_interface != undef {
+    $ensure_local_interface = present
+  } else {
+    $ensure_local_interface = absent
+  }
+
+  ini_setting { 'local_interface':
+    ensure            => $ensure_local_interface,
+    path              => $address_config_file,
+    section           => '',
+    key_val_separator => ': ',
+    setting           => 'local_interface',
+    value             => $local_interface,
     require           => Package[$package_name],
     notify            => Service[$service_name]
   }
@@ -41,6 +61,12 @@ class cassandra::datastax_agent (
       setting           => 'JAVA_HOME',
       value             => $java_home,
       notify            => Service[$service_name]
+    }
+  }
+
+  if $service_provider != undef {
+    System {
+      provider => $service_provider
     }
   }
 

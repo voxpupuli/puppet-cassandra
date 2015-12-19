@@ -44,10 +44,14 @@ A Puppet module to install and manage Cassandra, DataStax Agent & OpsCenter
 * Installs the Cassandra package (default **cassandra22** on Red Hat and
   **cassandra** on Debian).
 * Configures settings in *${config_path}/cassandra.yaml*.
+* On CentOS 7 if the `init` service provider is used, then cassandra
+  is added as a system service.
 * Optionally ensures that the Cassandra service is enabled and running.
 * On Ubuntu systems, optionally replace ```/etc/init.d/cassandra``` with a
   workaround for 
   [CASSANDRA-9822](https://issues.apache.org/jira/browse/CASSANDRA-9822).
+* Optionally creates a file /usr/lib/systemd/system/cassandra.service to
+  improve service interaction.
 
 #### What the cassandra::datastax_agent class affects
 
@@ -127,9 +131,9 @@ the documentation for cassandra::package_name below for details.
 
 ```puppet
  if $::osfamily == 'RedHat' {
-   $version = '2.2.3-1'
+   $version = '2.2.4-1'
  } else {
-   $version = '2.2.3'
+   $version = '2.2.4'
  }
 
  class { 'cassandra':
@@ -352,11 +356,12 @@ class { 'cassandra::datastax_repo':
 }
 
 class { 'cassandra':
-  cluster_name   => 'MyCassandraCluster',
-  config_path    => '/etc/dse/cassandra',
-  package_ensure => '4.7.0-1',
-  package_name   => 'dse-full',
-  service_name   => 'dse',
+  cluster_name    => 'MyCassandraCluster',
+  config_path     => '/etc/dse/cassandra',
+  package_ensure  => '4.7.0-1',
+  package_name    => 'dse-full',
+  service_name    => 'dse',
+  service_systemd => true
 }
 ```
 
@@ -1173,12 +1178,24 @@ Default value 'running'
 The name of the service that runs the Cassandra software.
 Default value 'cassandra'
 
+##### `service_provider`
+The name of the provider that runs the service.  If left as *undef* then the OS family specific default will
+be used, otherwise the specified value will be used instead.
+Default value *undef*
+
 ##### `service_refresh`
 If set to true, changes to the Cassandra config file or the data directories
 will ensure that Cassandra service is refreshed after the changes.  Setting
 this flag to false will disable this behaviour, therefore allowing the changes
 to be made but allow the user to control when the service is restarted.
 Default value true
+
+##### `service_systemd`
+If set to true then a systemd service file called
+/usr/lib/systemd/system/${*service_name*}.service will be added to the node with
+basic settings to ensure that the Cassandra service interacts with systemd
+better.
+Default value false
 
 ##### `snapshot_before_compaction`
 This is passed to the
@@ -1290,11 +1307,23 @@ Default value 'true'
 Is passed to the service reference.
 Default value 'datastax-agent'
 
+##### `service_provider`
+The name of the provider that runs the service.  If left as *undef* then the OS family specific default will
+be used, otherwise the specified value will be used instead.
+Default value *undef*
+
 ##### `stomp_interface`
 If the value is changed from the default of *undef* then this is what is
 set as the stomp_interface setting in
 **/var/lib/datastax-agent/conf/address.yaml**
 which connects the agent to an OpsCenter instance.
+Default value *undef*
+
+##### `local_interface`
+If the value is changed from the default of *undef* then this is what is
+set as the local_interface setting in
+**/var/lib/datastax-agent/conf/address.yaml**
+which is the address there the local cassandra will be contacted.
 Default value *undef*
 
 ### Class: cassandra::datastax_repo
@@ -2226,6 +2255,11 @@ Default value 'running'
 The name of the service that runs the OpsCenter software.
 Default value 'opscenterd'
 
+##### `service_provider`
+The name of the provider that runs the service.  If left as *undef* then the OS family specific default will
+be used, otherwise the specified value will be used instead.
+Default value *undef*
+
 ##### `spark_base_master_proxy_port`
 This sets the base_master_proxy_port setting in the spark section of the
 OpsCenter configuration file.  See
@@ -2634,3 +2668,9 @@ request to restart the service if the datastax-agent package is upgraded
 [#136](https://github.com/locp/cassandra/issues/136) with some excellent
 help and advice from [@al4](https://github.com/al4).  Thanks to both
 Mladen and Alex for your feedback and constructive collaboration.
+
+* Allowing the setting of the local_interface for the DataStax agent
+  configuration was submitted via a pull request
+  (see [#144](https://github.com/locp/cassandra/pull/144)) by
+  [@Mike-Petersen](https://github.com/Mike-Petersen).
+  

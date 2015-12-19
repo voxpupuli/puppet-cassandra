@@ -62,6 +62,7 @@ class cassandra::opscenter (
     $service_enable                                 = true,
     $service_ensure                                 = 'running',
     $service_name                                   = 'opscenterd',
+    $service_provider                               = undef,
     $ldap_admin_group_name                          = undef,
     $ldap_connection_timeout                        = undef,
     $ldap_debug_ssl                                 = undef,
@@ -139,6 +140,12 @@ class cassandra::opscenter (
     ensure => $ensure,
     name   => $package_name,
     before => Service['opscenterd']
+  }
+
+  if $service_provider != undef {
+    System {
+      provider => $service_provider
+    }
   }
 
   service { 'opscenterd':
