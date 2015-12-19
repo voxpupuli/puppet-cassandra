@@ -56,31 +56,31 @@ describe 'cassandra class' do
         $version = '2.2.4'
     }
 
+    $data_dirs = [ '/opt/data/cassandra1', '/opt/data/cassandra2' ]
+
+    file { '/opt/data':
+      ensure => directory,
+    } ->
     file { "commit_log_dir":
       path   => '/opt/data/commitlog',
       ensure => directory,
       mode   => '775',
       owner  => 'cassandra',
       group  => 'cassandra',
-    }
-
+    } ->
     file { "saved_caches_dir":
       path   => '/opt/data/caches',
       ensure => directory,
       mode   => '775',
       owner  => 'cassandra',
       group  => 'cassandra',
-    }
-
-    $data_dirs = [ '/opt/data/cassandra/data1', '/opt/data/cassandra/data2' ]
-
+    } ->
     file { $data_dirs:
       ensure => directory,
       mode   => '775',
       owner  => 'cassandra',
       group  => 'cassandra',
-    }
-
+    } ->
     class { 'cassandra':
       package_ensure              => $version,
       cassandra_9822              => true,
