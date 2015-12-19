@@ -61,15 +61,13 @@ describe 'cassandra class' do
     file { '/opt/data':
       ensure => directory,
     } ->
-    file { "commit_log_dir":
-      path   => '/opt/data/commitlog',
+    file { '/opt/data/commitlog':
       ensure => directory,
       mode   => '775',
       owner  => 'cassandra',
       group  => 'cassandra',
     } ->
-    file { "saved_caches_dir":
-      path   => '/opt/data/caches',
+    file { '/opt/data/caches':
       ensure => directory,
       mode   => '775',
       owner  => 'cassandra',
