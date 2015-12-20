@@ -134,6 +134,10 @@ describe 'cassandra' do
         'write_request_timeout_in_ms' => 2000,
       )
     }
+
+    it {
+      should contain_cassandra__data_directory('/var/lib/cassandra/data')
+    }
   end
 
   context 'On an unsupported OS pleading tolerance (with dyslexia)' do
