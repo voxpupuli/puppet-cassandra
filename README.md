@@ -397,8 +397,9 @@ cassandra::opscenter::cluster_name { 'Cluster1':
 
 ### Private Defined Types
 
-* cassandra::opscenter::setting
+* cassandra::data_directory
 * cassandra::firewall_ports::rule
+* cassandra::opscenter::setting
 
 ### Class: cassandra
 
@@ -2572,6 +2573,17 @@ _cluster_name_.conf configuration file.  See
 http://docs.datastax.com/en/opscenter/5.2/opsc/configure/opscStoringCollectionDataDifferentCluster_t.html
 for more details.  A value of *undef* will ensure the setting is not
 present in the file.  Default value *undef*
+
+### Defined Type cassandra::data_directory
+
+A defined type to handle the `::cassandra::data_file_directoryies` array.
+This is not intended to be used by a user but is documented here for
+completeness.
+
+#### Parameters
+
+##### `title`
+The name of an individual directory.
 
 ### Defined Type cassandra::firewall_ports::rule
 
