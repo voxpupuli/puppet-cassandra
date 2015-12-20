@@ -408,13 +408,29 @@ configuration file.
 #### Parameters
 
 ##### `authenticator`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Authentication backend, implementing IAuthenticator; used to identify users.
+Out of the box, Cassandra provides
+org.apache.cassandra.auth.{AllowAllAuthenticator, PasswordAuthenticator}.
+
+* AllowAllAuthenticator performs no checks - set it to disable authentication.
+* PasswordAuthenticator relies on username/password pairs to authenticate
+  users. It keeps usernames and hashed passwords in system_auth.credentials
+  table.  Please increase system_auth keyspace replication factor if you use
+  this authenticator.
+
 Default value: 'AllowAllAuthenticator.
 
 ##### `authorizer`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Authorization backend, implementing IAuthorizer; used to limit access/provide
+permissions.  Out of the box, Cassandra provides
+org.apache.cassandra.auth.{AllowAllAuthorizer, CassandraAuthorizer}.
+
+- AllowAllAuthorizer allows any action to any user - set it to disable
+  authorization.
+- CassandraAuthorizer stores permissions in system_auth.permissions table.
+  Please increase system_auth keyspace replication factor if you use this
+  authorizer.
+
 Default value: 'AllowAllAuthorizer'
 
 ##### `auto_bootstrap`
