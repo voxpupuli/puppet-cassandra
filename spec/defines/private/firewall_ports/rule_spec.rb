@@ -1,5 +1,5 @@
 require 'spec_helper'
-describe 'cassandra::firewall_ports::rule' do
+describe 'cassandra::private::firewall_ports::rule' do
   let(:pre_condition) { [
     'define firewall ($action, $dport, $proto, $source) {}',
   ] }

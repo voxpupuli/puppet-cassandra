@@ -397,9 +397,9 @@ cassandra::opscenter::cluster_name { 'Cluster1':
 
 ### Private Defined Types
 
-* cassandra::data_directory
-* cassandra::firewall_ports::rule
-* cassandra::opscenter::setting
+* cassandra::private::data_directory
+* cassandra::private::firewall_ports::rule
+* cassandra::private::opscenter::setting
 
 ### Class: cassandra
 
@@ -2574,7 +2574,7 @@ http://docs.datastax.com/en/opscenter/5.2/opsc/configure/opscStoringCollectionDa
 for more details.  A value of *undef* will ensure the setting is not
 present in the file.  Default value *undef*
 
-### Defined Type cassandra::data_directory
+### Defined Type cassandra::private::data_directory
 
 A defined type to handle the `::cassandra::data_file_directoryies` array.
 This is not intended to be used by a user but is documented here for
@@ -2585,7 +2585,7 @@ completeness.
 ##### `title`
 The name of an individual directory.
 
-### Defined Type cassandra::firewall_ports::rule
+### Defined Type cassandra::private::firewall_ports::rule
 
 A defined type to be used as a macro for setting host based firewall
 rules.  This is not intended to be used by a user (who should use the
@@ -2600,7 +2600,7 @@ A text field that contains the protocol name and CIDR address of a subnet.
 ##### `port`
 The number(s) of the port(s) to be opened.
 
-### Defined Type cassandra::opscenter::setting
+### Defined Type cassandra::private::opscenter::setting
 
 A defined type to be used as a macro for settings in the OpsCenter
 configuration file.  This is not intended to be used by a user (who

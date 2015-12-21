@@ -1,5 +1,5 @@
-# cassandra::firewall_ports::rule
-define cassandra::firewall_ports::rule(
+# cassandra::private::firewall_ports::rule
+define cassandra::private::firewall_ports::rule(
     $ports
   ) {
   $array_var1 = split($title, '_')
