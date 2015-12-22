@@ -434,47 +434,46 @@ org.apache.cassandra.auth.{AllowAllAuthorizer, CassandraAuthorizer}.
 Default value: 'AllowAllAuthorizer'
 
 ##### `auto_bootstrap`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+This setting if set to true makes new (non-seed) nodes automatically migrate
+the right data to themselves. When initializing a fresh cluster without data,
+set this value to false.  If left at the default value of *undef* then the
+entry in the configuration file is absent or commented out.  If a value is
+set, then the parameter and variable are placed into the configuration file.
 Default value: *undef*
 
 ##### `auto_snapshot`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-Default value 'true'
+Whether or not a snapshot is taken of the data before keyspace truncation
+or dropping of column families. The STRONGLY advised default of true 
+should be used to provide data safety. If you set this flag to false, you will
+lose data on truncation or drop.
+Default value **true**
 
 ##### `batchlog_replay_throttle_in_kb`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Maximum throttle in KBs per second, total. This will be reduced proportionally
+to the number of nodes in the cluster.
 Default value: '1024'
 
 ##### `batch_size_warn_threshold_in_kb`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Log WARN on any batch size exceeding this value. 5kb per batch by default.
+Caution should be taken on increasing the size of this threshold as it can
+lead to node instability.
 Default value 5
 
 ##### `broadcast_address`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+Address to broadcast to other Cassandra nodes. Leaving this value as the
+default will set it to the same value as `listen_address`.
 Default value: *undef*
 
 ##### `broadcast_rpc_address`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+RPC address to broadcast to drivers and other Cassandra nodes. This cannot
+be set to 0.0.0.0. If left as the default value it will be set to the value
+of `rpc_address`.  If `rpc_address` is set to 0.0.0.0, broadcast_rpc_address
+must be set.
 Default value: *undef*
 
 ##### `cas_contention_timeout_in_ms`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+How long a coordinator should continue to retry a CAS operation
+that contends with other proposals for the same row.
 Default value: '1000'
 
 ##### `cassandra_9822`
@@ -492,71 +491,154 @@ compatible template called cassandra1.yaml.erb has been provided by @Spredzy.
 Default value 'cassandra/cassandra.yaml.erb'
 
 ##### `client_encryption_algorithm`
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
-The field being set is `client_encryption_options -> algorithm`.
+Sets `client_encryption_options -> algorithm`.
 Default value: *undef*
+
+Part of the client encryption options.  See also
+`client_encryption_enabled`,
+`client_encryption_keystore`,
+`client_encryption_keystore_password`,
+`client_encryption_require_client_auth`,
+`client_encryption_truststore`,
+`client_encryption_truststore_password`,
+`client_encryption_protocol`,
+`client_encryption_store_type`,
+`client_encryption_cipher_suites`.
 
 ##### `client_encryption_cipher_suites`
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
-The field being set is `client_encryption_options -> cipher_suites`.
+Sets `client_encryption_options -> cipher_suites`.
 Default value: *undef*
+
+Part of the client encryption options.  See also
+`client_encryption_algorithm`,
+`client_encryption_enabled`,
+`client_encryption_keystore`,
+`client_encryption_keystore_password`,
+`client_encryption_require_client_auth`,
+`client_encryption_truststore`,
+`client_encryption_truststore_password`,
+`client_encryption_protocol`,
+`client_encryption_store_type`.
 
 ##### `client_encryption_enabled`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-The field being set is `client_encryption_options -> enabled`.
+Sets `client_encryption_options -> enabled`.
 Default value 'false'
 
+Part of the client encryption options.  See also
+`client_encryption_algorithm`,
+`client_encryption_keystore`,
+`client_encryption_keystore_password`,
+`client_encryption_require_client_auth`,
+`client_encryption_truststore`,
+`client_encryption_truststore_password`,
+`client_encryption_protocol`,
+`client_encryption_store_type`,
+`client_encryption_cipher_suites`.
+
 ##### `client_encryption_keystore`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-The field being set is `client_encryption_options -> keystore`.
+Sets `client_encryption_options -> keystore`.
 Default value 'conf/.keystore'
 
+Part of the client encryption options.  See also
+`client_encryption_algorithm`,
+`client_encryption_enabled`,
+`client_encryption_keystore_password`,
+`client_encryption_require_client_auth`,
+`client_encryption_truststore`,
+`client_encryption_truststore_password`,
+`client_encryption_protocol`,
+`client_encryption_store_type`,
+`client_encryption_cipher_suites`.
+
 ##### `client_encryption_keystore_password`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-The field being set is `client_encryption_options -> keystore_password`.
+Sets `client_encryption_options -> keystore_password`.
 Default value 'cassandra'
 
+Part of the client encryption options.  See also
+`client_encryption_algorithm`,
+`client_encryption_enabled`,
+`client_encryption_keystore`,
+`client_encryption_require_client_auth`,
+`client_encryption_truststore`,
+`client_encryption_truststore_password`,
+`client_encryption_protocol`,
+`client_encryption_store_type`,
+`client_encryption_cipher_suites`.
+
 ##### `client_encryption_protocol`
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
-The field being set is `client_encryption_options -> protocol`.
+Sets `client_encryption_options -> protocol`.
 Default value: *undef*
+
+Part of the client encryption options.  See also
+`client_encryption_algorithm`,
+`client_encryption_enabled`,
+`client_encryption_keystore`,
+`client_encryption_keystore_password`,
+`client_encryption_require_client_auth`,
+`client_encryption_truststore`,
+`client_encryption_truststore_password`,
+`client_encryption_store_type`,
+`client_encryption_cipher_suites`.
 
 ##### `client_encryption_require_client_auth`
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
-The field being set is `client_encryption_options -> require_client_auth`.
+Sets `client_encryption_options -> require_client_auth`.
 Default value: *undef*
+
+Part of the client encryption options.  See also
+`client_encryption_algorithm`,
+`client_encryption_enabled`,
+`client_encryption_keystore`,
+`client_encryption_keystore_password`,
+`client_encryption_truststore`,
+`client_encryption_truststore_password`,
+`client_encryption_protocol`,
+`client_encryption_store_type`,
+`client_encryption_cipher_suites`.
 
 ##### `client_encryption_store_type`
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
-The field being set is `client_encryption_options -> store_type`.
+Sets `client_encryption_options -> store_type`.
 Default value: *undef*
+
+Part of the client encryption options.  See also
+`client_encryption_algorithm`,
+`client_encryption_enabled`,
+`client_encryption_keystore`,
+`client_encryption_keystore_password`,
+`client_encryption_require_client_auth`,
+`client_encryption_truststore`,
+`client_encryption_truststore_password`,
+`client_encryption_protocol`,
+`client_encryption_cipher_suites`.
 
 ##### `client_encryption_truststore`
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
-The field being set is `client_encryption_options -> truststore`.
+Sets `client_encryption_options -> truststore`.
 Default value: *undef*
 
+Part of the client encryption options.  See also
+`client_encryption_algorithm`,
+`client_encryption_enabled`,
+`client_encryption_keystore`,
+`client_encryption_keystore_password`,
+`client_encryption_require_client_auth`,
+`client_encryption_truststore_password`,
+`client_encryption_protocol`,
+`client_encryption_store_type`,
+`client_encryption_cipher_suites`.
+
 ##### `client_encryption_truststore_password`
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
-The field being set is `client_encryption_options -> truststore_password`.
+Sets `client_encryption_options -> truststore_password`.
 Default value: *undef*
+
+Part of the client encryption options.  See also
+`client_encryption_algorithm`,
+`client_encryption_enabled`,
+`client_encryption_keystore`,
+`client_encryption_keystore_password`,
+`client_encryption_require_client_auth`,
+`client_encryption_truststore`,
+`client_encryption_protocol`,
+`client_encryption_store_type`,
+`client_encryption_cipher_suites`.
 
 ##### `cluster_name`
 This is passed to the
