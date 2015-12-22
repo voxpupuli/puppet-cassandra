@@ -641,18 +641,33 @@ Part of the client encryption options.  See also
 `client_encryption_cipher_suites`.
 
 ##### `cluster_name`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+The name of the cluster. This is mainly used to prevent machines in one
+logical cluster from joining another.
 Default value 'Test Cluster'
 
 ##### `column_index_size_in_kb`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Granularity of the collation index of rows within a partition.
+Increase if your rows are large, or if you have a very large
+number of rows per partition.  The competing goals are these:
+
+1. a smaller granularity means more index entries are generated
+   and looking up rows withing the partition by collation column
+   is faster
+2. but, Cassandra will keep the collation index in memory for hot
+   rows (as part of the key cache), so a larger granularity means
+   you can cache more hot rows
+
 Default value: '64'
 
 ##### `commit_failure_policy`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Policy for commit disk failures:
+* die: shut down gossip and Thrift and kill the JVM, so the node can be replaced.
+* stop: shut down gossip and Thrift, leaving the node effectively dead, but
+        can still be inspected via JMX.
+* stop_commit: shutdown the commit log, letting writes collect but
+               continuing to service reads, as in pre-2.0.5 Cassandra
+* ignore: ignore fatal errors and let the batches fail
+
 Default value: 'stop'
 
 ##### `commitlog_directory`
