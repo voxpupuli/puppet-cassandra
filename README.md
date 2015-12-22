@@ -671,54 +671,58 @@ Policy for commit disk failures:
 Default value: 'stop'
 
 ##### `commitlog_directory`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+When running on magnetic HDD, this should be a separate spindle than the data
+directories.
 Default value '/var/lib/cassandra/commitlog'
+
+See also `data_file_directories` and `saved_caches_directory`.
 
 ##### `commitlog_directory_mode`
 The mode for the directory specified in `commitlog_directory`.
 Default value '0750'
 
 ##### `commitlog_segment_size_in_mb`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+The size of the individual commitlog file segments.  A commitlog
+segment may be archived, deleted, or recycled once all the data
+in it (potentially from each columnfamily in the system) has been
+flushed to sstables.  
+
+The default size is 32, which is almost always fine, but if you are
+archiving commitlog segments (see commitlog_archiving.properties),
+then you probably want a finer granularity of archiving; 8 or 16 MB
+is reasonable.
+
 Default value: 32
 
 ##### `commitlog_sync`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-
-See also `commitlog_sync_batch_window_in_ms` and `commitlog_sync_period_in_ms`.
+May be either "periodic" or "batch." When in batch mode, Cassandra won't ack
+writes until the commit log has been fsynced to disk. It will wait up to
+commitlog_sync_batch_window_in_ms milliseconds for other writes, before
+performing the sync.
 Default value: 'periodic'
 
-##### `commitlog_sync_batch_window_in_ms`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+See also `commitlog_sync_batch_window_in_ms` and `commitlog_sync_period_in_ms`.
 
+##### `commitlog_sync_batch_window_in_ms`
 If `commitlog_sync` is set to 'batch' then this value should be set.
 Otherwise it should be set to *undef*.
 Default value: *undef*
 
 ##### `commitlog_sync_period_in_ms`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If set to a value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
-
 If `commitlog_sync` is set to 'periodic' then this value should be set.
 Otherwise it should be set to *undef*.
 Default value: 10000
 
 ##### `commitlog_total_space_in_mb`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+Total space to use for commitlogs.  Since commitlog segments are
+mmapped, and hence use up address space, the default size is 32
+on 32-bit JVMs, and 8192 on 64-bit JVMs (calculated automatically by
+cassandra if the module setting is left at *undef*).
+
+If space gets above this value (it will round up to the next nearest
+segment multiple), Cassandra will flush every dirty CF in the oldest
+segment and remove it.  So a small total commitlog space will tend
+to cause more flush activity on less-active columnfamilies.
 Default value: *undef*
 
 ##### `compaction_throughput_mb_per_sec`
@@ -792,6 +796,8 @@ Default value: 'false'
 This is passed to the
 [cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
 Default value '['/var/lib/cassandra/data']'
+
+See also `commitlog_directory` and `saved_caches_directory`.
 
 ##### `data_file_directories_mode`
 The mode for the directories specified in `data_file_directories`.
@@ -1196,6 +1202,8 @@ Default value 'sync'
 This is passed to the
 [cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
 Default value '/var/lib/cassandra/saved_caches'
+
+See also `commitlog_directory` and `data_file_directories`.
 
 ##### `saved_caches_directory_mode`
 The mode for the directory specified in `saved_caches_directory`.
