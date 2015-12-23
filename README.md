@@ -726,23 +726,34 @@ to cause more flush activity on less-active columnfamilies.
 Default value: *undef*
 
 ##### `compaction_throughput_mb_per_sec`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Throttles compaction to the given total throughput across the entire
+system. The faster you insert data, the faster you need to compact in
+order to keep the sstable count down, but in general, setting this to
+16 to 32 times the rate you are inserting data is more than sufficient.
+Setting this to 0 disables throttling. Note that this accounts for all types
+of compaction, including validation compaction.
 Default value: '16'
 
 ##### `concurrent_counter_writes`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+For workloads with more data than can fit in memory, Cassandra's
+bottleneck will be reads that need to fetch data from
+disk. `concurrent_reads` should be set to (16 * number_of_drives) in
+order to allow the operations to enqueue low enough in the stack
+that the OS and drives can reorder them. Same applies to
+`concurrent_counter_writes`, since counter writes read the current
+values before incrementing and writing them back.
+
+On the other hand, since writes are almost never IO bound, the ideal
+number of `concurrent_writes` is dependent on the number of cores in
+your system; (8 * number_of_cores) is a good rule of thumb.
 Default value '32'
 
 ##### `concurrent_reads`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+See `concurrent_counter_writes`.
 Default value '32'
 
 ##### `concurrent_writes`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+See `concurrent_counter_writes`.
 Default value '32'
 
 ##### `config_file_mode`
@@ -757,39 +768,65 @@ path name.
 Default value *undef*
 
 ##### `concurrent_compactors`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+Number of simultaneous compactions to allow, NOT including
+validation "compactions" for anti-entropy repair.  Simultaneous
+compactions can help preserve read performance in a mixed read/write
+workload, by mitigating the tendency of small sstables to accumulate
+during a single long running compactions. The default (*undef*) is usually
+fine and if you experience problems with compaction running too
+slowly or too fast, you should look at
+`compaction_throughput_mb_per_sec` first.
+
+`concurrent_compactors` defaults to the smaller of (number of disks,
+number of cores), with a minimum of 2 and a maximum of 8.
+ 
+If your data directories are backed by SSD, you should increase this
+to the number of cores.
 Default value: *undef*
 
 ##### `counter_cache_save_period`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-Default value: '7200'
+Duration in seconds after which Cassandra should save the counter cache (keys
+only). Caches are saved to saved_caches_directory as specified in this
+configuration file.
+Default value: '7200' (2 hours)
 
 ##### `counter_cache_keys_to_save`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+Number of keys from the counter cache to save.  Disabled by default
+(*undef*), meaning all keys are going to be saved.
 Default value: *undef*
 
 ##### `counter_cache_size_in_mb`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Maximum size of the counter cache in memory.
+
+Counter cache helps to reduce counter locks' contention for hot counter cells.
+In case of RF = 1 a counter cache hit will cause Cassandra to skip the read
+before write entirely. With RF > 1 a counter cache hit will still help to
+reduce the duration of the lock hold, helping with hot counter cell updates,
+but will not allow skipping the read entirely. Only the local (clock, count)
+tuple of a counter cell is kept in memory, not the whole counter, so it's
+relatively cheap.
+
+NOTE: if you reduce the size, you may not get you hottest keys loaded on
+startup.
+
+Default value is empty to make it "auto" (min(2.5% of Heap (in MB), 50MB)).
+Set to 0 to disable counter cache.  NOTE: if you perform counter deletes and
+rely on low gcgs, you should disable the counter cache.
 Default value: ''
 
 ##### `counter_write_request_timeout_in_ms`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+How long the coordinator should wait for counter writes to complete.
 Default value: '5000'
 
 ##### `cross_node_timeout`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Enable operation timeout information exchange between nodes to accurately
+measure request timeouts.  If disabled, replicas will assume that requests
+were forwarded to them instantly by the coordinator, which means that
+under overload conditions we will waste that much extra time processing 
+already-timed-out requests.
+
+Warning: before enabling this property make sure that ntp is installed
+and the times are synchronized between the nodes.
 Default value: 'false'
 
 ##### `data_file_directories`
@@ -800,7 +837,10 @@ Default value '['/var/lib/cassandra/data']'
 See also `commitlog_directory` and `saved_caches_directory`.
 
 ##### `data_file_directories_mode`
-The mode for the directories specified in `data_file_directories`.
+Directories where Cassandra should store data on disk.  Cassandra
+will spread data evenly across them, subject to the granularity of
+the configured compaction strategy.
+If not set, the default directory is $CASSANDRA_HOME/data/data.
 Default value '0750'
 
 ##### `dc`
@@ -817,28 +857,88 @@ snitch properties file for this setting.
 Default value *undef*
 
 ##### `disk_failure_policy`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Policy for data disk failures:
+* die: shut down gossip and Thrift and kill the JVM for any fs errors or
+       single-sstable errors, so the node can be replaced.
+* stop_paranoid: shut down gossip and Thrift even for single-sstable errors.
+* stop: shut down gossip and Thrift, leaving the node effectively dead, but
+        can still be inspected via JMX.
+* best_effort: stop using the failed disk and respond to requests based on
+               remaining available sstables.  This means you WILL see obsolete
+               data at CL.ONE!
+* ignore: ignore fatal errors and let requests fail, as in pre-1.2 Cassandra
+
 Default value 'stop'
 
 ##### `dynamic_snitch_badness_threshold`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+if set greater than zero and read_repair_chance is < 1.0, this will allow
+'pinning' of replicas to hosts in order to increase cache capacity.
+The badness threshold will control how much worse the pinned host has to be
+before the dynamic snitch will prefer other replicas over it.  This is
+expressed as a double which represents a percentage.  Thus, a value of
+0.2 means Cassandra would continue to prefer the static snitch values
+until the pinned host was 20% worse than the fastest.
 Default value: '0.1'
 
 ##### `dynamic_snitch_reset_interval_in_ms`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Controls how often to reset all host scores, allowing a bad host to
+possibly recover.
 Default value: '600000'
 
 ##### `dynamic_snitch_update_interval_in_ms`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Controls how often to perform the more expensive part of host score calculation.
 Default value: '100'
 
 ##### `endpoint_snitch`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Set this to a class that implements IEndpointSnitch.  The snitch has two functions:
+1. It teaches Cassandra enough about your network topology to route requests
+   efficiently.
+2. It allows Cassandra to spread replicas around your cluster to avoid
+   correlated failures. It does this by grouping machines into
+   "datacenters" and "racks."  Cassandra will do its best not to have
+   more than one replica on the same "rack" (which may not actually
+   be a physical location)
+
+IF YOU CHANGE THE SNITCH AFTER DATA IS INSERTED INTO THE CLUSTER,
+YOU MUST RUN A FULL REPAIR, SINCE THE SNITCH AFFECTS WHERE REPLICAS
+ARE PLACED.
+
+Out of the box, Cassandra provides:
+* SimpleSnitch:
+  Treats Strategy order as proximity. This can improve cache
+  locality when disabling read repair.  Only appropriate for
+  single-datacenter deployments.
+* GossipingPropertyFileSnitch:
+  This should be your go-to snitch for production use.  The rack
+  and datacenter for the local node are defined in
+  cassandra-rackdc.properties and propagated to other nodes via
+  gossip.  If cassandra-topology.properties exists, it is used as a
+  fallback, allowing migration from the PropertyFileSnitch.
+* PropertyFileSnitch:
+  Proximity is determined by rack and data center, which are
+  explicitly configured in cassandra-topology.properties.
+* Ec2Snitch:
+  Appropriate for EC2 deployments in a single Region. Loads Region
+  and Availability Zone information from the EC2 API. The Region is
+  treated as the datacenter, and the Availability Zone as the rack.
+  Only private IPs are used, so this will not work across multiple
+  Regions.
+* Ec2MultiRegionSnitch:
+  Uses public IPs as broadcast_address to allow cross-region
+  connectivity.  (Thus, you should set seed addresses to the public
+  IP as well.) You will need to open the storage_port or
+  ssl_storage_port on the public IP firewall.  (For intra-Region
+  traffic, Cassandra will switch to the private IP after
+  establishing a connection.)
+* RackInferringSnitch:
+  Proximity is determined by rack and data center, which are
+  assumed to correspond to the 3rd and 2nd octet of each node's IP
+  address, respectively.  Unless this happens to match your
+  deployment conventions, this is best used as an example of
+  writing a custom Snitch class and is provided in that spirit.
+
+You can use a custom Snitch by setting this to the full class name
+of the snitch, which will be assumed to be on your classpath.
 Default value 'SimpleSnitch'
 
 ##### `fail_on_non_supported_os`
