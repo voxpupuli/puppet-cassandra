@@ -955,54 +955,67 @@ and variable are placed into the configuration file.
 Default value: *undef*
 
 ##### `hinted_handoff_enabled`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+See http://wiki.apache.org/cassandra/HintedHandoff
+May either be "true" or "false" to enable globally, or contain a list
+of data centers to enable per-datacenter (e.g. DC1,DC2).
 Default value 'true'
 
 ##### `hinted_handoff_throttle_in_kb`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Maximum throttle in KBs per second, per delivery thread.  This will be
+reduced proportionally to the number of nodes in the cluster.  (If there
+are two nodes in the cluster, each delivery thread will use the maximum
+rate; if there are three, each will throttle to half of the maximum,
+since we expect two nodes to be delivering hints simultaneously.)
 Default value: '1024'
 
 ##### `index_summary_capacity_in_mb`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+A fixed memory pool size in MB for for SSTable index summaries. If left
+empty, this will default to 5% of the heap size. If the memory usage of
+all index summaries exceeds this limit, SSTables with low read rates will
+shrink their index summaries in order to meet this limit.  However, this
+is a best-effort process. In extreme conditions Cassandra may need to use
+more than this amount of memory.
 Default value: ''
 
 ##### `index_summary_resize_interval_in_minutes`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+How frequently index summaries should be resampled.  This is done
+periodically to redistribute memory from the fixed-size pool to sstables
+proportional their recent read rates.  Setting to -1 will disable this
+process, leaving existing index summaries at their current sampling level.
 Default value: '60'
 
 ##### `incremental_backups`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Set to true to have Cassandra create a hard link to each sstable
+flushed or streamed locally in a backups/ subdirectory of the
+keyspace data.  Removing these links is the operator's
+responsibility.
 Default value 'false'
 
 ##### `initial_token`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+Allows you to specify tokens manually.  While you can use
+it with vnodes (num_tokens > 1, above) - in which case you should provide a 
+comma-separated list - it's primarily used when adding nodes
+to legacy clusters that do not have vnodes enabled.
 Default value: *undef*
 
 ##### `inter_dc_tcp_nodelay`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Enable or disable tcp_nodelay for inter-dc communication.
+Disabling it will result in larger (but fewer) network packets being sent,
+reducing overhead from the TCP protocol itself, at the cost of increasing
+latency if you block for cross-datacenter responses.
 Default value: 'false'
 
 ##### `internode_authenticator`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+Internode authentication backend, implementing IInternodeAuthenticator;
+used to allow/disallow connections from peer nodes.
 Default value: *undef*
 
 ##### `internode_compression`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Controls whether traffic between nodes is compressed.  Can be:
+* all - all traffic is compressed
+* dc   - traffic between different datacenters is compressed
+* none - nothing is compressed.
+
 Default value 'all'
 
 ##### `internode_recv_buff_size_in_bytes`
