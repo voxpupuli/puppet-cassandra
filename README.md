@@ -830,17 +830,16 @@ and the times are synchronized between the nodes.
 Default value: 'false'
 
 ##### `data_file_directories`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Directories where Cassandra should store data on disk.  Cassandra
+will spread data evenly across them, subject to the granularity of
+the configured compaction strategy.
+
 Default value '['/var/lib/cassandra/data']'
 
 See also `commitlog_directory` and `saved_caches_directory`.
 
 ##### `data_file_directories_mode`
-Directories where Cassandra should store data on disk.  Cassandra
-will spread data evenly across them, subject to the granularity of
-the configured compaction strategy.
-If not set, the default directory is $CASSANDRA_HOME/data/data.
+The mode for the directories specified in `data_file_directories`.
 Default value '0750'
 
 ##### `dc`
