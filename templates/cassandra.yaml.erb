@@ -1,4 +1,4 @@
-# Cassandra storage config YAML 
+# Cassandra storage config YAML
 
 # NOTE:
 #   See http://wiki.apache.org/cassandra/StorageConfiguration for
@@ -20,13 +20,13 @@ cluster_name: '<%= @cluster_name %>'
 # Specifying initial_token will override this setting on the node's initial start,
 # on subsequent starts, this setting will apply even if initial token is set.
 #
-# If you already have a cluster with 1 token per node, and wish to migrate to 
+# If you already have a cluster with 1 token per node, and wish to migrate to
 # multiple tokens per node, see http://wiki.apache.org/cassandra/Operations
 num_tokens: <%= @num_tokens %>
 
 # initial_token allows you to specify tokens manually.  While you can use # it with
-# vnodes (num_tokens > 1, above) -- in which case you should provide a 
-# comma-separated list -- it's primarily used when adding nodes # to legacy clusters 
+# vnodes (num_tokens > 1, above) -- in which case you should provide a
+# comma-separated list -- it's primarily used when adding nodes # to legacy clusters
 # that do not have vnodes enabled.
 <% if @initial_token != nil %>initial_token: <%= @initial_token %><% else %># initial_token:<% end %>
 
@@ -214,7 +214,7 @@ counter_cache_save_period: <%= @counter_cache_save_period %>
 # well as caches.  Experiments show that JEMAlloc saves some memory
 # than the native GCC allocator (i.e., JEMalloc is more
 # fragmentation-resistant).
-# 
+#
 # Supported values are: NativeAllocator, JEMallocAllocator
 #
 # If you intend to use JEMallocAllocator you have to install JEMalloc as library and
@@ -227,7 +227,7 @@ counter_cache_save_period: <%= @counter_cache_save_period %>
 # If not set, the default directory is $CASSANDRA_HOME/data/saved_caches.
 saved_caches_directory: <%= @saved_caches_directory %>
 
-# commitlog_sync may be either "periodic" or "batch." 
+# commitlog_sync may be either "periodic" or "batch."
 # When in batch mode, Cassandra won't ack writes until the commit log
 # has been fsynced to disk.  It will wait up to
 # commitlog_sync_batch_window_in_ms milliseconds for other writes, before
@@ -238,14 +238,14 @@ saved_caches_directory: <%= @saved_caches_directory %>
 #
 # the other option is "periodic" where writes may be acked immediately
 # and the CommitLog is simply synced every commitlog_sync_period_in_ms
-# milliseconds. 
+# milliseconds.
 <% if @commitlog_sync != nil %>commitlog_sync: <%= @commitlog_sync %><% else %># commitlog_sync: periodic<% end %>
 <% if @commitlog_sync_period_in_ms != nil %>commitlog_sync_period_in_ms: <%= @commitlog_sync_period_in_ms %><% else %># commitlog_sync_period_in_ms: 10000<% end %>
 
 # The size of the individual commitlog file segments.  A commitlog
 # segment may be archived, deleted, or recycled once all the data
 # in it (potentially from each columnfamily in the system) has been
-# flushed to sstables.  
+# flushed to sstables.
 #
 # The default size is 32, which is almost always fine, but if you are
 # archiving commitlog segments (see commitlog_archiving.properties),
@@ -256,7 +256,7 @@ commitlog_segment_size_in_mb: <%= @commitlog_segment_size_in_mb %>
 # any class that implements the SeedProvider interface and has a
 # constructor that takes a Map<String, String> of parameters will do.
 seed_provider:
-    # Addresses of hosts that are deemed contact points. 
+    # Addresses of hosts that are deemed contact points.
     # Cassandra nodes use this list of hosts to find each other and learn
     # the topology of the ring.  You must change this if you are running
     # multiple nodes!
@@ -285,7 +285,7 @@ concurrent_counter_writes: <%= @concurrent_counter_writes %>
 # the smaller of 1/4 of heap or 512MB.
 <% if @file_cache_size_in_mb != nil %>file_cache_size_in_mb: <%= @file_cache_size_in_mb %><% else %># file_cache_size_in_mb: 512<% end %>
 
-# Total permitted memory to use for memtables. Cassandra will stop 
+# Total permitted memory to use for memtables. Cassandra will stop
 # accepting writes when the limit is exceeded until a flush completes,
 # and will trigger a flush based on memtable_cleanup_threshold
 # If omitted, Cassandra will set both to 1/4 the size of the heap.
@@ -320,11 +320,11 @@ memtable_allocation_type: heap_buffers
 
 # This sets the amount of memtable flush writer threads.  These will
 # be blocked by disk io, and each one will hold a memtable in memory
-# while blocked. 
+# while blocked.
 #
 # memtable_flush_writers defaults to the smaller of (number of disks,
 # number of cores), with a minimum of 2 and a maximum of 8.
-# 
+#
 # If your data directories are backed by SSD, you should increase this
 # to the number of cores.
 <% if @memtable_flush_writers != nil %>memtable_flush_writers: <%= @memtable_flush_writers %><% else %>#memtable_flush_writers: 8<% end %>
@@ -377,8 +377,11 @@ ssl_storage_port: <%= @ssl_storage_port %>
 # you can specify which should be chosen using listen_interface_prefer_ipv6. If false the first ipv4
 # address will be used. If true the first ipv6 address will be used. Defaults to false preferring
 # ipv4. If there is only one address it will be selected regardless of ipv4/ipv6.
+<% if @listen_interface == nil -%>
 listen_address: <%= @listen_address %>
-# listen_interface: eth0
+<% else -%>
+listen_interface: <%= @listen_interface %>
+<% end -%>
 # listen_interface_prefer_ipv6: false
 
 # Address to broadcast to other Cassandra nodes
@@ -435,8 +438,11 @@ start_rpc: <%= @start_rpc %>
 # you can specify which should be chosen using rpc_interface_prefer_ipv6. If false the first ipv4
 # address will be used. If true the first ipv6 address will be used. Defaults to false preferring
 # ipv4. If there is only one address it will be selected regardless of ipv4/ipv6.
+<% if @rpc_interface == nil -%>
 rpc_address: <%= @rpc_address %>
-# rpc_interface: eth1
+<% else -%>
+rpc_interface: <%= @rpc_interface %>
+<% end -%>
 # rpc_interface_prefer_ipv6: false
 
 # port for Thrift to listen for clients on
@@ -516,7 +522,7 @@ incremental_backups: <%= @incremental_backups %>
 snapshot_before_compaction: <%= @snapshot_before_compaction %>
 
 # Whether or not a snapshot is taken of the data before keyspace truncation
-# or dropping of column families. The STRONGLY advised default of true 
+# or dropping of column families. The STRONGLY advised default of true
 # should be used to provide data safety. If you set this flag to false, you will
 # lose data on truncation or drop.
 auto_snapshot: <%= @auto_snapshot %>
@@ -560,7 +566,7 @@ batch_size_warn_threshold_in_kb: <%= @batch_size_warn_threshold_in_kb %>
 #
 # concurrent_compactors defaults to the smaller of (number of disks,
 # number of cores), with a minimum of 2 and a maximum of 8.
-# 
+#
 # If your data directories are backed by SSD, you should increase this
 # to the number of cores.
 <% if @concurrent_compactors != nil %>concurrent_compactors: <%= @concurrent_compactors %><% else %>#concurrent_compactors: 1<% end %>
@@ -575,7 +581,7 @@ compaction_throughput_mb_per_sec: <%= @compaction_throughput_mb_per_sec %>
 
 # When compacting, the replacement sstable(s) can be opened before they
 # are completely written, and used in place of the prior sstables for
-# any range that has been written. This helps to smoothly transfer reads 
+# any range that has been written. This helps to smoothly transfer reads
 # between the sstables, reducing page cache churn and keeping hot rows hot
 sstable_preemptive_open_interval_in_mb: <%= @sstable_preemptive_open_interval_in_mb %>
 
@@ -613,7 +619,7 @@ request_timeout_in_ms: <%= @request_timeout_in_ms %>
 # Enable operation timeout information exchange between nodes to accurately
 # measure request timeouts.  If disabled, replicas will assume that requests
 # were forwarded to them instantly by the coordinator, which means that
-# under overload conditions we will waste that much extra time processing 
+# under overload conditions we will waste that much extra time processing
 # already-timed-out requests.
 #
 # Warning: before enabling this property make sure to ntp is installed
@@ -715,7 +721,7 @@ request_scheduler: <%= @request_scheduler %>
 # NoScheduler - Has no options
 # RoundRobin
 #  - throttle_limit -- The throttle_limit is the number of in-flight
-#                      requests per client.  Requests beyond 
+#                      requests per client.  Requests beyond
 #                      that limit are queued up until
 #                      running requests can complete.
 #                      The value of 80 here is twice the number of
