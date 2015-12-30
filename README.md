@@ -1115,72 +1115,75 @@ that will trigger a flush of the largest memtable.  Lager mct will
 mean larger flushes and hence less compaction, but also less concurrent
 flush activity which can make it difficult to keep your disks fed
 under heavy write load.
+
+If not set, `memtable_cleanup_threshold` defaults to 1 / (`memtable_flush_writers` + 1)
 Default value: *undef*
 
 ##### `memtable_flush_writers`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+This sets the amount of memtable flush writer threads.  These will
+be blocked by disk io, and each one will hold a memtable in memory
+while blocked. 
+
+If omitted is to set to the smaller of (number of disks,
+number of cores), with a minimum of 2 and a maximum of 8.
+ 
+If your data directories are backed by SSD, you should increase this
+to the number of cores.
 Default value: *undef*
 
 ##### `memtable_heap_space_in_mb`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+Total permitted memory to use for memtables. Cassandra will stop 
+accepting writes when the limit is exceeded until a flush completes,
+and will trigger a flush based on `memtable_cleanup_threshold`
+If omitted, Cassandra will set both to 1/4 the size of the heap.
 Default value: *undef*
 
 ##### `memtable_offheap_space_in_mb`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+If omitted defaults to 1/4 heap. See `memtable_heap_space_in_mb`.
 Default value: *undef*
 
 ##### `native_transport_max_concurrent_connections`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+The maximum number of concurrent client connections.  The assumed default is -1
+when omitted, which means unlimited.
 Default value: *undef*
 
 ##### `native_transport_max_concurrent_connections_per_ip`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+The maximum number of concurrent client connections per source ip.
+The assumed default is -1 when omitted, which means unlimited.
 Default value: *undef*
 
 ##### `native_transport_max_frame_size_in_mb`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+The maximum size of allowed frame. Frame (requests) larger than this will
+be rejected as invalid.  The assumed default is 256MB when omitted.
 Default value: *undef*
 
 ##### `native_transport_max_threads`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+The maximum threads for handling requests when the native transport is used.
+This is similar to `rpc_max_threads` though the default differs slightly (and
+there is no native_transport_min_threads, idle threads will always be stopped
+after 30 seconds).
 Default value: *undef*
 
 ##### `native_transport_port`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Port for the CQL native transport to listen for clients on.  For security
+reasons, you should not expose this port to the internet.  Firewall it if needed.
 Default value '9042'
 
 ##### `num_tokens`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+This defines the number of tokens randomly assigned to this node on the ring
+The more tokens, relative to other nodes, the larger the proportion of data
+that this node will store. You probably want all nodes to have the same number
+of tokens assuming they have equal hardware capability.
+
+If you leave this unspecified, Cassandra will use the default of 1 token for legacy compatibility,
+and will use the `initial_token` as described below.
+
+Specifying `initial_token` will override this setting on the node's initial start,
+on subsequent starts, this setting will apply even if initial token is set.
+
+If you already have a cluster with 1 token per node, and wish to migrate to 
+multiple tokens per node, see http://wiki.apache.org/cassandra/Operations
+
 Default value '256'
 
 ##### `package_ensure`
@@ -1196,21 +1199,32 @@ specify the package name.
 Default value *undef*
 
 ##### `partitioner`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+The partitioner is responsible for distributing groups of rows (by
+partition key) across nodes in the cluster.  You should leave this
+alone for new clusters.  The partitioner can NOT be changed without
+reloading all data, so when upgrading you should set this to the
+same partitioner you were already using.
+
+Besides Murmur3Partitioner, partitioners included for backwards
+compatibility include RandomPartitioner, ByteOrderedPartitioner, and
+OrderPreservingPartitioner.
+
 Default value 'org.apache.cassandra.dht.Murmur3Partitioner'
 
 ##### `permissions_update_interval_in_ms`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+Refresh interval for permissions cache (if enabled).
+After this interval, cache entries become eligible for refresh. Upon next
+access, an async reload is scheduled and the old value returned until it
+completes. If `permissions_validity_in_ms` is non-zero, then this must be
+also.
+If omitted defaults to the same value as `permissions_validity_in_ms`.
 Default value: *undef*
 
 ##### `permissions_validity_in_ms`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Validity period for permissions cache (fetching permissions can be an
+expensive operation depending on the authorizer, CassandraAuthorizer is
+one example). Defaults to 2000, set to 0 to disable.
+Will be disabled automatically for AllowAllAuthorizer.
 Default value: '2000'
 
 ##### `phi_convict_threshold`
