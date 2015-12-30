@@ -1019,42 +1019,59 @@ Controls whether traffic between nodes is compressed.  Can be:
 Default value 'all'
 
 ##### `internode_recv_buff_size_in_bytes`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+Change from the default to set socket buffer size for internode communication
+Note that when setting this, the buffer size is limited by net.core.wmem_max
+and when not setting it it is defined by net.ipv4.tcp_wmem
+
+See:
+* /proc/sys/net/core/wmem_max
+* /proc/sys/net/core/rmem_max
+* /proc/sys/net/ipv4/tcp_wmem
+* /proc/sys/net/ipv4/tcp_wmem
+
+and: man tcp
+
 Default value: *undef*
 
 ##### `internode_send_buff_size_in_bytes`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+See `internode_recv_buff_size_in_bytes`.
 Default value: *undef*
 
 ##### `key_cache_save_period`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-Default value: 14400
+Duration in seconds after which Cassandra should
+save the key cache. Caches are saved to saved_caches_directory as
+specified in this configuration file.
+
+Saved caches greatly improve cold-start speeds, and is relatively cheap in
+terms of I/O for the key cache. Row cache saving is much more expensive and
+has limited use.
+
+Default value: 14400 (4 hours)
 
 ##### `key_cache_size_in_mb`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Default value is empty to make it "auto" (min(5% of Heap (in MB), 100MB)). Set
+to 0 to disable key cache.
 Default value: ''
 
 ##### `key_cache_keys_to_save`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+Number of keys from the key cache to save.  Disabled by default, meaning all
+keys are going to be saved.
 Default value: *undef*
 
 ##### `listen_address`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Address or interface to bind to and tell other Cassandra nodes to connect to.
+You **MUST** change this if you want multiple nodes to be able to communicate!
+
+Set `listen_address` OR `listen_interface`, not both. Interfaces must correspond
+to a single address, IP aliasing is not supported.
+
+Leaving it blank leaves it up to InetAddress.getLocalHost(). This
+will always do the Right Thing _if_ the node is properly configured
+(hostname, name resolution, etc), and the Right Thing is to use the
+address associated with the hostname (it might not be).
+
+Setting listen_address to 0.0.0.0 is always wrong.
+
 Default value 'localhost'
 
 ##### `manage_dsc_repo`
@@ -1066,29 +1083,38 @@ downloaded from DataStax community.
 Default value 'false'
 
 ##### `max_hints_delivery_threads`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Number of threads with which to deliver hints; Consider increasing this number
+when you have multi-dc deployments, since cross-dc handoff tends to be slower.
 Default value: '2'
 
 ##### `max_hint_window_in_ms`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Defines the maximum amount of time a dead host will have hints
+generated.  After it has been dead this long, new hints for it will not be
+created until it has been seen alive and gone down again.
 Default value: '10800000'
 
 ##### `memory_allocator`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+The off-heap memory allocator.  Affects storage engine metadata as
+well as caches.  Experiments show that JEMAlloc saves some memory
+than the native GCC allocator (i.e., JEMalloc is more
+fragmentation-resistant).
+ 
+Supported values are:
+* NativeAllocator
+* JEMallocAllocator
+
+If you intend to use JEMallocAllocator you have to install JEMalloc as library and
+modify cassandra-env.sh as directed in the file.
+
+If left as the default, NativeAllocator is assumed.
 Default value: *undef*
 
 ##### `memtable_cleanup_threshold`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+Ratio of occupied non-flushing memtable size to total permitted size
+that will trigger a flush of the largest memtable.  Lager mct will
+mean larger flushes and hence less compaction, but also less concurrent
+flush activity which can make it difficult to keep your disks fed
+under heavy write load.
 Default value: *undef*
 
 ##### `memtable_flush_writers`
