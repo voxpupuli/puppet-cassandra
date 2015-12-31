@@ -947,11 +947,8 @@ If you set this option to false then you must also at least set the
 Default value 'true'
 
 ##### `file_cache_size_in_mb`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+Total memory to use for sstable-reading buffers.  If omitted defaults to
+the smaller of 1/4 of heap or 512MB.
 Default value: *undef*
 
 ##### `hinted_handoff_enabled`
@@ -1228,11 +1225,8 @@ Will be disabled automatically for AllowAllAuthorizer.
 Default value: '2000'
 
 ##### `phi_convict_threshold`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+Phi value that must be reached for a host to be marked down.
+Most users should never need to adjust this.
 Default value: *undef*
 
 ##### `prefer_local`
@@ -1250,34 +1244,48 @@ for more details.
 Default value 'RAC1'
 
 ##### `range_request_timeout_in_ms`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+How long the coordinator should wait for seq or index scans to complete.
 Default value: '10000'
 
 ##### `read_request_timeout_in_ms`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+How long the coordinator should wait for read operations to complete.
 Default value: '5000'
 
 ##### `request_scheduler`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Set this to a class that implements RequestScheduler, which will schedule
+incoming client requests according to the specific policy. This is useful for
+multi-tenancy with a single Cassandra cluster.
+
+NOTE: This is specifically for requests from the client and does not affect
+inter node communication.
+
+* org.apache.cassandra.scheduler.NoScheduler - No scheduling takes place
+* org.apache.cassandra.scheduler.RoundRobinScheduler - Round robin of
+  client requests to a node with a separate queue for each
+  request_scheduler_id.
+
+The scheduler is further customized by request_scheduler_options:
+
+* NoScheduler - Has no options
+* RoundRobin
+  * throttle_limit - The throttle_limit is the number of in-flight requests
+  per client.  Requests beyond that limit are queued up until running requests
+  can complete.  The value of 80 here is twice the number of
+  concurrent_reads + concurrent_writes.
+  * default_weight - default_weight is optional and allows for overriding the
+  default which is 1.
+  * weights - Weights are optional and will default to 1 or the overridden
+  default_weight. The weight translates into how many requests are handled
+  during each turn of the RoundRobin, based on the scheduler id.
+
 Default value: 'org.apache.cassandra.scheduler.NoScheduler'
 
 ##### `request_scheduler_options_default_weight`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+See `request_scheduler`.
 Default value: *undef*
 
 ##### `request_scheduler_options_throttle_limit`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+See `request_scheduler`.
 Default value: *undef*
 
 ##### `request_timeout_in_ms`
