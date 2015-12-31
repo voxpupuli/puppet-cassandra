@@ -1289,78 +1289,101 @@ See `request_scheduler`.
 Default value: *undef*
 
 ##### `request_timeout_in_ms`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+How long the coordinator should wait for read operations to complete.
 Default value: '10000'
 
 ##### `row_cache_keys_to_save`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+Number of keys from the row cache to save. Disabled by default, meaning all
+keys are going to be saved.
 Default value: *undef*
 
 ##### `row_cache_save_period`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-Default value: '0'
+Duration in seconds after which Cassandra should
+save the row cache. Caches are saved to saved_caches_directory as specified
+in this configuration file.
+
+Saved caches greatly improve cold-start speeds, and is relatively cheap in
+terms of I/O for the key cache. Row cache saving is much more expensive and
+has limited use.
+
+Default value: '0' (disable saving the row cache)
 
 ##### `row_cache_size_in_mb`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-Default value: '0'
+Maximum size of the row cache in memory.
+
+NOTE: if you reduce the size, you may not get you hottest keys loaded on startup.
+
+Default value: '0' (disable row caching)
 
 ##### `rpc_address`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+The address  bind the Thrift RPC service and native transport server to.
+
+Set rpc_address OR rpc_interface, not both. Interfaces must correspond
+to a single address, IP aliasing is not supported.
+
+Leaving rpc_address blank has the same effect as on listen_address
+(i.e. it will be based on the configured hostname of the node).
+
+Note that unlike listen_address, you can specify 0.0.0.0, but you must also
+set broadcast_rpc_address to a value other than 0.0.0.0.
+
+For security reasons, you should not expose this port to the internet.  Firewall it if needed.
+
 Default value 'localhost'
 
 ##### `rpc_max_threads`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+Set rpc_min|max_thread to set request pool size limits.
+
+Regardless of your choice of RPC server (see `rpc_server_type`), the number of
+maximum requests in the RPC thread pool dictates how many concurrent requests
+are possible (but if you are using the sync RPC server, it also dictates the
+number of clients that can be connected at all).
+
+The default is unlimited and thus provides no protection against clients
+overwhelming the server. You are encouraged to set a maximum that makes sense
+for you in production, but do keep in mind that rpc_max_threads represents the
+maximum number of client requests this server may execute concurrently.
 Default value: *undef*
 
 ##### `rpc_min_threads`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+See `rpc_max_threads`.
 Default value: *undef*
 
 ##### `rpc_port`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Port for Thrift to listen for clients on.
 Default value '9160'
 
 ##### `rpc_recv_buff_size_in_bytes`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+Change from *undef* to set socket buffer sizes on rpc connections.
 Default value: *undef*
 
 ##### `rpc_send_buff_size_in_bytes`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+Change from *undef* to set socket buffer sizes on rpc connections.
 Default value: *undef*
 
 ##### `rpc_server_type`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Cassandra provides two out-of-the-box options for the RPC Server:
+
+* sync -> One thread per thrift connection. For a very large number of clients, memory
+  will be your limiting factor. On a 64 bit JVM, 180KB is the minimum stack size
+  per thread, and that will correspond to your use of virtual memory (but physical memory
+  may be limited depending on use of stack space).
+
+* hsha -> Stands for "half synchronous, half asynchronous." All thrift clients are handled
+  asynchronously using a small number of threads that does not vary with the amount
+  of thrift clients (and thus scales well to many clients). The rpc requests are still
+  synchronous (one thread per active request). If hsha is selected then it is essential
+  that rpc_max_threads is changed from the default value of unlimited.
+
+The default is sync because on Windows hsha is about 30% slower.  On Linux,
+sync/hsha performance is about the same, with hsha of course using less memory.
+
+Alternatively, provide your own RPC server by providing the fully-qualified class name
+of an o.a.c.t.TServerFactory that can create an instance of it.
+
 Default value 'sync'
 
 ##### `saved_caches_directory`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
 Default value '/var/lib/cassandra/saved_caches'
 
 See also `commitlog_directory` and `data_file_directories`.
@@ -1370,15 +1393,26 @@ The mode for the directory specified in `saved_caches_directory`.
 Default value '0750'
 
 ##### `seeds`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
 The field being set is `seed_provider -> parameters -> seeds`.
+
+Addresses of hosts that are deemed contact points. Cassandra nodes use this list
+of hosts to find each other and learn the topology of the ring. You must change
+this if you are running multiple nodes!
+
+seeds is actually a comma-delimited list of addresses. Ex: "<ip1>,<ip2>,<ip3>"
+
+See also `seed_provider_class_name`.
+
 Default value '127.0.0.1'
 
 ##### `seed_provider_class_name`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
 The field being set is `seed_provider -> class_name`.
+
+Any class that implements the SeedProvider interface and has a constructor
+that takes a Map<String, String> of parameters will do.
+
+See also `seeds`.
+
 Default value 'org.apache.cassandra.locator.SimpleSeedProvider'
 
 ##### `server_encryption_algorithm`
