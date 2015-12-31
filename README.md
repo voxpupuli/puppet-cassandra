@@ -48,7 +48,7 @@ A Puppet module to install and manage Cassandra, DataStax Agent & OpsCenter
   is added as a system service.
 * Optionally ensures that the Cassandra service is enabled and running.
 * On Ubuntu systems, optionally replace ```/etc/init.d/cassandra``` with a
-  workaround for 
+  workaround for
   [CASSANDRA-9822](https://issues.apache.org/jira/browse/CASSANDRA-9822).
 * Optionally creates a file /usr/lib/systemd/system/cassandra.service to
   improve service interaction.
@@ -443,7 +443,7 @@ Default value: *undef*
 
 ##### `auto_snapshot`
 Whether or not a snapshot is taken of the data before keyspace truncation
-or dropping of column families. The STRONGLY advised default of true 
+or dropping of column families. The STRONGLY advised default of true
 should be used to provide data safety. If you set this flag to false, you will
 lose data on truncation or drop.
 Default value **true**
@@ -685,7 +685,7 @@ Default value '0750'
 The size of the individual commitlog file segments.  A commitlog
 segment may be archived, deleted, or recycled once all the data
 in it (potentially from each columnfamily in the system) has been
-flushed to sstables.  
+flushed to sstables.
 
 The default size is 32, which is almost always fine, but if you are
 archiving commitlog segments (see commitlog_archiving.properties),
@@ -779,7 +779,7 @@ slowly or too fast, you should look at
 
 `concurrent_compactors` defaults to the smaller of (number of disks,
 number of cores), with a minimum of 2 and a maximum of 8.
- 
+
 If your data directories are backed by SSD, you should increase this
 to the number of cores.
 Default value: *undef*
@@ -822,7 +822,7 @@ Default value: '5000'
 Enable operation timeout information exchange between nodes to accurately
 measure request timeouts.  If disabled, replicas will assume that requests
 were forwarded to them instantly by the coordinator, which means that
-under overload conditions we will waste that much extra time processing 
+under overload conditions we will waste that much extra time processing
 already-timed-out requests.
 
 Warning: before enabling this property make sure that ntp is installed
@@ -993,7 +993,7 @@ Default value 'false'
 
 ##### `initial_token`
 Allows you to specify tokens manually.  While you can use
-it with vnodes (num_tokens > 1, above) - in which case you should provide a 
+it with vnodes (num_tokens > 1, above) - in which case you should provide a
 comma-separated list - it's primarily used when adding nodes
 to legacy clusters that do not have vnodes enabled.
 Default value: *undef*
@@ -1098,7 +1098,7 @@ The off-heap memory allocator.  Affects storage engine metadata as
 well as caches.  Experiments show that JEMAlloc saves some memory
 than the native GCC allocator (i.e., JEMalloc is more
 fragmentation-resistant).
- 
+
 Supported values are:
 * NativeAllocator
 * JEMallocAllocator
@@ -1122,17 +1122,17 @@ Default value: *undef*
 ##### `memtable_flush_writers`
 This sets the amount of memtable flush writer threads.  These will
 be blocked by disk io, and each one will hold a memtable in memory
-while blocked. 
+while blocked.
 
 If omitted is to set to the smaller of (number of disks,
 number of cores), with a minimum of 2 and a maximum of 8.
- 
+
 If your data directories are backed by SSD, you should increase this
 to the number of cores.
 Default value: *undef*
 
 ##### `memtable_heap_space_in_mb`
-Total permitted memory to use for memtables. Cassandra will stop 
+Total permitted memory to use for memtables. Cassandra will stop
 accepting writes when the limit is exceeded until a flush completes,
 and will trigger a flush based on `memtable_cleanup_threshold`
 If omitted, Cassandra will set both to 1/4 the size of the heap.
@@ -1181,7 +1181,7 @@ and will use the `initial_token` as described below.
 Specifying `initial_token` will override this setting on the node's initial start,
 on subsequent starts, this setting will apply even if initial token is set.
 
-If you already have a cluster with 1 token per node, and wish to migrate to 
+If you already have a cluster with 1 token per node, and wish to migrate to
 multiple tokens per node, see http://wiki.apache.org/cassandra/Operations
 
 Default value '256'
@@ -1639,7 +1639,7 @@ Default value 'stable'
 ### Class: cassandra::firewall_ports
 
 An optional class to configure incoming network ports on the host that are
-relevant to the Cassandra installation.  If firewalls are being managed 
+relevant to the Cassandra installation.  If firewalls are being managed
 already, simply do not include this module in your manifest.
 
 IMPORTANT: The full list of which ports should be configured is assessed at
@@ -2946,4 +2946,4 @@ Mladen and Alex for your feedback and constructive collaboration.
   configuration was submitted via a pull request
   (see [#144](https://github.com/locp/cassandra/pull/144)) by
   [@Mike-Petersen](https://github.com/Mike-Petersen).
-  
+
