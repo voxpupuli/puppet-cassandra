@@ -1399,7 +1399,7 @@ Addresses of hosts that are deemed contact points. Cassandra nodes use this list
 of hosts to find each other and learn the topology of the ring. You must change
 this if you are running multiple nodes!
 
-seeds is actually a comma-delimited list of addresses. Ex: "<ip1>,<ip2>,<ip3>"
+seeds is actually a comma-delimited list of addresses. Ex: "ip1,ip2,ip3"
 
 See also `seed_provider_class_name`.
 
@@ -1409,7 +1409,7 @@ Default value '127.0.0.1'
 The field being set is `seed_provider -> class_name`.
 
 Any class that implements the SeedProvider interface and has a constructor
-that takes a Map<String, String> of parameters will do.
+that takes a Map(String, String) of parameters will do.
 
 See also `seeds`.
 
