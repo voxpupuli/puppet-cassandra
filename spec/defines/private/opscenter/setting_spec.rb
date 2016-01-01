@@ -1,5 +1,5 @@
 require 'spec_helper'
-describe 'cassandra::opscenter::setting' do
+describe 'cassandra::private::opscenter::setting' do
   let(:pre_condition) { [
     'define ini_setting($ensure = nil,
        $path                    = nil,

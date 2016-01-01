@@ -265,7 +265,7 @@ class cassandra (
     }
   }
 
-  cassandra::data_directory { $data_file_directories: }
+  cassandra::private::data_directory { $data_file_directories: }
 
   if ! defined( File[$saved_caches_directory] ) {
     file { $saved_caches_directory:

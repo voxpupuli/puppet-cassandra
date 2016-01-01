@@ -1,5 +1,5 @@
-# cassandra::opscenter::setting
-define cassandra::opscenter::setting (
+# cassandra::private::opscenter::setting
+define cassandra::private::opscenter::setting (
   $path,
   $section,
   $setting,

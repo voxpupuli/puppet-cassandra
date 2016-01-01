@@ -136,7 +136,7 @@ describe 'cassandra' do
     }
 
     it {
-      should contain_cassandra__data_directory('/var/lib/cassandra/data')
+      should contain_cassandra__private__data_directory('/var/lib/cassandra/data')
     }
   end
 
