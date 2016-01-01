@@ -1,5 +1,28 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-01-01 - Release 1.11.0 ([diff](https://github.com/locp/cassandra/compare/1.10.0...1.11.0))
+
+### Summary
+
+New features added to the main class.  Also some non-functional improvements.
+
+### Features
+
+* The addition of the listen_interface and rpc_interface parameters to the
+  main class.
+
+### Bugfixes
+
+* N/A
+
+### Improvements
+
+* Added more detail to the parameters to the main class in the README.
+* Improved the module metadata.
+* Clarified private defined types with the private subclass.
+* The test coverage in release 1.10.0 dropped to 99.09%.  Got it back to
+  100% in this release.
+
 ##2015-12-19 - Release 1.10.0 ([diff](https://github.com/locp/cassandra/compare/1.9.2...1.10.0))
 
 ### Summary
