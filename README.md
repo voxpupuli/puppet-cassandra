@@ -244,12 +244,12 @@ node /^node\d+$/ {
   }
 
   class { 'cassandra':
-    cluster_name    => 'MyCassandraCluster',
-    endpoint_snitch => 'GossipingPropertyFileSnitch',
-    listen_address  => "${::ipaddress}",
-    num_tokens      => 256,
-    seeds           => '110.82.155.0,110.82.156.3',
-    auto_bootstrap  => false
+    cluster_name     => 'MyCassandraCluster',
+    endpoint_snitch  => 'GossipingPropertyFileSnitch',
+    listen_interface => "eth1",
+    num_tokens       => 256,
+    seeds            => '110.82.155.0,110.82.156.3',
+    auto_bootstrap   => false
   }
 }
 ```
@@ -1072,6 +1072,11 @@ Setting listen_address to 0.0.0.0 is always wrong.
 
 Default value 'localhost'
 
+##### `listen_interface`
+Setting this to any value effectively means that `listen_address` address
+is ignored.
+Default value *undef*
+
 ##### `manage_dsc_repo`
 DEPRECATION WARNING:  This option is deprecated.  Please include the
 the ::cassandra::datastax_repo instead.
@@ -1331,6 +1336,11 @@ set broadcast_rpc_address to a value other than 0.0.0.0.
 For security reasons, you should not expose this port to the internet.  Firewall it if needed.
 
 Default value 'localhost'
+
+##### `rpc_interface`
+Setting this to any value effectively means that `rpc_address` address
+is ignored.
+Default value: *undef*
 
 ##### `rpc_max_threads`
 Set rpc_min|max_thread to set request pool size limits.
@@ -3120,3 +3130,7 @@ Mladen and Alex for your feedback and constructive collaboration.
   (see [#144](https://github.com/locp/cassandra/pull/144)) by
   [@Mike-Petersen](https://github.com/Mike-Petersen).
 
+* In the Cassandra class, the addition of the listen_interface and
+  rpc_interface parameters in
+  [#153](https://github.com/locp/cassandra/pull/153) were contributed by
+  [@t0mmyt](https://github.com/t0mmyt).
