@@ -379,7 +379,9 @@ ssl_storage_port: <%= @ssl_storage_port %>
 # ipv4. If there is only one address it will be selected regardless of ipv4/ipv6.
 <% if @listen_interface == nil -%>
 listen_address: <%= @listen_address %>
+# listen_interface: eth0
 <% else -%>
+# listen_address: localhost
 listen_interface: <%= @listen_interface %>
 <% end -%>
 # listen_interface_prefer_ipv6: false
@@ -440,7 +442,9 @@ start_rpc: <%= @start_rpc %>
 # ipv4. If there is only one address it will be selected regardless of ipv4/ipv6.
 <% if @rpc_interface == nil -%>
 rpc_address: <%= @rpc_address %>
+# rpc_interface: eth1
 <% else -%>
+# rpc_address: localhost
 rpc_interface: <%= @rpc_interface %>
 <% end -%>
 # rpc_interface_prefer_ipv6: false
