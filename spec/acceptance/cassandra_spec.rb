@@ -214,9 +214,29 @@ describe 'cassandra class' do
     it { is_expected.to be_enabled }
   end
 
+  interface_config_pp = <<-EOS
+    class { 'cassandra':
+      listen_interface => 'lo',
+      rpc_interface    => 'lo'
+    }
+  EOS
+
+  describe 'Ensure that the interface can be specified.' do
+    it 'should work with no errors' do
+      apply_manifest(interface_config_pp, :catch_failures => true)
+    end
+    it 'check code is idempotent' do
+      expect(apply_manifest(interface_config_pp,
+        :catch_failures => true).exit_code).to be_zero
+    end
+  end
+
 #############################################################################
 # Disabled for the release of 1.10.0 because of the change from systemd to
 # init for the service provider.
+#
+# Kept in for 1.11.0 due to non-functional refactoring of the template
+# file.
 #############################################################################
 #  check_against_previous_version_pp = <<-EOS
 #    include cassandra
