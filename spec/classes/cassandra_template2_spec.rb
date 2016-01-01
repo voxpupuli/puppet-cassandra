@@ -276,6 +276,8 @@ describe 'cassandra' do
     it { should contain_file('commitlog_directory') }
     it { should contain_file('datadir1') }
     it { should contain_file('datadir2') }
+    it { should contain_cassandra__data_directory('datadir1') }
+    it { should contain_cassandra__data_directory('datadir2') }
     it { should contain_file('saved_caches_directory') }
   end
 end
