@@ -27,7 +27,6 @@
     * [cassandra::opscenter::cluster_name](#defined-type-cassandraopscentercluster_name)
     * [cassandra::opscenter::pycrypto](#class-cassandraopscenterpycrypto)
     * [cassandra::optutils](#class-cassandraoptutils)
-    * [cassandra::opscenter::setting](#defined-type-cassandraopscentersetting)
 5. [Limitations - OS compatibility, etc.](#limitations)
 6. [Contributers](#contributers)
 
