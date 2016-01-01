@@ -1416,68 +1416,166 @@ See also `seeds`.
 Default value 'org.apache.cassandra.locator.SimpleSeedProvider'
 
 ##### `server_encryption_algorithm`
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
 The field being set is `server_encryption_options -> algorithm`.
+
+This is part of the server encryption options.  See also:
+`server_encryption_cipher_suites`,
+`server_encryption_internode`,
+`server_encryption_keystore`,
+`server_encryption_keystore_password`,
+`server_encryption_protocol`,
+`server_encryption_require_client_auth`,
+`server_encryption_store_type`,
+`server_encryption_truststore`,
+`server_encryption_truststore_password`.
+
 Default value: *undef*
 
 ##### `server_encryption_cipher_suites`
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
 The field being set is `server_encryption_options -> cipher_suites`.
+
+This is part of the server encryption options.  See also:
+`server_encryption_algorithm`,
+`server_encryption_cipher_suites`,
+`server_encryption_internode`,
+`server_encryption_keystore`,
+`server_encryption_keystore_password`,
+`server_encryption_protocol`,
+`server_encryption_require_client_auth`,
+`server_encryption_store_type`,
+`server_encryption_truststore`,
+`server_encryption_truststore_password`.
+
 Default value: *undef*
 
 ##### `server_encryption_internode`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
 The field being set is `server_encryption_options -> internode_encryption`.
+
+This is part of the server encryption options.  See also:
+`server_encryption_algorithm`,
+`server_encryption_cipher_suites`,
+`server_encryption_keystore`,
+`server_encryption_keystore_password`,
+`server_encryption_protocol`,
+`server_encryption_require_client_auth`,
+`server_encryption_store_type`,
+`server_encryption_truststore`,
+`server_encryption_truststore_password`.
+
 Default value 'none'
 
 ##### `server_encryption_keystore`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
 The field being set is `server_encryption_options -> keystore`.
+
+This is part of the server encryption options.  See also:
+`server_encryption_algorithm`,
+`server_encryption_cipher_suites`,
+`server_encryption_internode`,
+`server_encryption_keystore_password`,
+`server_encryption_protocol`,
+`server_encryption_require_client_auth`,
+`server_encryption_store_type`,
+`server_encryption_truststore`,
+`server_encryption_truststore_password`.
+
 Default value 'conf/.keystore'
 
 ##### `server_encryption_keystore_password`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
 The field being set is `server_encryption_options -> keystore_password`.
+
+This is part of the server encryption options.  See also:
+`server_encryption_algorithm`,
+`server_encryption_cipher_suites`,
+`server_encryption_internode`,
+`server_encryption_keystore`,
+`server_encryption_protocol`,
+`server_encryption_require_client_auth`,
+`server_encryption_store_type`,
+`server_encryption_truststore`,
+`server_encryption_truststore_password`.
+
 Default value 'cassandra'
 
 ##### `server_encryption_protocol`
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
 The field being set is `server_encryption_options -> protocol`.
+
+This is part of the server encryption options.  See also:
+`server_encryption_algorithm`,
+`server_encryption_cipher_suites`,
+`server_encryption_internode`,
+`server_encryption_keystore`,
+`server_encryption_keystore_password`,
+`server_encryption_require_client_auth`,
+`server_encryption_store_type`,
+`server_encryption_truststore`,
+`server_encryption_truststore_password`.
+
 Default value: *undef*
 
 ##### `server_encryption_require_client_auth`
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
 The field being set is `server_encryption_options -> require_client_auth`.
+
+This is part of the server encryption options.  See also:
+`server_encryption_algorithm`,
+`server_encryption_cipher_suites`,
+`server_encryption_internode`,
+`server_encryption_keystore`,
+`server_encryption_keystore_password`,
+`server_encryption_protocol`,
+`server_encryption_store_type`,
+`server_encryption_truststore`,
+`server_encryption_truststore_password`.
+
 Default value: *undef*
 
 ##### `server_encryption_store_type`
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
 The field being set is `server_encryption_options -> store_type`.
+
+This is part of the server encryption options.  See also:
+`server_encryption_algorithm`,
+`server_encryption_cipher_suites`,
+`server_encryption_internode`,
+`server_encryption_keystore`,
+`server_encryption_keystore_password`,
+`server_encryption_protocol`,
+`server_encryption_require_client_auth`,
+`server_encryption_truststore`,
+`server_encryption_truststore_password`.
+
 Default value: *undef*
 
 ##### `server_encryption_truststore`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
 The field being set is `server_encryption_options -> truststore`.
+
+This is part of the server encryption options.  See also:
+`server_encryption_algorithm`,
+`server_encryption_cipher_suites`,
+`server_encryption_internode`,
+`server_encryption_keystore`,
+`server_encryption_keystore_password`,
+`server_encryption_protocol`,
+`server_encryption_require_client_auth`,
+`server_encryption_store_type`,
+`server_encryption_truststore_password`.
+
 Default value 'conf/.truststore'
 
 ##### `server_encryption_truststore_password`
 This is passed to the
 [cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
 The field being set is `server_encryption_options -> truststore_password`.
+
+This is part of the server encryption options.  See also:
+`server_encryption_algorithm`,
+`server_encryption_cipher_suites`,
+`server_encryption_internode`,
+`server_encryption_keystore`,
+`server_encryption_keystore_password`,
+`server_encryption_protocol`,
+`server_encryption_require_client_auth`,
+`server_encryption_store_type`,
+`server_encryption_truststore`.
+
 Default value 'cassandra'
 
 ##### `service_enable`
@@ -1513,8 +1611,10 @@ better.
 Default value false
 
 ##### `snapshot_before_compaction`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Whether or not to take a snapshot before each compaction.  Be
+careful using this option, since Cassandra won't clean up the
+snapshots for you.  Mostly useful if you're paranoid when there
+is a data format change.
 Default value 'false'
 
 ##### `snitch_properties_file`
@@ -1523,66 +1623,85 @@ The name of the snitch properties file.  The full path name would be
 Default value 'cassandra-rackdc.properties'
 
 ##### `ssl_storage_port`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+SSL port, for encrypted communication.  Unused unless enabled in
+encryption_options For security reasons, you should not expose this port to
+the internet.  Firewall it if needed.
 Default value '7001'
 
 ##### `sstable_preemptive_open_interval_in_mb`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+When compacting, the replacement sstable(s) can be opened before they
+are completely written, and used in place of the prior sstables for
+any range that has been written. This helps to smoothly transfer reads 
+between the sstables, reducing page cache churn and keeping hot rows hot
 Default value: '50'
 
 ##### `start_native_transport`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Whether to start the native transport server.
+Please note that the address on which the native transport is bound is the
+same as the rpc_address. The port however is different and specified below.
 Default value 'true'
 
 ##### `start_rpc`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Whether to start the thrift rpc server.
 Default value 'true'
 
 ##### `storage_port`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+TCP port, for commands and data. For security reasons, you should not expose
+this port to the internet.  Firewall it if needed.
 Default value '7000'
 
 ##### `streaming_socket_timeout_in_ms`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
-If left at the default value of *undef* then the entry in the configuration
-file is absent or commented out.  If a value is set, then the parameter
-and variable are placed into the configuration file.
+Enable socket timeout for streaming operation.
+When a timeout occurs during streaming, streaming is retried from the start
+of the current file. This _can_ involve re-streaming an important amount of
+data, so you should avoid setting the value too low.
+If omitted value is 0 is assumed, which never timeout streams.
 Default value: *undef*
 
 ##### `tombstone_failure_threshold`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+When executing a scan, within or across a partition, we need to keep the
+tombstones seen in memory so we can return them to the coordinator, which
+will use them to make sure other replicas also know about the deleted rows.
+With workloads that generate a lot of tombstones, this can cause performance
+problems and even exaust the server heap.
+(http://www.datastax.com/dev/blog/cassandra-anti-patterns-queues-and-queue-like-datasets)
+Adjust the thresholds here if you understand the dangers and want to
+scan more tombstones anyway.  These thresholds may also be adjusted at runtime
+using the StorageService mbean.
+
+See also `tombstone_warn_threshold`.
+
 Default value: '100000'
 
 ##### `tombstone_warn_threshold`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+
+See `tombstone_failure_threshold`.
+
 Default value: '1000'
 
 ##### `trickle_fsync`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+Whether to, when doing sequential writing, fsync() at intervals in
+order to force the operating system to flush the dirty
+buffers. Enable this to avoid sudden dirty buffer flushing from
+impacting read latencies. Almost always a good idea on SSDs; not
+necessarily on platters.
+
+See also `trickle_fsync_interval_in_kb`
+
 Default value: 'false'
 
 ##### `trickle_fsync_interval_in_kb`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+See `trickle_fsync`.
 Default value: '10240'
 
 ##### `truncate_request_timeout_in_ms`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+How long the coordinator should wait for truncates to complete
+(This can be much longer, because unless auto_snapshot is disabled
+we need to flush first so we can snapshot before removing the data.)
 Default value: '60000'
 
 ##### `write_request_timeout_in_ms`
-This is passed to the
-[cassandra.yaml](http://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configCassandra_yaml_r.html) file.
+How long the coordinator should wait for writes to complete.
 Default value: '2000'
 
 ### Class: cassandra::datastax_agent
