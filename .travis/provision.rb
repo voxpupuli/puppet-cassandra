@@ -11,7 +11,7 @@ response = ec2.run_instances(
   'ami-fa74d689',
   1,
   1,
-  'InstanceType'  => 'c3.xlarge',
+  'InstanceType'  => 'c4.xlarge',
   'SecurityGroup' => 'ssh',
   'KeyName'       => 'travis'
 )
