@@ -197,6 +197,8 @@ class cassandra (
           before  => Service['cassandra']
         }
       }
+
+      $systemd_path = '/usr/lib/systemd/system'
     }
     'Debian': {
       if $config_path == undef {
@@ -217,6 +219,8 @@ class cassandra (
           source => 'puppet:///modules/cassandra/CASSANDRA-9822/cassandra'
         }
       }
+
+      $systemd_path = '/lib/systemd/system'
     }
     default: {
       if $supported_os_only {
@@ -234,7 +238,7 @@ class cassandra (
   }
 
   if $service_systemd == true {
-    file { "/usr/lib/systemd/system/${service_name}.service":
+    file { "${systemd_path}/${service_name}.service":
       ensure  => present,
       owner   => 'root',
       group   => 'root',
