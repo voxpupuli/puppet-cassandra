@@ -119,4 +119,20 @@ describe 'cassandra' do
 
     it { is_expected.to contain_file('/etc/init.d/cassandra') }
   end
+
+  context 'Systemd file can be activated on Debian' do
+    let :facts do
+      {
+        :osfamily => 'Debian'
+      }
+    end
+
+    let :params do
+      {
+        :service_systemd => true
+      }
+    end
+
+    it { should contain_file('/lib/systemd/system/cassandra.service') }
+  end
 end

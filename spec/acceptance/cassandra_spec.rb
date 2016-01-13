@@ -133,13 +133,24 @@ describe 'cassandra class' do
   end
 
   datastax_agent_install_pp = <<-EOS
+    if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == 7 {
+        $service_systemd = true
+    } elsif $::operatingsystem == 'Debian' and $::operatingsystemmajrelease == 8 {
+        $service_systemd = true
+    } else {
+        $service_systemd = false
+    }
+
     class { 'cassandra':
       cassandra_9822              => true,
       commitlog_directory_mode    => '0770',
       data_file_directories_mode  => '0770',
       saved_caches_directory_mode => '0770',
     }
-    include '::cassandra::datastax_agent'
+
+    class { '::cassandra::datastax_agent':
+        service_systemd => $service_systemd
+    }
   EOS
 
   describe 'DataStax agent installation.' do

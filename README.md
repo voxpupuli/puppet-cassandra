@@ -50,12 +50,16 @@ A Puppet module to install and manage Cassandra, DataStax Agent & OpsCenter
   workaround for
   [CASSANDRA-9822](https://issues.apache.org/jira/browse/CASSANDRA-9822).
 * Optionally creates a file /usr/lib/systemd/system/cassandra.service to
-  improve service interaction.
+  improve service interaction on the RedHat family or
+  /lib/systemd/system/cassandra.service on the Debian family.
 
 #### What the cassandra::datastax_agent class affects
 
 * Optionally installs the DataStax agent.
 * Optionally sets JAVA_HOME in **/etc/default/datastax-agent**.
+* Optionally creates a file /usr/lib/systemd/system/datastax-agent.service to
+  improve service interaction on the RedHat family or
+  /lib/systemd/system/datastax-agent.service on the Debian family.
 
 #### What the cassandra::datastax_agent class affects
 
@@ -1614,10 +1618,14 @@ to be made but allow the user to control when the service is restarted.
 Default value true
 
 ##### `service_systemd`
-If set to true then a systemd service file called
-/usr/lib/systemd/system/${*service_name*}.service will be added to the node with
+If set to true then a systemd service file called 
+${*systemd_path*}/${*service_name*}.service will be added to the node with
 basic settings to ensure that the Cassandra service interacts with systemd
-better.
+better where *systemd_path* will be:
+
+* `/usr/lib/systemd/system` on the Red Hat family.
+* `/lib/systemd/system` on Debian the familiy.
+
 Default value false
 
 ##### `snapshot_before_compaction`
@@ -1755,6 +1763,17 @@ Default value 'datastax-agent'
 The name of the provider that runs the service.  If left as *undef* then the OS family specific default will
 be used, otherwise the specified value will be used instead.
 Default value *undef*
+
+##### `service_systemd`
+If set to true then a systemd service file called 
+${*systemd_path*}/${*service_name*}.service will be added to the node with
+basic settings to ensure that the Cassandra service interacts with systemd
+better where *systemd_path* will be:
+
+* `/usr/lib/systemd/system` on the Red Hat family.
+* `/lib/systemd/system` on Debian the familiy.
+
+Default value false
 
 ##### `stomp_interface`
 If the value is changed from the default of *undef* then this is what is

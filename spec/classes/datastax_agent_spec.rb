@@ -16,6 +16,7 @@ describe 'cassandra::datastax_agent' do
         'service_enable'   => true,
         'service_name'     => 'datastax-agent',
         #'service_provider' => nil,
+        'service_systemd'  => false,
         'stomp_interface'  => nil,
         'local_interface'  => nil,
       )
@@ -80,5 +81,39 @@ describe 'cassandra::datastax_agent' do
     it {
       should contain_ini_setting('local_interface').with_ensure('absent')
     }
+  end
+
+  context 'Systemd file can be activated on Red Hat' do
+    let :facts do
+      {
+        :osfamily => 'RedHat'
+      }
+    end
+
+    let :params do
+      {
+        :service_systemd => true
+      }
+    end
+
+    it { should contain_file('/usr/lib/systemd/system/datastax-agent.service') }
+    it { should contain_file('/var/run/datastax-agent') }
+  end
+
+  context 'Systemd file can be activated on Debian' do
+    let :facts do
+      {
+        :osfamily => 'Debian'
+      }
+    end
+
+    let :params do
+      {
+        :service_systemd => true
+      }
+    end
+
+    it { should contain_file('/lib/systemd/system/datastax-agent.service') }
+    it { should contain_file('/var/run/datastax-agent') }
   end
 end

@@ -9,6 +9,7 @@ class cassandra::datastax_agent (
   $service_enable      = true,
   $service_name        = 'datastax-agent',
   $service_provider    = undef,
+  $service_systemd     = false,
   $stomp_interface     = undef,
   $local_interface     = undef,
   ){
@@ -67,6 +68,30 @@ class cassandra::datastax_agent (
   if $service_provider != undef {
     System {
       provider => $service_provider
+    }
+  }
+
+  if $service_systemd == true {
+    if $::osfamily == 'Debian' {
+      $systemd_path = '/lib/systemd/system'
+    } else {
+      $systemd_path = '/usr/lib/systemd/system'
+    }
+
+    file { '/var/run/datastax-agent':
+      ensure => directory,
+      owner  => 'cassandra',
+      group  => 'cassandra',
+      before => Package[$package_name],
+    }
+
+    file { "${systemd_path}/${service_name}.service":
+      ensure  => present,
+      owner   => 'root',
+      group   => 'root',
+      content => template('cassandra/datastax-agent.service.erb'),
+      mode    => '0644',
+      before  => Package[$package_name],
     }
   }
 
