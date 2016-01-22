@@ -1,5 +1,13 @@
-general:
-  branches:
-    only:
-      - circleci
+---
+# CircleCI configuration file (circle.yml).
+test:
+  override:
+    - bundle exec rake lint
+    - bundle exec rake validate
+    - bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml"
 
+notify:
+  webhooks:
+    # A list of hook hashes, containing the url field
+    # gitter hook
+    - url: https://webhooks.gitter.im/e/da8c065419a91983f0cf
