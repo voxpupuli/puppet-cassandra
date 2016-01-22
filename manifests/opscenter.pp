@@ -59,10 +59,6 @@ class cassandra::opscenter (
     $provisioning_agent_install_timeout             = undef,
     $provisioning_keyspace_timeout                  = undef,
     $provisioning_private_key_dir                   = undef,
-    $service_enable                                 = true,
-    $service_ensure                                 = 'running',
-    $service_name                                   = 'opscenterd',
-    $service_provider                               = undef,
     $ldap_admin_group_name                          = undef,
     $ldap_connection_timeout                        = undef,
     $ldap_debug_ssl                                 = undef,
@@ -117,6 +113,11 @@ class cassandra::opscenter (
     $security_config_encryption_active              = undef,
     $security_config_encryption_key_name            = undef,
     $security_config_encryption_key_path            = undef,
+    $service_enable                                 = true,
+    $service_ensure                                 = 'running',
+    $service_name                                   = 'opscenterd',
+    $service_provider                               = undef,
+    $service_systemd                                = false,
     $spark_base_master_proxy_port                   = undef,
     $stat_reporter_initial_sleep                    = undef,
     $stat_reporter_interval                         = undef,
@@ -1027,5 +1028,22 @@ class cassandra::opscenter (
     section => 'webserver',
     setting => 'tarball_process_timeout',
     value   => $webserver_tarball_process_timeout
+  }
+
+  if $service_systemd == true {
+    if $::osfamily == 'Debian' {
+      $systemd_path = '/lib/systemd/system'
+    } else {
+      $systemd_path = '/usr/lib/systemd/system'
+    }
+
+    file { "${systemd_path}/${service_name}.service":
+      ensure  => present,
+      owner   => 'root',
+      group   => 'root',
+      content => template('cassandra/opscenter.service.erb'),
+      mode    => '0644',
+      before  => Package[$package_name],
+    }
   }
 }

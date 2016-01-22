@@ -164,12 +164,22 @@ describe 'cassandra class' do
   end
 
   opscenter_install_pp = <<-EOS
+    if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == 7 {
+        $service_systemd = true
+    } elsif $::operatingsystem == 'Debian' and $::operatingsystemmajrelease == 8 {
+        $service_systemd = true
+    } else {
+        $service_systemd = false
+    }
+
     class { '::cassandra::opscenter::pycrypto':
       manage_epel => true,
       before      => Class['::cassandra::opscenter']
     }
 
-    include '::cassandra::opscenter'
+    class { '::cassandra::opscenter':
+      service_systemd => $service_systemd
+    }
   EOS
 
   describe 'OpsCenter installation.' do
