@@ -13,6 +13,7 @@ group :system_tests do
   gem 'pry',                    :require => false
   gem 'puppet-blacksmith',      :require => false
   gem 'puppetlabs_spec_helper', :require => false
+  gem 'rspec_junit_formatter',  '0.2.2'
   gem 'rspec-puppet',           :require => false
   gem 'rspec-puppet-utils',     :require => false
   gem 'serverspec',             :require => false
