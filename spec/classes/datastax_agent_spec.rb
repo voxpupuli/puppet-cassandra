@@ -5,7 +5,7 @@ describe 'cassandra::datastax_agent' do
   ] }
 
   context 'Test for cassandra::datastax_agent.' do
-    it { should have_resource_count(4) }
+    it { should have_resource_count(5) }
     it {
       should contain_class('cassandra::datastax_agent').only_with(
         'defaults_file'    => '/etc/default/datastax-agent',
@@ -25,6 +25,25 @@ describe 'cassandra::datastax_agent' do
     }
     it {
       should contain_service('datastax-agent')
+    }
+  end
+
+  context 'Test that alias can be set.' do
+    let :params do
+      {
+          :alias => 'node-1'
+      }
+    end
+
+    it { should contain_ini_setting('alias').with_ensure('present') }
+    it {
+      should contain_ini_setting('alias').with_value('node-1')
+    }
+  end
+
+  context 'Test that alias can be ignored.' do
+    it {
+      should contain_ini_setting('alias').with_ensure('absent')
     }
   end
 
@@ -81,4 +100,5 @@ describe 'cassandra::datastax_agent' do
       should contain_ini_setting('local_interface').with_ensure('absent')
     }
   end
+
 end
