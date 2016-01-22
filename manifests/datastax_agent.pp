@@ -11,6 +11,7 @@ class cassandra::datastax_agent (
   $service_provider    = undef,
   $stomp_interface     = undef,
   $local_interface     = undef,
+  $alias               = undef,
   ){
   package { $package_name:
     ensure  => $package_ensure,
@@ -48,6 +49,23 @@ class cassandra::datastax_agent (
     key_val_separator => ': ',
     setting           => 'local_interface',
     value             => $local_interface,
+    require           => Package[$package_name],
+    notify            => Service[$service_name]
+  }
+
+  if $alias != undef {
+    $ensure_alias = present
+  } else {
+    $ensure_alias = absent
+  }
+
+  ini_setting { 'alias':
+    ensure            => $ensure_alias,
+    path              => $address_config_file,
+    section           => '',
+    key_val_separator => ': ',
+    setting           => 'alias',
+    value             => $alias,
     require           => Package[$package_name],
     notify            => Service[$service_name]
   }

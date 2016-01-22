@@ -1770,6 +1770,13 @@ set as the local_interface setting in
 which is the address there the local cassandra will be contacted.
 Default value *undef*
 
+##### `alias`
+If the value is changed from the default of *undef* then this is what is
+set as the alias setting in
+**/var/lib/datastax-agent/conf/address.yaml**
+which is the name the agent announces itself to OpsCenter as.
+Default value *undef*
+
 ### Class: cassandra::datastax_repo
 
 An optional class that will allow a suitable repository to be configured
