@@ -2,9 +2,13 @@
 # CircleCI configuration file (circle.yml).
 test:
   override:
-    - bundle exec rake lint
-    - bundle exec rake validate
-    - bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml"
+    - ./circle.bash unit_tests:
+        parallel: true
+
+general:
+  branches:
+    only:
+      - circleci
 
 notify:
   webhooks:
