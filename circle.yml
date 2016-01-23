@@ -5,11 +5,6 @@ test:
     - ./circle.bash unit_tests:
         parallel: true
 
-general:
-  branches:
-    only:
-      - circleci
-
 notify:
   webhooks:
     # A list of hook hashes, containing the url field
