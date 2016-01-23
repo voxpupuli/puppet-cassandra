@@ -28,22 +28,22 @@ describe 'cassandra::datastax_agent' do
     }
   end
 
-  context 'Test that alias can be set.' do
+  context 'Test that agent_alias can be set.' do
     let :params do
       {
-          :alias => 'node-1'
+          :agent_alias => 'node-1'
       }
     end
 
-    it { should contain_ini_setting('alias').with_ensure('present') }
+    it { should contain_ini_setting('agent_alias').with_ensure('present') }
     it {
-      should contain_ini_setting('alias').with_value('node-1')
+      should contain_ini_setting('agent_alias').with_value('node-1')
     }
   end
 
-  context 'Test that alias can be ignored.' do
+  context 'Test that agent_alias can be ignored.' do
     it {
-      should contain_ini_setting('alias').with_ensure('absent')
+      should contain_ini_setting('agent_alias').with_ensure('absent')
     }
   end
 

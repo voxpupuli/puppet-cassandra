@@ -1721,7 +1721,7 @@ instance.
 
 #### Parameters
 
-##### `alias`
+##### `agent_alias`
 If the value is changed from the default of *undef* then this is what is
 set as the alias setting in
 **/var/lib/datastax-agent/conf/address.yaml**
