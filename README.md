@@ -3139,4 +3139,8 @@ Mladen and Alex for your feedback and constructive collaboration.
 * In the Cassandra class, the addition of the listen_interface and
   rpc_interface parameters in
   [#153](https://github.com/locp/cassandra/pull/153) were contributed by
-  [@t0mmyt](https://github.com/t0mmyt).
+  Tom Taylor ([@t0mmyt](https://github.com/t0mmyt)).
+
+* In the cassandra::datastax_agent the agent_alias parameter was
+  contributed by
+  Stuart Fox ([@stuartbfox](https://github.com/stuartbfox)).
