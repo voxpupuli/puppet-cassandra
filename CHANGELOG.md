@@ -1,5 +1,24 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-01-27 - Release 1.12.0 ([diff](https://github.com/locp/cassandra/compare/1.11.0...1.12.0))
+
+### Summary
+
+A new feature in the cassandra::datastax_agent class, a minor bug fix and integration with CircleCI.
+
+### Features
+
+* There is now an agent_alias parameter for the cassandra::datastax_agent class.
+
+### Bugfixes
+
+* Unit tests were failing due to problems with the puppet-3.8.5 gem.
+
+### Improvements
+
+* In addition to TravisCI, the build process is now integrated with
+  [CircleCI](https://circleci.com/gh/locp/cassandra).
+
 ##2016-01-01 - Release 1.11.0 ([diff](https://github.com/locp/cassandra/compare/1.10.0...1.11.0))
 
 ### Summary
