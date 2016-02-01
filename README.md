@@ -995,6 +995,13 @@ comma-separated list - it's primarily used when adding nodes
 to legacy clusters that do not have vnodes enabled.
 Default value: *undef*
 
+##### `inter_dc_stream_throughput_outbound_megabits_per_sec`
+Throttles all streaming file transfer between the data centers. This setting
+allows throttles streaming throughput betweens data centers in addition to
+throttling all network stream traffic as configured with
+stream_throughput_outbound_megabits_per_sec.
+Default value: *undef*
+
 ##### `inter_dc_tcp_nodelay`
 Enable or disable tcp_nodelay for inter-dc communication.
 Disabling it will result in larger (but fewer) network packets being sent,
@@ -1654,6 +1661,13 @@ Default value 'true'
 ##### `start_rpc`
 Whether to start the thrift rpc server.
 Default value 'true'
+
+##### `stream_throughput_outbound_megabits_per_sec`
+Throttles all outbound streaming file transfers on a node to the specified
+throughput. Cassandra does mostly sequential I/O when streaming data during
+bootstrap or repair, which can lead to saturating the network connection and
+degrading client (RPC) performance.
+Default value: *undef*
 
 ##### `storage_port`
 TCP port, for commands and data. For security reasons, you should not expose
