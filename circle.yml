@@ -6,9 +6,7 @@ machine:
 
 test:
   override:
-    - ./circle.bash unit_tests:
-        parallel: true
-    - ./circle.bash acceptance_tests:
+    - ./circle.bash:
         parallel: true
 
 notify:
