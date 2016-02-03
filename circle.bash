@@ -52,7 +52,7 @@ case $CIRCLE_NODE_INDEX in
       export PUPPET_GEM_VERSION="~> 4.0"
       export STRICT_VARIABLES="yes"
       ;;
-  3)  export BEAKER_set"='debian7' ;;
+  3)  export BEAKER_set='debian7' ;;
 esac
 
 $1
