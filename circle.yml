@@ -6,10 +6,8 @@ machine:
 
 test:
   override:
-    - ./circle.bash unit_tests:
-        parallel: true
-    - ./circle.bash acceptance_tests:
-        parallel: true
+    - ./circle.bash unit_tests
+    - ./circle.bash acceptance_tests
 
 notify:
   webhooks:
