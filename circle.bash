@@ -7,6 +7,15 @@
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 export PATH=/home/ubuntu/.rvm/gems/ruby-1.9.3-p448/bin:$PATH
 
+acceptance_tests () {
+  if [ -z "$BEAKER_set" ]; then
+    echo "No acceptance tests configured on this node."
+    exit 0
+  fi
+
+  BEAKER_destroy=onpass BEAKER_set=$BEAKER_set bundle exec rake beaker 
+}
+
 unit_tests () {
   status=0
   rvm use $RVM --install --fuzzy
@@ -30,6 +39,8 @@ unit_tests () {
   return $status
 }
 
+export BEAKER_set"=""
+
 case $CIRCLE_NODE_INDEX in
   0)  export RVM=1.9.3
       export PUPPET_GEM_VERSION="~> 3.0"
@@ -41,6 +52,7 @@ case $CIRCLE_NODE_INDEX in
       export PUPPET_GEM_VERSION="~> 4.0"
       export STRICT_VARIABLES="yes"
       ;;
+  3)  export BEAKER_set"='debian7' ;;
 esac
 
 $1
