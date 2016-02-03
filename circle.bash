@@ -13,7 +13,7 @@ acceptance_tests () {
     exit 0
   fi
 
-  BEAKER_destroy=onpass BEAKER_set=$BEAKER_set bundle exec rake beaker 
+  BEAKER_set=$BEAKER_set bundle exec rake beaker 
 }
 
 unit_tests () {
