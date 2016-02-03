@@ -39,7 +39,7 @@ unit_tests () {
   return $status
 }
 
-export BEAKER_set"=""
+export BEAKER_set=""
 
 case $CIRCLE_NODE_INDEX in
   0)  export RVM=1.9.3
