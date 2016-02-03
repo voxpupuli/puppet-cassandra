@@ -17,6 +17,11 @@ acceptance_tests () {
 }
 
 unit_tests () {
+  if [ -z "$RVM"  ]; then
+    echo "No unit tests for this node."
+    return 0
+  fi
+
   status=0
   rvm use $RVM --install --fuzzy
   export BUNDLE_GEMFILE=$PWD/Gemfile
@@ -29,17 +34,13 @@ unit_tests () {
   bundle exec rake lint || status=$?
   bundle exec rake validate || status=$?
 
-  if [ $CIRCLE_NODE_INDEX -gt 2 ]; then
-    echo "No unit tests for this node."
-    return 0
-  fi
-
   bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter \
       -o $CIRCLE_TEST_REPORTS/rspec/puppet.xml" || status=$?
   return $status
 }
 
 export BEAKER_set=""
+export RVM=""
 
 case $CIRCLE_NODE_INDEX in
   0)  export RVM=1.9.3
@@ -55,5 +56,6 @@ case $CIRCLE_NODE_INDEX in
   3)  export BEAKER_set='debian7' ;;
 esac
 
-$1
+unit_tests || exit $?
+acceptance_tests
 exit $?
