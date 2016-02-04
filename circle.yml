@@ -5,14 +5,15 @@ machine:
     - docker
 
 test:
-  override:
-    - ./circle.bash unit_tests:
-        parallel: true
+#  override:
+#    - ./circle.bash unit_tests:
+#        parallel: true
   post:
     - >
       if [ -n "${RUN_NIGHTLY_BUILD}" ]; then
         ./circle.bash acceptance_tests;
       fi
+        parallel: true
 
 
 notify:
