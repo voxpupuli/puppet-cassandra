@@ -126,6 +126,7 @@ describe 'cassandra' do
         'start_native_transport' => true,
         'start_rpc' => true,
         'storage_port' => 7000,
+        'thrift_framed_transport_size_in_mb' => 15,
         'tombstone_failure_threshold' => 100000,
         'tombstone_warn_threshold' => 1000,
         'trickle_fsync' => false,
