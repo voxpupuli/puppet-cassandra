@@ -8,6 +8,11 @@
 export PATH=/home/ubuntu/.rvm/gems/ruby-1.9.3-p448/bin:$PATH
 
 acceptance_tests () {
+  if [ -n "${RUN_NIGHTLY_BUILD}" ]; then
+    echo "Acceptance tests are normally only run as a nightly build."
+    exit 0
+  fi
+
   if [ -z "$BEAKER_set" ]; then
     echo "No acceptance tests configured on this node."
     exit 0
