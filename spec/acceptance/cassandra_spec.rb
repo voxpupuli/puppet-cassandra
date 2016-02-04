@@ -193,10 +193,6 @@ describe 'cassandra class' do
     it 'should work with no errors' do
       apply_manifest(firewall_config_pp, :catch_failures => true)
     end
-    it 'check code is idempotent' do
-      expect(apply_manifest(firewall_config_pp,
-        :catch_failures => true).exit_code).to be_zero
-    end
   end
 
   describe service('cassandra') do
