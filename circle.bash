@@ -13,12 +13,24 @@ acceptance_tests () {
     exit 0
   fi
 
-  if [ -z "$BEAKER_set" ]; then
-    echo "No acceptance tests configured on this node."
-    exit 0
-  fi
+  status=0
+  i=0
+  BEAKER_NODES="centos6 centos7 debian7 ubuntu12.04 ubuntu14.04"
 
-  BEAKER_set=$BEAKER_set bundle exec rake beaker 
+  # We set beaker not to destroy the node because this fails on CircleCI
+  # which then marks otherwise successful builds as failures.
+  export BEAKER_destroy=off
+
+  for node in $BEAKER_NODES; do
+    if [ $(($i % $CIRCLE_NODE_TOTAL)) -eq $CIRCLE_NODE_INDEX ]; then
+      BEAKER_set=$node bundle exec rake beaker || status=$?
+    fi
+
+    ((i=i+1))
+  done
+
+  return $status
+
 }
 
 unit_tests () {
@@ -58,7 +70,6 @@ case $CIRCLE_NODE_INDEX in
       export PUPPET_GEM_VERSION="~> 4.0"
       export STRICT_VARIABLES="yes"
       ;;
-  3)  export BEAKER_set='debian7' ;;
 esac
 
 $1
