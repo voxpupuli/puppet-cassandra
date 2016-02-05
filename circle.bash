@@ -30,7 +30,6 @@ acceptance_tests () {
   done
 
   return $status
-
 }
 
 unit_tests () {
