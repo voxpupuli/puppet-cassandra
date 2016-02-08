@@ -17,7 +17,25 @@ describe 'cassandra::opscenter::cluster_name' do
       }
     end
      it { should contain_cassandra__opscenter__cluster_name('MyCluster') }
-     it { should have_resource_count(20) }
+     it { should have_resource_count(273) }
+
+     it {
+       should contain_file('/etc/opscenter/clusters/MyCluster.conf').with({
+         'ensure' => 'present',
+         'owner'  => 'opscenterd',
+         'group'  => 'opscenterd',
+         'mode'   => '0644'
+       })
+     }
+
+     it {
+       should contain_file('/etc/opscenter/clusters').with({
+         'ensure' => 'directory',
+         'owner'  => 'opscenterd',
+         'group'  => 'opscenterd',
+         'mode'   => '0755'
+       })
+     }
   end
   
   context 'Test that settings can be set.' do

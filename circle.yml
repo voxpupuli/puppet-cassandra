@@ -1,8 +1,12 @@
 ---
 # CircleCI configuration file (circle.yml).
+machine:
+  services:
+    - docker
+
 test:
   override:
-    - ./circle.bash unit_tests:
+    - ./circle.bash:
         parallel: true
 
 notify:
