@@ -1,5 +1,27 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-01-08 - Release 1.12.1 ([diff](https://github.com/locp/cassandra/compare/1.12.0...1.12.1))
+
+### Summary
+
+This is a non-functional release.  Some bug fixes and release improvements.
+
+### Features
+
+* N/A
+
+### Bugfixes
+
+* Completed documentation for parameters.  This was missing for the
+  `inter_dc_stream_throughput_outbound_megabits_per_sec` and
+  `stream_throughput_outbound_megabits_per_sec` options.
+* Corrected the ownership and directories for the OpsCenter configuration.
+
+### Improvements
+
+* Nightly build created so that issues similar to those found in issues
+  #136 and #157 can be caught quicker.
+
 ##2016-01-27 - Release 1.12.0 ([diff](https://github.com/locp/cassandra/compare/1.11.0...1.12.0))
 
 ### Summary
