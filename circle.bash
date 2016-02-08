@@ -7,31 +7,6 @@
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 export PATH=/home/ubuntu/.rvm/gems/ruby-1.9.3-p448/bin:$PATH
 
-acceptance_tests () {
-  if [ -z "${RUN_NIGHTLY_BUILD}" ]; then
-    echo "Acceptance tests are normally only run as a nightly build."
-    exit 0
-  fi
-
-  if [ -z "${BEAKER_NODES}" ]; then
-    echo "No acceptance tests for this node."
-    exit 0
-  fi
-
-  status=0
-  i=0
-
-  # We set beaker not to destroy the node because this fails on CircleCI
-  # which then marks otherwise successful builds as failures.
-  export BEAKER_destroy=no
-
-  for node in $BEAKER_NODES; do
-    BEAKER_set=$node bundle exec rake beaker || status=$?
-  done
-
-  return $status
-}
-
 unit_tests () {
   if [ -z "$RVM"  ]; then
     echo "No unit tests for this node."
