@@ -19,7 +19,7 @@ acceptance_tests () {
 
   # We set beaker not to destroy the node because this fails on CircleCI
   # which then marks otherwise successful builds as failures.
-  export BEAKER_destroy=off
+  export BEAKER_destroy=no
 
   for node in $BEAKER_NODES; do
     if [ $(($i % $CIRCLE_NODE_TOTAL)) -eq $CIRCLE_NODE_INDEX ]; then
