@@ -7,11 +7,19 @@ https://guides.github.com/activities/contributing-to-open-source.
 
 However, we do ask that:
 
-* All tests pass correctly (see below and also see
-  https://travis-ci.org/locp/cassandra/pull_requests).
-* Unit test coverage does not drop as a result of a push of your branch (see
-  https://coveralls.io/github/locp/cassandra).
-* Any parameters are documented.
+* All unit tests pass correctly.  For details on running unit tests, see below.
+  Also all pull requests have the unit tests run against them on CircleCI (see
+  https://circleci.com/gh/locp/cassandra).
+* Any parameters are documented.  This should be done in the README file in
+  the section for the specific class.  Class parameters are listed, both in
+  the manifest code and the README alphabetically.
+
+If your initial unit tests fail after a pull request and you need to fix them,
+simply change the code on your branch and push them to *origin* again as this
+will re-run the tests.  It is not required to submit a new pull request.
+
+If you don't know how to fix the failing tests, simply ask for help in the
+pull request and we'll do our best to help.
 
 ## Testing
 
