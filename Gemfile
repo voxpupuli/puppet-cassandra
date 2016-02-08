@@ -5,6 +5,7 @@ gem 'puppet', puppetversion
 gem 'facter', '>= 1.7.0'
 
 group :system_tests do
+  gem 'activesupport',          :require => false
   gem 'coveralls',              :require => false
   gem 'docker-api',             :require => false
   gem 'beaker-rspec',           :require => false
