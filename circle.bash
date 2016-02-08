@@ -15,7 +15,7 @@ acceptance_tests () {
 
   status=0
   i=0
-  BEAKER_NODES="centos6 centos7 debian7 ubuntu12.04 ubuntu14.04"
+  BEAKER_NODES="centos7 debian7 ubuntu12.04 ubuntu14.04"
 
   # We set beaker not to destroy the node because this fails on CircleCI
   # which then marks otherwise successful builds as failures.
