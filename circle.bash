@@ -7,15 +7,6 @@
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 export PATH=/home/ubuntu/.rvm/gems/ruby-1.9.3-p448/bin:$PATH
 
-acceptance_tests () {
-  if [ -z "$BEAKER_set" ]; then
-    echo "No acceptance tests configured on this node."
-    exit 0
-  fi
-
-  BEAKER_set=$BEAKER_set bundle exec rake beaker 
-}
-
 unit_tests () {
   if [ -z "$RVM"  ]; then
     echo "No unit tests for this node."
@@ -53,9 +44,9 @@ case $CIRCLE_NODE_INDEX in
       export PUPPET_GEM_VERSION="~> 4.0"
       export STRICT_VARIABLES="yes"
       ;;
-  3)  export BEAKER_set='debian7' ;;
+  3)  export BEAKER_NODES="debian7 ubuntu12.04 ubuntu14.04"
+      ;;
 esac
 
-unit_tests || exit $?
-acceptance_tests
+$1
 exit $?
