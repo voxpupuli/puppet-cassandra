@@ -20,13 +20,27 @@ define cassandra::opscenter::cluster_name(
   $storage_cassandra_used_hosts_per_remote_dc = undef,
   $storage_cassandra_username                 = undef,
   ) {
+  include ::cassandra::opscenter
+
   if ! defined( File[$config_path] ) {
     file { $config_path:
-      ensure => directory
+      ensure  => directory,
+      owner   => 'opscenterd',
+      group   => 'opscenterd',
+      mode    => '0755',
+      require => Package['opscenter']
     }
   }
 
   $cluster_file = "${config_path}/${title}.conf"
+
+  file { $cluster_file:
+    ensure  => present,
+    owner   => 'opscenterd',
+    group   => 'opscenterd',
+    mode    => '0644',
+    require => Package['opscenter']
+  }
 
   if $cassandra_seed_hosts != undef {
     ini_setting { "${title}:cassandra_seed_hosts":
@@ -36,7 +50,7 @@ define cassandra::opscenter::cluster_name(
       value             => $cassandra_seed_hosts,
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   } else {
@@ -46,7 +60,7 @@ define cassandra::opscenter::cluster_name(
       setting           => 'seed_hosts',
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   }
@@ -59,7 +73,7 @@ define cassandra::opscenter::cluster_name(
       value             => $storage_cassandra_api_port,
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   } else {
@@ -69,7 +83,7 @@ define cassandra::opscenter::cluster_name(
       setting           => 'api_port',
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   }
@@ -82,7 +96,7 @@ define cassandra::opscenter::cluster_name(
       value             => $storage_cassandra_bind_interface,
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   } else {
@@ -92,7 +106,7 @@ define cassandra::opscenter::cluster_name(
       setting           => 'bind_interface',
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   }
@@ -105,7 +119,7 @@ define cassandra::opscenter::cluster_name(
       value             => $storage_cassandra_connection_pool_size,
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   } else {
@@ -115,7 +129,7 @@ define cassandra::opscenter::cluster_name(
       setting           => 'connection_pool_size',
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   }
@@ -128,7 +142,7 @@ define cassandra::opscenter::cluster_name(
       value             => $storage_cassandra_connect_timeout,
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   } else {
@@ -138,7 +152,7 @@ define cassandra::opscenter::cluster_name(
       setting           => 'connect_timeout',
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   }
@@ -151,7 +165,7 @@ define cassandra::opscenter::cluster_name(
       value             => $storage_cassandra_cql_port,
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   } else {
@@ -161,7 +175,7 @@ define cassandra::opscenter::cluster_name(
       setting           => 'cql_port',
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   }
@@ -174,7 +188,7 @@ define cassandra::opscenter::cluster_name(
       value             => $storage_cassandra_keyspace,
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   } else {
@@ -184,7 +198,7 @@ define cassandra::opscenter::cluster_name(
       setting           => 'keyspace',
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   }
@@ -197,7 +211,7 @@ define cassandra::opscenter::cluster_name(
       value             => $storage_cassandra_local_dc_pref,
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   } else {
@@ -207,7 +221,7 @@ define cassandra::opscenter::cluster_name(
       setting           => 'local_dc_pref',
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   }
@@ -220,7 +234,7 @@ define cassandra::opscenter::cluster_name(
       value             => $storage_cassandra_password,
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   } else {
@@ -230,7 +244,7 @@ define cassandra::opscenter::cluster_name(
       setting           => 'password',
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   }
@@ -243,7 +257,7 @@ define cassandra::opscenter::cluster_name(
       value             => $storage_cassandra_retry_delay,
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   } else {
@@ -253,7 +267,7 @@ define cassandra::opscenter::cluster_name(
       setting           => 'retry_delay',
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   }
@@ -266,7 +280,7 @@ define cassandra::opscenter::cluster_name(
       value             => $storage_cassandra_seed_hosts,
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   } else {
@@ -276,7 +290,7 @@ define cassandra::opscenter::cluster_name(
       setting           => 'seed_hosts',
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   }
@@ -289,7 +303,7 @@ define cassandra::opscenter::cluster_name(
       value             => $storage_cassandra_send_rpc,
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   } else {
@@ -299,7 +313,7 @@ define cassandra::opscenter::cluster_name(
       setting           => 'send_rpc',
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   }
@@ -312,7 +326,7 @@ define cassandra::opscenter::cluster_name(
       value             => $storage_cassandra_ssl_ca_certs,
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   } else {
@@ -322,7 +336,7 @@ define cassandra::opscenter::cluster_name(
       setting           => 'ssl_ca_certs',
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   }
@@ -335,7 +349,7 @@ define cassandra::opscenter::cluster_name(
       value             => $storage_cassandra_ssl_client_key,
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   } else {
@@ -345,7 +359,7 @@ define cassandra::opscenter::cluster_name(
       setting           => 'ssl_client_key',
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   }
@@ -357,7 +371,7 @@ define cassandra::opscenter::cluster_name(
       setting           => 'ssl_client_pem',
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
       value             => $storage_cassandra_ssl_client_pem,
     }
@@ -368,7 +382,7 @@ define cassandra::opscenter::cluster_name(
       setting           => 'ssl_client_pem',
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   }
@@ -381,7 +395,7 @@ define cassandra::opscenter::cluster_name(
       value             => $storage_cassandra_ssl_validate,
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   } else {
@@ -391,7 +405,7 @@ define cassandra::opscenter::cluster_name(
       setting           => 'ssl_validate',
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   }
@@ -404,7 +418,7 @@ define cassandra::opscenter::cluster_name(
       value             => $storage_cassandra_used_hosts_per_remote_dc,
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   } else {
@@ -414,7 +428,7 @@ define cassandra::opscenter::cluster_name(
       setting           => 'used_hosts_per_remote_dc',
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   }
@@ -427,7 +441,7 @@ define cassandra::opscenter::cluster_name(
       value             => $storage_cassandra_username,
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   } else {
@@ -437,7 +451,7 @@ define cassandra::opscenter::cluster_name(
       setting           => 'username',
       path              => $cluster_file,
       key_val_separator => ' = ',
-      require           => File[$config_path],
+      require           => File[$cluster_file],
       notify            => Service['opscenterd'],
     }
   }

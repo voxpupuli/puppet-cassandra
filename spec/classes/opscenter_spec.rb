@@ -555,36 +555,4 @@ describe 'cassandra::opscenter' do
       should contain_service('opscenterd')
     }
   end
-
-  context 'Systemd file can be activated on Red Hat' do
-    let :facts do
-      {
-        :osfamily => 'RedHat'
-      }
-    end
-
-    let :params do
-      {
-        :service_systemd => true
-      }
-    end
-
-    it { should contain_file('/usr/lib/systemd/system/opscenterd.service') }
-  end
-
-  context 'Systemd file can be activated on Debian' do
-    let :facts do
-      {
-        :osfamily => 'Debian'
-      }
-    end
-
-    let :params do
-      {
-        :service_systemd => true
-      }
-    end
-
-    it { should contain_file('/lib/systemd/system/opscenterd.service') }
-  end
 end

@@ -1,5 +1,12 @@
-general:
-  branches:
-    only:
-      - circleci
+---
+# CircleCI configuration file (circle.yml).
+test:
+  override:
+    - ./circle.bash unit_tests:
+        parallel: true
 
+notify:
+  webhooks:
+    # A list of hook hashes, containing the url field
+    # gitter hook
+    - url: https://webhooks.gitter.im/e/da8c065419a91983f0cf

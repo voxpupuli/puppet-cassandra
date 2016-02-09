@@ -117,7 +117,6 @@ class cassandra::opscenter (
     $service_ensure                                 = 'running',
     $service_name                                   = 'opscenterd',
     $service_provider                               = undef,
-    $service_systemd                                = false,
     $spark_base_master_proxy_port                   = undef,
     $stat_reporter_initial_sleep                    = undef,
     $stat_reporter_interval                         = undef,
@@ -1028,22 +1027,5 @@ class cassandra::opscenter (
     section => 'webserver',
     setting => 'tarball_process_timeout',
     value   => $webserver_tarball_process_timeout
-  }
-
-  if $service_systemd == true {
-    if $::osfamily == 'Debian' {
-      $systemd_path = '/lib/systemd/system'
-    } else {
-      $systemd_path = '/usr/lib/systemd/system'
-    }
-
-    file { "${systemd_path}/${service_name}.service":
-      ensure  => present,
-      owner   => 'root',
-      group   => 'root',
-      content => template('cassandra/opscenter.service.erb'),
-      mode    => '0644',
-      before  => Package[$package_name],
-    }
   }
 }

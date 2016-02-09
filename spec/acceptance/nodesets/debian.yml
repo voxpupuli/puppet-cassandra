@@ -9,13 +9,13 @@ HOSTS:
     docker_image_commands:
       - 'apt-get install -y sudo ufw wget'
     docker_cmd: '["/sbin/init"]'
-  debian7:
-    roles:
-      - debian7
-    platform: debian-7-amd64
-    image: debian:7
-    hypervisor: docker
-    docker_image_commands:
-      - 'apt-get install -y sudo ufw wget'
+#  debian7:
+#    roles:
+#      - debian7
+#    platform: debian-7-amd64
+#    image: debian:7
+#    hypervisor: docker
+#    docker_image_commands:
+#      - 'apt-get install -y sudo ufw wget'
 CONFIG: 
   type: foss
