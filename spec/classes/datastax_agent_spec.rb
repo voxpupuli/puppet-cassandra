@@ -101,4 +101,30 @@ describe 'cassandra::datastax_agent' do
     }
   end
 
+  context 'Test that async_pool_size can be set.' do
+    let :params do
+      {
+         :async_pool_size => '20000'
+      }
+    end
+
+    it { should contain_ini_setting('async_pool_size').with_ensure('present') }
+    it {
+      should contain_ini_setting('async_pool_size').with_value('20000')
+    }
+  end
+
+  context 'Test that async_queue_size can be set.' do
+    let :params do
+      {
+         :async_queue_size => '20000'
+      }
+    end
+
+    it { should contain_ini_setting('async_queue_size').with_ensure('present') }
+    it {
+      should contain_ini_setting('async_queue_size').with_value('20000')
+    }
+  end
+
 end
