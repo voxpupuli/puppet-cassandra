@@ -1,6 +1,26 @@
 # Change Log for Puppet Module locp-cassandra
 
-##2016-01-08 - Release 1.12.1 ([diff](https://github.com/locp/cassandra/compare/1.12.0...1.12.1))
+##2016-02-12 - Release 1.12.2 ([diff](https://github.com/locp/cassandra/compare/1.12.1...1.12.2))
+
+### Summary
+
+More bug fixes.
+
+### Features
+
+* N/A
+
+### Bugfixes
+
+* Fixed a problem with the Red Hat family and systemd not starting the
+  service and reporting all service stops as failures, regardless of
+  if they were or not.
+
+### Improvements
+
+* N/A
+
+##2016-02-08 - Release 1.12.1 ([diff](https://github.com/locp/cassandra/compare/1.12.0...1.12.1))
 
 ### Summary
 
