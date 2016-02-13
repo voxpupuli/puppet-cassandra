@@ -1,5 +1,28 @@
 # Change Log for Puppet Module locp-cassandra
 
+##YYYY-MM-DD - Release X.Y.Z ([diff](https://github.com/locp/cassandra/compare/1.5.0...X.Y.Z))
+
+### Summary
+
+A short summary of what has been changed in this release.
+
+### Features
+
+* Added the `service_systemd` parameter to the following classes:
+  * ::cassandra::datastax-agent
+  * ::cassandra::opscenter
+
+### Bugfixes
+
+* Removed incorrect puppet code from the README examples.
+
+### Improvements
+
+* Changed the AWS instance type used by the TravisCI triggered acceptance
+  tests from a c3.xlarge to c4.xlarge.
+* Merged the acceptance tests virtual nodes into family specific node sets.
+* Refactored the Gemfile.
+
 ##2016-02-12 - Release 1.12.2 ([diff](https://github.com/locp/cassandra/compare/1.12.1...1.12.2))
 
 ### Summary
