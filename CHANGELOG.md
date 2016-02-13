@@ -8,9 +8,7 @@ A short summary of what has been changed in this release.
 
 ### Features
 
-* Added the `service_systemd` parameter to the following classes:
-  * ::cassandra::datastax-agent
-  * ::cassandra::opscenter
+* Added the `service_systemd` parameter to ::cassandra::datastax-agent.
 
 ### Bugfixes
 
