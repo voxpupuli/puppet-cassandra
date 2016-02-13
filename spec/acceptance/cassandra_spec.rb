@@ -164,21 +164,17 @@ describe 'cassandra class' do
   end
 
   opscenter_install_pp = <<-EOS
-    if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == 7 {
-        $service_systemd = true
-    } elsif $::operatingsystem == 'Debian' and $::operatingsystemmajrelease == 8 {
-        $service_systemd = true
-    } else {
-        $service_systemd = false
-    }
-
     class { '::cassandra::opscenter::pycrypto':
       manage_epel => true,
       before      => Class['::cassandra::opscenter']
     }
 
     class { '::cassandra::opscenter':
-      service_systemd => $service_systemd
+      config_purge => true
+    }
+
+    cassandra::opscenter::cluster_name { 'Cluster1':
+      cassandra_seed_hosts       => 'host1,host2',
     }
   EOS
 

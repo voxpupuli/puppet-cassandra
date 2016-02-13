@@ -13,6 +13,7 @@ A short summary of what has been changed in this release.
 ### Bugfixes
 
 * Removed incorrect puppet code from the README examples.
+* On Debian family, the opscenterd user is not created by the package.
 
 ### Improvements
 

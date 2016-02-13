@@ -91,6 +91,8 @@ A Puppet module to install and manage Cassandra, DataStax Agent & OpsCenter
   key space for metrics storage.  These files will be created in
   /etc/opscenter/clusters.  The module also creates this directory if
   required.  This functionality is only valid in DataStax Enterprise.
+* Optionally purge any none Puppet controlled clusters from
+  /etc/opscenter/clusters.
 
 #### What the cassandra::opscenter::pycrypto class affects
 
@@ -2220,6 +2222,11 @@ in the file.  Default value *undef*
 The full path to the OpsCenter configuration file.
 Default value '/etc/opscenter/opscenterd.conf'
 
+##### `config_purge`
+Whether to remove cluster configurations that are not controlled by this puppet module.
+Valid values are true or false.
+Default value false
+
 ##### `definitions_auto_update`
 This sets the auto_update setting in the definitions section of the
 OpsCenter configuration file.  See
@@ -2937,6 +2944,10 @@ _cluster_name_.conf configuration file.  See
 http://docs.datastax.com/en/opscenter/5.2/opsc/configure/opscStoringCollectionDataDifferentCluster_t.html
 for more details.  A value of *undef* will ensure the setting is not
 present in the file.  Default value *undef*
+
+##### `config_path`
+The path to where OpsCenter stores the cluster configurations.
+Default value '/etc/opscenter/clusters'
 
 ##### `storage_cassandra_api_port`
 This sets the api_port setting in the storage_cassandra section of the

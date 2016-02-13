@@ -1,23 +1,31 @@
 require 'spec_helper'
 describe 'cassandra::opscenter::cluster_name' do
-  let(:pre_condition) { [
+  let(:pre_condition) {[
+    'class cassandra::opscenter ($config_purge = false) {}',
     'define ini_setting($ensure = nil,
        $path,
        $section,
        $key_val_separator       = nil,
        $setting,
        $value                   = nil) {}'
-  ] }
+  ]}
 
   context 'Called with defaults.' do
     let(:title) { 'MyCluster' }
+
+    let :facts do
+      {
+        :osfamily => 'RedHat'
+      }
+    end
+
     let :params do
       {
         :cassandra_seed_hosts         => 'host1,host2',
       }
     end
      it { should contain_cassandra__opscenter__cluster_name('MyCluster') }
-     it { should have_resource_count(273) }
+     it { should have_resource_count(21) }
 
      it {
        should contain_file('/etc/opscenter/clusters/MyCluster.conf').with({
@@ -30,16 +38,25 @@ describe 'cassandra::opscenter::cluster_name' do
 
      it {
        should contain_file('/etc/opscenter/clusters').with({
-         'ensure' => 'directory',
-         'owner'  => 'opscenterd',
-         'group'  => 'opscenterd',
-         'mode'   => '0755'
+         'ensure'  => 'directory',
+         'owner'   => 'opscenterd',
+         'group'   => 'opscenterd',
+         'purge'   => false,
+         'recurse' => false,
+         'mode'    => '0755'
        })
      }
   end
   
   context 'Test that settings can be set.' do
     let(:title) { 'MyCluster' }
+
+    let :facts do
+      {
+        :osfamily => 'Debian'
+      }
+    end
+
     let :params do
       {
         :cassandra_seed_hosts         => 'host1,host2',
@@ -50,7 +67,9 @@ describe 'cassandra::opscenter::cluster_name' do
 
     it {
       should contain_file('/etc/opscenter/clusters').with({
-        'ensure' => 'directory',
+        'ensure'  => 'directory',
+         'owner'  => 'root',
+         'group'  => 'root',
       })
     }
 

@@ -40,6 +40,7 @@ class cassandra::opscenter (
     $clusters_startup_sleep                         = undef,
     $config_file
       = '/etc/opscenter/opscenterd.conf',
+    $config_purge                                   = false,
     $definitions_auto_update                        = undef,
     $definitions_definitions_dir                    = undef,
     $definitions_download_filename                  = undef,

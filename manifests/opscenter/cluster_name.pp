@@ -22,12 +22,22 @@ define cassandra::opscenter::cluster_name(
   ) {
   include ::cassandra::opscenter
 
+  if $::osfamily == 'RedHat' {
+    $owner = 'opscenterd'
+    $group = 'opscenterd'
+  } else {
+    $owner = 'root'
+    $group = 'root'
+  }
+
   if ! defined( File[$config_path] ) {
     file { $config_path:
       ensure  => directory,
-      owner   => 'opscenterd',
-      group   => 'opscenterd',
+      owner   => $owner,
+      group   => $group,
       mode    => '0755',
+      purge   => $cassandra::opscenter::config_purge,
+      recurse => $cassandra::opscenter::config_purge,
       require => Package['opscenter']
     }
   }
@@ -36,8 +46,8 @@ define cassandra::opscenter::cluster_name(
 
   file { $cluster_file:
     ensure  => present,
-    owner   => 'opscenterd',
-    group   => 'opscenterd',
+    owner   => $owner,
+    group   => $group,
     mode    => '0644',
     require => Package['opscenter']
   }
