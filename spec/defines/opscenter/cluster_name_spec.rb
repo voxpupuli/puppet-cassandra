@@ -30,8 +30,6 @@ describe 'cassandra::opscenter::cluster_name' do
      it {
        should contain_file('/etc/opscenter/clusters/MyCluster.conf').with({
          'ensure' => 'present',
-         'owner'  => 'opscenterd',
-         'group'  => 'opscenterd',
          'mode'   => '0644'
        })
      }
@@ -39,11 +37,8 @@ describe 'cassandra::opscenter::cluster_name' do
      it {
        should contain_file('/etc/opscenter/clusters').with({
          'ensure'  => 'directory',
-         'owner'   => 'opscenterd',
-         'group'   => 'opscenterd',
          'purge'   => false,
          'recurse' => false,
-         'mode'    => '0755'
        })
      }
   end
@@ -68,8 +63,6 @@ describe 'cassandra::opscenter::cluster_name' do
     it {
       should contain_file('/etc/opscenter/clusters').with({
         'ensure'  => 'directory',
-         'owner'  => 'root',
-         'group'  => 'root',
       })
     }
 
