@@ -144,6 +144,7 @@ describe 'cassandra' do
         :server_encryption_protocol => 'server_encryption_protocol',
         :server_encryption_require_client_auth => 'server_encryption_require_client_auth',
         :server_encryption_store_type => 'server_encryption_store_type',
+        :thrift_framed_transport_size_in_mb => 16,
       }
     end
 
@@ -272,6 +273,7 @@ describe 'cassandra' do
     it { should contain_file('/etc/cassandra.yaml').with_content(/protocol: server_encryption_protocol/) }
     it { should contain_file('/etc/cassandra.yaml').with_content(/require_client_auth: server_encryption_require_client_auth/) }
     it { should contain_file('/etc/cassandra.yaml').with_content(/store_type: server_encryption_store_type/) }
+    it { should contain_file('/etc/cassandra.yaml').with_content(/thrift_framed_transport_size_in_mb: 16/) }
 
     it { should contain_file('commitlog_directory') }
     it { should contain_file('datadir1') }
