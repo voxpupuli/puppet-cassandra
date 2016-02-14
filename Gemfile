@@ -9,6 +9,7 @@ group :system_tests do
   gem 'coveralls',              :require => false
   gem 'docker-api',             :require => false
   gem 'beaker-rspec',           :require => false
+  gem 'beaker',                 '2.33.0'
   gem 'fog',                    :require => false
   gem 'fog-google',             '<= 0.0.9'
   gem 'pry',                    :require => false
