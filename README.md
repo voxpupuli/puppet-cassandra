@@ -3144,51 +3144,19 @@ page for project specific requirements.
 
 ### Additional Contributers
 
-**Release**  | **Contributer**                                | **PR/Issue**                                         
--------------|------------------------------------------------|--------------------------------------------------
-0.3.0        | [@spredzy](https://github.com/Spredzy)         | [#11](https://github.com/locp/cassandra/pull/11)
-0.4.2        | [@amosshapira](https://github.com/amosshapira) | [#34](https://github.com/locp/cassandra/pull/34)
+**Release**  | **Contributer**                                    | **PR/Issue**                                         
+-------------|----------------------------------------------------|--------------------------------------------------
+0.3.0        | [@spredzy](https://github.com/Spredzy)             | [#11](https://github.com/locp/cassandra/pull/11)
+0.4.2        | [@amosshapira](https://github.com/amosshapira)     | [#34](https://github.com/locp/cassandra/pull/34)
+1.3.3        | [@DylanGriffith](https://github.com/DylanGriffith) | [#87](https://github.com/locp/cassandra/pull/87)
+1.3.5        | [@sampowers](https://github.com/sampowers)         | [#93](https://github.com/locp/cassandra/issues/93)
+1.4.0        | [@markasammut](https://github.com/markasammut)     | [#100](https://github.com/locp/cassandra/pull/100)
+1.4.2        | [@markasammut](https://github.com/markasammut)     | [#110](https://github.com/locp/cassandra/pull/110)
+1.9.2        | [@mantunovic](https://github.com/mantunovic)       | [#136](https://github.com/locp/cassandra/issues/136)
+1.9.2        | [@al4](https://github.com/al4)                     | [#136](https://github.com/locp/cassandra/issues/136)
+1.10.0       | [@Mike-Petersen](https://github.com/Mike-Petersen) | [#144](https://github.com/locp/cassandra/pull/144)
+1.12.0       | [@Mike-Petersen](https://github.com/Mike-Petersen) | [#153](https://github.com/locp/cassandra/pull/153)
 
-* Yanis Guenane (GitHub [@spredzy](https://github.com/Spredzy)) provided the
-Cassandra 1.x compatible template
-(see [#11](https://github.com/locp/cassandra/pull/11)).
-
-* Amos Shapira (GitHub [@amosshapira](https://github.com/amosshapira)) fixed
-a bug in the requirements metadata that caused a problem with Puppetfile
-(see [#34](https://github.com/locp/cassandra/pull/34)).
-
-* Dylan Griffith (GitHub [@DylanGriffith](https://github.com/DylanGriffith))
-identified that the dependency for puppetlabs-apt was incorrect
-(see [#87](https://github.com/locp/cassandra/pull/87)).
-
-* Sam Powers (GitHub [@sampowers](https://github.com/sampowers)) reported a
-bug in the ability to set the running state of the Cassandra service and
-subsequently submitted a pull request with a fix
-(see [#93](https://github.com/locp/cassandra/issues/93)).
-
-* [@markasammut](https://github.com/markasammut) contributed a pull request
-to set the batch_size_warn_threshold_in_kb attribute (see
-[#100](https://github.com/locp/cassandra/pull/100)).
-
-* [@markasammut](https://github.com/markasammut) also contributed a pull
-request to restart the service if the datastax-agent package is upgraded
-(see [#110](https://github.com/locp/cassandra/pull/110)).
-
-* Issues with the newly released Cassandra 3 were reported by
-[@mantunovic](https://github.com/mantunovic) in
-[#136](https://github.com/locp/cassandra/issues/136) with some excellent
-help and advice from [@al4](https://github.com/al4).  Thanks to both
-Mladen and Alex for your feedback and constructive collaboration.
-
-* Allowing the setting of the local_interface for the DataStax agent
-  configuration was submitted via a pull request
-  (see [#144](https://github.com/locp/cassandra/pull/144)) by
-  [@Mike-Petersen](https://github.com/Mike-Petersen).
-
-* In the Cassandra class, the addition of the listen_interface and
-  rpc_interface attribute in
-  [#153](https://github.com/locp/cassandra/pull/153) were contributed by
-  Tom Taylor ([@t0mmyt](https://github.com/t0mmyt)).
 
 * In the cassandra::datastax_agent the agent_alias attribute was
   contributed by
