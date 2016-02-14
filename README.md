@@ -1692,6 +1692,10 @@ data, so you should avoid setting the value too low.
 If omitted value is 0 is assumed, which never timeout streams.
 Default value: *undef*
 
+##### `thrift_framed_transport_size_in_mb`
+Frame size for thrift (maximum message length).
+Default value: 15
+
 ##### `tombstone_failure_threshold`
 When executing a scan, within or across a partition, we need to keep the
 tombstones seen in memory so we can return them to the coordinator, which

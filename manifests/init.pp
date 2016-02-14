@@ -154,6 +154,7 @@ class cassandra (
   $storage_port                                         = 7000,
   $streaming_socket_timeout_in_ms                       = undef,
   $stream_throughput_outbound_megabits_per_sec          = undef,
+  $thrift_framed_transport_size_in_mb                   = 15,
   $tombstone_failure_threshold                          = 100000,
   $tombstone_warn_threshold                             = 1000,
   $trickle_fsync                                        = false,
