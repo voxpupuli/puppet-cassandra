@@ -37,14 +37,14 @@ bundle exec rake spec     # Run spec tests in a clean fixtures directory
 
 ### Beaker Tests (Acceptance Testing)
 
+These tests are more expensive and are normally only ran in preparation for
+a release.  More details are available at
+https://github.com/locp/cassandra/wiki/Acceptance-(Beaker)-Tests
+which describes the transition of the test harness from Vagrant to Docker.
+
 ```bash
 for node in $( bundle exec rake beaker_nodes ); do
   export BEAKER_set=$node
   BEAKER_destroy=onpass bundle exec rake beaker || break
 done
 ```
-
-## Preparing for a Release
-
-The notes for preparing for a release have been moved to
-https://github.com/locp/cassandra/wiki/Preparing-for-a-Release
