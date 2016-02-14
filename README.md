@@ -3156,8 +3156,4 @@ page for project specific requirements.
 1.9.2        | [@al4](https://github.com/al4)                     | [#136](https://github.com/locp/cassandra/issues/136)
 1.10.0       | [@Mike-Petersen](https://github.com/Mike-Petersen) | [#144](https://github.com/locp/cassandra/pull/144)
 1.12.0       | [@Mike-Petersen](https://github.com/Mike-Petersen) | [#153](https://github.com/locp/cassandra/pull/153)
-
-
-* In the cassandra::datastax_agent the agent_alias attribute was
-  contributed by
-  Stuart Fox ([@stuartbfox](https://github.com/stuartbfox)).
+1.12.0       | [@stuartbfox](https://github.com/stuartbfox)       | [#156](https://github.com/locp/cassandra/pull/156)
