@@ -3144,6 +3144,11 @@ page for project specific requirements.
 
 ### Additional Contributers
 
+**Release**  | **Contributer**                                | **PR/Issue**                                         
+-------------|------------------------------------------------|--------------------------------------------------
+0.3.0        | [@spredzy](https://github.com/Spredzy)         | [#11](https://github.com/locp/cassandra/pull/11)
+0.4.2        | [@amosshapira](https://github.com/amosshapira) | [#34](https://github.com/locp/cassandra/pull/34)
+
 * Yanis Guenane (GitHub [@spredzy](https://github.com/Spredzy)) provided the
 Cassandra 1.x compatible template
 (see [#11](https://github.com/locp/cassandra/pull/11)).
