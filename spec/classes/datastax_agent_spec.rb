@@ -102,7 +102,6 @@ describe 'cassandra::datastax_agent' do
     }
   end
 
-<<<<<<< HEAD
   context 'Systemd file can be activated on Red Hat' do
     let :facts do
       {
