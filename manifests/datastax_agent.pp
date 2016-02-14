@@ -13,6 +13,8 @@ class cassandra::datastax_agent (
   $stomp_interface     = undef,
   $local_interface     = undef,
   $agent_alias         = undef,
+  $async_pool_size     = undef,
+  $async_queue_size    = undef,
   ){
   package { $package_name:
     ensure  => $package_ensure,
@@ -69,6 +71,32 @@ class cassandra::datastax_agent (
     value             => $agent_alias,
     require           => Package[$package_name],
     notify            => Service[$service_name]
+  }
+
+  if $async_pool_size != undef {
+    ini_setting { 'async_pool_size':
+      ensure            => present,
+      path              => $address_config_file,
+      section           => '',
+      key_val_separator => ': ',
+      setting           => 'async_pool_size',
+      value             => $async_pool_size,
+      require           => Package[$package_name],
+      notify            => Service[$service_name]
+    }
+  }
+
+  if $async_queue_size != undef {
+    ini_setting { 'async_queue_size':
+      ensure            => present,
+      path              => $address_config_file,
+      section           => '',
+      key_val_separator => ': ',
+      setting           => 'async_queue_size',
+      value             => $async_queue_size,
+      require           => Package[$package_name],
+      notify            => Service[$service_name]
+    }
   }
 
   if $java_home != undef {

@@ -102,6 +102,7 @@ describe 'cassandra::datastax_agent' do
     }
   end
 
+<<<<<<< HEAD
   context 'Systemd file can be activated on Red Hat' do
     let :facts do
       {
@@ -134,5 +135,31 @@ describe 'cassandra::datastax_agent' do
 
     it { should contain_file('/lib/systemd/system/datastax-agent.service') }
     it { should contain_file('/var/run/datastax-agent') }
+  end
+
+  context 'Test that async_pool_size can be set.' do
+    let :params do
+      {
+         :async_pool_size => '20000'
+      }
+    end
+
+    it { should contain_ini_setting('async_pool_size').with_ensure('present') }
+    it {
+      should contain_ini_setting('async_pool_size').with_value('20000')
+    }
+  end
+
+  context 'Test that async_queue_size can be set.' do
+    let :params do
+      {
+         :async_queue_size => '20000'
+      }
+    end
+
+    it { should contain_ini_setting('async_queue_size').with_ensure('present') }
+    it {
+      should contain_ini_setting('async_queue_size').with_value('20000')
+    }
   end
 end

@@ -1816,6 +1816,20 @@ set as the local_interface setting in
 which is the address there the local cassandra will be contacted.
 Default value *undef*
 
+##### `async_pool_size`
+If the value is changed from the default of *undef* then this is what is
+set as the async_pool_size setting in
+**/var/lib/datastax-agent/conf/address.yaml**
+which is the pool size to use for async operations to cassandra.
+Default value *undef*
+
+##### `async_queue_size`
+If the value is changed from the default of *undef* then this is what is
+set as the async_queue_size setting in
+**/var/lib/datastax-agent/conf/address.yaml**
+which is the maximum number of queued cassandra operations.
+Default value *undef*
+
 ### Class: cassandra::datastax_repo
 
 An optional class that will allow a suitable repository to be configured
