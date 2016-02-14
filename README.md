@@ -261,7 +261,7 @@ node /^node\d+$/ {
 
 The default value for the num_tokens is already 256, but it is
 included in the example for clarity.  Do not forget to either
-set auto_bootstrap to true or not set the parameter at all
+set auto_bootstrap to true or not set the attribute at all
 after initializing the cluster.
 
 ### Create a Cluster in Multiple Data Centers
@@ -307,9 +307,9 @@ node /^node[345]$/ {
 }
 ```
 
-We don't need to specify the rack name (with the rack parameter) as RAC1 is
+We don't need to specify the rack name (with the rack attribute) as RAC1 is
 the default value.  Again, do not forget to either set auto_bootstrap to
-true or not set the parameter at all after initializing the cluster.
+true or not set the attribute at all after initializing the cluster.
 
 ### OpsCenter
 
@@ -411,7 +411,7 @@ cassandra::opscenter::cluster_name { 'Cluster1':
 A class for installing the Cassandra package and manipulate settings in the
 configuration file.
 
-#### Parameters
+#### Attributes
 
 ##### `authenticator`
 Authentication backend, implementing IAuthenticator; used to identify users.
@@ -444,7 +444,7 @@ This setting if set to true makes new (non-seed) nodes automatically migrate
 the right data to themselves. When initializing a fresh cluster without data,
 set this value to false.  If left at the default value of *undef* then the
 entry in the configuration file is absent or commented out.  If a value is
-set, then the parameter and variable are placed into the configuration file.
+set, then the attribute and variable are placed into the configuration file.
 Default value: *undef*
 
 ##### `auto_snapshot`
@@ -949,7 +949,7 @@ Default value 'SimpleSnitch'
 ##### `fail_on_non_supported_os`
 A flag that dictates if the module should fail if it is not RedHat or Debian.
 If you set this option to false then you must also at least set the
-`config_path` parameter as well.
+`config_path` attribute as well.
 Default value 'true'
 
 ##### `file_cache_size_in_mb`
@@ -1743,7 +1743,7 @@ Default value: '2000'
 A class for installing the DataStax Agent and to point it at an OpsCenter
 instance.
 
-#### Parameters
+#### Attributes
 
 ##### `agent_alias`
 If the value is changed from the default of *undef* then this is what is
@@ -1819,21 +1819,21 @@ from which packages for DataStax Community can be downloaded.  Changing
 the defaults will allow any Debian Apt or Red Hat Yum repository to be
 configured.
 
-#### Parameters
+#### Attributes
 
 ##### `descr`
-On the Red Hat family, this is passed as the `descr` parameter to a
+On the Red Hat family, this is passed as the `descr` attribute to a
 `yumrepo` resource.  On the Debian family, it is passed as the `comment`
-parameter to an `apt::source` resource.
+attribute to an `apt::source` resource.
 Default value 'DataStax Repo for Apache Cassandra'
 
 ##### `key_id`
-On the Debian family, this is passed as the `id` parameter to an `apt::key`
+On the Debian family, this is passed as the `id` attribute to an `apt::key`
 resource.  On the Red Hat family, it is ignored.
 Default value '7E41C00F85BFC1706C4FFFB3350200F2B999A372'
 
 ##### `key_url`
-On the Debian family, this is passed as the `source` parameter to an
+On the Debian family, this is passed as the `source` attribute to an
 `apt::key` resource.  On the Red Hat family, it is ignored.
 Default value 'http://debian.datastax.com/debian/repo_key'
 
@@ -1841,11 +1841,11 @@ Default value 'http://debian.datastax.com/debian/repo_key'
 If left as the default, this will set the `baseurl` to
 'http://rpm.datastax.com/community' on a `yumrepo` resource
 on the Red Hat family.  On the Debian family, leaving this as the default
-will set the `location` parameter on an `apt::source` to
+will set the `location` attribute on an `apt::source` to
 'http://debian.datastax.com/community'.  Default value *undef*
 
 ##### `release`
-On the Debian family, this is passed as the `release` parameter to an
+On the Debian family, this is passed as the `release` attribute to an
 `apt::source` resource.  On the Red Hat family, it is ignored.
 Default value 'stable'
 
@@ -1859,7 +1859,7 @@ IMPORTANT: The full list of which ports should be configured is assessed at
 evaluation time of the configuration. Therefore if one is to use this class,
 it must be the final cassandra class included in the manifest.
 
-#### Parameters
+#### Attributes
 
 ##### `client_ports`
 Only has any effect if the `cassandra` class is defined on the node.
@@ -1931,7 +1931,7 @@ Default value '['0.0.0.0/0']'
 
 A class to install an appropriate Java package.
 
-#### Parameters
+#### Attributes
 
 ##### `ensure`
 Is passed to the package reference for the JRE/JDK package.  Valid values are
@@ -1964,7 +1964,7 @@ This class installs and manages the DataStax OpsCenter.  Leaving the defaults
 as they are will provide a running OpsCenter without any authentication on
 port 8888.
 
-#### Parameters
+#### Attributes
 
 ##### `agents_agent_certfile`
 This sets the agent_certfile setting in the agents section of the
@@ -2889,7 +2889,7 @@ for more details.
 This class has no effect when included on nodes that are not in the Red Hat
 family.
 
-#### Parameters
+#### Attributes
 
 ##### `ensure`
 This is passed to the package reference for **pycrypto**.  Valid values are
@@ -2916,7 +2916,7 @@ Default value '['python-devel', 'python-pip' ]'
 
 A class to install the optional Cassandra tools package.
 
-#### Parameters
+#### Attributes
 
 ##### `ensure`
 Is passed to the package reference.  Valid values are **present** or a version
@@ -2936,7 +2936,7 @@ Default value *undef*
 With DataStax Enterprise, one can specify a remote keyspace for OpsCenter
 to store metric data (this is not available in the DataStax Community Edition).
 
-#### Parameters
+#### Attributes
 
 ##### `cassandra_seed_hosts`
 This sets the seed_hosts setting in the cassandra section of the
@@ -3074,7 +3074,7 @@ A defined type to handle the `::cassandra::data_file_directoryies` array.
 This is not intended to be used by a user but is documented here for
 completeness.
 
-#### Parameters
+#### Attributes
 
 ##### `title`
 The name of an individual directory.
@@ -3086,7 +3086,7 @@ rules.  This is not intended to be used by a user (who should use the
 API provided by cassandra::firewall_ports instead) but is documented
 here for completeness.
 
-#### Parameters
+#### Attributes
 
 ##### `title`
 A text field that contains the protocol name and CIDR address of a subnet.
@@ -3101,7 +3101,7 @@ configuration file.  This is not intended to be used by a user (who
 should use the API provided by cassandra::opscenter instead) but is documented
 here for completeness.
 
-#### Parameters
+#### Attributes
 
 ##### `service_name`
 The name of the service to be notified if a change is made to the
@@ -3162,7 +3162,7 @@ subsequently submitted a pull request with a fix
 (see [#93](https://github.com/locp/cassandra/issues/93)).
 
 * [@markasammut](https://github.com/markasammut) contributed a pull request
-to set the batch_size_warn_threshold_in_kb parameter (see
+to set the batch_size_warn_threshold_in_kb attribute (see
 [#100](https://github.com/locp/cassandra/pull/100)).
 
 * [@markasammut](https://github.com/markasammut) also contributed a pull
@@ -3181,10 +3181,10 @@ Mladen and Alex for your feedback and constructive collaboration.
   [@Mike-Petersen](https://github.com/Mike-Petersen).
 
 * In the Cassandra class, the addition of the listen_interface and
-  rpc_interface parameters in
+  rpc_interface attribute in
   [#153](https://github.com/locp/cassandra/pull/153) were contributed by
   Tom Taylor ([@t0mmyt](https://github.com/t0mmyt)).
 
-* In the cassandra::datastax_agent the agent_alias parameter was
+* In the cassandra::datastax_agent the agent_alias attribute was
   contributed by
   Stuart Fox ([@stuartbfox](https://github.com/stuartbfox)).

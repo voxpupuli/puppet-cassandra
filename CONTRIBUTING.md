@@ -10,8 +10,8 @@ However, we do ask that:
 * All unit tests pass correctly.  For details on running unit tests, see below.
   Also all pull requests have the unit tests run against them on CircleCI (see
   https://circleci.com/gh/locp/cassandra).
-* Any parameters are documented.  This should be done in the README file in
-  the section for the specific class.  Class parameters are listed, both in
+* Any attributes are documented.  This should be done in the README file in
+  the section for the specific class.  Class attributes are listed, both in
   the manifest code and the README alphabetically.
 
 If your initial unit tests fail after a pull request and you need to fix them,

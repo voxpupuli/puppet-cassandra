@@ -8,7 +8,7 @@ A short summary of what has been changed in this release.
 
 ### Features
 
-* Added the `service_systemd` parameter to ::cassandra::datastax-agent.
+* Added the `service_systemd` attribute to ::cassandra::datastax-agent.
 
 ### Bugfixes
 
@@ -54,7 +54,7 @@ This is a non-functional release.  Some bug fixes and release improvements.
 
 ### Bugfixes
 
-* Completed documentation for parameters.  This was missing for the
+* Completed documentation for attributes.  This was missing for the
   `inter_dc_stream_throughput_outbound_megabits_per_sec` and
   `stream_throughput_outbound_megabits_per_sec` options.
 * Corrected the ownership and directories for the OpsCenter configuration.
@@ -72,7 +72,7 @@ A new feature in the cassandra::datastax_agent class, a minor bug fix and integr
 
 ### Features
 
-* There is now an agent_alias parameter for the cassandra::datastax_agent class.
+* There is now an agent_alias attribute for the cassandra::datastax_agent class.
 
 ### Bugfixes
 
@@ -91,7 +91,7 @@ New features added to the main class.  Also some non-functional improvements.
 
 ### Features
 
-* The addition of the listen_interface and rpc_interface parameters to the
+* The addition of the listen_interface and rpc_interface attributes to the
   main class.
 
 ### Bugfixes
@@ -100,7 +100,7 @@ New features added to the main class.  Also some non-functional improvements.
 
 ### Improvements
 
-* Added more detail to the parameters to the main class in the README.
+* Added more detail to the attributes to the main class in the README.
 * Improved the module metadata.
 * Clarified private defined types with the private subclass.
 * The test coverage in release 1.10.0 dropped to 99.09%.  Got it back to
@@ -117,9 +117,9 @@ A feature release with minor improvements.
 * Added the ability to allow setting the local_interface for the DataStax
   agent configuration.
 * Allow the service provider to be specified for the Cassandra, DataStax
-  agent and OpsCenter services  with the service_provider parameter.
+  agent and OpsCenter services  with the service_provider attribute.
 * Optionally allow a systemd system file be inserted with the
-  cassandra::service_systemd parameter.
+  cassandra::service_systemd attribute.
 
 ### Bugfixes
 
@@ -127,7 +127,7 @@ A feature release with minor improvements.
 
 ### Improvements
 
-* Allow the files resources specified with in the cassandra parameters:
+* Allow the files resources specified with in the cassandra attributes:
   * commitlog_directory
   * data_file_directories
   * saved_caches_directory
@@ -183,7 +183,7 @@ change log documentation.
 
 ### Features
 
-* The following parameters have been added to the ::cassandra class to be
+* The following attributes have been added to the ::cassandra class to be
   configured into the configuration file:
 
   * client_encryption_algorithm
@@ -243,12 +243,12 @@ Some new features a minor bug fix and some non-functional improvements.
 
 ### Features
 
-* Added the service_refresh and config_file_mode parameters to the Cassandra
+* Added the service_refresh and config_file_mode attributes to the Cassandra
   class.
 
 ### Bugfixes
 
-* The name of the fail_on_non_supported_os parameter has been corrected.
+* The name of the fail_on_non_supported_os attribute has been corrected.
 
 ### Improvements
 
@@ -283,7 +283,7 @@ A minor bug fix that incorrctly gave a failed build status for the module.
 
 ### Features
 
-* Added the commitlog_segment_size_in_mb parameter to the cassandra class.
+* Added the commitlog_segment_size_in_mb attribute to the cassandra class.
 * Added the following fields to the cassandra::datastax_repo class:
 
   * descr
@@ -296,7 +296,7 @@ A minor bug fix that incorrctly gave a failed build status for the module.
 
 ### Bugfixes
 
-* Fixed a bug in how the commitlog_sync and the parameters that are
+* Fixed a bug in how the commitlog_sync and the attributes that are
   associated with it are handled
 
 ### Improvements
@@ -313,13 +313,13 @@ The following non-functional improvements were implemented:
 
 ### Summary
 
-More parameters for ::cassandra and ::cassandra::datastax_agent.  Also some
+More attributes for ::cassandra and ::cassandra::datastax_agent.  Also some
 non-functional improvements in the automated unit tests.
 
 ### Features
 
 * The JAVA_HOME can now be set for the datastax_agent (see the
-  cassandra::datastax_agent => java_home parameter).
+  cassandra::datastax_agent => java_home attribute).
 * The file mode for the directories can now be specified for the
   commitlog_directory, data_file_directories and the saved_caches_directory
   in the cassandra class.
@@ -336,12 +336,12 @@ non-functional improvements in the automated unit tests.
 
 ### Summary
 
-More parameters have been added that can be configured into the
+More attributes have been added that can be configured into the
 cassandra.yaml file.
 
 ### Features
 
-* The following parameters to the cassandra class can be configured into
+* The following attributes to the cassandra class can be configured into
   the cassandra configuration:
   * broadcast_address
   * broadcast_rpc_address
@@ -433,10 +433,10 @@ override the default behaviour of failing on a non-supported operating system.
 
 ##2015-09-10 - Release 1.4.0 ([diff](https://github.com/locp/cassandra/compare/1.3.7...1.4.0))
 
-* Ensured that directories specified in the directory parameters
+* Ensured that directories specified in the directory attributes
   are controlled with file resources.
 
-* Added the following parameters to the cassandra.yml file:
+* Added the following attributes to the cassandra.yml file:
   * batchlog_replay_throttle_in_kb
   * cas_contention_timeout_in_ms
   * column_index_size_in_kb
@@ -469,7 +469,7 @@ override the default behaviour of failing on a non-supported operating system.
   * write_request_timeout_in_ms
 
 ##2015-09-08 - Release 1.3.7 ([diff](https://github.com/locp/cassandra/compare/1.3.6...1.3.7))
-* Made the auto_bootstrap parameter available.
+* Made the auto_bootstrap attribute available.
 
 ##2015-09-03 - Release 1.3.6 ([diff](https://github.com/locp/cassandra/compare/1.3.5...1.3.6))
 * Fixed a bug, now allowing the user to set the enabled state of the Cassandra
@@ -485,7 +485,7 @@ override the default behaviour of failing on a non-supported operating system.
 
 ##2015-08-28 - Release 1.3.4 ([diff](https://github.com/locp/cassandra/compare/1.3.3...1.3.4))
 * Minor corrections to the README.
-* The addition of the storage_cassandra_seed_hosts parameter to
+* The addition of the storage_cassandra_seed_hosts attribute to
   cassandra::opscenter::cluster_name which is part of a bigger part of
   work but is urgently require by a client.
 
@@ -587,7 +587,7 @@ Forge.
 
 ##2015-05-28 - Release 0.2.0 ([diff](https://github.com/locp/cassandra/compare/0.1.0...0.2.0))
 ### Summary
-Added more parameters and improved the module metadata.
+Added more attributes and improved the module metadata.
 
 ##2015-05-26 - Release 0.1.0
 ### Summary
