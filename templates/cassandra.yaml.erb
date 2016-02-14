@@ -511,7 +511,7 @@ rpc_server_type: <%= @rpc_server_type %>
 <% if @internode_recv_buff_size_in_bytes != nil %>internode_recv_buff_size_in_bytes: <%= @internode_recv_buff_size_in_bytes %><% else %># internode_recv_buff_size_in_bytes:<% end %>
 
 # Frame size for thrift (maximum message length).
-thrift_framed_transport_size_in_mb: 15
+thrift_framed_transport_size_in_mb: <%= @thrift_framed_transport_size_in_mb %>
 
 # Set to true to have Cassandra create a hard link to each sstable
 # flushed or streamed locally in a backups/ subdirectory of the
