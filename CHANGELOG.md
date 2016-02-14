@@ -1,19 +1,28 @@
 # Change Log for Puppet Module locp-cassandra
 
-##YYYY-MM-DD - Release X.Y.Z ([diff](https://github.com/locp/cassandra/compare/1.5.0...X.Y.Z))
+##2016-02-14 - Release 1.13.0 ([diff](https://github.com/locp/cassandra/compare/1.12.2...1.13.0))
 
 ### Summary
 
-A short summary of what has been changed in this release.
+A mixed back of new features in the shape of attributes for the cassandra,
+cassandra::datastax_agent and cassandra::opscenter classes.  A couple of
+bug fixes and some non-functional improvements.
 
 ### Features
 
-* Added the `service_systemd` attribute to ::cassandra::datastax-agent.
+* Added the thrift_framed_transport_size_in_mb attribute to
+  ::cassandra.
+* Added the following attributes to ::cassandra::datastax_agent:
+  * async_pool_size
+  * async_queue_size
+  * service_systemd
+* Added the config_purge attribute to ::cassandra::opscenter.
 
 ### Bugfixes
 
 * Removed incorrect puppet code from the README examples.
-* On Debian family, the opscenterd user is not created by the package.
+* Fixed a problem with the beaker 2.34.0 gem which was causing problems
+  during automated acceptance testing.
 
 ### Improvements
 
@@ -21,6 +30,9 @@ A short summary of what has been changed in this release.
   tests from a c3.xlarge to c4.xlarge.
 * Merged the acceptance tests virtual nodes into family specific node sets.
 * Refactored the Gemfile.
+* Changed references in the documentation to parameters to refer to
+  attributes as that is more Puppet-like.
+* Changed the format of the contributers section.
 
 ##2016-02-12 - Release 1.12.2 ([diff](https://github.com/locp/cassandra/compare/1.12.1...1.12.2))
 

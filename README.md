@@ -3176,3 +3176,5 @@ page for project specific requirements.
 1.12.0       | [@Mike-Petersen](https://github.com/Mike-Petersen) | [#153](https://github.com/locp/cassandra/pull/153)
 1.12.0       | [@stuartbfox](https://github.com/stuartbfox)       | [#156](https://github.com/locp/cassandra/pull/156)
 1.12.2       | [@palmertime](https://github.com/palmertime)       | [#165](https://github.com/locp/cassandra/pull/165)
+1.13.0       | [@VeriskPuppet](https://github.com/VeriskPuppet)   | [#163](https://github.com/locp/cassandra/pull/163)
+1.13.0       | [@Mike-Petersen](https://github.com/Mike-Petersen) | [#166](https://github.com/locp/cassandra/pull/166)
