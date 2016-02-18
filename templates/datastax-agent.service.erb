@@ -6,8 +6,6 @@ After=network.target
 
 [Service]
 PIDFile=/var/run/<%= @service_name %>/<%= @service_name %>-monitor.pid
-User=cassandra
-Group=cassandra
 ExecStart=/etc/init.d/<%= @service_name %> start
 StandardOutput=journal
 StandardError=journal
