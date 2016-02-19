@@ -24,7 +24,7 @@ describe 'cassandra::opscenter' do
       })
     }
 
-    it { should have_resource_count(252) }
+    it { should have_resource_count(254) }
 
     it {
       should contain_cassandra__private__opscenter__setting('agents agent_certfile')
@@ -224,6 +224,10 @@ describe 'cassandra::opscenter' do
 
     it {
       should contain_cassandra__private__opscenter__setting('hadoop base_job_tracker_proxy_port')
+    }
+    
+    it {
+      should contain_cassandra__private__opscenter__setting('labs orbited_longpoll')
     }
 
     it {

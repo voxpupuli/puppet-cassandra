@@ -12,3 +12,4 @@ spec/fixtures/
 .vagrant/
 vendor/
 log/
+.project
