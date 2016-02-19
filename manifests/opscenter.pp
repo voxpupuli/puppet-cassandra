@@ -506,7 +506,7 @@ class cassandra::opscenter (
     value   => $hadoop_base_job_tracker_proxy_port
   }
   
-  cassandra::opscenter::setting { 'labs orbited_longpoll':
+  cassandra::private::opscenter::setting { 'labs orbited_longpoll':
     path    => $config_file,
     section => 'labs',
     setting => 'orbited_longpoll',
