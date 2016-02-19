@@ -1,5 +1,23 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-02-19 - Release 1.14.0 ([diff](https://github.com/locp/cassandra/compare/1.13.0...1.14.0))
+
+### Summary
+
+A minor release with one of each of a feature, bug fix and improvement.
+
+### Features
+
+* Added the orbited_longpoll attribute to the cassandra::opscenter class.
+
+### Bugfixes
+
+* Fixed a problem with the DataStax agent and systemd.
+
+### Improvements
+
+* Refactored the contributors section of the README.
+
 ##2016-02-14 - Release 1.13.0 ([diff](https://github.com/locp/cassandra/compare/1.12.2...1.13.0))
 
 ### Summary
