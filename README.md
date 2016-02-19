@@ -3162,19 +3162,19 @@ page for project specific requirements.
 
 ### Additional Contributers
 
-**Release**  | **Contributer**                                    | **PR/Issue**                                         
--------------|----------------------------------------------------|--------------------------------------------------
-0.3.0        | [@spredzy](https://github.com/Spredzy)             | [#11](https://github.com/locp/cassandra/pull/11)
-0.4.2        | [@amosshapira](https://github.com/amosshapira)     | [#34](https://github.com/locp/cassandra/pull/34)
-1.3.3        | [@DylanGriffith](https://github.com/DylanGriffith) | [#87](https://github.com/locp/cassandra/pull/87)
-1.3.5        | [@sampowers](https://github.com/sampowers)         | [#93](https://github.com/locp/cassandra/issues/93)
-1.4.0        | [@markasammut](https://github.com/markasammut)     | [#100](https://github.com/locp/cassandra/pull/100)
-1.4.2        | [@markasammut](https://github.com/markasammut)     | [#110](https://github.com/locp/cassandra/pull/110)
-1.9.2        | [@mantunovic](https://github.com/mantunovic)       | [#136](https://github.com/locp/cassandra/issues/136)
-1.9.2        | [@al4](https://github.com/al4)                     | [#136](https://github.com/locp/cassandra/issues/136)
-1.10.0       | [@Mike-Petersen](https://github.com/Mike-Petersen) | [#144](https://github.com/locp/cassandra/pull/144)
-1.12.0       | [@Mike-Petersen](https://github.com/Mike-Petersen) | [#153](https://github.com/locp/cassandra/pull/153)
-1.12.0       | [@stuartbfox](https://github.com/stuartbfox)       | [#156](https://github.com/locp/cassandra/pull/156)
-1.12.2       | [@palmertime](https://github.com/palmertime)       | [#165](https://github.com/locp/cassandra/pull/165)
-1.13.0       | [@VeriskPuppet](https://github.com/VeriskPuppet)   | [#163](https://github.com/locp/cassandra/pull/163)
-1.13.0       | [@Mike-Petersen](https://github.com/Mike-Petersen) | [#166](https://github.com/locp/cassandra/pull/166)
+**Release**  | **PR/Issue**                                        | **Contributer**
+-------------|-----------------------------------------------------|----------------------------------------------------
+0.3.0        | [#11](https://github.com/locp/cassandra/pull/11)    | [@spredzy](https://github.com/Spredzy)
+0.4.2        | [#34](https://github.com/locp/cassandra/pull/34)    | [@amosshapira](https://github.com/amosshapira)
+1.3.3        | [#87](https://github.com/locp/cassandra/pull/87)    | [@DylanGriffith](https://github.com/DylanGriffith)
+1.3.5        | [#93](https://github.com/locp/cassandra/issues/93)  | [@sampowers](https://github.com/sampowers)
+1.4.0        | [#100](https://github.com/locp/cassandra/pull/100)  | [@markasammut](https://github.com/markasammut)
+1.4.2        | [#110](https://github.com/locp/cassandra/pull/110)  | [@markasammut](https://github.com/markasammut)
+1.9.2        | [#136](https://github.com/locp/cassandra/issues/136)| [@mantunovic](https://github.com/mantunovic)
+1.9.2        | [#136](https://github.com/locp/cassandra/issues/136)| [@al4](https://github.com/al4)
+1.10.0       | [#144](https://github.com/locp/cassandra/pull/144)  | [@Mike-Petersen](https://github.com/Mike-Petersen)
+1.12.0       | [#153](https://github.com/locp/cassandra/pull/153)  | [@Mike-Petersen](https://github.com/Mike-Petersen)
+1.12.0       | [#156](https://github.com/locp/cassandra/pull/156)  | [@stuartbfox](https://github.com/stuartbfox)
+1.12.2       | [#165](https://github.com/locp/cassandra/pull/165)  | [@palmertime](https://github.com/palmertime)
+1.13.0       | [#163](https://github.com/locp/cassandra/pull/163)  | [@VeriskPuppet](https://github.com/VeriskPuppet)
+1.13.0       | [#166](https://github.com/locp/cassandra/pull/166)  | [@Mike-Petersen](https://github.com/Mike-Petersen)
