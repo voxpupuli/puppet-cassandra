@@ -227,7 +227,7 @@ describe 'cassandra::opscenter' do
     }
     
     it {
-          should contain_cassandra__opscenter__setting('labs orbited_longpoll')
+      should contain_cassandra__private__opscenter__setting('labs orbited_longpoll')
     }
 
     it {

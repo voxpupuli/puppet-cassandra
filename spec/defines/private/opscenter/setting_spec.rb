@@ -1011,6 +1011,26 @@ describe 'cassandra::private::opscenter::setting' do
     }
   end
 
+  context 'labs orbited_longpoll' do
+    let(:title) { 'labs orbited_longpoll' }
+    let :params do
+      {
+        :path    => '/path/to/file',
+        :section => 'labs',
+        :setting => 'orbited_longpoll',
+      }
+    end
+
+    it {
+      should contain_ini_setting('labs orbited_longpoll').with({
+        'ensure'  => 'absent',
+        'path'    => '/path/to/file',
+        'section' => 'labs',
+        'setting' => 'orbited_longpoll',
+      })
+    }
+  end
+
   context 'ldap admin_group_name' do
     let(:title) { 'ldap admin_group_name' }
     let :params do
