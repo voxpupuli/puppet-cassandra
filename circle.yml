@@ -13,7 +13,7 @@ notify:
 
 deployment:
   improvement:
-    branch: /^improvement*/
+    branch: /^improvement.*/
     commands:
       - ./scripts/circle.bash merge release/patch
       - ./scripts/circle.bash merge release/minor
