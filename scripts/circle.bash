@@ -26,6 +26,7 @@ merge () {
     echo "Branch $target checked out successfully."
   fi
 
+  set -x
   echo "Pulling $target from the origin."
   git pull -p origin || exit $?
   echo "Merging $CIRCLE_BRANCH into $target."
