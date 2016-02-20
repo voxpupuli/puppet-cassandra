@@ -8,6 +8,11 @@
 export PATH=/home/ubuntu/.rvm/gems/ruby-1.9.3-p448/bin:$PATH
 
 merge () {
+  if [ "$CIRCLE_NODE_INDEX" != 0 ]; then
+    echo "Not on the primary Circle node."
+    exit 0
+  fi
+
   target="$1"
   git checkout $target 2> /dev/null
 
