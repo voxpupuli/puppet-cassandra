@@ -26,11 +26,17 @@ merge () {
     echo "Branch $target checked out successfully."
   fi
 
-  set -x
   echo "Fetching from origin with purge."
   git fetch -p origin || exit $?
-  echo "Pulling from origin."
-  git pull origin $target || exit $?
+  git branch -r | grep origin/$target
+
+  if [ $? == 0 ]; then
+    echo "Pulling from origin."
+    git pull origin $target || exit $?
+  else
+    echo "$target is not currently on the remote origin."
+  fi
+
   echo "Merging $CIRCLE_BRANCH into $target."
   git merge $CIRCLE_BRANCH || exit $?
   echo "Pushing merged branch back to the origin."
