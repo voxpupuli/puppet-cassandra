@@ -9,7 +9,7 @@ export PATH=/home/ubuntu/.rvm/gems/ruby-1.9.3-p448/bin:$PATH
 
 merge () {
   if [ "$CIRCLE_NODE_INDEX" != 0 ]; then
-    echo "Not on the primary Circle node."
+    echo "Not on the primary Circle node. Skipping merge."
     exit 0
   fi
 
@@ -26,8 +26,13 @@ merge () {
     echo "Branch $target checked out successfully."
   fi
 
+  echo "Pulling $target from the origin."
+  git pull -p origin || exit $?
+  echo "Merging $CIRCLE_BRANCH into $target."
   git merge $CIRCLE_BRANCH || exit $?
-  git commit -m "circleci: Merged $CIRCLE_BRANCH into $target." || exit $?
+  echo "Pushing merged branch back to the origin."
+  git push --set-upstream origin $target
+  return $?
 }
 
 unit_tests () {
