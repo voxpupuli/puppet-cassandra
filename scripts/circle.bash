@@ -7,6 +7,22 @@
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 export PATH=/home/ubuntu/.rvm/gems/ruby-1.9.3-p448/bin:$PATH
 
+merge () {
+  target="$1"
+  git checkout $target 2> /dev/null
+
+  if [ $? != 0 ]; then
+    echo "Attempting to create branch $target."
+    git checkout -b "$target" || exit $?
+    echo "Branch $target created successfully."
+  else
+    echo "Branch $target checked out successfully."
+  fi
+
+  git merge $CIRCLE_BRANCH || exit $?
+  git commit -m "circleci: Merged $CIRCLE_BRANCH into $target." || exit $?
+}
+
 unit_tests () {
   if [ -z "$RVM"  ]; then
     echo "No unit tests for this node."
@@ -48,5 +64,7 @@ case $CIRCLE_NODE_INDEX in
       ;;
 esac
 
-$1
+subcommand=$1 
+shift
+$subcommand $*
 exit $?
