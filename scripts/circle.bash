@@ -27,8 +27,10 @@ merge () {
   fi
 
   set -x
-  echo "Pulling $target from the origin."
-  git pull -p || exit $?
+  echo "Fetching from origin with purge."
+  git fetch -p origin || exit $?
+  echo "Pulling from origin."
+  git pull || exit $?
   echo "Merging $CIRCLE_BRANCH into $target."
   git merge $CIRCLE_BRANCH || exit $?
   echo "Pushing merged branch back to the origin."
