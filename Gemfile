@@ -1,7 +1,13 @@
-source ENV['GEM_SOURCE'] || "https://rubygems.org"
+source ENV['GEM_SOURCE'] || 'https://rubygems.org'
 
-puppetversion = ENV.key?('PUPPET_GEM_VERSION') ? " #{ENV['PUPPET_GEM_VERSION']}" : ['>= 4.0']
-gem 'puppet', puppetversion
+puppetversion = ENV['PUPPET_GEM_VERSION']
+
+if puppetversion
+  gem 'puppet', puppetversion, :require => false
+else
+  gem 'puppet', :require => false
+end
+
 gem 'facter', '>= 1.7.0'
 
 group :system_tests do
