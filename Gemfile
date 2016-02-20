@@ -21,6 +21,7 @@ group :system_tests do
   gem 'rspec_junit_formatter',  '0.2.2'
   gem 'rspec-puppet',           :require => false
   gem 'rspec-puppet-utils',     :require => false
+  gem 'rubocop',                :require => false
   gem 'serverspec',             :require => false
   gem 'travis',                 :require => false
   gem 'travis-lint',            :require => false
