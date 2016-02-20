@@ -30,7 +30,7 @@ merge () {
   echo "Fetching from origin with purge."
   git fetch -p origin || exit $?
   echo "Pulling from origin."
-  git pull || exit $?
+  git pull origin $target || exit $?
   echo "Merging $CIRCLE_BRANCH into $target."
   git merge $CIRCLE_BRANCH || exit $?
   echo "Pushing merged branch back to the origin."
