@@ -7,6 +7,21 @@
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 export PATH=/home/ubuntu/.rvm/gems/ruby-1.9.3-p448/bin:$PATH
 
+acceptance_tests () {
+  i=0
+  nodes=()
+
+  for node in $( bundle exec rake beaker_nodes | grep '^circle' ) ; do
+    if [ $(($i % $CIRCLE_NODE_TOTAL)) -eq $CIRCLE_NODE_INDEX ]; then
+      nodes+=" $node"
+    fi
+
+    ((i=i+1))
+  done
+
+  echo "Nodes: $nodes"
+}
+
 merge () {
   if [ "$CIRCLE_NODE_INDEX" != 0 ]; then
     echo "Not on the primary Circle node. Skipping merge."
@@ -67,7 +82,6 @@ unit_tests () {
   return $status
 }
 
-export BEAKER_set=""
 export RVM=""
 
 case $CIRCLE_NODE_INDEX in
@@ -80,8 +94,6 @@ case $CIRCLE_NODE_INDEX in
   2)  export RVM=2.1.6
       export PUPPET_GEM_VERSION="~> 4.0"
       export STRICT_VARIABLES="yes"
-      ;;
-  3)  export BEAKER_NODES="debian7 ubuntu12.04 ubuntu14.04"
       ;;
 esac
 

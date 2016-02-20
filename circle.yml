@@ -4,6 +4,8 @@ test:
   override:
     - ./scripts/circle.bash unit_tests:
         parallel: true
+    - ./scripts/circle.bash acceptance_tests:
+        parallel: true
 
 notify:
   webhooks:
@@ -12,8 +14,18 @@ notify:
     - url: https://webhooks.gitter.im/e/da8c065419a91983f0cf
 
 deployment:
+  bugfix:
+    branch: /^bugfix.*/
+    commands:
+      - ./scripts/circle.bash merge release/patch
+      - ./scripts/circle.bash merge release/minor
   improvement:
     branch: /^improvement.*/
     commands:
       - ./scripts/circle.bash merge release/patch
       - ./scripts/circle.bash merge release/minor
+  master:
+    branch: master
+    commands:
+      - ./scripts/circle.bash merge release/last
+      - ./scripts/circle.bash deploy
