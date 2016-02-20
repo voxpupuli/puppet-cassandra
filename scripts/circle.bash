@@ -11,7 +11,7 @@ acceptance_tests () {
   i=0
   nodes=()
 
-  for node in $( bundle exec rake beaker_nodes | grep '^circle' ) ; do
+  for node in $( rake beaker_nodes | grep '^circle' ) ; do
     if [ $(($i % $CIRCLE_NODE_TOTAL)) -eq $CIRCLE_NODE_INDEX ]; then
       nodes+=" $node"
     fi
