@@ -28,7 +28,7 @@ merge () {
 
   set -x
   echo "Pulling $target from the origin."
-  git pull -p origin/$CIRCLE_BRANCH || exit $?
+  git pull -p || exit $?
   echo "Merging $CIRCLE_BRANCH into $target."
   git merge $CIRCLE_BRANCH || exit $?
   echo "Pushing merged branch back to the origin."
