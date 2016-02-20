@@ -20,7 +20,7 @@ echo "TRAVIS_TEST_RESULT  : $TRAVIS_TEST_RESULT"
 # Check if we are to run this at all.
 #############################################################################
 
-echo "$TRAVIS_BRANCH" | grep -q "^release/"
+echo "$TRAVIS_BRANCH" | grep -Eq '^release/[0-9]{1,4}/v[0-9]'
 
 if [ $? != 0 ]; then
   echo "Not on a release branch, skipping acceptance tests."
