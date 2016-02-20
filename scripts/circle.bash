@@ -14,6 +14,8 @@ merge () {
   fi
 
   target="$1"
+  git config --global user.email "circleci@locp.co.uk"
+  git config --global user.name  "CircleCI"
   git checkout $target 2> /dev/null
 
   if [ $? != 0 ]; then
