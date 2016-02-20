@@ -2,7 +2,7 @@
 # CircleCI configuration file (circle.yml).
 test:
   override:
-    - ./circle.bash unit_tests:
+    - ./scripts/circle.bash unit_tests:
         parallel: true
 
 notify:
