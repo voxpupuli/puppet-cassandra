@@ -8,8 +8,4 @@ Blacksmith::RakeTask.new do |t|
   t.tag_pattern = '%s'
 end
 
-Rake::Task['lint'].enhance do
-  Rake::Task['rubocop'].invoke
-end
-
 RuboCop::RakeTask.new

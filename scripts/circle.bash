@@ -75,6 +75,11 @@ unit_tests () {
   gem --version
   bundle install --without development
   bundle exec rake lint || status=$?
+
+  if [ ! -z "$RUBOCOP" ]; then
+    $RUBOCOP || status=$?
+  fi
+
   bundle exec rake validate || status=$?
 
   bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter \
@@ -82,7 +87,8 @@ unit_tests () {
   return $status
 }
 
-export RVM=""
+export RVM=''
+export RUBOCOP=''
 
 case $CIRCLE_NODE_INDEX in
   0)  export RVM=1.9.3
@@ -94,6 +100,9 @@ case $CIRCLE_NODE_INDEX in
   2)  export RVM=2.1.6
       export PUPPET_GEM_VERSION="~> 4.0"
       export STRICT_VARIABLES="yes"
+      export RUBOCOP='rake rubocop'
+      ;;
+  3)  export RUBOCOP='rake rubocop'
       ;;
 esac
 
