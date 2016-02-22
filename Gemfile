@@ -21,6 +21,7 @@ group :system_tests do
   gem 'hiera',                  require: false
   gem 'metadata-json-lint',     require: false
   gem 'pry',                    require: false
+  gem 'psych',                  '<= 2.0.5'
   gem 'puppet-blacksmith',      require: false
   gem 'puppet-lint',            require: false
   gem 'puppetlabs_spec_helper', require: false
