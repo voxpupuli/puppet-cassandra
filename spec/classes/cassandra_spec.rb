@@ -33,7 +33,8 @@ describe 'cassandra' do
     end
 
     it do
-      should contain_file('/etc/cassandra/default.conf/cassandra.yaml').with_content(/^key_cache_size_in_mb:$/)
+      should contain_file('/etc/cassandra/default.conf/cassandra.yaml')
+        .with_content(/^key_cache_size_in_mb:$/)
     end
 
     it do
@@ -108,7 +109,9 @@ describe 'cassandra' do
         'rpc_server_type' => 'sync',
         'saved_caches_directory' => '/var/lib/cassandra/saved_caches',
         'saved_caches_directory_mode' => '0750',
+        # rubocop:disable Metrics/LineLength
         'seed_provider_class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
+        # rubocop:enable Metrics/LineLength
         'seeds' => '127.0.0.1',
         'server_encryption_internode' => 'none',
         'server_encryption_keystore' => 'conf/.keystore',
@@ -139,7 +142,9 @@ describe 'cassandra' do
     end
 
     it do
+      # rubocop:disable Metrics/LineLength
       should contain_cassandra__private__data_directory('/var/lib/cassandra/data')
+      # rubocop:enable Metrics/LineLength
     end
   end
 
@@ -178,7 +183,8 @@ describe 'cassandra' do
     end
 
     it do
-      should contain_file('/etc/cassandra/cassandra.yaml').with('mode' => '0755')
+      should contain_file('/etc/cassandra/cassandra.yaml')
+        .with('mode' => '0755')
     end
 
     it do
@@ -205,30 +211,44 @@ describe 'cassandra' do
       }
     end
     it do
-      should contain_ini_setting('rackdc.properties.dc').with('path' => '/etc/cassandra/default.conf/cassandra-topology.properties',
-                                                              'section' => '',
-                                                              'setting' => 'dc',
-                                                              'value'   => 'NYC')
+      # rubocop:disable Metrics/LineLength
+      should contain_ini_setting('rackdc.properties.dc')
+        .with('path' => '/etc/cassandra/default.conf/cassandra-topology.properties',
+              'section' => '',
+              'setting' => 'dc',
+              'value'   => 'NYC')
+      # rubocop:enable Metrics/LineLength
     end
     it do
-      should contain_ini_setting('rackdc.properties.rack').with('path' => '/etc/cassandra/default.conf/cassandra-topology.properties',
-                                                                'section' => '',
-                                                                'setting' => 'rack',
-                                                                'value'   => 'R101')
+      # rubocop:disable Metrics/LineLength
+      should contain_ini_setting('rackdc.properties.rack')
+        .with('path' => '/etc/cassandra/default.conf/cassandra-topology.properties',
+              'section' => '',
+              'setting' => 'rack',
+              'value'   => 'R101')
+      # rubocop:enable Metrics/LineLength
     end
     it do
-      should contain_service('cassandra').that_subscribes_to('Ini_setting[rackdc.properties.dc_suffix]')
-      should contain_ini_setting('rackdc.properties.dc_suffix').with('path' => '/etc/cassandra/default.conf/cassandra-topology.properties',
-                                                                     'section' => '',
-                                                                     'setting' => 'dc_suffix',
-                                                                     'value'   => '_1_cassandra')
+      should contain_service('cassandra')
+        .that_subscribes_to('Ini_setting[rackdc.properties.dc_suffix]')
+      # rubocop:disable Metrics/LineLength
+      should contain_ini_setting('rackdc.properties.dc_suffix')
+        .with('path' => '/etc/cassandra/default.conf/cassandra-topology.properties',
+              'section' => '',
+              'setting' => 'dc_suffix',
+              'value'   => '_1_cassandra')
+      # rubocop:enable Metrics/LineLength
     end
     it do
-      should contain_service('cassandra').that_subscribes_to('Ini_setting[rackdc.properties.prefer_local]')
-      should contain_ini_setting('rackdc.properties.prefer_local').with('path' => '/etc/cassandra/default.conf/cassandra-topology.properties',
-                                                                        'section' => '',
-                                                                        'setting' => 'prefer_local',
-                                                                        'value'   => 'true')
+      should contain_service('cassandra')
+        .that_subscribes_to('Ini_setting[rackdc.properties.prefer_local]')
+      # rubocop:disable Metrics/LineLength
+      should contain_ini_setting('rackdc.properties.prefer_local')
+        .with('path' => '/etc/cassandra/default.conf/cassandra-topology.properties',
+              'section' => '',
+              'setting' => 'prefer_local',
+              'value'   => 'true')
+      # rubocop:enable Metrics/LineLength
     end
   end
 
@@ -246,15 +266,20 @@ describe 'cassandra' do
       }
     end
     it do
-      should contain_service('cassandra').with('ensure' => 'stopped',
-                                               'name'      => 'cassandra',
-                                               'enable'    => 'false')
+      should contain_service('cassandra')
+        .with('ensure' => 'stopped',
+              'name'      => 'cassandra',
+              'enable'    => 'false')
     end
     it do
-      should contain_service('cassandra').that_subscribes_to('File[/etc/cassandra/cassandra.yaml]')
-      should contain_service('cassandra').that_subscribes_to('Ini_setting[rackdc.properties.dc]')
-      should contain_service('cassandra').that_subscribes_to('Ini_setting[rackdc.properties.rack]')
-      should contain_service('cassandra').that_subscribes_to('Package[cassandra]')
+      should contain_service('cassandra')
+        .that_subscribes_to('File[/etc/cassandra/cassandra.yaml]')
+      should contain_service('cassandra')
+        .that_subscribes_to('Ini_setting[rackdc.properties.dc]')
+      should contain_service('cassandra')
+        .that_subscribes_to('Ini_setting[rackdc.properties.rack]')
+      should contain_service('cassandra')
+        .that_subscribes_to('Package[cassandra]')
     end
   end
 
@@ -273,7 +298,13 @@ describe 'cassandra' do
       }
     end
 
-    it { should contain_file('/etc/cassandra.yaml').with_content(/listen_interface: ethX/) }
-    it { should contain_file('/etc/cassandra.yaml').with_content(/rpc_interface: ethY/) }
+    it do
+      should contain_file('/etc/cassandra.yaml')
+        .with_content(/listen_interface: ethX/)
+    end
+    it do
+      should contain_file('/etc/cassandra.yaml')
+        .with_content(/rpc_interface: ethY/)
+    end
   end
 end

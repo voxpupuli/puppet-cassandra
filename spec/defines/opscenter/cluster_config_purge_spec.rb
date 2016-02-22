@@ -23,9 +23,10 @@ describe 'cassandra::opscenter::cluster_name' do
     end
 
     it do
-      should contain_file('/etc/opscenter/clusters').with('ensure' => 'directory',
-                                                          'purge'   => true,
-                                                          'recurse' => true)
+      should contain_file('/etc/opscenter/clusters')
+        .with('ensure' => 'directory',
+              'purge'   => true,
+              'recurse' => true)
     end
   end
 end

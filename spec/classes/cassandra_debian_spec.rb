@@ -36,16 +36,18 @@ describe 'cassandra' do
     it { is_expected.not_to contain_apt__source('datastax') }
     it { is_expected.not_to contain_exec('update-cassandra-repos') }
     it do
-      should contain_ini_setting('rackdc.properties.dc').with('path' => '/etc/cassandra/cassandra-rackdc.properties',
-                                                              'section' => '',
-                                                              'setting' => 'dc',
-                                                              'value'   => 'DC1')
+      should contain_ini_setting('rackdc.properties.dc')
+        .with('path' => '/etc/cassandra/cassandra-rackdc.properties',
+              'section' => '',
+              'setting' => 'dc',
+              'value'   => 'DC1')
     end
     it do
-      should contain_ini_setting('rackdc.properties.rack').with('path' => '/etc/cassandra/cassandra-rackdc.properties',
-                                                                'section' => '',
-                                                                'setting' => 'rack',
-                                                                'value'   => 'RAC1')
+      should contain_ini_setting('rackdc.properties.rack')
+        .with('path' => '/etc/cassandra/cassandra-rackdc.properties',
+              'section' => '',
+              'setting' => 'rack',
+              'value'   => 'RAC1')
     end
   end
 
@@ -69,14 +71,16 @@ describe 'cassandra' do
     it { should contain_class('apt::update') }
 
     it do
-      is_expected.to contain_apt__key('datastaxkey').with('id' => '7E41C00F85BFC1706C4FFFB3350200F2B999A372',
-                                                          'source' => 'http://debian.datastax.com/debian/repo_key')
+      is_expected.to contain_apt__key('datastaxkey')
+        .with('id' => '7E41C00F85BFC1706C4FFFB3350200F2B999A372',
+              'source' => 'http://debian.datastax.com/debian/repo_key')
     end
 
     it do
-      is_expected.to contain_apt__source('datastax').with('location' => 'http://debian.datastax.com/community',
-                                                          'comment'  => 'DataStax Repo for Apache Cassandra',
-                                                          'release'  => 'stable')
+      is_expected.to contain_apt__source('datastax')
+        .with('location' => 'http://debian.datastax.com/community',
+              'comment'  => 'DataStax Repo for Apache Cassandra',
+              'release'  => 'stable')
     end
 
     it { is_expected.to contain_exec('update-cassandra-repos') }

@@ -8,10 +8,11 @@ describe 'cassandra::java' do
     end
 
     it do
-      should contain_class('cassandra::java').only_with('ensure' => 'present',
-                                                        'jna_ensure'       => 'present',
-                                                        # 'jna_package_name' => nil,
-                                                        'package_name'     => nil)
+      should contain_class('cassandra::java')
+        .only_with('ensure' => 'present',
+                   'jna_ensure'       => 'present',
+                   # 'jna_package_name' => nil,
+                   'package_name'     => nil)
     end
     it { should contain_package('java-1.8.0-openjdk-headless') }
     it { should contain_package('jna') }
