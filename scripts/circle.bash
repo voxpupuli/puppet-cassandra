@@ -60,17 +60,16 @@ merge () {
 }
 
 unit_tests () {
-  if [ -z "$RVM"  ]; then
-    echo "No unit tests for this node."
-    return 0
+  status=0
+
+  if [ ! -z "$RVM" ]; then
+    rvm use $RVM --install --fuzzy
+    export BUNDLE_GEMFILE=$PWD/Gemfile
+    rm -f Gemfile.lock
+    ruby --version
+    rvm --version
   fi
 
-  status=0
-  rvm use $RVM --install --fuzzy
-  export BUNDLE_GEMFILE=$PWD/Gemfile
-  rm -f Gemfile.lock
-  ruby --version
-  rvm --version
   bundle --version
   gem --version
   bundle install --without development
