@@ -5,3 +5,4 @@ AllCops:
     - 'spec/classes/opscenter_spec.rb'
     - 'spec/defines/opscenter/cluster_name_spec.rb'
     - 'spec/defines/private/opscenter/setting_spec.rb'
+    - 'vendor/**/*'
