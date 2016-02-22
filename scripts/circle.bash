@@ -100,9 +100,9 @@ case $CIRCLE_NODE_INDEX in
   2)  export RVM=2.1.6
       export PUPPET_GEM_VERSION="~> 4.0"
       export STRICT_VARIABLES="yes"
-      export RUBOCOP='rake rubocop'
+      export RUBOCOP='bundle exec rake rubocop'
       ;;
-  3)  export RUBOCOP='rake rubocop'
+  3)  export RUBOCOP='bundle exec rake rubocop'
       ;;
 esac
 
