@@ -70,6 +70,9 @@ unit_tests () {
   return $status
 }
 
+# Load RVM into a shell session *as a function*
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+
 if [ ! -z "$RVM" ]; then
   echo "Using rvm version $RVM"
   rvm use ruby-${RVM}
