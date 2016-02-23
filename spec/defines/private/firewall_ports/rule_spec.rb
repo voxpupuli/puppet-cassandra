@@ -1,31 +1,27 @@
 require 'spec_helper'
 describe 'cassandra::private::firewall_ports::rule' do
-  let(:pre_condition) { [
-    'define firewall ($action, $dport, $proto, $source) {}',
-  ] }
+  let(:pre_condition) do
+    ['define firewall ($action, $dport, $proto, $source) {}']
+  end
 
-  let!(:stdlib_stubs) {
-    MockFunction.new('prefix') { |f|
+  let!(:stdlib_stubs) do
+    MockFunction.new('prefix') do |f|
       f.stubbed.with(['0.0.0.0/0'],
-        '200_Public_').returns('200_Public_0.0.0.0/0')
+                     '200_Public_').returns('200_Public_0.0.0.0/0')
       f.stubbed.with(['0.0.0.0/0'],
-        '210_InterNode_').returns('210_InterNode__0.0.0.0/0')
+                     '210_InterNode_').returns('210_InterNode__0.0.0.0/0')
       f.stubbed.with(['0.0.0.0/0'],
-        '220_Client_').returns('220_Client__0.0.0.0/0')
-    }
-    MockFunction.new('concat') { |f|
-      f.stubbed().returns([8888, 22])
-    }
-    MockFunction.new('size') { |f|
-      f.stubbed().returns(42)
-    }
-  }
+                     '220_Client_').returns('220_Client__0.0.0.0/0')
+    end
+    MockFunction.new('concat') { |f| f.stubbed.returns([8888, 22]) }
+    MockFunction.new('size') { |f| f.stubbed.returns(42) }
+  end
 
   context 'Test that rules can be set.' do
     let(:title) { '200_Public_0.0.0.0/0' }
     let :params do
       {
-        :ports => [8888, 22],
+        ports: [8888, 22]
       }
     end
 

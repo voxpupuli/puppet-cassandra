@@ -53,28 +53,33 @@ merge () {
   fi
 
   echo "Merging $CIRCLE_BRANCH into $target."
-  git merge $CIRCLE_BRANCH || exit $?
+  message="Merge branch $CIRCLE_BRANCH into $target"
+  git merge -m "$message" $CIRCLE_BRANCH || exit $?
   echo "Pushing merged branch back to the origin."
   git push --set-upstream origin $target
   return $?
 }
 
 unit_tests () {
-  if [ -z "$RVM"  ]; then
-    echo "No unit tests for this node."
-    return 0
+  status=0
+
+  if [ ! -z "$RVM" ]; then
+    rvm use $RVM --install --fuzzy
+    export BUNDLE_GEMFILE=$PWD/Gemfile
+    rm -f Gemfile.lock
+    ruby --version
+    rvm --version
   fi
 
-  status=0
-  rvm use $RVM --install --fuzzy
-  export BUNDLE_GEMFILE=$PWD/Gemfile
-  rm -f Gemfile.lock
-  ruby --version
-  rvm --version
   bundle --version
   gem --version
   bundle install --without development
   bundle exec rake lint || status=$?
+
+  if [ ! -z "$RUBOCOP" ]; then
+    $RUBOCOP || status=$?
+  fi
+
   bundle exec rake validate || status=$?
 
   bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter \
@@ -82,7 +87,8 @@ unit_tests () {
   return $status
 }
 
-export RVM=""
+export RVM=''
+export RUBOCOP=''
 
 case $CIRCLE_NODE_INDEX in
   0)  export RVM=1.9.3
@@ -94,6 +100,9 @@ case $CIRCLE_NODE_INDEX in
   2)  export RVM=2.1.6
       export PUPPET_GEM_VERSION="~> 4.0"
       export STRICT_VARIABLES="yes"
+      export RUBOCOP='bundle exec rake rubocop'
+      ;;
+  3)  export RUBOCOP='bundle exec rake rubocop'
       ;;
 esac
 

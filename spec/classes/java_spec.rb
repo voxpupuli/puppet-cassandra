@@ -3,18 +3,17 @@ describe 'cassandra::java' do
   context 'On a RedHat OS with defaults for all parameters' do
     let :facts do
       {
-        :osfamily => 'RedHat'
+        osfamily: 'RedHat'
       }
     end
 
-    it {
-      should contain_class('cassandra::java').only_with({
-        'ensure'           => 'present',
-        'jna_ensure'       => 'present',
-        #'jna_package_name' => nil,
-        'package_name'     => nil,
-      })
-    }
+    it do
+      should contain_class('cassandra::java')
+        .only_with('ensure' => 'present',
+                   'jna_ensure'       => 'present',
+                   # 'jna_package_name' => nil,
+                   'package_name'     => nil)
+    end
     it { should contain_package('java-1.8.0-openjdk-headless') }
     it { should contain_package('jna') }
   end
@@ -22,7 +21,7 @@ describe 'cassandra::java' do
   context 'On a Debian OS with defaults for all parameters' do
     let :facts do
       {
-        :osfamily => 'Debian'
+        osfamily: 'Debian'
       }
     end
 
@@ -35,23 +34,19 @@ describe 'cassandra::java' do
   context 'With package names set to foobar' do
     let :params do
       {
-        :package_name       => 'foobar-java',
-        :ensure             => '42',
-        :jna_package_name   => 'foobar-jna',
-        :jna_ensure         => 'latest',
+        package_name: 'foobar-java',
+        ensure: '42',
+        jna_package_name: 'foobar-jna',
+        jna_ensure: 'latest'
       }
     end
 
-    it {
-      should contain_package('foobar-java').with({
-        :ensure => 42,
-      })
-    }
+    it do
+      should contain_package('foobar-java').with(ensure: 42)
+    end
 
-    it {
-      should contain_package('foobar-jna').with({
-        :ensure => 'latest',
-      })
-    }
+    it do
+      should contain_package('foobar-jna').with(ensure: 'latest')
+    end
   end
 end
