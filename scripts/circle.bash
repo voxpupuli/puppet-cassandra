@@ -70,7 +70,7 @@ unit_tests () {
   return $status
 }
 
-if [ ! -z "$RVM"]; then
+if [ ! -z "$RVM" ]; then
   echo "Using rvm version $RVM"
   rvm use ruby-${RVM}
 fi
