@@ -62,6 +62,7 @@ merge () {
 
 unit_tests () {
   status=0
+  set -x
   rvm use ruby-${RVM}
   bundle --version
   gem --version
