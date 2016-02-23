@@ -1,4 +1,7 @@
 --- 
+machine:
+  services:
+    - docker
 dependencies: 
   cache_directories: 
     - ../.rvm/rubies
