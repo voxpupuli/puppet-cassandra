@@ -1,52 +1,52 @@
----
-# CircleCI configuration file (circle.yml).
-
-dependencies:
-  cache_directories:
-    - '../.rvm/rubies'
-
-  override:
-    - >
-      case $CIRCLE_NODE_INDEX in
-       0)
-         PUPPET_GEM_VERSION="~> 3.0" rvm-exec 1.9.3-p551 bash -c "bundle check --path=vendor/bundle || bundle install --path=vendor/bundle"
-         ;;
-       1)
-         PUPPET_GEM_VERSION="~> 3.0" rvm-exec 2.1.5 bash -c "bundle check --path=vendor/bundle || bundle install --path=vendor/bundle"
-         ;;
-       2)
-         PUPPET_GEM_VERSION="~> 4.0" rvm-exec 2.1.6 bash -c "bundle check --path=vendor/bundle || bundle install --path=vendor/bundle"
-         ;;
-       3) bundle install --without development
-         ;;
-      esac
-
-test:
-  override:
-    - case $CIRCLE_NODE_INDEX in 0) rvm-exec 1.9.3-p551 ./scripts/circle.bash unit_tests ;; 1) rvm-exec 2.1.5 ./scripts/circle.bash unit_tests ;; 2) rvm-exec 2.1.6 ./scripts/circle.bash unit_tests ;; 3) bundle exec rake rubocop ;; esac:
-        parallel: true
-    - ./scripts/circle.bash acceptance_tests:
-        parallel: true
-
-notify:
-  webhooks:
-    # A list of hook hashes, containing the url field
-    # gitter hook
-    - url: https://webhooks.gitter.im/e/da8c065419a91983f0cf
-
-deployment:
-  bugfix:
+--- 
+dependencies: 
+  cache_directories: 
+    - ../.rvm/rubies
+  override: 
+    - |
+        case $CIRCLE_NODE_INDEX in
+         0) RVM=1.9.3-p551
+           rvm use ruby-${RVM}
+           PUPPET_GEM_VERSION="~> 3.0" rvm-exec $RVM bash -c "bundle check --path=vendor/bundle || bundle install --path=vendor/bundle"
+           ;;
+         1) RVM=2.1.5
+           rvm use ruby-${RVM}
+           PUPPET_GEM_VERSION="~> 3.0" rvm-exec $RVM bash -c "bundle check --path=vendor/bundle || bundle install --path=vendor/bundle"
+           ;;
+         2) RVM=2.1.6
+           rvm use ruby-${RVM}
+           PUPPET_GEM_VERSION="~> 4.0" rvm-exec $RVM bash -c "bundle check --path=vendor/bundle || bundle install --path=vendor/bundle"
+           ;;
+         3) bundle install --without development
+           ;;
+        esac
+deployment: 
+  bugfix: 
     branch: /^bugfix.*/
-    commands:
-      - ./scripts/circle.bash merge release/patch
-      - ./scripts/circle.bash merge release/minor
-  improvement:
+    commands: 
+      - "./scripts/circle.bash merge release/patch"
+      - "./scripts/circle.bash merge release/minor"
+  improvement: 
     branch: /^improvement.*/
-    commands:
-      - ./scripts/circle.bash merge release/patch
-      - ./scripts/circle.bash merge release/minor
-  master:
+    commands: 
+      - "./scripts/circle.bash merge release/patch"
+      - "./scripts/circle.bash merge release/minor"
+  master: 
     branch: master
-    commands:
-      - ./scripts/circle.bash merge release/last
-      - ./scripts/circle.bash deploy
+    commands: 
+      - "./scripts/circle.bash merge release/last"
+      - "./scripts/circle.bash deploy"
+notify: 
+  webhooks: 
+    - 
+      url: "https://webhooks.gitter.im/e/da8c065419a91983f0cf"
+test: 
+  override: 
+    - 
+      ? "case $CIRCLE_NODE_INDEX in 0) rvm-exec 1.9.3-p551 ./scripts/circle.bash unit_tests ;; 1) rvm-exec 2.1.5 ./scripts/circle.bash unit_tests ;; 2) rvm-exec 2.1.6 ./scripts/circle.bash unit_tests ;; 3) bundle exec rake rubocop ;; esac"
+      : 
+        parallel: true
+    - 
+      ? "./scripts/circle.bash acceptance_tests"
+      : 
+        parallel: true
