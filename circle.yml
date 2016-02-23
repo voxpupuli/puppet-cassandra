@@ -1,5 +1,26 @@
 ---
 # CircleCI configuration file (circle.yml).
+
+machine:
+  - |
+    if [ "$CIRCLE_NODE_INDEX" == 0 ]; then
+      ruby:
+        version: 1.9.3
+      environment:
+        PUPPET_GEM_VERSION: '~> 3.0'
+    elif [ "$CIRCLE_NODE_INDEX" == 1 ]; then
+      ruby:
+        version: 2.1.5
+      environment:
+        PUPPET_GEM_VERSION: '~> 3.0'
+    elif [ "$CIRCLE_NODE_INDEX" == 2 ]; then
+      ruby:
+        version: 2.1.6
+      environment:
+        PUPPET_GEM_VERSION: '~> 4.0'
+        STRICT_VARIABLES: yes
+    fi
+
 test:
   override:
     - ./scripts/circle.bash unit_tests:
