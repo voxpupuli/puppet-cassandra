@@ -62,7 +62,7 @@ merge () {
 
 unit_tests () {
   status=0
-  set -x
+  echo "Using rvm version $RVM"
   rvm use ruby-${RVM}
   bundle --version
   gem --version
