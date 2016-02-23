@@ -4,18 +4,17 @@
 #############################################################################
 
 acceptance_tests () {
-  i=0
-  nodes=()
+  status=0
 
-  for node in $( rake beaker_nodes | grep '^circle' ) ; do
-    if [ $(($i % $CIRCLE_NODE_TOTAL)) -eq $CIRCLE_NODE_INDEX ]; then
-      nodes+=" $node"
-    fi
+  if [ $CIRCLE_NODE_INDEX == 3 ]; then
+    BEAKER_destroy=no BEAKER_set=$1 bundle exec rake beaker
+    status=$?
+    docker ps | grep -v 'CONTAINER ID' | xargs docker rm -f
+  else
+    echo "Not to be built on this node."
+  fi
 
-    ((i=i+1))
-  done
-
-  echo "Nodes: $nodes"
+  return $status
 }
 
 merge () {
