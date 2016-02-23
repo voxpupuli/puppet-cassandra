@@ -8,11 +8,11 @@ describe 'cassandra class' do
 
   describe 'Pre-requisits installation.' do
     it 'should work with no errors' do
-      apply_manifest(pre_req_install_pp, :catch_failures => true)
+      apply_manifest(pre_req_install_pp, catch_failures: true)
     end
     it 'check code is idempotent' do
       expect(apply_manifest(pre_req_install_pp,
-        :catch_failures => true).exit_code).to be_zero
+                            catch_failures: true).exit_code).to be_zero
     end
   end
 
@@ -43,15 +43,15 @@ describe 'cassandra class' do
 
   describe 'Cassandra installation.' do
     it 'should work with no errors' do
-      apply_manifest(cassandra_install_pp, :catch_failures => true)
+      apply_manifest(cassandra_install_pp, catch_failures: true)
     end
     it 'check code is idempotent' do
       expect(apply_manifest(cassandra_install_pp,
-        :catch_failures => true).exit_code).to be_zero
+                            catch_failures: true).exit_code).to be_zero
     end
   end
 
-  Gene_Michtchenko_pp = <<-EOS
+  Gene_Michtchenko_pp = <<-EOS.freeze
     if $::osfamily == 'RedHat' {
         $version = '2.2.4-1'
     } else {
@@ -95,11 +95,11 @@ describe 'cassandra class' do
 
   describe 'Can data directories be specified outside of module.' do
     it 'should work with no errors' do
-      apply_manifest(Gene_Michtchenko_pp, :catch_failures => true)
+      apply_manifest(Gene_Michtchenko_pp, catch_failures: true)
     end
     it 'check code is idempotent' do
       expect(apply_manifest(Gene_Michtchenko_pp,
-        :catch_failures => true).exit_code).to be_zero
+                            catch_failures: true).exit_code).to be_zero
     end
   end
 
@@ -124,11 +124,11 @@ describe 'cassandra class' do
 
   describe 'Cassandra optional utilities installation.' do
     it 'should work with no errors' do
-      apply_manifest(optutils_install_pp, :catch_failures => true)
+      apply_manifest(optutils_install_pp, catch_failures: true)
     end
     it 'check code is idempotent' do
       expect(apply_manifest(optutils_install_pp,
-        :catch_failures => true).exit_code).to be_zero
+                            catch_failures: true).exit_code).to be_zero
     end
   end
 
@@ -155,11 +155,11 @@ describe 'cassandra class' do
 
   describe 'DataStax agent installation.' do
     it 'should work with no errors' do
-      apply_manifest(datastax_agent_install_pp, :catch_failures => true)
+      apply_manifest(datastax_agent_install_pp, catch_failures: true)
     end
     it 'check code is idempotent' do
       expect(apply_manifest(datastax_agent_install_pp,
-        :catch_failures => true).exit_code).to be_zero
+                            catch_failures: true).exit_code).to be_zero
     end
   end
 
@@ -180,11 +180,11 @@ describe 'cassandra class' do
 
   describe 'OpsCenter installation.' do
     it 'should work with no errors' do
-      apply_manifest(opscenter_install_pp, :catch_failures => true)
+      apply_manifest(opscenter_install_pp, catch_failures: true)
     end
     it 'check code is idempotent' do
       expect(apply_manifest(opscenter_install_pp,
-        :catch_failures => true).exit_code).to be_zero
+                            catch_failures: true).exit_code).to be_zero
     end
   end
 
@@ -210,7 +210,7 @@ describe 'cassandra class' do
 
   describe 'Firewall configuration.' do
     it 'should work with no errors' do
-      apply_manifest(firewall_config_pp, :catch_failures => true)
+      apply_manifest(firewall_config_pp, catch_failures: true)
     end
   end
 
@@ -238,45 +238,45 @@ describe 'cassandra class' do
 
   describe 'Ensure that the interface can be specified.' do
     it 'should work with no errors' do
-      apply_manifest(interface_config_pp, :catch_failures => true)
+      apply_manifest(interface_config_pp, catch_failures: true)
     end
     it 'check code is idempotent' do
       expect(apply_manifest(interface_config_pp,
-        :catch_failures => true).exit_code).to be_zero
+                            catch_failures: true).exit_code).to be_zero
     end
   end
 
-#############################################################################
-# Disabled for the release of 1.10.0 because of the change from systemd to
-# init for the service provider.
-#
-# Kept in for 1.11.0 due to non-functional refactoring of the template
-# file.
-#############################################################################
-#  check_against_previous_version_pp = <<-EOS
-#    include cassandra
-#  EOS
-#  
-#  describe 'Ensure config file does get updated unnecessarily.' do
-#    it 'Initial install manifest again' do
-#      apply_manifest(check_against_previous_version_pp,
-#        :catch_failures => true)
-#    end
-#    it 'Copy the current module to the side without error.' do
-#      shell("cp -R /etc/puppet/modules/cassandra /var/tmp",
-#        :acceptable_exit_codes => 0)
-#    end
-#    it 'Remove the current module without error.' do
-#      shell("puppet module uninstall locp-cassandra",
-#        :acceptable_exit_codes => 0)
-#    end
-#    it 'Install the latest module from the forge.' do
-#      shell("puppet module install locp-cassandra",
-#        :acceptable_exit_codes => 0)
-#    end
-#    it 'Check install works without changes with previous module version.' do
-#      expect(apply_manifest(check_against_previous_version_pp,
-#        :catch_failures => true).exit_code).to be_zero
-#    end
-#  end
+  #############################################################################
+  # Disabled for the release of 1.10.0 because of the change from systemd to
+  # init for the service provider.
+  #
+  # Kept in for 1.11.0 due to non-functional refactoring of the template
+  # file.
+  #############################################################################
+  #  check_against_previous_version_pp = <<-EOS
+  #    include cassandra
+  #  EOS
+  #
+  #  describe 'Ensure config file does get updated unnecessarily.' do
+  #    it 'Initial install manifest again' do
+  #      apply_manifest(check_against_previous_version_pp,
+  #        :catch_failures => true)
+  #    end
+  #    it 'Copy the current module to the side without error.' do
+  #      shell("cp -R /etc/puppet/modules/cassandra /var/tmp",
+  #        :acceptable_exit_codes => 0)
+  #    end
+  #    it 'Remove the current module without error.' do
+  #      shell("puppet module uninstall locp-cassandra",
+  #        :acceptable_exit_codes => 0)
+  #    end
+  #    it 'Install the latest module from the forge.' do
+  #      shell("puppet module install locp-cassandra",
+  #        :acceptable_exit_codes => 0)
+  #    end
+  #    it 'Check install works without changes with previous module version.' do
+  #      expect(apply_manifest(check_against_previous_version_pp,
+  #        :catch_failures => true).exit_code).to be_zero
+  #    end
+  #  end
 end
