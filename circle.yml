@@ -1,8 +1,29 @@
 ---
 # CircleCI configuration file (circle.yml).
+
+dependencies:
+  cache_directories:
+    - '../.rvm/rubies'
+
+  override:
+    - >
+      case $CIRCLE_NODE_INDEX in
+       0)
+         PUPPET_GEM_VERSION="~> 3.0" rvm-exec 1.9.3-p551 bash -c "bundle check --path=vendor/bundle || bundle install --path=vendor/bundle"
+         ;;
+       1)
+         PUPPET_GEM_VERSION="~> 3.0" rvm-exec 2.1.5 bash -c "bundle check --path=vendor/bundle || bundle install --path=vendor/bundle"
+         ;;
+       2)
+         PUPPET_GEM_VERSION="~> 4.0" rvm-exec 2.1.6 bash -c "bundle check --path=vendor/bundle || bundle install --path=vendor/bundle"
+         ;;
+       3) bundle install --without development
+         ;;
+      esac
+
 test:
   override:
-    - ./scripts/circle.bash unit_tests:
+    - case $CIRCLE_NODE_INDEX in 0) rvm-exec 1.9.3-p551 ./scripts/circle.bash unit_tests ;; 1) rvm-exec 2.1.5 ./scripts/circle.bash unit_tests ;; 2) rvm-exec 2.1.6 ./scripts/circle.bash unit_tests ;; 3) bundle exec rake rubocop ;; esac:
         parallel: true
     - ./scripts/circle.bash acceptance_tests:
         parallel: true
