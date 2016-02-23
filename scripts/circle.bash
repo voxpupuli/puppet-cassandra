@@ -66,7 +66,6 @@ unit_tests () {
   gem --version
   ruby --version
   rvm --version
-  bundle install --without development
   bundle exec rake lint || status=$?
   bundle exec rake validate || status=$?
 

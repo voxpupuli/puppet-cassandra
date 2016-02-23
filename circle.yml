@@ -17,6 +17,8 @@ dependencies:
        2)
          PUPPET_GEM_VERSION="~> 4.0" rvm-exec 2.1.6 bash -c "bundle check --path=vendor/bundle || bundle install --path=vendor/bundle"
          ;;
+       3) bundle install --without development
+         ;;
       esac
 
 test:
