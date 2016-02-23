@@ -53,7 +53,8 @@ merge () {
   fi
 
   echo "Merging $CIRCLE_BRANCH into $target."
-  git merge $CIRCLE_BRANCH || exit $?
+  message="Merge branch $CIRCLE_BRANCH into $target"
+  git merge -m "$message" $CIRCLE_BRANCH || exit $?
   echo "Pushing merged branch back to the origin."
   git push --set-upstream origin $target
   return $?
