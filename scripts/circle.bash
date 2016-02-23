@@ -62,49 +62,18 @@ merge () {
 
 unit_tests () {
   status=0
-
-  if [ ! -z "$RVM" ]; then
-    rvm use $RVM --install --fuzzy
-    export BUNDLE_GEMFILE=$PWD/Gemfile
-    rm -f Gemfile.lock
-    ruby --version
-    rvm --version
-  fi
-
   bundle --version
   gem --version
+  ruby --version
+  rvm --version
   bundle install --without development
   bundle exec rake lint || status=$?
-
-  if [ ! -z "$RUBOCOP" ]; then
-    $RUBOCOP || status=$?
-  fi
-
   bundle exec rake validate || status=$?
 
   bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter \
       -o $CIRCLE_TEST_REPORTS/rspec/puppet.xml" || status=$?
   return $status
 }
-
-export RVM=''
-export RUBOCOP=''
-
-case $CIRCLE_NODE_INDEX in
-  0)  export RVM=1.9.3
-      export PUPPET_GEM_VERSION="~> 3.0"
-      ;;
-  1)  export RVM=2.1.5
-      export PUPPET_GEM_VERSION="~> 3.0"
-      ;;
-  2)  export RVM=2.1.6
-      export PUPPET_GEM_VERSION="~> 4.0"
-      export STRICT_VARIABLES="yes"
-      export RUBOCOP='bundle exec rake rubocop'
-      ;;
-  3)  export RUBOCOP='bundle exec rake rubocop'
-      ;;
-esac
 
 subcommand=$1 
 shift
