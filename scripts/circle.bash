@@ -3,10 +3,6 @@
 # A script for splitting the test suite across nodes on CircleCI.
 #############################################################################
 
-# Load RVM into a shell session *as a function*
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
-export PATH=/home/ubuntu/.rvm/gems/ruby-1.9.3-p448/bin:$PATH
-
 acceptance_tests () {
   i=0
   nodes=()
@@ -62,8 +58,6 @@ merge () {
 
 unit_tests () {
   status=0
-  echo "Using rvm version $RVM"
-  rvm use ruby-${RVM}
   bundle --version
   gem --version
   ruby --version
@@ -75,6 +69,11 @@ unit_tests () {
       -o $CIRCLE_TEST_REPORTS/rspec/puppet.xml" || status=$?
   return $status
 }
+
+if [ ! -z "$RVM"]; then
+  echo "Using rvm version $RVM"
+  rvm use ruby-${RVM}
+fi
 
 subcommand=$1 
 shift
