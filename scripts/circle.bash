@@ -33,6 +33,11 @@ acceptance_tests () {
 }
 
 merge () {
+  if [ ! -z "$RUN_NIGHTLY_BUILD" ]; then
+    echo "Skipping merge on nightly build."
+    exit 0
+  fi
+
   if [ "$CIRCLE_NODE_INDEX" != 0 ]; then
     echo "Not on the primary Circle node. Skipping merge."
     exit 0
