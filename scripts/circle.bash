@@ -4,18 +4,32 @@
 #############################################################################
 
 acceptance_tests () {
-  i=0
-  nodes=()
+  status=0
+  BEAKER_set=''
 
-  for node in $( rake beaker_nodes | grep '^circle' ) ; do
-    if [ $(($i % $CIRCLE_NODE_TOTAL)) -eq $CIRCLE_NODE_INDEX ]; then
-      nodes+=" $node"
+  if [ "$CIRCLE_NODE_INDEX" != 3 ]; then
+    echo "Not to be built on this node ($CIRCLE_NODE_INDEX)."
+  elif [ ! -z "$RUN_NIGHTLY_BUILD" ]; then
+      BEAKER_set="$1"
+  else
+    # If we reach this point, we're on the right node, but we're
+    # not a nightly build.
+    echo "$CIRCLE_BRANCH" | grep -Eq '^release/[0-9]{1,4}/v[0-9]'
+
+    if [ $? != 0 ]; then
+      echo "Not a nighlty build or a release branch."
+    else
+      BEAKER_set="$1"
     fi
+  fi
 
-    ((i=i+1))
-  done
+  if [ ! -z "$BEAKER_set" ]; then
+    BEAKER_destroy=no BEAKER_set=$BEAKER_set bundle exec rake beaker
+    status=$?
+    docker ps | grep -v 'CONTAINER ID' | xargs docker rm -f
+  fi
 
-  echo "Nodes: $nodes"
+  return $status
 }
 
 merge () {

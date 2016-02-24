@@ -16,7 +16,7 @@ gem install --no-rdoc bundler rake
 bundle install --without development
 status=0
 
-for node in $( bundle exec rake beaker_nodes ); do
+for node in $( bundle exec rake beaker_nodes | grep '^aws_' ); do
   BEAKER_set=$node bundle exec rake beaker
 
   if [ $? != 0 ]; then

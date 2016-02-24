@@ -1,4 +1,7 @@
 --- 
+machine:
+  services:
+    - docker
 dependencies: 
   cache_directories: 
     - ../.rvm/rubies
@@ -46,7 +49,9 @@ test:
       ? "case $CIRCLE_NODE_INDEX in 0) RVM=1.9.3-p551 rvm-exec 1.9.3-p551 ./scripts/circle.bash unit_tests ;; 1) RVM=2.1.5 rvm-exec 2.1.5 ./scripts/circle.bash unit_tests ;; 2) RVM=2.1.6 rvm-exec 2.1.6 ./scripts/circle.bash unit_tests ;; 3) bundle exec rake rubocop ;; esac"
       : 
         parallel: true
-    - 
-      ? "case $CIRCLE_NODE_INDEX in 0) RVM=1.9.3-p551 rvm-exec 1.9.3-p551 ./scripts/circle.bash acceptance_tests ;; 1) RVM=2.1.5 rvm-exec 2.1.5 ./scripts/circle.bash acceptance_tests ;; 2) RVM=2.1.6 rvm-exec 2.1.6 ./scripts/circle.bash acceptance_tests ;; 3) ./scripts/circle.bash acceptance_tests ;; esac"
-      : 
+    - ./scripts/circle.bash acceptance_tests circle_debian7:
+        timeout: 300
+        parallel: true
+    - ./scripts/circle.bash acceptance_tests circle_ubuntu14:
+        timeout: 300
         parallel: true
