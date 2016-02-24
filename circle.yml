@@ -28,17 +28,19 @@ deployment:
     branch: /^bugfix.*/
     commands: 
       - "./scripts/circle.bash merge release/patch"
-      - "./scripts/circle.bash merge release/minor"
   improvement: 
     branch: /^improvement.*/
     commands: 
       - "./scripts/circle.bash merge release/patch"
-      - "./scripts/circle.bash merge release/minor"
   master: 
     branch: master
     commands: 
       - "./scripts/circle.bash merge release/last"
       - "./scripts/circle.bash deploy"
+  patch_release:
+    branch: release/patch
+    commands:
+      - "./scripts/circle.bash merge release/minor"
 notify: 
   webhooks: 
     - 
