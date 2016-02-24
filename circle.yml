@@ -52,9 +52,6 @@ test:
     - ./scripts/circle.bash acceptance_tests circle_debian7:
         timeout: 300
         parallel: true
-    - ./scripts/circle.bash acceptance_tests circle_ubuntu12:
-        timeout: 300
-        parallel: true
     - ./scripts/circle.bash acceptance_tests circle_ubuntu14:
         timeout: 300
         parallel: true
