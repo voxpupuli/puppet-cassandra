@@ -33,7 +33,7 @@ acceptance_tests () {
 }
 
 merge () {
-  if [ ! -z "$RUN_NIGHTLY_BUILD" ] then
+  if [ ! -z "$RUN_NIGHTLY_BUILD" ]; then
     echo "Skipping merge on nightly build."
     exit 0
   fi
