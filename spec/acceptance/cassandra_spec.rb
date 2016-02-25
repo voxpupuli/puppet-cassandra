@@ -49,18 +49,23 @@ describe 'cassandra class' do
       commitlog_directory_mode    => '0770',
       data_file_directories_mode  => '0770',
       saved_caches_directory_mode => '0770',
-      service_systemd             => $service_systemd
-    } ->
+      service_systemd             => $service_systemd,
+      before                      => Class['cassandra::optutils',
+                                           'cassandra::datastax_agent']
+    }
+
     class { 'cassandra::optutils':
       ensure => $version,
-    } ->
-    class { '::cassandra::datastax_agent':
+    }
+
+    class { 'cassandra::datastax_agent':
         service_systemd => $service_systemd
-    } ->
-    class { '::cassandra::opscenter::pycrypto':
+    }
+
+    class { 'cassandra::opscenter::pycrypto':
       manage_epel => true,
     } ->
-    class { '::cassandra::opscenter':
+    class { 'cassandra::opscenter':
       config_purge => true
     }
 
@@ -122,8 +127,12 @@ describe 'cassandra class' do
 
   interface_config_pp = <<-EOS
     class { 'cassandra':
-      listen_interface => 'lo',
-      rpc_interface    => 'lo'
+      cassandra_9822              => true,
+      commitlog_directory_mode    => '0770',
+      data_file_directories_mode  => '0770',
+      saved_caches_directory_mode => '0770',
+      listen_interface            => 'lo',
+      rpc_interface               => 'lo'
     }
   EOS
 

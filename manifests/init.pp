@@ -239,10 +239,9 @@ class cassandra (
   }
 
   if $service_systemd == true {
-    if ! defined(Exec["${::cassandra::params::systemctl} daemon-reload"]) {
-      exec { "${::cassandra::params::systemctl} daemon-reload":
-        refreshonly => true
-      }
+    exec { 'cassandra_reload_systemctl':
+      command     => "${::cassandra::params::systemctl} daemon-reload",
+      refreshonly => true
     }
 
     file { "${systemd_path}/${service_name}.service":
@@ -252,7 +251,7 @@ class cassandra (
       content => template('cassandra/cassandra.service.erb'),
       mode    => '0644',
       before  => Package[$cassandra_pkg],
-      notify  => Exec["${::cassandra::params::systemctl} daemon-reload"]
+      notify  => Exec[cassandra_reload_systemctl]
     }
   }
 
