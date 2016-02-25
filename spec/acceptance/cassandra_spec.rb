@@ -31,46 +31,13 @@ describe 'cassandra class' do
         $version = '2.2.4'
     }
 
-    file { '/var/lib/cassandra':
-      ensure => directory,
-    } ->
-    file { '/var/lib/cassandra/commitlog':
-      ensure => directory,
-    } ->
-    file { '/var/lib/cassandra/caches':
-      ensure => directory,
-    } ->
-    file { '/var/lib/cassandra/data':
-      ensure => directory,
-    } ->
     class { 'cassandra':
       package_ensure              => $version,
       cassandra_9822              => true,
       commitlog_directory_mode    => '0770',
       data_file_directories_mode  => '0770',
       saved_caches_directory_mode => '0770',
-      service_systemd             => $service_systemd,
-      before                      => Class['cassandra::optutils',
-                                           'cassandra::datastax_agent']
-    }
-
-    class { 'cassandra::optutils':
-      ensure => $version,
-    }
-
-    class { 'cassandra::datastax_agent':
-        service_systemd => $service_systemd
-    }
-
-    class { 'cassandra::opscenter::pycrypto':
-      manage_epel => true,
-    } ->
-    class { 'cassandra::opscenter':
-      config_purge => true
-    }
-
-    cassandra::opscenter::cluster_name { 'Cluster1':
-      cassandra_seed_hosts       => 'host1,host2',
+      service_systemd             => $service_systemd
     }
   EOS
 
@@ -80,6 +47,143 @@ describe 'cassandra class' do
     end
     it 'check code is idempotent' do
       expect(apply_manifest(cassandra_install_pp,
+                            catch_failures: true).exit_code).to be_zero
+    end
+  end
+
+  Gene_Michtchenko_pp = <<-EOS.freeze
+    if $::osfamily == 'RedHat' {
+        $version = '2.2.4-1'
+    } else {
+        $version = '2.2.4'
+    }
+
+    $data_dirs = [ '/opt/data/cassandra1', '/opt/data/cassandra2' ]
+
+    file { '/opt/data':
+      ensure => directory,
+    } ->
+    file { '/opt/data/commitlog':
+      ensure => directory,
+      mode   => '775',
+      owner  => 'cassandra',
+      group  => 'cassandra',
+    } ->
+    file { '/opt/data/caches':
+      ensure => directory,
+      mode   => '775',
+      owner  => 'cassandra',
+      group  => 'cassandra',
+    } ->
+    file { $data_dirs:
+      ensure => directory,
+      mode   => '775',
+      owner  => 'cassandra',
+      group  => 'cassandra',
+    } ->
+    class { 'cassandra':
+      package_ensure              => $version,
+      cassandra_9822              => true,
+      commitlog_directory         => '/opt/data/commitlog',
+      commitlog_directory_mode    => '0770',
+      data_file_directories       => $data_dirs,
+      data_file_directories_mode  => '0770',
+      saved_caches_directory      => '/opt/data/caches',
+      saved_caches_directory_mode => '0770',
+    }
+  EOS
+
+  describe 'Can data directories be specified outside of module.' do
+    it 'should work with no errors' do
+      apply_manifest(Gene_Michtchenko_pp, catch_failures: true)
+    end
+    it 'check code is idempotent' do
+      expect(apply_manifest(Gene_Michtchenko_pp,
+                            catch_failures: true).exit_code).to be_zero
+    end
+  end
+
+  optutils_install_pp = <<-EOS
+    if $::osfamily == 'RedHat' {
+        $version = '2.2.4-1'
+    } else {
+        $version = '2.2.4'
+    }
+
+    class { 'cassandra':
+      cassandra_9822              => true,
+      commitlog_directory_mode    => '0770',
+      data_file_directories_mode  => '0770',
+      saved_caches_directory_mode => '0770',
+    }
+
+    class { 'cassandra::optutils':
+      ensure => $version,
+    }
+  EOS
+
+  describe 'Cassandra optional utilities installation.' do
+    it 'should work with no errors' do
+      apply_manifest(optutils_install_pp, catch_failures: true)
+    end
+    it 'check code is idempotent' do
+      expect(apply_manifest(optutils_install_pp,
+                            catch_failures: true).exit_code).to be_zero
+    end
+  end
+
+  datastax_agent_install_pp = <<-EOS
+    if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == 7 {
+        $service_systemd = true
+    } elsif $::operatingsystem == 'Debian' and $::operatingsystemmajrelease == 8 {
+        $service_systemd = true
+    } else {
+        $service_systemd = false
+    }
+
+    class { 'cassandra':
+      cassandra_9822              => true,
+      commitlog_directory_mode    => '0770',
+      data_file_directories_mode  => '0770',
+      saved_caches_directory_mode => '0770',
+    }
+
+    class { '::cassandra::datastax_agent':
+        service_systemd => $service_systemd
+    }
+  EOS
+
+  describe 'DataStax agent installation.' do
+    it 'should work with no errors' do
+      apply_manifest(datastax_agent_install_pp, catch_failures: true)
+    end
+    it 'check code is idempotent' do
+      expect(apply_manifest(datastax_agent_install_pp,
+                            catch_failures: true).exit_code).to be_zero
+    end
+  end
+
+  opscenter_install_pp = <<-EOS
+    class { '::cassandra::opscenter::pycrypto':
+      manage_epel => true,
+      before      => Class['::cassandra::opscenter']
+    }
+
+    class { '::cassandra::opscenter':
+      config_purge => true
+    }
+
+    cassandra::opscenter::cluster_name { 'Cluster1':
+      cassandra_seed_hosts       => 'host1,host2',
+    }
+  EOS
+
+  describe 'OpsCenter installation.' do
+    it 'should work with no errors' do
+      apply_manifest(opscenter_install_pp, catch_failures: true)
+    end
+    it 'check code is idempotent' do
+      expect(apply_manifest(opscenter_install_pp,
                             catch_failures: true).exit_code).to be_zero
     end
   end
@@ -127,12 +231,8 @@ describe 'cassandra class' do
 
   interface_config_pp = <<-EOS
     class { 'cassandra':
-      cassandra_9822              => true,
-      commitlog_directory_mode    => '0770',
-      data_file_directories_mode  => '0770',
-      saved_caches_directory_mode => '0770',
-      listen_interface            => 'lo',
-      rpc_interface               => 'lo'
+      listen_interface => 'lo',
+      rpc_interface    => 'lo'
     }
   EOS
 
