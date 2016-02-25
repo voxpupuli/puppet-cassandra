@@ -31,6 +31,18 @@ describe 'cassandra class' do
         $version = '2.2.4'
     }
 
+    file { '/var/lib/cassandra':
+      ensure => directory,
+    } ->
+    file { '/var/lib/cassandra/commitlog':
+      ensure => directory,
+    } ->
+    file { '/var/lib/cassandra/caches':
+      ensure => directory,
+    } ->
+    file { '/var/lib/cassandra/data':
+      ensure => directory,
+    } ->
     class { 'cassandra':
       package_ensure              => $version,
       cassandra_9822              => true,
@@ -38,137 +50,16 @@ describe 'cassandra class' do
       data_file_directories_mode  => '0770',
       saved_caches_directory_mode => '0770',
       service_systemd             => $service_systemd
-    }
-  EOS
-
-  describe 'Cassandra installation.' do
-    it 'should work with no errors' do
-      apply_manifest(cassandra_install_pp, catch_failures: true)
-    end
-    it 'check code is idempotent' do
-      expect(apply_manifest(cassandra_install_pp,
-                            catch_failures: true).exit_code).to be_zero
-    end
-  end
-
-  Gene_Michtchenko_pp = <<-EOS.freeze
-    if $::osfamily == 'RedHat' {
-        $version = '2.2.4-1'
-    } else {
-        $version = '2.2.4'
-    }
-
-    $data_dirs = [ '/opt/data/cassandra1', '/opt/data/cassandra2' ]
-
-    file { '/opt/data':
-      ensure => directory,
     } ->
-    file { '/opt/data/commitlog':
-      ensure => directory,
-      mode   => '775',
-      owner  => 'cassandra',
-      group  => 'cassandra',
-    } ->
-    file { '/opt/data/caches':
-      ensure => directory,
-      mode   => '775',
-      owner  => 'cassandra',
-      group  => 'cassandra',
-    } ->
-    file { $data_dirs:
-      ensure => directory,
-      mode   => '775',
-      owner  => 'cassandra',
-      group  => 'cassandra',
-    } ->
-    class { 'cassandra':
-      package_ensure              => $version,
-      cassandra_9822              => true,
-      commitlog_directory         => '/opt/data/commitlog',
-      commitlog_directory_mode    => '0770',
-      data_file_directories       => $data_dirs,
-      data_file_directories_mode  => '0770',
-      saved_caches_directory      => '/opt/data/caches',
-      saved_caches_directory_mode => '0770',
-    }
-  EOS
-
-  describe 'Can data directories be specified outside of module.' do
-    it 'should work with no errors' do
-      apply_manifest(Gene_Michtchenko_pp, catch_failures: true)
-    end
-    it 'check code is idempotent' do
-      expect(apply_manifest(Gene_Michtchenko_pp,
-                            catch_failures: true).exit_code).to be_zero
-    end
-  end
-
-  optutils_install_pp = <<-EOS
-    if $::osfamily == 'RedHat' {
-        $version = '2.2.4-1'
-    } else {
-        $version = '2.2.4'
-    }
-
-    class { 'cassandra':
-      cassandra_9822              => true,
-      commitlog_directory_mode    => '0770',
-      data_file_directories_mode  => '0770',
-      saved_caches_directory_mode => '0770',
-    }
-
     class { 'cassandra::optutils':
       ensure => $version,
-    }
-  EOS
-
-  describe 'Cassandra optional utilities installation.' do
-    it 'should work with no errors' do
-      apply_manifest(optutils_install_pp, catch_failures: true)
-    end
-    it 'check code is idempotent' do
-      expect(apply_manifest(optutils_install_pp,
-                            catch_failures: true).exit_code).to be_zero
-    end
-  end
-
-  datastax_agent_install_pp = <<-EOS
-    if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == 7 {
-        $service_systemd = true
-    } elsif $::operatingsystem == 'Debian' and $::operatingsystemmajrelease == 8 {
-        $service_systemd = true
-    } else {
-        $service_systemd = false
-    }
-
-    class { 'cassandra':
-      cassandra_9822              => true,
-      commitlog_directory_mode    => '0770',
-      data_file_directories_mode  => '0770',
-      saved_caches_directory_mode => '0770',
-    }
-
+    } ->
     class { '::cassandra::datastax_agent':
         service_systemd => $service_systemd
-    }
-  EOS
-
-  describe 'DataStax agent installation.' do
-    it 'should work with no errors' do
-      apply_manifest(datastax_agent_install_pp, catch_failures: true)
-    end
-    it 'check code is idempotent' do
-      expect(apply_manifest(datastax_agent_install_pp,
-                            catch_failures: true).exit_code).to be_zero
-    end
-  end
-
-  opscenter_install_pp = <<-EOS
+    } ->
     class { '::cassandra::opscenter::pycrypto':
       manage_epel => true,
-      before      => Class['::cassandra::opscenter']
-    }
-
+    } ->
     class { '::cassandra::opscenter':
       config_purge => true
     }
@@ -178,12 +69,12 @@ describe 'cassandra class' do
     }
   EOS
 
-  describe 'OpsCenter installation.' do
+  describe 'Cassandra installation.' do
     it 'should work with no errors' do
-      apply_manifest(opscenter_install_pp, catch_failures: true)
+      apply_manifest(cassandra_install_pp, catch_failures: true)
     end
     it 'check code is idempotent' do
-      expect(apply_manifest(opscenter_install_pp,
+      expect(apply_manifest(cassandra_install_pp,
                             catch_failures: true).exit_code).to be_zero
     end
   end
@@ -246,37 +137,30 @@ describe 'cassandra class' do
     end
   end
 
-  #############################################################################
-  # Disabled for the release of 1.10.0 because of the change from systemd to
-  # init for the service provider.
-  #
-  # Kept in for 1.11.0 due to non-functional refactoring of the template
-  # file.
-  #############################################################################
-  #  check_against_previous_version_pp = <<-EOS
-  #    include cassandra
-  #  EOS
-  #
-  #  describe 'Ensure config file does get updated unnecessarily.' do
-  #    it 'Initial install manifest again' do
-  #      apply_manifest(check_against_previous_version_pp,
-  #        :catch_failures => true)
-  #    end
-  #    it 'Copy the current module to the side without error.' do
-  #      shell("cp -R /etc/puppet/modules/cassandra /var/tmp",
-  #        :acceptable_exit_codes => 0)
-  #    end
-  #    it 'Remove the current module without error.' do
-  #      shell("puppet module uninstall locp-cassandra",
-  #        :acceptable_exit_codes => 0)
-  #    end
-  #    it 'Install the latest module from the forge.' do
-  #      shell("puppet module install locp-cassandra",
-  #        :acceptable_exit_codes => 0)
-  #    end
-  #    it 'Check install works without changes with previous module version.' do
-  #      expect(apply_manifest(check_against_previous_version_pp,
-  #        :catch_failures => true).exit_code).to be_zero
-  #    end
-  #  end
+  check_against_previous_version_pp = <<-EOS
+    include cassandra
+  EOS
+
+  describe 'Ensure config file does get updated unnecessarily.' do
+    it 'Initial install manifest again' do
+      apply_manifest(check_against_previous_version_pp,
+                     catch_failures: true)
+    end
+    it 'Copy the current module to the side without error.' do
+      shell('cp -R /etc/puppet/modules/cassandra /var/tmp',
+            acceptable_exit_codes: 0)
+    end
+    it 'Remove the current module without error.' do
+      shell('puppet module uninstall locp-cassandra',
+            acceptable_exit_codes: 0)
+    end
+    it 'Install the latest module from the forge.' do
+      shell('puppet module install locp-cassandra',
+            acceptable_exit_codes: 0)
+    end
+    it 'Check install works without changes with previous module version.' do
+      expect(apply_manifest(check_against_previous_version_pp,
+                            catch_failures: true).exit_code).to be_zero
+    end
+  end
 end
