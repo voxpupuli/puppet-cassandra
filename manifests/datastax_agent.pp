@@ -131,10 +131,9 @@ class cassandra::datastax_agent (
       before => Package[$package_name],
     }
 
-    if ! defined(Exec["${::cassandra::params::systemctl} daemon-reload"]) {
-      exec { "${::cassandra::params::systemctl} daemon-reload":
-        refreshonly => true
-      }
+    exec { 'datastax_agent_reload_systemctl':
+      command     => "${::cassandra::params::systemctl} daemon-reload",
+      refreshonly => true
     }
 
     file { "${systemd_path}/${service_name}.service":
@@ -144,7 +143,7 @@ class cassandra::datastax_agent (
       content => template('cassandra/datastax-agent.service.erb'),
       mode    => '0644',
       before  => Package[$package_name],
-      notify  => Exec["${::cassandra::params::systemctl} daemon-reload"]
+      notify  => Exec['datastax_agent_reload_systemctl']
     }
   }
 
