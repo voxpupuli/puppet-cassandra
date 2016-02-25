@@ -35,7 +35,7 @@ deployment:
   master: 
     branch: master
     commands: 
-      - "./scripts/circle.bash merge release/last"
+      - "./scripts/circle.bash merge release/latest"
       - "./scripts/circle.bash deploy"
   patch_release:
     branch: release/patch
