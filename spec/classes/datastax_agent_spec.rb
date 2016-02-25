@@ -121,7 +121,8 @@ describe 'cassandra::datastax_agent' do
     it { should contain_file('/var/run/datastax-agent') }
 
     it do 
-      is_expected.to contain_exec('/usr/bin/systemctl daemon-reload').with(
+      is_expected.to contain_exec('datastax_agent_reload_systemctl').with(
+        command: '/usr/bin/systemctl daemon-reload',
         refreshonly: true
       )
     end
@@ -144,7 +145,8 @@ describe 'cassandra::datastax_agent' do
     it { should contain_file('/var/run/datastax-agent') }
 
     it do 
-      is_expected.to contain_exec('/bin/systemctl daemon-reload').with(
+      is_expected.to contain_exec('datastax_agent_reload_systemctl').with(
+        command: '/bin/systemctl daemon-reload',
         refreshonly: true
       )
     end
