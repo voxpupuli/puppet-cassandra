@@ -119,6 +119,12 @@ describe 'cassandra::datastax_agent' do
 
     it { should contain_file('/usr/lib/systemd/system/datastax-agent.service') }
     it { should contain_file('/var/run/datastax-agent') }
+
+    it do 
+      is_expected.to contain_exec('/usr/bin/systemctl daemon-reload').with(
+        refreshonly: true
+      )
+    end
   end
 
   context 'Systemd file can be activated on Debian' do
@@ -136,6 +142,12 @@ describe 'cassandra::datastax_agent' do
 
     it { should contain_file('/lib/systemd/system/datastax-agent.service') }
     it { should contain_file('/var/run/datastax-agent') }
+
+    it do 
+      is_expected.to contain_exec('/bin/systemctl daemon-reload').with(
+        refreshonly: true
+      )
+    end
   end
 
   context 'Test that async_pool_size can be set.' do
