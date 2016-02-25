@@ -15,7 +15,7 @@ class cassandra::datastax_agent (
   $agent_alias         = undef,
   $async_pool_size     = undef,
   $async_queue_size    = undef,
-  ){
+  ) inherits ::cassandra::params {
   package { $package_name:
     ensure  => $package_ensure,
     require => Class['cassandra'],
@@ -131,6 +131,12 @@ class cassandra::datastax_agent (
       before => Package[$package_name],
     }
 
+    if ! defined(Exec["${::cassandra::params::systemctl} daemon-reload"]) {
+      exec { "${::cassandra::params::systemctl} daemon-reload":
+        refreshonly => true
+      }
+    }
+
     file { "${systemd_path}/${service_name}.service":
       ensure  => present,
       owner   => 'root',
@@ -138,6 +144,7 @@ class cassandra::datastax_agent (
       content => template('cassandra/datastax-agent.service.erb'),
       mode    => '0644',
       before  => Package[$package_name],
+      notify  => Exec["${::cassandra::params::systemctl} daemon-reload"]
     }
   }
 
