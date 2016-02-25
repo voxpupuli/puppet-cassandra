@@ -161,7 +161,7 @@ class cassandra (
   $trickle_fsync_interval_in_kb                         = 10240,
   $truncate_request_timeout_in_ms                       = 60000,
   $write_request_timeout_in_ms                          = 2000
-  ) {
+  ) inherits cassandra::params {
   if $manage_dsc_repo == true {
     $dep_014_url = 'https://github.com/locp/cassandra/wiki/DEP-014'
     require '::cassandra::datastax_repo'
@@ -239,6 +239,12 @@ class cassandra (
   }
 
   if $service_systemd == true {
+    if ! defined(Exec["${::cassandra::params::systemctl} daemon-reload"]) {
+      exec { "${::cassandra::params::systemctl} daemon-reload":
+        refreshonly => true
+      }
+    }
+
     file { "${systemd_path}/${service_name}.service":
       ensure  => present,
       owner   => 'root',
@@ -246,6 +252,7 @@ class cassandra (
       content => template('cassandra/cassandra.service.erb'),
       mode    => '0644',
       before  => Package[$cassandra_pkg],
+      notify  => Exec["${::cassandra::params::systemctl} daemon-reload"]
     }
   }
 
