@@ -58,37 +58,22 @@ describe 'cassandra class' do
         $version = '2.2.4'
     }
 
-    $data_dirs = [ '/opt/data/cassandra1', '/opt/data/cassandra2' ]
+    $data_dirs = [ '/var/lib/cassandra/data' ]
 
-    file { '/opt/data':
+    file { '/var/lib/cassandra/commitlog':
       ensure => directory,
     } ->
-    file { '/opt/data/commitlog':
+    file { '/var/lib/cassandra/caches':
       ensure => directory,
-      mode   => '775',
-      owner  => 'cassandra',
-      group  => 'cassandra',
-    } ->
-    file { '/opt/data/caches':
-      ensure => directory,
-      mode   => '775',
-      owner  => 'cassandra',
-      group  => 'cassandra',
     } ->
     file { $data_dirs:
       ensure => directory,
-      mode   => '775',
-      owner  => 'cassandra',
-      group  => 'cassandra',
     } ->
     class { 'cassandra':
       package_ensure              => $version,
       cassandra_9822              => true,
-      commitlog_directory         => '/opt/data/commitlog',
       commitlog_directory_mode    => '0770',
-      data_file_directories       => $data_dirs,
       data_file_directories_mode  => '0770',
-      saved_caches_directory      => '/opt/data/caches',
       saved_caches_directory_mode => '0770',
     }
   EOS
@@ -229,25 +214,30 @@ describe 'cassandra class' do
     it { is_expected.to be_enabled }
   end
 
-  interface_config_pp = <<-EOS
-    class { 'cassandra':
-      listen_interface => 'lo',
-      rpc_interface    => 'lo'
-    }
-  EOS
-
-  describe 'Ensure that the interface can be specified.' do
-    it 'should work with no errors' do
-      apply_manifest(interface_config_pp, catch_failures: true)
-    end
-    it 'check code is idempotent' do
-      expect(apply_manifest(interface_config_pp,
-                            catch_failures: true).exit_code).to be_zero
-    end
-  end
+#  interface_config_pp = <<-EOS
+#    class { 'cassandra':
+#      listen_interface => 'lo',
+#      rpc_interface    => 'lo'
+#    }
+#  EOS
+#
+#  describe 'Ensure that the interface can be specified.' do
+#    it 'should work with no errors' do
+#      apply_manifest(interface_config_pp, catch_failures: true)
+#    end
+#    it 'check code is idempotent' do
+#      expect(apply_manifest(interface_config_pp,
+#                            catch_failures: true).exit_code).to be_zero
+#    end
+#  end
 
   check_against_previous_version_pp = <<-EOS
-    include cassandra
+    class { 'cassandra':
+      cassandra_9822              => true,
+      commitlog_directory_mode    => '0770',
+      data_file_directories_mode  => '0770',
+      saved_caches_directory_mode => '0770',
+    }
   EOS
 
   describe 'Ensure config file does get updated unnecessarily.' do
@@ -273,14 +263,12 @@ describe 'cassandra class' do
     end
   end
 
-  describe 'Gather service information.' do
-    it 'Show the cassandra output log.' do
-      shell('cat /var/log/cassandra/output.log',
-            acceptable_exit_codes: 0)
-    end
+  describe 'Gather service information (when in debug mode).' do
     it 'Show the cassandra system log.' do
-      shell('cat /var/log/cassandra/system.log',
-            acceptable_exit_codes: 0)
+      shell('grep -v \'^INFO\' /var/log/cassandra/system.log')
+    end
+    it 'Kernel log.' do
+      shell('dmesg')
     end
   end
 end
