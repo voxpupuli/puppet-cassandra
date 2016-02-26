@@ -6,7 +6,7 @@ describe 'cassandra class' do
     include '::cassandra::java'
   EOS
 
-  describe 'Pre-requisits installation.' do
+  describe '########### Pre-requisits installation.' do
     it 'should work with no errors' do
       apply_manifest(pre_req_install_pp, catch_failures: true)
     end
@@ -41,7 +41,7 @@ describe 'cassandra class' do
     }
   EOS
 
-  describe 'Cassandra installation.' do
+  describe '########### Cassandra installation.' do
     it 'should work with no errors' do
       apply_manifest(cassandra_install_pp, catch_failures: true)
     end
@@ -78,7 +78,7 @@ describe 'cassandra class' do
     }
   EOS
 
-  describe 'Can data directories be specified outside of module.' do
+  describe '########### Can data directories be specified outside of module.' do
     it 'should work with no errors' do
       apply_manifest(Gene_Michtchenko_pp, catch_failures: true)
     end
@@ -107,7 +107,7 @@ describe 'cassandra class' do
     }
   EOS
 
-  describe 'Cassandra optional utilities installation.' do
+  describe '########### Cassandra optional utilities installation.' do
     it 'should work with no errors' do
       apply_manifest(optutils_install_pp, catch_failures: true)
     end
@@ -138,7 +138,7 @@ describe 'cassandra class' do
     }
   EOS
 
-  describe 'DataStax agent installation.' do
+  describe '########### DataStax agent installation.' do
     it 'should work with no errors' do
       apply_manifest(datastax_agent_install_pp, catch_failures: true)
     end
@@ -163,7 +163,7 @@ describe 'cassandra class' do
     }
   EOS
 
-  describe 'OpsCenter installation.' do
+  describe '########### OpsCenter installation.' do
     it 'should work with no errors' do
       apply_manifest(opscenter_install_pp, catch_failures: true)
     end
@@ -193,7 +193,7 @@ describe 'cassandra class' do
     }
   EOS
 
-  describe 'Firewall configuration.' do
+  describe '########### Firewall configuration.' do
     it 'should work with no errors' do
       apply_manifest(firewall_config_pp, catch_failures: true)
     end
@@ -214,22 +214,22 @@ describe 'cassandra class' do
     it { is_expected.to be_enabled }
   end
 
-#  interface_config_pp = <<-EOS
-#    class { 'cassandra':
-#      listen_interface => 'lo',
-#      rpc_interface    => 'lo'
-#    }
-#  EOS
-#
-#  describe 'Ensure that the interface can be specified.' do
-#    it 'should work with no errors' do
-#      apply_manifest(interface_config_pp, catch_failures: true)
-#    end
-#    it 'check code is idempotent' do
-#      expect(apply_manifest(interface_config_pp,
-#                            catch_failures: true).exit_code).to be_zero
-#    end
-#  end
+  #  interface_config_pp = <<-EOS
+  #    class { 'cassandra':
+  #      listen_interface => 'lo',
+  #      rpc_interface    => 'lo'
+  #    }
+  #  EOS
+  #
+  #  describe '########### Ensure that the interface can be specified.' do
+  #    it 'should work with no errors' do
+  #      apply_manifest(interface_config_pp, catch_failures: true)
+  #    end
+  #    it 'check code is idempotent' do
+  #      expect(apply_manifest(interface_config_pp,
+  #                            catch_failures: true).exit_code).to be_zero
+  #    end
+  #  end
 
   check_against_previous_version_pp = <<-EOS
     class { 'cassandra':
@@ -240,7 +240,7 @@ describe 'cassandra class' do
     }
   EOS
 
-  describe 'Ensure config file does get updated unnecessarily.' do
+  describe '########### Ensure config file does get updated unnecessarily.' do
     it 'Initial install manifest again' do
       apply_manifest(check_against_previous_version_pp,
                      catch_failures: true)
@@ -263,7 +263,7 @@ describe 'cassandra class' do
     end
   end
 
-  describe 'Gather service information (when in debug mode).' do
+  describe '########### Gather service information (when in debug mode).' do
     it 'Show the cassandra system log.' do
       shell('grep -v \'^INFO\' /var/log/cassandra/system.log')
     end
