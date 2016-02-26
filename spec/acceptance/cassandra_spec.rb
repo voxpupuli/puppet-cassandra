@@ -272,4 +272,15 @@ describe 'cassandra class' do
                             catch_failures: true).exit_code).to be_zero
     end
   end
+
+  describe 'Gather service information.' do
+    it 'Show the cassandra output log.' do
+      shell('cat /var/log/cassandra/output.log',
+            acceptable_exit_codes: 0)
+    end
+    it 'Show the cassandra system log.' do
+      shell('cat /var/log/cassandra/system.log',
+            acceptable_exit_codes: 0)
+    end
+  end
 end
