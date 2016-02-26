@@ -9,15 +9,13 @@ acceptance_tests () {
 
   if [ "$CIRCLE_NODE_INDEX" != 3 ]; then
     echo "Not to be built on this node ($CIRCLE_NODE_INDEX)."
-  elif [ ! -z "$RUN_NIGHTLY_BUILD" ]; then
-      BEAKER_set="$1"
   else
-    # If we reach this point, we're on the right node, but we're
-    # not a nightly build.
-    echo "$CIRCLE_BRANCH" | grep -Eq '^release/[0-9]{1,4}/v[0-9]'
+    # If we reach this point, we're on the right node. Check if we're on
+    # a release branch.
+    echo "$CIRCLE_BRANCH" | grep -Eq '^release/'
 
     if [ $? != 0 ]; then
-      echo "Not a nighlty build or a release branch."
+      echo "Not a release branch."
     else
       BEAKER_set="$1"
     fi
@@ -26,7 +24,7 @@ acceptance_tests () {
   if [ ! -z "$BEAKER_set" ]; then
     BEAKER_destroy=no BEAKER_set=$BEAKER_set bundle exec rake beaker
     status=$?
-    docker ps | grep -v 'CONTAINER ID' | xargs docker rm -f
+    docker ps -a | grep -v 'CONTAINER ID' | xargs docker rm -f
   fi
 
   return $status
