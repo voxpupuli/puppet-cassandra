@@ -3,6 +3,8 @@
 # A script for splitting the test suite across nodes on CircleCI.
 #############################################################################
 
+DEBUG='echo'
+
 acceptance_tests () {
   status=0
   BEAKER_set=''
@@ -28,6 +30,47 @@ acceptance_tests () {
   fi
 
   return $status
+}
+
+deploy () {
+  local_version=$( ./scripts/module_version.py --local )
+
+  if [ -z "$local_version" ]; then
+    echo "Unable to find local module version."
+    exit 1
+  fi
+
+  echo "Module version (local): $local_version"
+  git tag --list | grep --quiet $local_version
+
+  if [ $? != 0 ]; then
+    echo "Creating tag $local_version."
+    $DEBUG rake module:tag
+  fi
+
+  git ls-remote --tags 2> /dev/null | grep -q "refs/tags/${local_version}"
+
+  if [ $? != 0 ]; then
+    echo "Pushing remote tag $local_version."
+    $DEBUG git push --tags
+  fi
+
+  forge_version=$( ./scripts/module_version.py --forge )
+
+  if [ -z "$forge_version" ]; then
+    echo "Unable to find forge module version."
+    exit 1
+  fi
+
+  echo "Module version (forge): $forge_version"
+
+  if [ $local_version != $forge_version ]; then
+    echo "Build and deploy version $local_version."
+    $DEBUG rake module:clean
+    $DEBUG rake build
+    echo "Populating $HOME/.puppetforge.yml"
+    $DEBUG module:push
+  fi
 }
 
 merge () {
