@@ -45,14 +45,14 @@ deploy () {
 
   if [ $? != 0 ]; then
     echo "Creating tag $local_version."
-    rake module:tag
+    bundle exec rake module:tag || exit $?
   fi
 
   git ls-remote --tags 2> /dev/null | grep -q "refs/tags/${local_version}"
 
   if [ $? != 0 ]; then
     echo "Pushing remote tag $local_version."
-    git push --tags
+    git push --tags || exit $?
   fi
 
   forge_version=$( ./scripts/module_version.py --forge )
@@ -66,8 +66,8 @@ deploy () {
 
   if [ $local_version != $forge_version ]; then
     echo "Build and deploy version $local_version."
-    rake module:clean
-    rake build
+    bundle exec rake module:clean || exit $?
+    bundle exec rake build || exit $?
 
     if [[ -z "$CIRCLE_PROJECT_USERNAME" || -z "$PUPPET_FORGE_PASSWORD" ]]; then
       echo "Not enough data to populate ${PUPPET_FORGE_CREDENTIALS_FILE}"
@@ -80,7 +80,7 @@ deploy () {
       echo "password: ${PUPPET_FORGE_PASSWORD}" >> $PUPPET_FORGE_CREDENTIALS_FILE
     fi
 
-    module:push
+    bundle exec rake module:push
   fi
 }
 
