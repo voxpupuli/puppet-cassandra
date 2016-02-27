@@ -1,5 +1,32 @@
 # Change Log for Puppet Module locp-cassandra
 
+##20016-02-27 - Release 1.14.1 ([diff](https://github.com/locp/cassandra/compare/1.14.0...1.14.1))
+
+### Summary
+
+A non-functional release of improvements and a bugfix.
+
+### Features
+
+* N/A
+
+### Bugfixes
+
+* If a systemd service file is created or updated, then systemctl daemon-reload
+  is now be executed.
+
+### Improvements
+
+* The workflow for building the module has been improved to include:
+  * Automatic integration of improvements and bugfixes into release candidates.
+  * Testing of release candidates includes acceptance (beaker) as well as
+    unit (spec) tests.
+  * The refactoring of the majority of the Ruby code used to test and
+    build this module so that it is hopefully more readable and easier to
+    maintain.
+  * The automation of what had previously been manual steps when building a
+    release.
+
 ##2016-02-19 - Release 1.14.0 ([diff](https://github.com/locp/cassandra/compare/1.13.0...1.14.0))
 
 ### Summary

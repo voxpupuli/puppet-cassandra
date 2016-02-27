@@ -3,7 +3,7 @@
 # A script for splitting the test suite across nodes on CircleCI.
 #############################################################################
 
-DEBUG='echo'
+PUPPET_FORGE_CREDENTIALS_FILE="$HOME/.puppetforge.yml"
 
 acceptance_tests () {
   status=0
@@ -45,14 +45,14 @@ deploy () {
 
   if [ $? != 0 ]; then
     echo "Creating tag $local_version."
-    $DEBUG rake module:tag
+    bundle exec rake module:tag || exit $?
   fi
 
   git ls-remote --tags 2> /dev/null | grep -q "refs/tags/${local_version}"
 
   if [ $? != 0 ]; then
     echo "Pushing remote tag $local_version."
-    $DEBUG git push --tags
+    git push --tags || exit $?
   fi
 
   forge_version=$( ./scripts/module_version.py --forge )
@@ -66,10 +66,21 @@ deploy () {
 
   if [ $local_version != $forge_version ]; then
     echo "Build and deploy version $local_version."
-    $DEBUG rake module:clean
-    $DEBUG rake build
-    echo "Populating $HOME/.puppetforge.yml"
-    $DEBUG module:push
+    bundle exec rake module:clean || exit $?
+    bundle exec rake build || exit $?
+
+    if [[ -z "$CIRCLE_PROJECT_USERNAME" || -z "$PUPPET_FORGE_PASSWORD" ]]; then
+      echo "Not enough data to populate ${PUPPET_FORGE_CREDENTIALS_FILE}"
+      exit 1
+    else
+      echo "Populating $PUPPET_FORGE_CREDENTIALS_FILE"
+      echo '---' > $PUPPET_FORGE_CREDENTIALS_FILE
+      echo 'url: https://forgeapi.puppetlabs.com' >> $PUPPET_FORGE_CREDENTIALS_FILE
+      echo "username: ${CIRCLE_PROJECT_USERNAME}" >> $PUPPET_FORGE_CREDENTIALS_FILE
+      echo "password: ${PUPPET_FORGE_PASSWORD}" >> $PUPPET_FORGE_CREDENTIALS_FILE
+    fi
+
+    bundle exec rake module:push
   fi
 }
 
