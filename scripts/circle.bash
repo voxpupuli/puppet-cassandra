@@ -80,7 +80,7 @@ deploy () {
       echo "password: ${PUPPET_FORGE_PASSWORD}" >> $PUPPET_FORGE_CREDENTIALS_FILE
     fi
 
-    bundle exec module:push
+    bundle exec rake module:push
   fi
 }
 
