@@ -33,6 +33,18 @@ acceptance_tests () {
   return $status
 }
 
+bundle () {
+  echo "Bundle Path: $BUNDLE_PATH"
+  echo "RVM: $RVM"
+  BUNDLE_OPS='--without development'
+
+  if [ ! -z "$RVM" ]; then
+    rvm-exec $RVM bash -c "bundle install" $BUNDLE_OPS
+  else
+    bundle install $BUNDLE_OPS
+  fi
+}
+
 deploy () {
   local_version=$( ./scripts/module_version.py --local )
 
@@ -151,6 +163,26 @@ if [ ! -z "$RVM" ]; then
   [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
   rvm use ruby-${RVM}
 fi
+
+if [ ! -z "${CIRCLE_NODE_INDEX}" ]; then
+  export BUNDLE_PATH="~/vendor/bundle_${CIRCLE_NODE_INDEX}"
+fi
+
+case $CIRCLE_NODE_INDEX in
+  0) export RVM=1.9.3-p448
+     export PUPPET_GEM_VERSION="~> 3.0"
+     rvm use ruby-${RVM}
+     ;;
+  1) export RVM=2.1.5
+     export PUPPET_GEM_VERSION="~> 3.0"
+     rvm use ruby-${RVM}
+     ;;
+  2) export RVM=2.1.6
+     export PUPPET_GEM_VERSION="~> 4.0"
+     export STRICT_VARIABLES="yes"
+     rvm use ruby-${RVM}
+     ;;
+esac
 
 subcommand=$1 
 shift
