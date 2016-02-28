@@ -20,7 +20,7 @@ dependencies:
            rvm use ruby-${RVM}
            PUPPET_GEM_VERSION="~> 4.0" rvm-exec $RVM bash -c "bundle install --path=vendor/bundle_${CIRCLE_NODE_INDEX}"
            ;;
-         3) bundle install --path=vendor/bundle_${CIRCLE_NODE_INDEX}--without development
+         3) bundle install --path=vendor/bundle_${CIRCLE_NODE_INDEX} --without development
            ;;
         esac
 deployment: 
