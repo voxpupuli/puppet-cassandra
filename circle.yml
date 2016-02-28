@@ -3,8 +3,9 @@ machine:
   services:
     - docker
 dependencies: 
-  cache_directories: 
-    - ../.rvm/rubies
+  cache_directories:
+    - '~/.rvm/rubies'
+    - 'vendor'
   override: 
     - |
         case $CIRCLE_NODE_INDEX in
