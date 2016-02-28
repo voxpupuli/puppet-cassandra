@@ -154,17 +154,9 @@ unit_tests () {
   return $status
 }
 
-
-if [ ! -z "$RVM" ]; then
-  echo "Using rvm version $RVM"
-  # Set the path
-  export PATH=/home/ubuntu/.rvm/gems/ruby-${RVM}/bin:$PATH
-  # Load RVM into a shell session *as a function*
-  [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
-  rvm use ruby-${RVM}
-fi
-
-if [ ! -z "${CIRCLE_NODE_INDEX}" ]; then
+if [ -z "${CIRCLE_NODE_INDEX}" ]; then
+  echo "Not running on CircleCI parallel nodes."
+else
   export BUNDLE_PATH="~/vendor/bundle_${CIRCLE_NODE_INDEX}"
 fi
 
