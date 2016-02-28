@@ -4,7 +4,7 @@ dependencies:
     - ~/.rvm/rubies
     - ~/vendor
   override: 
-    - "./scripts/circle.bash bundle"
+    - "./scripts/circle.bash bundle_install"
 deployment: 
   bugfix: 
     branch: /^bugfix.*/

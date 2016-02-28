@@ -33,7 +33,7 @@ acceptance_tests () {
   return $status
 }
 
-bundle () {
+bundle_install () {
   echo "Bundle Path: $BUNDLE_PATH"
   echo "RVM: $RVM"
   BUNDLE_OPS='--without development'
