@@ -20,7 +20,7 @@ acceptance_tests () {
 
   for node in $( rake beaker_nodes | grep '^circle' ); do
     if [ $(($i % $CIRCLE_NODE_TOTAL)) -eq $CIRCLE_NODE_INDEX ]; then
-      BEAKER_destroy=no BEAKER_set=$BEAKER_set bundle exec rake beaker || status=$?
+      BEAKER_destroy=no BEAKER_set=$node bundle exec rake beaker || status=$?
       docker ps -a | grep -v 'CONTAINER ID' | xargs docker rm -f
     fi
   done
