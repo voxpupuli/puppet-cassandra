@@ -1,28 +1,10 @@
 --- 
-machine:
-  services:
-    - docker
 dependencies: 
   cache_directories: 
-    - ../.rvm/rubies
+    - ~/.rvm/rubies
+    - ~/vendor
   override: 
-    - |
-        case $CIRCLE_NODE_INDEX in
-         0) export RVM=1.9.3-p448
-           rvm use ruby-${RVM}
-           PUPPET_GEM_VERSION="~> 3.0" rvm-exec $RVM bash -c "bundle check --path=vendor/bundle || bundle install --path=vendor/bundle"
-           ;;
-         1) export RVM=2.1.5
-           rvm use ruby-${RVM}
-           PUPPET_GEM_VERSION="~> 3.0" rvm-exec $RVM bash -c "bundle check --path=vendor/bundle || bundle install --path=vendor/bundle"
-           ;;
-         2) export RVM=2.1.6
-           rvm use ruby-${RVM}
-           PUPPET_GEM_VERSION="~> 4.0" rvm-exec $RVM bash -c "bundle check --path=vendor/bundle || bundle install --path=vendor/bundle"
-           ;;
-         3) bundle install --without development
-           ;;
-        esac
+    - "./scripts/circle.bash bundle_install"
 deployment: 
   bugfix: 
     branch: /^bugfix.*/
@@ -37,23 +19,20 @@ deployment:
     commands: 
       - "./scripts/circle.bash merge release/latest"
       - "./scripts/circle.bash deploy"
-  patch_release:
+  patch_release: 
     branch: release/patch
-    commands:
+    commands: 
       - "./scripts/circle.bash merge release/minor"
+machine: 
+  services: 
+    - docker
 notify: 
   webhooks: 
     - 
       url: "https://webhooks.gitter.im/e/da8c065419a91983f0cf"
 test: 
   override: 
-    - 
-      ? "case $CIRCLE_NODE_INDEX in 0) RVM=1.9.3-p551 rvm-exec 1.9.3-p551 ./scripts/circle.bash unit_tests ;; 1) RVM=2.1.5 rvm-exec 2.1.5 ./scripts/circle.bash unit_tests ;; 2) RVM=2.1.6 rvm-exec 2.1.6 ./scripts/circle.bash unit_tests ;; 3) bundle exec rake rubocop ;; esac"
-      : 
+    - ./scripts/circle.bash unit_tests:
         parallel: true
-    - ./scripts/circle.bash acceptance_tests circle_debian7:
-        timeout: 300
-        parallel: true
-    - ./scripts/circle.bash acceptance_tests circle_ubuntu14:
-        timeout: 300
+    - ./scripts/circle.bash acceptance_tests:
         parallel: true
