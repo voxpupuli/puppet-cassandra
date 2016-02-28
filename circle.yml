@@ -47,15 +47,17 @@ notify:
     - 
       url: "https://webhooks.gitter.im/e/da8c065419a91983f0cf"
 test: 
-  override: 
-    - |
+  override:
+    - >
         case $CIRCLE_NODE_INDEX in
           0) RVM=1.9.3-p551 rvm-exec 1.9.3-p551 ./scripts/circle.bash unit_tests ;;
           1) RVM=2.1.5 rvm-exec 2.1.5 ./scripts/circle.bash unit_tests ;;
           2) RVM=2.1.6 rvm-exec 2.1.6 ./scripts/circle.bash unit_tests ;;
           3) bundle exec rake rubocop ;;
-        esac : 
-          parallel: true
+        esac
+
+      : 
+        parallel: true
     - 
       ? "./scripts/circle.bash acceptance_tests circle_debian7"
       : 
