@@ -4,7 +4,7 @@ dependencies:
     - ~/.rvm/rubies
     - ~/vendor
   override: 
-    - ./scripts/circle.bash bundle
+    - "./scripts/circle.bash bundle"
 deployment: 
   bugfix: 
     branch: /^bugfix.*/
@@ -31,8 +31,10 @@ notify:
     - 
       url: "https://webhooks.gitter.im/e/da8c065419a91983f0cf"
 test: 
-  override:
-    - ./scripts/circle.bash unit_tests
+  override: 
+    - 
+      ? "./scripts/circle.bash unit_tests"
+      : ~
       parallel: true
     - 
       ? "./scripts/circle.bash acceptance_tests circle_debian7"
