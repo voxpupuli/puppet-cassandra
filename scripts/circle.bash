@@ -29,7 +29,6 @@ acceptance_tests () {
 }
 
 bundle_install () {
-  echo "Bundle Path: $BUNDLE_PATH"
   echo "RVM: $RVM"
   BUNDLE_OPS='--without development'
 
@@ -153,6 +152,7 @@ if [ -z "${CIRCLE_NODE_INDEX}" ]; then
   echo "Not running on CircleCI parallel nodes."
 else
   export BUNDLE_PATH="~/vendor/bundle_${CIRCLE_NODE_INDEX}"
+  echo "Bundle Path: $BUNDLE_PATH"
 fi
 
 # Load RVM into a shell session *as a function*
