@@ -168,6 +168,9 @@ if [ ! -z "${CIRCLE_NODE_INDEX}" ]; then
   export BUNDLE_PATH="~/vendor/bundle_${CIRCLE_NODE_INDEX}"
 fi
 
+# Load RVM into a shell session *as a function*
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" 
+
 case $CIRCLE_NODE_INDEX in
   0) export RVM=1.9.3-p448
      export PUPPET_GEM_VERSION="~> 3.0"
@@ -183,9 +186,6 @@ case $CIRCLE_NODE_INDEX in
      rvm use ruby-${RVM}
      ;;
 esac
-
-# Load RVM into a shell session *as a function*
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" 
 
 subcommand=$1 
 shift
