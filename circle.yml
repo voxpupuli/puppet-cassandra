@@ -10,17 +10,17 @@ dependencies:
         case $CIRCLE_NODE_INDEX in
          0) export RVM=1.9.3-p448
            rvm use ruby-${RVM}
-           PUPPET_GEM_VERSION="~> 3.0" rvm-exec $RVM bash -c "bundle check --path=vendor/bundle || bundle install --path=vendor/bundle"
+           PUPPET_GEM_VERSION="~> 3.0" rvm-exec $RVM bash -c "bundle install --path=vendor/bundle_${CIRCLE_NODE_INDEX}"
            ;;
          1) export RVM=2.1.5
            rvm use ruby-${RVM}
-           PUPPET_GEM_VERSION="~> 3.0" rvm-exec $RVM bash -c "bundle check --path=vendor/bundle || bundle install --path=vendor/bundle"
+           PUPPET_GEM_VERSION="~> 3.0" rvm-exec $RVM bash -c "bundle install --path=vendor/bundle_${CIRCLE_NODE_INDEX}"
            ;;
          2) export RVM=2.1.6
            rvm use ruby-${RVM}
-           PUPPET_GEM_VERSION="~> 4.0" rvm-exec $RVM bash -c "bundle check --path=vendor/bundle || bundle install --path=vendor/bundle"
+           PUPPET_GEM_VERSION="~> 4.0" rvm-exec $RVM bash -c "bundle install --path=vendor/bundle_${CIRCLE_NODE_INDEX}"
            ;;
-         3) bundle install --without development
+         3) bundle install --path=vendor/bundle_${CIRCLE_NODE_INDEX}--without development
            ;;
         esac
 deployment: 
