@@ -11,6 +11,7 @@ acceptance_tests () {
 
   if [ "$CIRCLE_NODE_INDEX" != 3 ]; then
     echo "Not to be built on this node ($CIRCLE_NODE_INDEX)."
+    bundle exec rake beaker_nodes
   else
     # If we reach this point, we're on the right node. Check if we're on
     # a release branch.
