@@ -9,27 +9,34 @@ acceptance_tests () {
   status=0
   BEAKER_set=''
 
-  if [ "$CIRCLE_NODE_INDEX" != 3 ]; then
-    echo "Not to be built on this node ($CIRCLE_NODE_INDEX)."
-  else
-    # If we reach this point, we're on the right node. Check if we're on
-    # a release branch.
-    echo "$CIRCLE_BRANCH" | grep -Eq '^release/'
+  echo "$CIRCLE_BRANCH" | grep -Eq '^release/'
 
-    if [ $? != 0 ]; then
-      echo "Not a release branch."
-    else
-      BEAKER_set="$1"
+  if [ $? != 0 ]; then
+    echo "Not a release branch."
+    return 0
+  fi
+
+  i=0
+
+  for node in $( rake beaker_nodes | grep '^circle' ); do
+    if [ $(($i % $CIRCLE_NODE_TOTAL)) -eq $CIRCLE_NODE_INDEX ]; then
+      BEAKER_destroy=no BEAKER_set=$node bundle exec rake beaker || status=$?
+      docker ps -a | grep -v 'CONTAINER ID' | xargs docker rm -f
     fi
-  fi
-
-  if [ ! -z "$BEAKER_set" ]; then
-    BEAKER_destroy=no BEAKER_set=$BEAKER_set bundle exec rake beaker
-    status=$?
-    docker ps -a | grep -v 'CONTAINER ID' | xargs docker rm -f
-  fi
+  done
 
   return $status
+}
+
+bundle_install () {
+  echo "RVM: $RVM"
+  BUNDLE_OPS='--without development'
+
+  if [ ! -z "$RVM" ]; then
+    rvm-exec $RVM bash -c "bundle install" $BUNDLE_OPS
+  else
+    bundle install $BUNDLE_OPS
+  fi
 }
 
 deploy () {
@@ -141,15 +148,31 @@ unit_tests () {
   return $status
 }
 
-
-if [ ! -z "$RVM" ]; then
-  echo "Using rvm version $RVM"
-  # Set the path
-  export PATH=/home/ubuntu/.rvm/gems/ruby-${RVM}/bin:$PATH
-  # Load RVM into a shell session *as a function*
-  [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
-  rvm use ruby-${RVM}
+if [ -z "${CIRCLE_NODE_INDEX}" ]; then
+  echo "Not running on CircleCI parallel nodes."
+else
+  export BUNDLE_PATH="~/vendor/bundle_${CIRCLE_NODE_INDEX}"
+  echo "Bundle Path: $BUNDLE_PATH"
 fi
+
+# Load RVM into a shell session *as a function*
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" 
+
+case $CIRCLE_NODE_INDEX in
+  0) export RVM=1.9.3-p448
+     export PUPPET_GEM_VERSION="~> 3.0"
+     rvm use ruby-${RVM}
+     ;;
+  1) export RVM=2.1.5
+     export PUPPET_GEM_VERSION="~> 3.0"
+     rvm use ruby-${RVM}
+     ;;
+  2) export RVM=2.1.6
+     export PUPPET_GEM_VERSION="~> 4.0"
+     export STRICT_VARIABLES="yes"
+     rvm use ruby-${RVM}
+     ;;
+esac
 
 subcommand=$1 
 shift
