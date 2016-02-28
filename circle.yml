@@ -35,7 +35,7 @@ test:
     - 
       ? "./scripts/circle.bash unit_tests"
       : ~
-      parallel: true
+        parallel: true
     - 
       ? "./scripts/circle.bash acceptance_tests circle_debian7"
       : 
