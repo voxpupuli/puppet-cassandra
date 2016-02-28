@@ -9,26 +9,21 @@ acceptance_tests () {
   status=0
   BEAKER_set=''
 
-  if [ "$CIRCLE_NODE_INDEX" != 3 ]; then
-    echo "Not to be built on this node ($CIRCLE_NODE_INDEX)."
-    bundle exec rake beaker_nodes
-  else
-    # If we reach this point, we're on the right node. Check if we're on
-    # a release branch.
-    echo "$CIRCLE_BRANCH" | grep -Eq '^release/'
+  echo "$CIRCLE_BRANCH" | grep -Eq '^release/'
 
-    if [ $? != 0 ]; then
-      echo "Not a release branch."
-    else
-      BEAKER_set="$1"
+  if [ $? != 0 ]; then
+    echo "Not a release branch."
+    return 0
+  fi
+
+  i=0
+
+  for node in $( rake beaker_nodes | grep '^circle' ); do
+    if [ $(($i % $CIRCLE_NODE_TOTAL)) -eq $CIRCLE_NODE_INDEX ]; then
+      BEAKER_destroy=no BEAKER_set=$BEAKER_set bundle exec rake beaker || status=$?
+      docker ps -a | grep -v 'CONTAINER ID' | xargs docker rm -f
     fi
-  fi
-
-  if [ ! -z "$BEAKER_set" ]; then
-    BEAKER_destroy=no BEAKER_set=$BEAKER_set bundle exec rake beaker
-    status=$?
-    docker ps -a | grep -v 'CONTAINER ID' | xargs docker rm -f
-  fi
+  done
 
   return $status
 }

@@ -34,13 +34,5 @@ test:
   override: 
     - ./scripts/circle.bash unit_tests:
         parallel: true
-    - 
-      ? "./scripts/circle.bash acceptance_tests circle_debian7"
-      : 
+    - ./scripts/circle.bash acceptance_tests:
         parallel: true
-        timeout: 300
-    - 
-      ? "./scripts/circle.bash acceptance_tests circle_ubuntu14"
-      : 
-        parallel: true
-        timeout: 300
