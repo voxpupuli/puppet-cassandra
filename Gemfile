@@ -24,6 +24,7 @@ group :system_tests do
   gem 'puppet-blacksmith',      require: false
   gem 'puppet-lint',            require: false
   gem 'puppetlabs_spec_helper', require: false
+  gem 'rake',                   require: false
   gem 'rspec_junit_formatter',  '0.2.2'
   gem 'rspec-puppet',           require: false
   gem 'rspec-puppet-utils',     require: false
