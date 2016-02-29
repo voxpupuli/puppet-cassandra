@@ -1,5 +1,23 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-02-29 - Release 1.14.2 ([diff](https://github.com/locp/cassandra/compare/1.14.1...1.14.2))
+
+### Summary
+
+A small bugfix release.
+
+### Features
+
+* N/A
+
+### Bugfixes
+
+* Removed `Restart=always` from the Systemd configuration files.
+
+### Improvements
+
+* N/A
+
 ##20016-02-27 - Release 1.14.1 ([diff](https://github.com/locp/cassandra/compare/1.14.0...1.14.1))
 
 ### Summary
