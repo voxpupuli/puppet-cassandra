@@ -151,7 +151,7 @@ unit_tests () {
 if [ -z "${CIRCLE_NODE_INDEX}" ]; then
   echo "Not running on CircleCI parallel nodes."
 else
-  export BUNDLE_PATH="~/vendor/bundle_${CIRCLE_NODE_INDEX}"
+  export BUNDLE_PATH="vendor/bundle_${CIRCLE_NODE_INDEX}"
   echo "Bundle Path: $BUNDLE_PATH"
 fi
 
