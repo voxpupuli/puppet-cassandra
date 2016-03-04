@@ -3,21 +3,24 @@ require 'spec_helper_acceptance'
 describe 'cassandra class' do
   cassandra_install_pp = <<-EOS
     if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == 7 {
-        $service_systemd = true
+      $service_systemd = true
     } elsif $::operatingsystem == 'Debian' and $::operatingsystemmajrelease == 8 {
-        $service_systemd = true
+      $service_systemd = true
     } else {
-        $service_systemd = false
+      $service_systemd = false
     }
 
     if $::osfamily == 'RedHat' {
-        $cassandra_optutils_package = 'cassandra20-tools'
-        $cassandra_package = 'cassandra20'
-        $version = '2.0.17-1'
+      $cassandra_package = 'cassandra20'
+      $version = '2.0.17-1'
     } else {
-        $cassandra_optutils_package = 'cassandra-tools'
-        $cassandra_package = 'cassandra'
-        $version = '2.0.17'
+      $cassandra_package = 'cassandra'
+      $version = '2.0.17'
+
+      exec { '/bin/chown root:root /etc/apt/sources.list.d/datastax.list':
+        unless  => '/usr/bin/test -O /etc/apt/sources.list.d/datastax.list',
+        require => Class['cassandra::opscenter']
+      }
     }
 
     class { 'cassandra::java': } ->
@@ -76,17 +79,26 @@ describe 'cassandra class' do
   end
 
   firewall_config_pp = <<-EOS
+    if $::osfamily == 'RedHat' {
+      $cassandra_package = 'cassandra20'
+      $version = '2.0.17-1'
+    } else {
+      $cassandra_package = 'cassandra'
+      $version = '2.0.17'
+    }
+
     class { 'cassandra':
       cassandra_9822              => true,
+      cassandra_yaml_tmpl         => 'cassandra/cassandra20.yaml.erb',
       commitlog_directory_mode    => '0770',
       data_file_directories_mode  => '0770',
+      package_ensure              => $version,
+      package_name                => $cassandra_package,
       saved_caches_directory_mode => '0770',
     }
 
-    include '::cassandra::optutils'
     include '::cassandra::datastax_agent'
     include '::cassandra::opscenter'
-    include '::cassandra::opscenter::pycrypto'
 
     # This really sucks but Docker, CentOS 6 and iptables don't play nicely
     # together.  Therefore we can't test the firewall on this platform :-(
@@ -157,7 +169,6 @@ describe 'cassandra class' do
 
     class { 'cassandra':
       cassandra_9822              => true,
-      #cassandra_yaml_tmpl         => 'cassandra/cassandra.yaml.erb',
       commitlog_directory_mode    => '0770',
       data_file_directories_mode  => '0770',
       listen_interface            => 'lo',
@@ -176,6 +187,17 @@ describe 'cassandra class' do
     it 'check code is idempotent' do
       expect(apply_manifest(cassandra_upgrade21_pp,
                             catch_failures: true).exit_code).to be_zero
+    end
+  end
+
+  describe service('cassandra') do
+    it { is_expected.to be_running }
+    it { is_expected.to be_enabled }
+  end
+
+  describe '########### Gather service information (when in debug mode).' do
+    it 'Show the cassandra system log.' do
+      shell('grep -v \'^INFO\' /var/log/cassandra/system.log')
     end
   end
 end
