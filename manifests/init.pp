@@ -165,13 +165,17 @@ class cassandra (
   if $manage_dsc_repo == true {
     $dep_014_url = 'https://github.com/locp/cassandra/wiki/DEP-014'
     require '::cassandra::datastax_repo'
-    warning ("manage_dsc_repo has been deprecated. See ${dep_014_url}")
+    cassandra::private::deprecation_warning { 'cassandra::manage_dsc_repo':
+      item_number => 14
+    }
   }
 
   if $fail_on_non_suppoted_os != undef {
     $dep_015_url = 'https://github.com/locp/cassandra/wiki/DEP-015'
     $supported_os_only = $fail_on_non_suppoted_os
-    warning ("fail_on_non_suppoted_os has been deprecated. See ${dep_015_url}")
+    cassandra::private::deprecation_warning { 'cassandra::fail_on_non_suppoted_os':
+      item_number => 15
+    }
   } else {
     $supported_os_only = $fail_on_non_supported_os
   }

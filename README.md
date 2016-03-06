@@ -403,6 +403,7 @@ cassandra::opscenter::cluster_name { 'Cluster1':
 ### Private Defined Types
 
 * cassandra::private::data_directory
+* cassandra::private::deprecation_warning
 * cassandra::private::firewall_ports::rule
 * cassandra::private::opscenter::setting
 
@@ -2945,6 +2946,10 @@ A class to install the optional Cassandra tools package.
 #### Attributes
 
 ##### `ensure`
+Is deprecated (see https://github.com/locp/cassandra/wiki/DEP-016).  Use
+`package_name` instead.
+
+##### `package_name`
 Is passed to the package reference.  Valid values are **present** or a version
 number.
 Default value 'present'
