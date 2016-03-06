@@ -12,7 +12,5 @@ RSpec.configure do |c|
   c.manifest_dir = File.join(fixture_path, 'manifests')
 end
 
-SimpleCov.minimum_coverage 100.0
-
 Coveralls.wear!
 at_exit { RSpec::Puppet::Coverage.report! }
