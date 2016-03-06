@@ -1,22 +1,28 @@
 # Please see the README file for the module.
 class cassandra::optutils (
-  $ensure       = 'present',
-  $package_name = undef
-  ) {
-  if $package_name == undef {
-    if $::osfamily == 'RedHat' {
-      $real_package_name = 'cassandra22-tools'
-    } elsif $::osfamily == 'Debian' {
-      $real_package_name = 'cassandra-tools'
-    } else {
-      fail("OS family ${::osfamily} not supported")
+  $ensure         = 'present',
+  $package_ensure = 'present',
+  $package_name   = $::cassandra::params::optutils_package_name
+  ) inherits cassandra::params {
+  # Some horrific jiggerypokery until we can deprecate the ensure parameter.
+  if $ensure != present {
+    if $package_ensure != present {
+      if $ensure != $package_ensure {
+        fail('Both ensure and package_ensure attributes are set.')
+      }
     }
+
+    cassandra::private::deprecation_warning { 'cassandra::optutils::ensure':
+      item_number => 16
+    }
+
+    $version = $ensure
   } else {
-    $real_package_name = $package_name
+    $version = $package_ensure
   }
 
-  package { $real_package_name:
-    ensure  => $ensure,
+  package { $package_name:
+    ensure  => $version,
     require => Class['cassandra']
   }
 }

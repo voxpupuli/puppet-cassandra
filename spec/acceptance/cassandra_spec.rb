@@ -253,9 +253,9 @@ describe 'cassandra class' do
     }
 
     class { 'cassandra::optutils':
-      ensure       => $version,
-      package_name => $cassandra_optutils_package,
-      require      => Class['cassandra']
+      package_ensure => $version,
+      package_name   => $cassandra_optutils_package,
+      require        => Class['cassandra']
     }
   EOS
 
