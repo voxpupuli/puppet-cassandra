@@ -4,9 +4,15 @@
 # It sets variables according to platform
 #
 class cassandra::params {
-  if $::osfamily == 'Debian' {
-    $systemctl = '/bin/systemctl'
-  } elsif $::osfamily == 'RedHat' {
-    $systemctl = '/usr/bin/systemctl'
+  case $::osfamily {
+    'Debian': {
+      $optutils_package_name = 'cassandra-tools'
+      $systemctl = '/bin/systemctl'
+    }
+    'RedHat': {
+      $optutils_package_name = 'cassandra22-tools'
+      $systemctl = '/usr/bin/systemctl'
+    }
+    default: {}
   }
 }
