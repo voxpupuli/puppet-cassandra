@@ -494,6 +494,8 @@ Default value 'false'
 The path to the Puppet template for the Cassandra configuration file.  This
 allows the user to supply their own customized template.  A Cassandra 1.X
 compatible template called cassandra1.yaml.erb has been provided by @Spredzy.
+There is also cassandra20.yaml.erb that is more suitable for use with
+Cassandra 2.0.
 Default value 'cassandra/cassandra.yaml.erb'
 
 ##### `client_encryption_algorithm`
