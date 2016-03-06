@@ -403,6 +403,7 @@ cassandra::opscenter::cluster_name { 'Cluster1':
 ### Private Defined Types
 
 * cassandra::private::data_directory
+* cassandra::private::deprecation_warning
 * cassandra::private::firewall_ports::rule
 * cassandra::private::opscenter::setting
 
