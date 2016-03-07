@@ -126,15 +126,6 @@ commitlog_directory: <%= @commitlog_directory %>
 # ignore: ignore fatal errors and let requests fail, as in pre-1.2 Cassandra
 disk_failure_policy: <%= @disk_failure_policy %>
 
-# policy for commit disk failures:
-# die: shut down gossip and Thrift and kill the JVM, so the node can be replaced.
-# stop: shut down gossip and Thrift, leaving the node effectively dead, but
-#       can still be inspected via JMX.
-# stop_commit: shutdown the commit log, letting writes collect but
-#              continuing to service reads, as in pre-2.0.5 Cassandra
-# ignore: ignore fatal errors and let the batches fail
-commit_failure_policy: <%= @commit_failure_policy %>
-
 # Maximum size of the key cache in memory.
 #
 # Each key cache hit saves 1 seek and each row cache hit saves 2 seeks at the
