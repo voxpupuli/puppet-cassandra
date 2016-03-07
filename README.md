@@ -2348,7 +2348,7 @@ http://docs.datastax.com/en/opscenter/5.2/opsc/configure/opscConfigProps_r.html
 for more details.  A value of *undef* will ensure the setting is not present
 in the file.  Default value *undef*
 
-#### `orbited_longpoll`
+##### `orbited_longpoll`
 This sets the orbited_longpoll setting in the labs section of the OpsCenter 
 configuration file. See labs http://docs.datastax.com/en/opscenter/5.2/opsc/troubleshooting/opscTroubleshootingZeroNodes.html
 for more details.  A value of *undef* will ensure the setting is not present in 
