@@ -1,4 +1,5 @@
 # Cassandra storage config YAML
+# This configuration was built from the cassandra20.yaml.erb
 
 # NOTE:
 #   See http://wiki.apache.org/cassandra/StorageConfiguration for
@@ -125,15 +126,6 @@ commitlog_directory: <%= @commitlog_directory %>
 # ignore: ignore fatal errors and let requests fail, as in pre-1.2 Cassandra
 disk_failure_policy: <%= @disk_failure_policy %>
 
-# policy for commit disk failures:
-# die: shut down gossip and Thrift and kill the JVM, so the node can be replaced.
-# stop: shut down gossip and Thrift, leaving the node effectively dead, but
-#       can still be inspected via JMX.
-# stop_commit: shutdown the commit log, letting writes collect but
-#              continuing to service reads, as in pre-2.0.5 Cassandra
-# ignore: ignore fatal errors and let the batches fail
-commit_failure_policy: <%= @commit_failure_policy %>
-
 # Maximum size of the key cache in memory.
 #
 # Each key cache hit saves 1 seek and each row cache hit saves 2 seeks at the
@@ -184,15 +176,6 @@ row_cache_save_period: <%= @row_cache_save_period %>
 # Disabled by default, meaning all keys are going to be saved
 <% if @row_cache_keys_to_save != nil %>row_cache_keys_to_save: <%= @row_cache_keys_to_save %><% else %># row_cache_keys_to_save: 100<% end %>
 
-# Maximum size of the counter cache in memory.
-#
-# Counter cache helps to reduce counter locks' contention for hot counter cells.
-# In case of RF = 1 a counter cache hit will cause Cassandra to skip the read before
-# write entirely. With RF > 1 a counter cache hit will still help to reduce the duration
-# of the lock hold, helping with hot counter cell updates, but will not allow skipping
-# the read entirely. Only the local (clock, count) tuple of a counter cell is kept
-# in memory, not the whole counter, so it's relatively cheap.
-#
 # Number of keys from the counter cache to save
 # Disabled by default, meaning all keys are going to be saved
 <% if @counter_cache_keys_to_save != nil %>counter_cache_keys_to_save: <%= @counter_cache_keys_to_save %><% else %># counter_cache_keys_to_save: 100<% end %>
@@ -325,31 +308,17 @@ storage_port: <%= @storage_port %>
 # For security reasons, you should not expose this port to the internet.  Firewall it if needed.
 ssl_storage_port: <%= @ssl_storage_port %>
 
-# Address or interface to bind to and tell other Cassandra nodes to connect to.
-# You _must_ change this if you want multiple nodes to be able to communicate!
-#
-# Set listen_address OR listen_interface, not both. Interfaces must correspond
-# to a single address, IP aliasing is not supported.
-#
+# Address to bind to and tell other Cassandra nodes to connect to. You
+# _must_ change this if you want multiple nodes to be able to
+# communicate!
+# 
 # Leaving it blank leaves it up to InetAddress.getLocalHost(). This
 # will always do the Right Thing _if_ the node is properly configured
 # (hostname, name resolution, etc), and the Right Thing is to use the
 # address associated with the hostname (it might not be).
 #
-# Setting listen_address to 0.0.0.0 is always wrong.
-#
-# If you choose to specify the interface by name and the interface has an ipv4 and an ipv6 address
-# you can specify which should be chosen using listen_interface_prefer_ipv6. If false the first ipv4
-# address will be used. If true the first ipv6 address will be used. Defaults to false preferring
-# ipv4. If there is only one address it will be selected regardless of ipv4/ipv6.
-<% if @listen_interface == nil -%>
+# Setting this to 0.0.0.0 is always wrong.
 listen_address: <%= @listen_address %>
-# listen_interface: eth0
-<% else -%>
-# listen_address: localhost
-listen_interface: <%= @listen_interface %>
-<% end -%>
-# listen_interface_prefer_ipv6: false
 
 # Address to broadcast to other Cassandra nodes
 # Leaving this blank will set it to the same value as listen_address
@@ -518,11 +487,6 @@ tombstone_failure_threshold: <%= @tombstone_failure_threshold %>
 #      rows (as part of the key cache), so a larger granularity means
 #      you can cache more hot rows
 column_index_size_in_kb: <%= @column_index_size_in_kb %>
-
-
-# Log WARN on any batch size exceeding this value. 5kb per batch by default.
-# Caution should be taken on increasing the size of this threshold as it can lead to node instability.
-batch_size_warn_threshold_in_kb: <%= @batch_size_warn_threshold_in_kb %>
 
 # Number of simultaneous compactions to allow, NOT including
 # validation "compactions" for anti-entropy repair.  Simultaneous
