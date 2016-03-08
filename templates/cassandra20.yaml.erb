@@ -308,6 +308,18 @@ storage_port: <%= @storage_port %>
 # For security reasons, you should not expose this port to the internet.  Firewall it if needed.
 ssl_storage_port: <%= @ssl_storage_port %>
 
+# Address to bind to and tell other Cassandra nodes to connect to. You
+# _must_ change this if you want multiple nodes to be able to
+# communicate!
+# 
+# Leaving it blank leaves it up to InetAddress.getLocalHost(). This
+# will always do the Right Thing _if_ the node is properly configured
+# (hostname, name resolution, etc), and the Right Thing is to use the
+# address associated with the hostname (it might not be).
+#
+# Setting this to 0.0.0.0 is always wrong.
+listen_address: <%= @listen_address %>
+
 # Address to broadcast to other Cassandra nodes
 # Leaving this blank will set it to the same value as listen_address
 <% if @broadcast_address != nil %>broadcast_address: <%= @broadcast_address %><% else %># broadcast_address: 1.2.3.4<% end %>
