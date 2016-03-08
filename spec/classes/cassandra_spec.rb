@@ -194,6 +194,27 @@ describe 'cassandra' do
     it { should have_resource_count(9) }
   end
 
+  context 'Deprecation warnings.' do
+    let :facts do
+      {
+        osfamily: 'RedHat'
+      }
+    end
+    let :params do
+      {
+        manage_dsc_repo: true,
+        fail_on_non_suppoted_os: false
+      }
+    end
+
+    it do
+      # rubocop:disable Metrics/LineLength
+      should contain_cassandra__private__deprecation_warning('cassandra::manage_dsc_repo')
+      should contain_cassandra__private__deprecation_warning('cassandra::fail_on_non_suppoted_os')
+      # rubocop:enable Metrics/LineLength
+    end
+  end
+
   context 'Test the dc and rack properties.' do
     let :facts do
       {

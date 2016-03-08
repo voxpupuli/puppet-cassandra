@@ -163,7 +163,6 @@ class cassandra (
   $write_request_timeout_in_ms                          = 2000
   ) inherits cassandra::params {
   if $manage_dsc_repo == true {
-    $dep_014_url = 'https://github.com/locp/cassandra/wiki/DEP-014'
     require '::cassandra::datastax_repo'
     cassandra::private::deprecation_warning { 'cassandra::manage_dsc_repo':
       item_number => 14
