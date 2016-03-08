@@ -11,7 +11,7 @@ describe 'cassandra::optutils' do
     it do
       should contain_class('cassandra::optutils').with(
         ensure: 'present',
-        package_ensure: 'present',
+        package_ensure: 'present'
       )
     end
     it { should contain_package('cassandra22-tools') }
