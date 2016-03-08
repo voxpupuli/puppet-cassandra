@@ -1955,9 +1955,8 @@ A class to install an appropriate Java package.
 #### Attributes
 
 ##### `ensure`
-Is passed to the package reference for the JRE/JDK package.  Valid values are
-**present** or a version number.
-Default value 'present'
+Is deprecated (see https://github.com/locp/cassandra/wiki/DEP-016).  Use
+`package_ensure` instead.
 
 ##### `jna_ensure`
 Is passed to the package reference for the JNA package.  Valid values are
@@ -1970,6 +1969,11 @@ jna or libjna-java will be installed on a Red Hat family or Debian system
 respectively.  Alternatively, one can specify a package that is available in
 a package repository to the node.
 Default value *undef*
+
+##### `package_ensure`
+Is passed to the package reference for the JRE/JDK package.  Valid values are
+**present** or a version number.
+Default value 'present'
 
 ##### `package_name`
 If the default value of *undef* is left as it is, then a package called
@@ -2312,9 +2316,8 @@ for more details.  A value of *undef* will ensure the setting is not present
 in the file.  Default value *undef*
 
 ##### `ensure`
-This is passed to the package reference for **opscenter**.  Valid values are
-**present** or a version number.
-Default value 'present'
+Is deprecated (see https://github.com/locp/cassandra/wiki/DEP-016).  Use
+`package_ensure` instead.
 
 ##### `failover_configuration_directory`
 This sets the failover_configuration_directory setting in the failover section of the
@@ -2552,6 +2555,11 @@ OpsCenter configuration file.  See
 http://docs.datastax.com/en/opscenter/5.2/opsc/configure/opscConfigProps_r.html
 for more details.  A value of *undef* will ensure the setting is not present
 in the file.  Default value *undef*
+
+##### `package_ensure`
+This is passed to the package reference for **opscenter**.  Valid values are
+**present** or a version number.
+Default value 'present'
 
 ##### `package_name`
 The name of the OpsCenter package.
@@ -2919,13 +2927,17 @@ family.
 #### Attributes
 
 ##### `ensure`
-This is passed to the package reference for **pycrypto**.  Valid values are
-**present** or a version number.
-Default value 'present'
+Is deprecated (see https://github.com/locp/cassandra/wiki/DEP-016).  Use
+`package_ensure` instead.
 
 ##### `manage_epel`
 If set to true, the **epel-release** package will be installed.
 Default value 'false'
+
+##### `package_ensure`
+This is passed to the package reference for **pycrypto**.  Valid values are
+**present** or a version number.
+Default value 'present'
 
 ##### `package_name`
 The name of the PyCrypto package.
@@ -2947,11 +2959,11 @@ A class to install the optional Cassandra tools package.
 
 ##### `ensure`
 Is deprecated (see https://github.com/locp/cassandra/wiki/DEP-016).  Use
-`package_name` instead.
+`package_ensure` instead.
 
-##### `package_name`
-Is passed to the package reference.  Valid values are **present** or a version
-number.
+##### `package_ensure`
+The status of the package specified in **package_name**.  Can be
+*present*, *latest* or a specific version number.
 Default value 'present'
 
 ##### `package_name`
