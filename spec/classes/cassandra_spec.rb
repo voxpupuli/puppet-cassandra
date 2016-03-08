@@ -208,8 +208,10 @@ describe 'cassandra' do
     end
 
     it do
+      # rubocop:disable Metrics/LineLength
       should contain_cassandra__private__deprecation_warning('cassandra::manage_dsc_repo')
       should contain_cassandra__private__deprecation_warning('cassandra::fail_on_non_suppoted_os')
+      # rubocop:enable Metrics/LineLength
     end
   end
 

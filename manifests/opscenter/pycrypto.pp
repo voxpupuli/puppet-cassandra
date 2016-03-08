@@ -2,11 +2,12 @@
 #
 # Please see the README for the module for details on usage.
 class cassandra::opscenter::pycrypto (
-  $ensure       = 'present',
-  $manage_epel  = false,
-  $package_name = 'pycrypto',
-  $provider     = 'pip',
-  $reqd_pckgs   = ['python-devel', 'python-pip' ],
+  $ensure         = 'present',
+  $manage_epel    = false,
+  $package_ensure = 'present',
+  $package_name   = 'pycrypto',
+  $provider       = 'pip',
+  $reqd_pckgs     = ['python-devel', 'python-pip' ],
   ){
   if $::osfamily == 'RedHat' {
     if $manage_epel == true {
@@ -33,8 +34,25 @@ class cassandra::opscenter::pycrypto (
     # End of PUP-3829 hack.
     ##########################################################################
 
+    # Some horrific jiggerypokery until we can deprecate the ensure parameter.
+    if $ensure != present {
+      if $package_ensure != present {
+        if $ensure != $package_ensure {
+          fail('Both ensure and package_ensure attributes are set.')
+        }
+      }
+
+      cassandra::private::deprecation_warning { 'cassandra::opscenter::pycrypto::ensure':
+        item_number => 16
+      }
+
+      $version = $ensure
+    } else {
+      $version = $package_ensure
+    }
+
     package { $package_name:
-      ensure   => $ensure,
+      ensure   => $version,
       provider => $provider,
       before   => Package['opscenter']
     }
