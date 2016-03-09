@@ -11,11 +11,8 @@ deployment:
     commands: 
       - "./scripts/circle.bash merge release/patch"
   feature:
-    branch: /feature\/182\/service_systemd_tmpl/
+    branch: feature/182/service_systemd_tmpl
     commands:
-      - "./scripts/circle.bash merge release/minor"
-    branch: /feature\/188\/package_ensure/
-    commands: 
       - "./scripts/circle.bash merge release/minor"
   improvement: 
     branch: /^improvement.*/
