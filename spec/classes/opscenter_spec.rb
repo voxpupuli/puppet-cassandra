@@ -51,6 +51,51 @@ describe 'cassandra::opscenter' do
     end
   end
 
+  context 'With package_ensure set' do
+    let :params do
+      {
+        package_ensure: '2.1.13-1'
+      }
+    end
+
+    it { should contain_package('opscenter').with_ensure('2.1.13-1') }
+  end
+
+  context 'With both ensure and package_ensure set differently.' do
+    let :params do
+      {
+        package_ensure: '2.1.13-1',
+        ensure: 'latest'
+      }
+    end
+
+    it { should raise_error(Puppet::Error) }
+  end
+
+  context 'With both ensure and package_ensure set the same' do
+    let :params do
+      {
+        ensure: '2.1.13-1',
+        package_ensure: '2.1.13-1'
+      }
+    end
+
+    it { should contain_package('opscenter').with_ensure('2.1.13-1') }
+  end
+
+  context 'With ensure set.' do
+    let :params do
+      {
+        ensure: '2.1.13-1'
+      }
+    end
+
+    it do
+      should contain_package('opscenter').with_ensure('2.1.13-1')
+      should contain_cassandra__private__deprecation_warning('cassandra::opscenter::ensure')
+    end
+  end
+
   context 'Test params for cassandra::opscenter defaults.' do
     it do
       should contain_class('cassandra::opscenter')

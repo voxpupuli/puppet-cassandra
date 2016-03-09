@@ -8,11 +8,12 @@ describe 'cassandra::opscenter::pycrypto' do
     it { should have_resource_count(4) }
     it do
       should contain_class('cassandra::opscenter::pycrypto').with(
-        'ensure'       => 'present',
-        'manage_epel'  => false,
-        'package_name' => 'pycrypto',
-        'provider'     => 'pip',
-        'reqd_pckgs'   => ['python-devel', 'python-pip']
+        'ensure'         => 'present',
+        'manage_epel'    => false,
+        'package_ensure' => 'present',
+        'package_name'   => 'pycrypto',
+        'provider'       => 'pip',
+        'reqd_pckgs'     => ['python-devel', 'python-pip']
       )
     end
     it { should contain_package('pycrypto') }
@@ -44,5 +45,60 @@ describe 'cassandra::opscenter::pycrypto' do
     it do
       should_not contain_package('pycrypto')
     end
+  end
+
+  context 'With ensure set.' do
+    let :facts do
+      { osfamily: 'RedHat' }
+    end
+    let :params do
+      {
+        ensure: '2.1.13-1'
+      }
+    end
+    it do
+      should contain_package('pycrypto').with_ensure('2.1.13-1')
+      # rubocop:disable Metrics/LineLength
+      should contain_cassandra__private__deprecation_warning('cassandra::opscenter::pycrypto::ensure')
+      # rubocop:enable Metrics/LineLength
+    end
+  end
+
+  context 'With package_ensure set' do
+    let :facts do
+      { osfamily: 'RedHat' }
+    end
+    let :params do
+      {
+        package_ensure: '2.1.13-1'
+      }
+    end
+    it { should contain_package('pycrypto').with_ensure('2.1.13-1') }
+  end
+
+  context 'With both ensure and package_ensure set differently.' do
+    let :facts do
+      { osfamily: 'RedHat' }
+    end
+    let :params do
+      {
+        package_ensure: '2.1.13-1',
+        ensure: 'latest'
+      }
+    end
+    it { should raise_error(Puppet::Error) }
+  end
+
+  context 'With both ensure and package_ensure set the same' do
+    let :facts do
+      { osfamily: 'RedHat' }
+    end
+    let :params do
+      {
+        ensure: '2.1.13-1',
+        package_ensure: '2.1.13-1'
+      }
+    end
+    it { should contain_package('pycrypto').with_ensure('2.1.13-1') }
   end
 end

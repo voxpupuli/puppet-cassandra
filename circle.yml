@@ -1,8 +1,8 @@
 --- 
 dependencies: 
   cache_directories: 
-    - ~/.rvm/rubies
-    - ~/vendor
+    - '~/.rvm/rubies'
+    - 'vendor'
   override: 
     - "./scripts/circle.bash bundle_install"
 deployment: 
@@ -13,6 +13,9 @@ deployment:
   feature:
     branch: feature/182/service_systemd_tmpl
     commands:
+      - "./scripts/circle.bash merge release/minor"
+    branch: feature/188/package_ensure
+    commands: 
       - "./scripts/circle.bash merge release/minor"
   improvement: 
     branch: /^improvement.*/

@@ -56,6 +56,7 @@ class cassandra::opscenter (
     $failover_heartbeat_period                      = undef,
     $failover_heartbeat_reply_period                = undef,
     $hadoop_base_job_tracker_proxy_port             = undef,
+    $package_ensure                                 = present,
     $package_name                                   = 'opscenter',
     $provisioning_agent_install_timeout             = undef,
     $provisioning_keyspace_timeout                  = undef,
@@ -140,8 +141,25 @@ class cassandra::opscenter (
     $webserver_sub_process_timeout                  = undef,
     $webserver_tarball_process_timeout              = undef
   ) inherits ::cassandra::params {
+  # Some horrific jiggerypokery until we can deprecate the ensure parameter.
+  if $ensure != present {
+    if $package_ensure != present {
+      if $ensure != $package_ensure {
+        fail('Both ensure and package_ensure attributes are set.')
+      }
+    }
+
+    cassandra::private::deprecation_warning { 'cassandra::opscenter::ensure':
+      item_number => 16
+    }
+
+    $version = $ensure
+  } else {
+    $version = $package_ensure
+  }
+
   package { 'opscenter':
-    ensure => $ensure,
+    ensure => $version,
     name   => $package_name,
     before => Service['opscenterd']
   }
