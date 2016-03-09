@@ -144,6 +144,7 @@ class cassandra (
   $service_provider                                     = undef,
   $service_refresh                                      = true,
   $service_systemd                                      = false,
+  $service_systemd_tmpl                                 = 'cassandra/cassandra.service.erb',
   $snapshot_before_compaction                           = false,
   $snitch_properties_file
     = 'cassandra-rackdc.properties',
@@ -248,7 +249,7 @@ class cassandra (
       ensure  => present,
       owner   => 'root',
       group   => 'root',
-      content => template('cassandra/cassandra.service.erb'),
+      content => template($service_systemd_tmpl),
       mode    => '0644',
       before  => Package[$cassandra_pkg],
       notify  => Exec[cassandra_reload_systemctl]

@@ -1640,6 +1640,12 @@ better where *systemd_path* will be:
 
 Default value false
 
+##### `service_systemd_tmpl`
+The location for the template for the systemd service file.  This attribute
+only has any effect if `service_systemd` is set to true.
+
+Default value `cassandra/cassandra.service.erb`
+
 ##### `snapshot_before_compaction`
 Whether or not to take a snapshot before each compaction.  Be
 careful using this option, since Cassandra won't clean up the
@@ -1804,6 +1810,12 @@ better where *systemd_path* will be:
 * `/lib/systemd/system` on Debian the familiy.
 
 Default value false
+
+##### `service_systemd_tmpl`
+The location for the template for the systemd service file.  This attribute
+only has any effect if `service_systemd` is set to true.
+
+Default value `cassandra/datastax-agent.service.erb`
 
 ##### `stomp_interface`
 If the value is changed from the default of *undef* then this is what is
@@ -2788,6 +2800,12 @@ better where *systemd_path* will be:
 * `/lib/systemd/system` on Debian the familiy.
 
 Default value false
+
+##### `service_systemd_tmpl`
+The location for the template for the systemd service file.  This attribute
+only has any effect if `service_systemd` is set to true.
+
+Default value `cassandra/opscenterd.service.erb`
 
 ##### `spark_base_master_proxy_port`
 This sets the base_master_proxy_port setting in the spark section of the

@@ -120,6 +120,7 @@ class cassandra::opscenter (
     $service_name                                   = 'opscenterd',
     $service_provider                               = undef,
     $service_systemd                                = false,
+    $service_systemd_tmpl                           = 'cassandra/opscenterd.service.erb',
     $spark_base_master_proxy_port                   = undef,
     $stat_reporter_initial_sleep                    = undef,
     $stat_reporter_interval                         = undef,
@@ -163,7 +164,7 @@ class cassandra::opscenter (
       ensure  => present,
       owner   => 'root',
       group   => 'root',
-      content => template('cassandra/opscenterd.service.erb'),
+      content => template($service_systemd_tmpl),
       mode    => '0644',
       before  => Package[$package_name],
       notify  => Exec['opscenter_reload_systemctl']

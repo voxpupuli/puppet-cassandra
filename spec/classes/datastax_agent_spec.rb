@@ -19,6 +19,7 @@ describe 'cassandra::datastax_agent' do
         'service_name'     => 'datastax-agent',
         # 'service_provider' => nil,
         'service_systemd'  => false,
+        'service_systemd_tmpl' => 'cassandra/datastax-agent.service.erb',
         'stomp_interface'  => nil,
         'local_interface'  => nil
       )

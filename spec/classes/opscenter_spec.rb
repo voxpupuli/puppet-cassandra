@@ -62,6 +62,7 @@ describe 'cassandra::opscenter' do
               'service_ensure'         => 'running',
               'service_name'           => 'opscenterd',
               'service_systemd'        => false,
+              'service_systemd_tmpl'   => 'cassandra/opscenterd.service.erb',
               'webserver_interface'    => '0.0.0.0',
               'webserver_port'         => 8888)
     end
