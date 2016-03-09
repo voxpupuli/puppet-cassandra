@@ -11,17 +11,59 @@ describe 'cassandra::opscenter' do
     ]
   end
 
+  context 'Systemd (Red Hat).' do
+    let :facts do
+      {
+        osfamily: 'RedHat'
+      }
+    end
+
+    let :params do
+      {
+        service_systemd: true
+      }
+    end
+    it { should have_resource_count(256) }
+
+    it do
+      should contain_exec('opscenter_reload_systemctl').with(refreshonly: true)
+      should contain_file('/usr/lib/systemd/system/opscenterd.service')
+    end
+  end
+
+  context 'Systemd (Debian).' do
+    let :facts do
+      {
+        osfamily: 'Debian'
+      }
+    end
+
+    let :params do
+      {
+        service_systemd: true
+      }
+    end
+    it { should have_resource_count(256) }
+
+    it do
+      should contain_exec('opscenter_reload_systemctl').with(refreshonly: true)
+      should contain_file('/lib/systemd/system/opscenterd.service')
+    end
+  end
+
   context 'Test params for cassandra::opscenter defaults.' do
     it do
-      should contain_class('cassandra::opscenter').with('authentication_enabled' => 'False',
-                                                        'ensure'                 => 'present',
-                                                        'config_file'            => '/etc/opscenter/opscenterd.conf',
-                                                        'package_name'           => 'opscenter',
-                                                        'service_enable'         => 'true',
-                                                        'service_ensure'         => 'running',
-                                                        'service_name'           => 'opscenterd',
-                                                        'webserver_interface'    => '0.0.0.0',
-                                                        'webserver_port'         => 8888)
+      should contain_class('cassandra::opscenter')
+        .with('authentication_enabled' => 'False',
+              'ensure'                 => 'present',
+              'config_file'            => '/etc/opscenter/opscenterd.conf',
+              'package_name'           => 'opscenter',
+              'service_enable'         => 'true',
+              'service_ensure'         => 'running',
+              'service_name'           => 'opscenterd',
+              'service_systemd'        => false,
+              'webserver_interface'    => '0.0.0.0',
+              'webserver_port'         => 8888)
     end
 
     it { should have_resource_count(254) }

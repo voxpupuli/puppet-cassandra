@@ -119,6 +119,7 @@ class cassandra::opscenter (
     $service_ensure                                 = 'running',
     $service_name                                   = 'opscenterd',
     $service_provider                               = undef,
+    $service_systemd                                = false,
     $spark_base_master_proxy_port                   = undef,
     $stat_reporter_initial_sleep                    = undef,
     $stat_reporter_interval                         = undef,
@@ -137,7 +138,7 @@ class cassandra::opscenter (
     $webserver_staticdir                            = undef,
     $webserver_sub_process_timeout                  = undef,
     $webserver_tarball_process_timeout              = undef
-  ) {
+  ) inherits ::cassandra::params {
   package { 'opscenter':
     ensure => $ensure,
     name   => $package_name,
@@ -147,6 +148,25 @@ class cassandra::opscenter (
   if $service_provider != undef {
     System {
       provider => $service_provider
+    }
+  }
+
+  if $service_systemd == true {
+    $systemd_path = $::cassandra::params::systemd_path
+
+    exec { 'opscenter_reload_systemctl':
+      command     => "${::cassandra::params::systemctl} daemon-reload",
+      refreshonly => true
+    }
+
+    file { "${systemd_path}/${service_name}.service":
+      ensure  => present,
+      owner   => 'root',
+      group   => 'root',
+      content => template('cassandra/opscenterd.service.erb'),
+      mode    => '0644',
+      before  => Package[$package_name],
+      notify  => Exec['opscenter_reload_systemctl']
     }
   }
 

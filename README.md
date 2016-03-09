@@ -84,6 +84,9 @@ A Puppet module to install and manage Cassandra, DataStax Agent & OpsCenter
 * Manages the content of the configuration file
   (/etc/opscenter/opscenterd.conf).
 * Manages the opscenterd service.
+* Optionally creates a file /usr/lib/systemd/system/opscenterd.service to
+  improve service interaction on the RedHat family or
+  /lib/systemd/system/opscenterd.service on the Debian family.
 
 #### What the cassandra::opscenter::cluster_name type affects
 
@@ -2774,6 +2777,17 @@ Default value 'opscenterd'
 The name of the provider that runs the service.  If left as *undef* then the OS family specific default will
 be used, otherwise the specified value will be used instead.
 Default value *undef*
+
+##### `service_systemd`
+If set to true then a systemd service file called 
+${*systemd_path*}/${*service_name*}.service will be added to the node with
+basic settings to ensure that the Cassandra service interacts with systemd
+better where *systemd_path* will be:
+
+* `/usr/lib/systemd/system` on the Red Hat family.
+* `/lib/systemd/system` on Debian the familiy.
+
+Default value false
 
 ##### `spark_base_master_proxy_port`
 This sets the base_master_proxy_port setting in the spark section of the
