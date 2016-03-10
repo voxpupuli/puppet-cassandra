@@ -49,22 +49,22 @@ describe 'cassandra::schema' do
     end
   end
 
-  context 'Test that a keyspace can be created.' do
-    let :params do
-      {
-        cqlsh_host: 'localhost',
-        cqlsh_port: 9042,
-        keyspaces: [
-          Excelsior: {
-            ensure: 'present',
-            durable_writes: false,
-            replication_map: {
-              keyspace_class: 'SimpleStrategy',
-              replication_factor: 3
-            }
-          }
-        ]
-      }
-    end
-  end
+  # context 'Test that a keyspace can be created.' do
+  #  let :params do
+  #    {
+  #      cqlsh_host: 'localhost',
+  #      cqlsh_port: 9042,
+  #      keyspaces: [
+  #        Excelsior: {
+  #          ensure: 'present',
+  #          durable_writes: false,
+  #          replication_map: {
+  #            keyspace_class: 'SimpleStrategy',
+  #            replication_factor: 3
+  #          }
+  #        }
+  #      ]
+  #    }
+  #  end
+  # end
 end

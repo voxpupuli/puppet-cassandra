@@ -1,9 +1,9 @@
 # cassandra::schema::keyspace
 define cassandra::schema::keyspace(
-  $replication_map,
-  $ensure         = present,
-  $durable_writes = true,
-  $keyspace_name  = $title
+  $ensure          = present,
+  $durable_writes  = true,
+  $keyspace_name   = $title,
+  $replication_map = {},
   ) {
   include 'cassandra::schema'
 
