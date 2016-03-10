@@ -11,10 +11,6 @@ describe 'cassandra::schema' do
     ]
   end
 
-  let!(:stdlib_stubs) do
-    MockFunction.new('validate_hash') { |f| f.stubbed.returns(0) }
-  end
-
   let :facts do
     {
       osfamily: 'RedHat'

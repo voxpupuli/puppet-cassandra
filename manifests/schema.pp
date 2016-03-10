@@ -34,7 +34,6 @@ class cassandra::schema (
 
   # manage keyspaces if present
   if $keyspaces {
-    validate_hash($keyspaces)
     create_resources('cassandra::schema::keyspace', $keyspaces)
   }
 
