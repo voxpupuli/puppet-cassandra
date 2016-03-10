@@ -729,3 +729,9 @@ inter_dc_tcp_nodelay: <%= @inter_dc_tcp_nodelay %>
 # (non-seed) nodes automatically migrate the right data to themselves. When
 # initializing a fresh cluster without data, add auto_bootstrap: false.
 <% if @auto_bootstrap != nil %>auto_bootstrap: <%= @auto_bootstrap %><% else %>#auto_bootstrap: true<% end %>
+<% if !@additional_lines.empty? -%>
+
+<% @additional_lines.each do |additional_line| -%>
+<%= additional_line %>
+<% end -%>
+<% end -%>

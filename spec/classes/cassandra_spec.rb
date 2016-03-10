@@ -39,6 +39,7 @@ describe 'cassandra' do
 
     it do
       should contain_class('cassandra').only_with(
+        'additional_lines' => [],
         'authenticator' => 'AllowAllAuthenticator',
         'authorizer' => 'AllowAllAuthorizer',
         'auto_snapshot' => true,
@@ -327,6 +328,30 @@ describe 'cassandra' do
     it do
       should contain_file('/etc/cassandra.yaml')
         .with_content(/rpc_interface: ethY/)
+    end
+  end
+
+  context 'Test that additional lines can be specified.' do
+    let :facts do
+      {
+        osfamily: 'RedHat'
+      }
+    end
+
+    let :params do
+      {
+        config_path: '/etc',
+        additional_lines: ['# Hello,', '# world!']
+      }
+    end
+
+    it do
+      should contain_file('/etc/cassandra.yaml')
+        .with_content(/# Hello,/)
+    end
+    it do
+      should contain_file('/etc/cassandra.yaml')
+        .with_content(/# world!/)
     end
   end
 end

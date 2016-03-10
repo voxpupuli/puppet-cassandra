@@ -417,6 +417,12 @@ configuration file.
 
 #### Attributes
 
+##### `additional_lines`
+An optional array of user specified lines that are appended to the end of the
+Cassandra configuration file.
+
+Default value: []
+
 ##### `authenticator`
 Authentication backend, implementing IAuthenticator; used to identify users.
 Out of the box, Cassandra provides

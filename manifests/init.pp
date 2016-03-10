@@ -4,6 +4,7 @@
 # does as part of the module and how to use it.
 #
 class cassandra (
+  $additional_lines                                     = [],
   $authenticator
     = 'AllowAllAuthenticator',
   $authorizer
@@ -221,7 +222,8 @@ class cassandra (
       # A workaround for CASSANDRA-9822
       if $cassandra_9822 == true {
         file { '/etc/init.d/cassandra':
-          source => 'puppet:///modules/cassandra/CASSANDRA-9822/cassandra'
+          source => 'puppet:///modules/cassandra/CASSANDRA-9822/cassandra',
+          mode   => '0555'
         }
       }
 

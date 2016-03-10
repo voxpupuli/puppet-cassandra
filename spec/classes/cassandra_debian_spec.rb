@@ -95,7 +95,10 @@ describe 'cassandra' do
         lsbdistrelease: '14.04'
       }
     end
-    it { is_expected.not_to contain_file('/etc/init.d/cassandra') }
+    it do
+      is_expected.not_to contain_file('/etc/init.d/cassandra')
+        .with_mode('0555')
+    end
   end
 
   context 'CASSANDRA-9822 activated on Debian' do
