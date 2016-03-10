@@ -19,7 +19,7 @@ if $::osfamily == 'RedHat' {
 class { 'cassandra::java': } ->
 class { 'cassandra::datastax_repo': } ->
 class { 'cassandra':
-  cassandra_9822             => true,
+  cassandra_9822              => true,
   commitlog_directory_mode    => '0770',
   data_file_directories_mode  => '0770',
   listen_interface            => 'lo',
@@ -36,5 +36,30 @@ class { 'cassandra::optutils':
   require        => Class['cassandra']
 }
 
+$simple_strategy_map = {
+  keyspace_class     => 'SimpleStrategy',
+  replication_factor => 3
+}
+
+$network_topology_strategy = {
+  keyspace_class => 'NetworkTopologyStrategy',
+  dc1            => 3,
+  dc2            => 2
+}
+
+$keyspaces = {
+  'Excelsior' => {
+    ensure          => present,
+    replication_map => $simple_strategy_map,
+    durable_writes  => false
+  },
+  'Excalibur' => {
+    ensure          => present,
+    replication_map => $network_topology_strategy,
+    durable_writes  => true
+  }
+}
+
 class { 'cassandra::schema':
+  keyspaces => $keyspaces
 }
