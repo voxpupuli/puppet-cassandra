@@ -15,6 +15,7 @@
 3. [Usage - Configuration options and additional functionality](#usage)
     * [Create a Cluster in a Single Data Center](#create-a-cluster-in-a-single-data-center)
     * [Create a Cluster in Multiple Data Centers](#create-a-cluster-in-multiple-data-centers)
+    * [Create Keyspaces](#create-keyspaces)
     * [OpsCenter](#opscenter)
     * [DataStax Enterprise](#datastax-enterprise)
 4. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
@@ -27,6 +28,7 @@
     * [cassandra::opscenter::cluster_name](#defined-type-cassandraopscentercluster_name)
     * [cassandra::opscenter::pycrypto](#class-cassandraopscenterpycrypto)
     * [cassandra::optutils](#class-cassandraoptutils)
+    * [cassandra::schema](#class-cassandraschema)
 5. [Limitations - OS compatibility, etc.](#limitations)
 6. [Contributers](#contributers)
 
@@ -314,6 +316,43 @@ We don't need to specify the rack name (with the rack attribute) as RAC1 is
 the default value.  Again, do not forget to either set auto_bootstrap to
 true or not set the attribute at all after initializing the cluster.
 
+### Create Keyspaces
+
+Using the `cassandra::schema` class, we can make calls to the
+`cassandra::schema::keyspace` resource to create keyspaces.
+
+```puppet
+$simple_strategy_map = {
+  keyspace_class     => 'SimpleStrategy',
+  replication_factor => 3
+}
+
+$network_topology_strategy = {
+  keyspace_class => 'NetworkTopologyStrategy',
+  DC1            => 3,
+  DC2            => 2
+}
+
+$keyspaces = {
+  'Excelsior' => {
+    ensure          => present,
+    replication_map => $simple_strategy_map,
+    durable_writes  => false
+  },
+  'Excalibur' => {
+    ensure          => present,
+    replication_map => $network_topology_strategy,
+    durable_writes  => true
+  }
+}
+```
+
+In this case, the Excelsior keyspace is using the SimpleStrategy and has
+a replication factor of 3.  The Excalibur keyspace is using the
+recommended NetworkTopologyStrategy and is split over two data centers
+with a replication factor of 3 in DC1 and a replication factor of 2
+in DC2.
+
 ### OpsCenter
 
 To continue with the original example within a single data center, say we
@@ -399,6 +438,7 @@ cassandra::opscenter::cluster_name { 'Cluster1':
 * [cassandra::opscenter](#class-cassandraopscenter)
 * [cassandra::opscenter::pycrypto](#class-cassandraopscenterpycrypto)
 * [cassandra::optutils](#class-cassandraoptutils)
+* [cassandra::schema](#class-cassandraschema)
 
 ### Public Defined Types
 * [cassandra::opscenter::cluster_name](#defined-type-cassandraopscentercluster_name)
@@ -3012,6 +3052,60 @@ can specify a package that is available in a package repository to the
 node.
 Default value *undef*
 
+### Class: cassandra::schema
+
+A class to maintain the database schema
+
+#### Attributes
+
+##### `connection_tries`
+How many times do try to connect to Cassandra.  See also `connection_try_sleep`.
+
+Default value 6
+
+##### `connection_try_sleep`
+How much time to allow between the number of tries specified in
+`connection_tries`.
+
+Default value 30
+
+##### `cqlsh_additional_options`
+Any additional options to be passed to the **cqlsh** command.
+
+Default value ''
+
+##### `cqlsh_command`
+The full path to the **cqlsh** command.
+
+Default value '/usr/bin/cqlsh'
+
+##### `cqlsh_host`
+The host for the **cqlsh** command to connect to.  See also `cqlsh_port`.
+
+Default value `$::cassandra::listen_address`
+
+##### `cqlsh_password`
+If credentials are require for connecting, specify the password here.
+See also `cqlsh_user`.
+
+Default value *undef*
+
+##### `cqlsh_port`
+The host for the **cqlsh** command to connect to.  See also `cqlsh_host`.
+See also `cqlsh_host`.
+
+Default value `$::cassandra::native_transport_port`
+
+##### `cqlsh_user`
+If credentials are require for connecting, specify the password here.
+See also `cqlsh_password`.
+
+Default value 'cassandra'
+
+##### `keyspaces`
+Creates new `cassandra::schema::keyspace` resources. Valid options: a hash to
+be passed to the `create_resources` function. Default: {}.
+
 ### Defined Type cassandra::opscenter::cluster_name
 
 With DataStax Enterprise, one can specify a remote keyspace for OpsCenter
@@ -3149,6 +3243,16 @@ http://docs.datastax.com/en/opscenter/5.2/opsc/configure/opscStoringCollectionDa
 for more details.  A value of *undef* will ensure the setting is not
 present in the file.  Default value *undef*
 
+### Defined Type cassandra::schema::keyspace
+
+Create or drop keyspaces within the schema.  Please see the example code in the
+[Create Keyspaces](#create-keyspaces) and the
+[Limitations - OS compatibility, etc.](#limitations) sections of this document.
+
+#### Attributes
+
+##### `cassandra_seed_hosts`
+
 ### Defined Type cassandra::private::data_directory
 
 A defined type to handle the `::cassandra::data_file_directoryies` array.
@@ -3211,6 +3315,11 @@ Cassandra 3 but this is planned for the near future.
 From release 1.6.0 of this module, regular updates of the Cassandra 1.X
 template will cease and testing against this template will cease.  Testing
 against the template for versions of Cassandra >= 2.X will continue.
+
+When creating key spaces, the settings will only be used to create a new
+key space if it does not currently exist.  If a change is made to the
+Puppet manifest but the key space already exits, this change will not
+be reflected.
 
 ## Contributers
 
