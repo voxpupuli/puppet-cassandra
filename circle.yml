@@ -10,6 +10,10 @@ deployment:
     branch: /^bugfix.*/
     commands: 
       - "./scripts/circle.bash merge release/patch"
+  feature92:
+    branch: feature/92/schema
+    commands:
+      - "./scripts/circle.bash merge release/minor"
   feature182:
     branch: feature/182/service_systemd_tmpl
     commands:
