@@ -140,6 +140,8 @@ unit_tests () {
   gem --version
   ruby --version
   rvm --version
+  bundle exec rake metadata_lint || status=$?
+  bundle exec rake rubocop || status=$?
   bundle exec rake lint || status=$?
   bundle exec rake validate || status=$?
 
