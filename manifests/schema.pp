@@ -8,7 +8,7 @@ class cassandra::schema (
   $cqlsh_password           = undef,
   $cqlsh_port               = $::cassandra::native_transport_port,
   $cqlsh_user               = 'cassandra',
-  $keyspaces                = []
+  $keyspaces                = {}
   ) inherits ::cassandra::params {
   require '::cassandra'
 
@@ -22,11 +22,20 @@ class cassandra::schema (
 
   # See if we can make a connection to Cassandra.  Try $connection_tries
   # number of times with $connection_try_sleep in seconds between each try.
-  $connection_test = "${cqlsh_opts} -e 'DESC KEYSPACES;'"
+  $connection_test = "${cqlsh_opts} -e 'DESC KEYSPACES;' ${cqlsh_host} ${cqlsh_port}"
   exec { '::cassandra::schema connection test':
     command   => $connection_test,
     returns   => 0,
     tries     => $connection_tries,
-    try_sleep => $connection_try_sleep
+    try_sleep => $connection_try_sleep,
+    unless    => $connection_test
   }
+
+  # manage keyspaces if present
+  if $keyspaces {
+    validate_hash($keyspaces)
+    create_resources('cassandra::schema::keyspace', $keyspaces)
+  }
+
+  # Resource Ordering
 }
