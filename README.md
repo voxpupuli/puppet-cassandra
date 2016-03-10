@@ -29,6 +29,7 @@
     * [cassandra::opscenter::pycrypto](#class-cassandraopscenterpycrypto)
     * [cassandra::optutils](#class-cassandraoptutils)
     * [cassandra::schema](#class-cassandraschema)
+    * [cassandra::schema::keyspace](#class-cassandraschemakeyspace)
 5. [Limitations - OS compatibility, etc.](#limitations)
 6. [Contributers](#contributers)
 
@@ -3251,7 +3252,33 @@ Create or drop keyspaces within the schema.  Please see the example code in the
 
 #### Attributes
 
-##### `cassandra_seed_hosts`
+##### `replication_map`
+A mandatory attribute.  Can be something like the following:
+
+```puppet
+$network_topology_strategy = {
+  keyspace_class => 'NetworkTopologyStrategy',
+  dc1            => 3,
+  dc2            => 2
+}
+```
+
+##### `ensure`
+Valid values can be **present** to ensure a keyspace is create, or
+**absent** to ensure it is dropped.
+
+Default value **present**
+
+##### `durable_writes`
+When set to false, data written to the keyspace bypasses the commit log. Be
+careful using this option because you risk losing data. Do not set this
+attribute on a keyspace using the SimpleStrategy.
+
+Default value **false**
+
+##### `keyspace_name`
+The name of the keyspace.  This value is taken from the title given to the
+`cassandra::schema::keyspace` resource.
 
 ### Defined Type cassandra::private::data_directory
 
