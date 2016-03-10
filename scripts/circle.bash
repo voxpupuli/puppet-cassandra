@@ -141,7 +141,11 @@ unit_tests () {
   ruby --version
   rvm --version
   bundle exec rake metadata_lint || status=$?
-  bundle exec rake rubocop || status=$?
+
+  if (( CIRCLE_NODE_INDEX >= 2 )); then
+    bundle exec rake rubocop || status=$?
+  fi
+
   bundle exec rake lint || status=$?
   bundle exec rake validate || status=$?
 

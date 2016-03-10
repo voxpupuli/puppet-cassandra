@@ -25,7 +25,6 @@ notifications:
 script: 
   - "bundle exec rake metadata_lint"
   - "bundle exec rake lint"
-  - "bundle exec rake rubocop"
   - "bundle exec rake validate"
   - "bundle exec rake spec SPEC_OPTS='--format documentation'"
   - "sh .travis/acceptance.sh"
