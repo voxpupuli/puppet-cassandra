@@ -19,10 +19,11 @@ class cassandra::schema (
   }
 
   $cqlsh_opts = "${cqlsh_command} ${cmdline_login} ${cqlsh_additional_options}"
+  $cqlsh_conn = "${cqlsh_host} ${cqlsh_port}"
 
   # See if we can make a connection to Cassandra.  Try $connection_tries
   # number of times with $connection_try_sleep in seconds between each try.
-  $connection_test = "${cqlsh_opts} -e 'DESC KEYSPACES;' ${cqlsh_host} ${cqlsh_port}"
+  $connection_test = "${cqlsh_opts} -e 'DESC KEYSPACES' ${cqlsh_conn}"
   exec { '::cassandra::schema connection test':
     command   => $connection_test,
     returns   => 0,
