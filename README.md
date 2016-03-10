@@ -3253,7 +3253,8 @@ Create or drop keyspaces within the schema.  Please see the example code in the
 #### Attributes
 
 ##### `replication_map`
-A mandatory attribute.  Can be something like the following:
+Needed if the keyspace is to be present.  Optional if it is to be absent.
+Can be something like the following:
 
 ```puppet
 $network_topology_strategy = {
