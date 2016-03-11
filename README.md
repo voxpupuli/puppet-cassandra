@@ -3055,7 +3055,9 @@ Default value *undef*
 
 ### Class: cassandra::schema
 
-A class to maintain the database schema
+A class to maintain the database schema.  Please note that cqlsh expects
+Python 2.7 to be installed.  This may be a problem of older distributions
+(CentOS 6 for example).
 
 #### Attributes
 
