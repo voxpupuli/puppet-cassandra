@@ -346,6 +346,10 @@ $keyspaces = {
     durable_writes  => true
   }
 }
+
+class { 'cassandra::schema':
+  keyspaces => $keyspaces
+}
 ```
 
 In this case, the Excelsior keyspace is using the SimpleStrategy and has
