@@ -1,5 +1,64 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-03-11 - Release 1.15.1 ([diff](https://github.com/locp/cassandra/compare/1.15.0...1.15.1))
+
+### Summary
+
+A small improvement.
+
+### Features
+
+* N/A
+
+### Bugfixes
+
+* N/A
+
+### Improvements
+
+* Clarified CQL and Python versions.
+
+##2016-03-10 - Release 1.15.0 ([diff](https://github.com/locp/cassandra/compare/1.14.2...1.15.0))
+
+### Summary
+
+A rather large release.  Minor (non-functional) fixes to the production
+pipeline and new features.
+
+### Features
+
+* A new class `cassandra::schema` allows the creation and dropping of
+  keyspaces.
+* Added the `additional_lines` attribute to the `cassandra` class.
+* Added the `service_systemd` attribute to the `cassandra::opscenter`
+  class.
+* Allow the systemd template sources to be specified by the user.  This is
+  with the `service_systemd_tmpl` attribute to the following classes:
+
+  * cassandra
+  * cassandra::datastax_agent
+  * cassandra::opscenter
+* Added another template file for `cassandra` => `service_systemd_tmpl`
+  that is suitable for Cassandra 2.0.
+
+### Bugfixes
+
+* Worked around a problem with rake-11 in the Gemfile.
+* Fixed a problem in the CircleCI configuration.
+
+### Improvements
+
+* Renamed the `ensure` attribute to `package_ensure` so that it is more
+  in line with how it's called in other modules.  This was done on the
+  the following classes:
+
+  * cassandra::optutils
+  * cassandra::opscenter
+  * cassandra::opscenter::pycrypto
+  * cassandra::java
+* Updated the AWS AMI for the TravisCI/AWS acceptance testing to hopefully
+  speed up builds a bit.
+
 ##2016-02-29 - Release 1.14.2 ([diff](https://github.com/locp/cassandra/compare/1.14.1...1.14.2))
 
 ### Summary

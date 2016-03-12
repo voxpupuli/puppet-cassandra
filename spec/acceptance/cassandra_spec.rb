@@ -329,8 +329,10 @@ describe 'cassandra class' do
       }
     }
 
-    class { 'cassandra::schema':
-      keyspaces => $keyspaces
+    if $::operatingsystem != CentOS and $::operatingsystemmajrelease != 6 {
+      class { 'cassandra::schema':
+        keyspaces => $keyspaces
+      }
     }
   EOS
 
@@ -381,8 +383,10 @@ describe 'cassandra class' do
       }
     }
 
-    class { 'cassandra::schema':
-      keyspaces => $keyspaces
+    if $::operatingsystem != CentOS and $::operatingsystemmajrelease != 6 {
+      class { 'cassandra::schema':
+        keyspaces => $keyspaces
+      }
     }
   EOS
 
