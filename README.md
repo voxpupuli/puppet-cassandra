@@ -29,7 +29,7 @@
     * [cassandra::opscenter::pycrypto](#class-cassandraopscenterpycrypto)
     * [cassandra::optutils](#class-cassandraoptutils)
     * [cassandra::schema](#class-cassandraschema)
-    * [cassandra::schema::keyspace](#class-cassandraschemakeyspace)
+    * [cassandra::schema::keyspace](#defined-type-cassandraschemakeyspace)
 5. [Limitations - OS compatibility, etc.](#limitations)
 6. [Contributers](#contributers)
 
