@@ -14,16 +14,36 @@ describe 'cassandra::schema::keyspace' do
 
   let!(:stdlib_stubs) do
     MockFunction.new('delete') do |f|
-      f.stubbed.with({'keyspace_class' => 'NetworkTopologyStrategy', 'dc1' => 3, 'dc2' => 2}, 'keyspace_class').returns({'dc1' => 3, 'dc2' => 2})
+      f.stubbed.with(
+        {
+          'keyspace_class' => 'NetworkTopologyStrategy',
+          'dc1' => 3,
+          'dc2' => 2
+        },
+        'keyspace_class').returns('dc1' => 3, 'dc2' => 2)
     end
     MockFunction.new('join') do |f|
-      f.stubbed.with({'\'dc1\': ' => 3, '\'dc2\': ' => 2}, ', ').returns('\'dc1\': 3, \'dc2\': 2')
+      f.stubbed.with(
+        {
+          '\'dc1\': ' => 3,
+          '\'dc2\': ' => 2
+        },
+        ', ').returns('\'dc1\': 3, \'dc2\': 2')
     end
     MockFunction.new('join_keys_to_values') do |f|
-      f.stubbed.with({'\'dc1' => 3, '\'dc2' => 2}, '\': ').returns({'\'dc1\': ' => 3, '\'dc2\': ' => 2})
+      f.stubbed.with(
+        {
+          '\'dc1' => 3,
+          '\'dc2' => 2
+        },
+        '\': ').returns('\'dc1\': ' => 3, '\'dc2\': ' => 2)
     end
     MockFunction.new('prefix') do |f|
-      f.stubbed.with({'dc1' => 3, 'dc2' => 2}, '\'').returns({'\'dc1' => 3, '\'dc2' => 2})
+      f.stubbed.with(
+        {
+          'dc1' => 3,
+          'dc2' => 2
+        }, '\'').returns('\'dc1' => 3, '\'dc2' => 2)
     end
   end
 
@@ -50,7 +70,9 @@ describe 'cassandra::schema::keyspace' do
     it do
       should compile
       should contain_class('cassandra::schema')
+      # rubocop:disable Metrics/LineLength
       should contain_exec('/usr/bin/cqlsh   -e "CREATE KEYSPACE IF NOT EXISTS foobar WITH REPLICATION = { \'class\' : \'SimpleStrategy\', \'replication_factor\' : 3 } AND DURABLE_WRITES = true"  ')
+      # rubocop:enable Metrics/LineLength
     end
   end
 
@@ -77,7 +99,9 @@ describe 'cassandra::schema::keyspace' do
 
     it do
       should contain_class('cassandra::schema')
+      # rubocop:disable Metrics/LineLength
       should contain_exec('/usr/bin/cqlsh   -e "CREATE KEYSPACE IF NOT EXISTS foobar WITH REPLICATION = { \'class\' : \'NetworkTopologyStrategy\', \'dc1\': 3, \'dc2\': 2 } AND DURABLE_WRITES = true"  ')
+      # rubocop:enable Metrics/LineLength
     end
   end
 
