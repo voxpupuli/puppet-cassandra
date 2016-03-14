@@ -45,6 +45,7 @@ describe 'cassandra::schema::cql_type' do
 
     it { should compile }
     it { should contain_class('cassandra::schema') }
+    it { should contain_cassandra__schema__cql_type('fullname') }
     it do
       # rubocop:disable Metrics/LineLength
       should contain_exec('/usr/bin/cqlsh   -e "CREATE TYPE IF NOT EXISTS Excelsior.fullname (firstname text, lastname text)"  ')
@@ -66,6 +67,8 @@ describe 'cassandra::schema::cql_type' do
         'keyspace' => 'Excalibur'
       }
     end
+
+    it { should contain_cassandra__schema__cql_type('address') }
 
     it do
       should compile

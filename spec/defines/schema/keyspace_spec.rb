@@ -17,33 +17,33 @@ describe 'cassandra::schema::keyspace' do
       f.stubbed.with(
         {
           'keyspace_class' => 'NetworkTopologyStrategy',
-          'dc1' => 3,
-          'dc2' => 2
+          'dc1' => '3',
+          'dc2' => '2'
         },
-        'keyspace_class').returns('dc1' => 3, 'dc2' => 2)
+        'keyspace_class').returns('dc1' => '3', 'dc2' => '2')
     end
     MockFunction.new('join') do |f|
       f.stubbed.with(
         {
-          '\'dc1\': ' => 3,
-          '\'dc2\': ' => 2
+          '\'dc1\': ' => '3',
+          '\'dc2\': ' => '2'
         },
         ', ').returns('\'dc1\': 3, \'dc2\': 2')
     end
     MockFunction.new('join_keys_to_values') do |f|
       f.stubbed.with(
         {
-          '\'dc1' => 3,
-          '\'dc2' => 2
+          '\'dc1' => '3',
+          '\'dc2' => '2'
         },
-        '\': ').returns('\'dc1\': ' => 3, '\'dc2\': ' => 2)
+        '\': ').returns('\'dc1\': ' => '3', '\'dc2\': ' => '2')
     end
     MockFunction.new('prefix') do |f|
       f.stubbed.with(
         {
-          'dc1' => 3,
-          'dc2' => 2
-        }, '\'').returns('\'dc1' => 3, '\'dc2' => 2)
+          'dc1' => '3',
+          'dc2' => '2'
+        }, '\'').returns('\'dc1' => '3', '\'dc2' => '2')
     end
   end
 
@@ -67,9 +67,9 @@ describe 'cassandra::schema::keyspace' do
       }
     end
 
+    it { should compile }
+    it { should contain_class('cassandra::schema') }
     it do
-      should compile
-      should contain_class('cassandra::schema')
       # rubocop:disable Metrics/LineLength
       should contain_exec('/usr/bin/cqlsh   -e "CREATE KEYSPACE IF NOT EXISTS foobar WITH REPLICATION = { \'class\' : \'SimpleStrategy\', \'replication_factor\' : 3 } AND DURABLE_WRITES = true"  ')
       # rubocop:enable Metrics/LineLength
@@ -91,14 +91,15 @@ describe 'cassandra::schema::keyspace' do
         replication_map:
           {
             'keyspace_class' => 'NetworkTopologyStrategy',
-            'dc1'            => 3,
-            'dc2'            => 2
+            'dc1'            => '3',
+            'dc2'            => '2'
           }
       }
     end
 
+    it { should contain_cassandra__schema__keyspace('foobar') }
+
     it do
-      should contain_class('cassandra::schema')
       # rubocop:disable Metrics/LineLength
       should contain_exec('/usr/bin/cqlsh   -e "CREATE KEYSPACE IF NOT EXISTS foobar WITH REPLICATION = { \'class\' : \'NetworkTopologyStrategy\', \'dc1\': 3, \'dc2\': 2 } AND DURABLE_WRITES = true"  ')
       # rubocop:enable Metrics/LineLength
