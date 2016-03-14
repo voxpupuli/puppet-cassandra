@@ -36,30 +36,46 @@ class { 'cassandra::optutils':
   require        => Class['cassandra']
 }
 
-$simple_strategy_map = {
-  keyspace_class     => 'SimpleStrategy',
-  replication_factor => 3
-}
-
-$network_topology_strategy = {
-  keyspace_class => 'NetworkTopologyStrategy',
-  dc1            => 3,
-  dc2            => 2
-}
-
 $keyspaces = {
   'Excelsior' => {
     ensure          => present,
-    replication_map => $simple_strategy_map,
+    replication_map => {
+      keyspace_class     => 'SimpleStrategy',
+      replication_factor => 3
+    },
     durable_writes  => false
   },
   'Excalibur' => {
     ensure          => present,
-    replication_map => $network_topology_strategy,
+    replication_map => {
+      keyspace_class => 'NetworkTopologyStrategy',
+      dc1            => 3,
+      dc2            => 2
+    },
     durable_writes  => true
   }
 }
 
+$cql_types = {
+  'fullname'   => {
+    'keyspace' => 'Excalibur',
+    'fields'    => {
+      'firstname' => 'text',
+      'lastname'  => 'text'
+    }
+  },
+  'address' => {
+    'keyspace' => 'Excalibur',
+    'fields'   => {
+      'street'   => 'text',
+      'city'     => 'text',
+      'zip_code' => 'int',
+      'phones'   => 'set<text>'
+    }
+  }
+}
+
 class { 'cassandra::schema':
-  keyspaces => $keyspaces
+  keyspaces => $keyspaces,
+  cql_types => $cql_types
 }
