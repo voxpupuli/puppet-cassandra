@@ -1,5 +1,23 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-03-15 - Release 1.16.0 ([diff](https://github.com/locp/cassandra/compare/1.15.1...1.16.0))
+
+### Summary
+
+A smaller release than usual, but containing changes required for a client.
+
+### Features
+
+* Added the `hosts` attribute to the cassandra::datastax_agent class.
+
+### Bugfixes
+
+* The **address.yaml** file for the DataStax agent is now owned by the cassandra user.
+
+### Improvements
+
+* N/A
+
 ##2016-03-11 - Release 1.15.1 ([diff](https://github.com/locp/cassandra/compare/1.15.0...1.15.1))
 
 ### Summary
