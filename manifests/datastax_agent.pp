@@ -1,8 +1,12 @@
 # Install and configure the optional DataStax agent.
 class cassandra::datastax_agent (
-  $defaults_file        = '/etc/default/datastax-agent',
   $address_config_file  = '/var/lib/datastax-agent/conf/address.yaml',
+  $agent_alias          = undef,
+  $async_pool_size      = undef,
+  $async_queue_size     = undef,
+  $defaults_file        = '/etc/default/datastax-agent',
   $java_home            = undef,
+  $local_interface      = undef,
   $package_ensure       = 'present',
   $package_name         = 'datastax-agent',
   $service_ensure       = 'running',
@@ -11,11 +15,7 @@ class cassandra::datastax_agent (
   $service_provider     = undef,
   $service_systemd      = false,
   $service_systemd_tmpl = 'cassandra/datastax-agent.service.erb',
-  $stomp_interface      = undef,
-  $local_interface      = undef,
-  $agent_alias          = undef,
-  $async_pool_size      = undef,
-  $async_queue_size     = undef,
+  $stomp_interface      = undef
   ) inherits ::cassandra::params {
   package { $package_name:
     ensure  => $package_ensure,
