@@ -7,7 +7,7 @@ describe 'cassandra::datastax_agent' do
   end
 
   context 'Test for cassandra::datastax_agent.' do
-    it { should have_resource_count(6) }
+    it { should have_resource_count(7) }
     it do
       should contain_class('cassandra::datastax_agent').only_with(
         'defaults_file'    => '/etc/default/datastax-agent',
