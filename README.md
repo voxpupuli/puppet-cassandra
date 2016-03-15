@@ -1837,6 +1837,17 @@ Default value *undef*
 The full path name to the file where `java_home` is set.
 Default value '/etc/default/datastax-agent'
 
+##### `hosts`
+If the value is changed from the default of *undef* then this is what is
+set as the hosts setting in
+**/var/lib/datastax-agent/conf/address.yaml**
+which is the DataStax Enterprise node or nodes responsible for storing
+OpsCenter data. By default, this will be the local node, but may be
+configured to store data on a separate cluster. The hosts option accepts
+an array of strings specifying the IP addresses of the node or nodes. For
+example, ["1.2.3.4"] or ["1.2.3.4", "1.2.3.5"].
+Default value *undef*
+
 ##### `java_home`
 If the value of this variable is left as *undef*, no action is taken.
 Otherwise the value is set as JAVA_HOME in `defaults_file`.

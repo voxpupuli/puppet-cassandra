@@ -178,4 +178,23 @@ describe 'cassandra::datastax_agent' do
       should contain_ini_setting('async_queue_size').with_value('20000')
     end
   end
+
+  context 'Test that hosts can be set.' do
+    let :params do
+      {
+        hosts: '["1.2.3.4", "1.2.3.5"]'
+      }
+    end
+
+    it { should contain_ini_setting('hosts').with_ensure('present') }
+    it do
+      should contain_ini_setting('hosts').with_value('["1.2.3.4", "1.2.3.5"]')
+    end
+  end
+
+  context 'Test that hosts can be ignored.' do
+    it do
+      should contain_ini_setting('hosts').with_ensure('absent')
+    end
+  end
 end

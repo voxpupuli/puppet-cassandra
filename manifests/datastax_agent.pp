@@ -5,6 +5,7 @@ class cassandra::datastax_agent (
   $async_pool_size      = undef,
   $async_queue_size     = undef,
   $defaults_file        = '/etc/default/datastax-agent',
+  $hosts                = undef,
   $java_home            = undef,
   $local_interface      = undef,
   $package_ensure       = 'present',
@@ -53,6 +54,23 @@ class cassandra::datastax_agent (
     key_val_separator => ': ',
     setting           => 'local_interface',
     value             => $local_interface,
+    require           => Package[$package_name],
+    notify            => Service[$service_name]
+  }
+
+  if $hosts != undef {
+    $ensure_hosts = present
+  } else {
+    $ensure_hosts = absent
+  }
+
+  ini_setting { 'hosts':
+    ensure            => $ensure_hosts,
+    path              => $address_config_file,
+    section           => '',
+    key_val_separator => ': ',
+    setting           => 'hosts',
+    value             => $hosts,
     require           => Package[$package_name],
     notify            => Service[$service_name]
   }
