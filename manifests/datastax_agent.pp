@@ -29,6 +29,12 @@ class cassandra::datastax_agent (
     $ensure = absent
   }
 
+  file { $address_config_file:
+    owner   => 'cassandra',
+    group   => 'cassandra',
+    require => Package[$package_name]
+  }
+
   ini_setting { 'stomp_interface':
     ensure            => $ensure,
     path              => $address_config_file,

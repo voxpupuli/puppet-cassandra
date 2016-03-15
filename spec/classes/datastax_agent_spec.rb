@@ -7,7 +7,7 @@ describe 'cassandra::datastax_agent' do
   end
 
   context 'Test for cassandra::datastax_agent.' do
-    it { should have_resource_count(5) }
+    it { should have_resource_count(6) }
     it do
       should contain_class('cassandra::datastax_agent').only_with(
         'defaults_file'    => '/etc/default/datastax-agent',
@@ -24,11 +24,17 @@ describe 'cassandra::datastax_agent' do
         'local_interface'  => nil
       )
     end
+    it { should contain_package('datastax-agent') }
+    it { should contain_service('datastax-agent') }
+
     it do
-      should contain_package('datastax-agent')
-    end
-    it do
-      should contain_service('datastax-agent')
+      should contain_file('/var/lib/datastax-agent/conf/address.yaml')
+        .with(
+          owner: 'cassandra',
+          group: 'cassandra'
+        )
+      should contain_file('/var/lib/datastax-agent/conf/address.yaml')
+        .that_requires('Package[datastax-agent]')
     end
   end
 
