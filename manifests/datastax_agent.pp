@@ -16,8 +16,9 @@ class cassandra::datastax_agent (
   $service_provider     = undef,
   $service_systemd      = false,
   $service_systemd_tmpl = 'cassandra/datastax-agent.service.erb',
-  $stomp_interface      = undef
-  ) inherits ::cassandra::params {
+  $stomp_interface      = undef,
+  $storage_keyspace     = undef,
+  ) inherits cassandra::params {
   package { $package_name:
     ensure  => $package_ensure,
     require => Class['cassandra'],
@@ -77,6 +78,23 @@ class cassandra::datastax_agent (
     key_val_separator => ': ',
     setting           => 'hosts',
     value             => $hosts,
+    require           => Package[$package_name],
+    notify            => Service[$service_name]
+  }
+
+  if $storage_keyspace != undef {
+    $ensure_storage_keyspace = present
+  } else {
+    $ensure_storage_keyspace = absent
+  }
+
+  ini_setting { 'storage_keyspace':
+    ensure            => $ensure_storage_keyspace,
+    path              => $address_config_file,
+    section           => '',
+    key_val_separator => ': ',
+    setting           => 'storage_keyspace',
+    value             => $storage_keyspace,
     require           => Package[$package_name],
     notify            => Service[$service_name]
   }

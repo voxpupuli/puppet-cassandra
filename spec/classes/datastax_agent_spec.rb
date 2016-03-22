@@ -7,7 +7,7 @@ describe 'cassandra::datastax_agent' do
   end
 
   context 'Test for cassandra::datastax_agent.' do
-    it { should have_resource_count(7) }
+    it { should have_resource_count(8) }
     it do
       should contain_class('cassandra::datastax_agent').only_with(
         'defaults_file'    => '/etc/default/datastax-agent',
@@ -201,6 +201,25 @@ describe 'cassandra::datastax_agent' do
   context 'Test that hosts can be ignored.' do
     it do
       should contain_ini_setting('hosts').with_ensure('absent')
+    end
+  end
+
+  context 'Test that storage_keyspace can be set.' do
+    let :params do
+      {
+        storage_keyspace: 'OpsCenter_foobar'
+      }
+    end
+
+    it { should contain_ini_setting('storage_keyspace').with_ensure('present') }
+    it do
+      should contain_ini_setting('storage_keyspace').with_value('OpsCenter_foobar')
+    end
+  end
+
+  context 'Test that storage_keyspace can be ignored.' do
+    it do
+      should contain_ini_setting('storage_keyspace').with_ensure('absent')
     end
   end
 end

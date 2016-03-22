@@ -1910,6 +1910,13 @@ set as the stomp_interface setting in
 which connects the agent to an OpsCenter instance.
 Default value *undef*
 
+##### `storage_keyspace`
+If the value is changed from the default of *undef* then this is what is
+set as the storage_keyspace setting in
+**/var/lib/datastax-agent/conf/address.yaml**
+which is keyspace that the agent uses to store data.  See also `hosts`.
+Default value *undef*
+
 ### Class: cassandra::datastax_repo
 
 An optional class that will allow a suitable repository to be configured

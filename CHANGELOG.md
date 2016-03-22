@@ -1,5 +1,23 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-03-22 - Release 1.17.0 ([diff](https://github.com/locp/cassandra/compare/1.16.0...1.17.0))
+
+### Summary
+
+Another small change that is an emergency requirement for a client.
+
+### Features
+
+* Added the `storage_keyspace` attribute to the cassandra::datastax_agent class.
+
+### Bugfixes
+
+* N/A
+
+### Improvements
+
+* N/A
+
 ##2016-03-15 - Release 1.16.0 ([diff](https://github.com/locp/cassandra/compare/1.15.1...1.16.0))
 
 ### Summary
