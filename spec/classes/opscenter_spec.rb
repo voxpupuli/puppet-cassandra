@@ -23,7 +23,7 @@ describe 'cassandra::opscenter' do
         service_systemd: true
       }
     end
-    it { should have_resource_count(256) }
+    it { should have_resource_count(258) }
 
     it do
       should contain_exec('opscenter_reload_systemctl').with(refreshonly: true)
@@ -43,7 +43,7 @@ describe 'cassandra::opscenter' do
         service_systemd: true
       }
     end
-    it { should have_resource_count(256) }
+    it { should have_resource_count(258) }
 
     it do
       should contain_exec('opscenter_reload_systemctl').with(refreshonly: true)
@@ -112,7 +112,7 @@ describe 'cassandra::opscenter' do
               'webserver_port'         => 8888)
     end
 
-    it { should have_resource_count(254) }
+    it { should have_resource_count(256) }
 
     it do
       should contain_cassandra__private__opscenter__setting('agents agent_certfile')
@@ -340,6 +340,10 @@ describe 'cassandra::opscenter' do
 
     it do
       should contain_cassandra__private__opscenter__setting('ldap group_search_filter')
+    end
+
+    it do
+      should contain_cassandra__private__opscenter__setting('ldap group_search_filter_with_dn')
     end
 
     it do

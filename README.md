@@ -2480,7 +2480,16 @@ for more details.  A value of *undef* will ensure the setting is not present
 in the file.  Default value *undef*
 
 ##### `ldap_group_search_filter`
+Is deprecated use `ldap_group_search_filter_with_dn` instead.
+
 This sets the group_search_filter setting in the ldap section of the
+OpsCenter configuration file.  See
+http://docs.datastax.com/en/opscenter/5.2/opsc/configure/opscConfigProps_r.html
+for more details.  A value of *undef* will ensure the setting is not present
+in the file.  Default value *undef*
+
+##### `ldap_group_search_filter_with_dn`
+This sets the group_search_filter_with_dn setting in the ldap section of the
 OpsCenter configuration file.  See
 http://docs.datastax.com/en/opscenter/5.2/opsc/configure/opscConfigProps_r.html
 for more details.  A value of *undef* will ensure the setting is not present
