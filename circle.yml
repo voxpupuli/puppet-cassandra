@@ -1,10 +1,7 @@
 --- 
 dependencies: 
-  cache_directories: 
-    - '~/.rvm/rubies'
-    - 'vendor'
-  override: 
-    - "./scripts/circle.bash bundle_install"
+  bundler:
+    without: [development]
 deployment: 
   bugfix: 
     branch: /^bugfix.*/

@@ -28,17 +28,6 @@ acceptance_tests () {
   return $status
 }
 
-bundle_install () {
-  echo "RVM: $RVM"
-  BUNDLE_OPS='--without development'
-
-  if [ ! -z "$RVM" ]; then
-    rvm-exec $RVM bash -c "bundle install" $BUNDLE_OPS
-  else
-    bundle install $BUNDLE_OPS
-  fi
-}
-
 deploy () {
   local_version=$( ./scripts/module_version.py --local )
 
