@@ -2,6 +2,8 @@
 dependencies: 
   bundler:
     without: [development]
+  post:
+    - rm -rf ~/cassandra/vendor/bundle ~/.m2 ~/.ivy2 ~/.go_workspace ~/.gradle ~/.rvm/rubies ~/cassandra/vendor
 deployment: 
   bugfix: 
     branch: /^bugfix.*/
