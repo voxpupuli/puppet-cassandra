@@ -36,6 +36,11 @@ deployment:
     commands: 
       - "./scripts/circle.bash merge release/minor"
 machine: 
+  environment:
+    PUPPET_GEM_VERSION: '~> 4.0'
+    STRICT_VARIABLES: yes
+  ruby:
+    version: 2.1.6
   services: 
     - docker
 notify: 
