@@ -123,26 +123,6 @@ merge () {
   return $?
 }
 
-unit_tests () {
-  status=0
-  bundle --version
-  gem --version
-  ruby --version
-  rvm --version
-  bundle exec rake metadata_lint || status=$?
-
-  if (( CIRCLE_NODE_INDEX >= 2 )); then
-    bundle exec rake rubocop || status=$?
-  fi
-
-  bundle exec rake lint || status=$?
-  bundle exec rake validate || status=$?
-
-  bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter \
-      -o $CIRCLE_TEST_REPORTS/rspec/puppet.xml" || status=$?
-  return $status
-}
-
 subcommand=$1 
 shift
 $subcommand $*

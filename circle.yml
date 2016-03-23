@@ -46,7 +46,15 @@ notify:
       url: "https://webhooks.gitter.im/e/da8c065419a91983f0cf"
 test: 
   override: 
-    - ./scripts/circle.bash unit_tests:
+    - bundle exec rake metadata_lint:
+        parallel: true
+    - bundle exec rake rubocop:
+        parallel: true
+    - bundle exec rake lint:
+        parallel: true
+    - bundle exec rake validate:
+        parallel: true
+    - bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/puppet.xml":
         parallel: true
     - ./scripts/circle.bash acceptance_tests:
         parallel: true
