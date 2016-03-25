@@ -57,14 +57,14 @@ $keyspaces = {
 }
 
 $cql_types = {
-  'fullname'   => {
+  'fullname' => {
     'keyspace' => 'Excalibur',
-    'fields'    => {
+    'fields'   => {
       'firstname' => 'text',
       'lastname'  => 'text',
     },
   },
-  'address' => {
+  'address'  => {
     'keyspace' => 'Excalibur',
     'fields'   => {
       'street'   => 'text',
