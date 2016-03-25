@@ -80,7 +80,7 @@ class { 'cassandra::schema':
   },
   tables    => {
     'users' => {
-      'keyspace_name' => 'mykeyspace',
+      'keyspace' => 'mykeyspace',
       'columns'       => {
         'userid'      => 'int',
         'fname'       => 'text',
@@ -89,7 +89,7 @@ class { 'cassandra::schema':
       },
     },
     'users' => {
-      'keyspace_name' => 'Excalibur',
+      'keyspace' => 'Excalibur',
       'columns'       => {
         'userid'          => 'text',
         'username'        => 'FROZEN<fullname>',

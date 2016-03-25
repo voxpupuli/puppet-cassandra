@@ -67,7 +67,7 @@ describe 'cassandra::schema::table' do
 
     let(:params) do
       {
-        'keyspace_name' => 'Excelsior',
+        keyspace: 'Excelsior',
         columns:
           {
             'userid' => 'text',
@@ -105,7 +105,7 @@ describe 'cassandra::schema::table' do
 
     let(:params) do
       {
-        keyspace_name: 'Excelsior',
+        keyspace: 'Excelsior',
         ensure: 'absent'
       }
     end

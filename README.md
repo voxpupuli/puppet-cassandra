@@ -30,6 +30,7 @@
     * [cassandra::optutils](#class-cassandraoptutils)
     * [cassandra::schema](#class-cassandraschema)
     * [cassandra::schema::cql_type](#defined-type-cassandraschemacql_type)
+    * [cassandra::schema::index](#defined-type-cassandraschemaindex)
     * [cassandra::schema::keyspace](#defined-type-cassandraschemakeyspace)
     * [cassandra::schema::table](#defined-type-cassandraschematable)
 5. [Limitations - OS compatibility, etc.](#limitations)
@@ -365,7 +366,7 @@ class { 'cassandra::schema':
   tables    => {
     'users' => {
       'ensure'        => absent,
-      'keyspace_name' => 'Excalibur',
+      'keyspace'      => 'Excalibur',
       'columns'       => {
         'userid'          => 'text',
         'username'        => 'FROZEN<fullname>',
@@ -3170,6 +3171,10 @@ See also `cqlsh_password`.
 
 Default value 'cassandra'
 
+##### `indexes`
+Creates new `cassandra::schema::indexes` resources. Valid options: a hash to
+be passed to the `create_resources` function. Default: {}.
+
 ##### `keyspaces`
 Creates new `cassandra::schema::keyspace` resources. Valid options: a hash to
 be passed to the `create_resources` function. Default: {}.
@@ -3334,6 +3339,17 @@ Valid values can be **present** to ensure a data type is created, or
 A hash of the fields that will be components for the data type.  See
 the example earlier in this document for the layout of the hash.
 
+### Defined Type cassandra::schema::index
+
+Create or drop indexes within the schema.  Please see the
+example code in the [Schema Maintenance](#schema-maintenance) and the
+[Limitations - OS compatibility, etc.](#limitations) sections of this document.
+
+#### Attributes
+
+##### `keyspace`
+The name of the keyspace that the data type is to be associated with.
+
 ### Defined Type cassandra::schema::keyspace
 
 Create or drop keyspaces within the schema.  Please see the example code in the
@@ -3366,7 +3382,7 @@ Create or drop tables within the schema.  Please see the example code in the
 
 #### Attributes
 
-##### `keyspace_name`
+##### `keyspace`
 The name of the keyspace.  This value is taken from the title given to the
 `cassandra::schema::keyspace` resource.
 

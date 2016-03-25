@@ -1,17 +1,17 @@
 # cassandra::schema::table
 define cassandra::schema::table (
-  $keyspace_name,
+  $keyspace,
   $ensure  = present,
   $columns = {},
   $options = [],
   $table   = $title,
   ){
   include 'cassandra::schema'
-  $read_script = "DESC TABLE ${keyspace_name}.${table}"
+  $read_script = "DESC TABLE ${keyspace}.${table}"
   $read_command = "${::cassandra::schema::cqlsh_opts} -e \"${read_script}\" ${::cassandra::schema::cqlsh_conn}"
 
   if $ensure == present {
-    $create_script1 = "CREATE TABLE IF NOT EXISTS ${keyspace_name}.${table}"
+    $create_script1 = "CREATE TABLE IF NOT EXISTS ${keyspace}.${table}"
     $cols_def = join(join_keys_to_values($columns, ' '), ', ')
     $cols_def_rm_collection_type = delete($cols_def, 'COLLECTION-TYPE ')
 
@@ -28,7 +28,7 @@ define cassandra::schema::table (
       require => Exec['::cassandra::schema connection test'],
     }
   } elsif $ensure == absent {
-    $delete_script = "DROP TABLE IF EXISTS ${keyspace_name}.${table}"
+    $delete_script = "DROP TABLE IF EXISTS ${keyspace}.${table}"
     $delete_command = "${::cassandra::schema::cqlsh_opts} -e \"${delete_script}\" ${::cassandra::schema::cqlsh_conn}"
     exec { $delete_command:
       onlyif  => $read_command,
