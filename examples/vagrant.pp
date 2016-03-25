@@ -36,46 +36,42 @@ class { 'cassandra::optutils':
   require        => Class['cassandra']
 }
 
-$keyspaces = {
-  'Excelsior' => {
-    ensure          => present,
-    replication_map => {
-      keyspace_class     => 'SimpleStrategy',
-      replication_factor => 3
-    },
-    durable_writes  => false
-  },
-  'Excalibur' => {
-    ensure          => present,
-    replication_map => {
-      keyspace_class => 'NetworkTopologyStrategy',
-      dc1            => 3,
-      dc2            => 2
-    },
-    durable_writes  => true
-  }
-}
-
-$cql_types = {
-  'fullname'   => {
-    'keyspace' => 'Excalibur',
-    'fields'    => {
-      'firstname' => 'text',
-      'lastname'  => 'text'
-    }
-  },
-  'address' => {
-    'keyspace' => 'Excalibur',
-    'fields'   => {
-      'street'   => 'text',
-      'city'     => 'text',
-      'zip_code' => 'int',
-      'phones'   => 'set<text>'
-    }
-  }
-}
-
 class { 'cassandra::schema':
-  keyspaces => $keyspaces,
-  cql_types => $cql_types
+  cql_types => {
+    'fullname'   => {
+      'keyspace' => 'Excalibur',
+      'fields'    => {
+        'firstname' => 'text',
+        'lastname'  => 'text'
+      }
+    },
+    'address' => {
+      'keyspace' => 'Excalibur',
+      'fields'   => {
+        'street'   => 'text',
+        'city'     => 'text',
+        'zip_code' => 'int',
+        'phones'   => 'set<text>'
+      }
+    }
+  },
+  keyspaces => {
+    'Excelsior' => {
+      ensure          => present,
+      replication_map => { 
+        keyspace_class     => 'SimpleStrategy',
+        replication_factor => 3
+      },
+      durable_writes  => false
+    },
+    'Excalibur' => {
+      ensure          => present,
+      replication_map => {
+        keyspace_class => 'NetworkTopologyStrategy',
+        dc1            => 3,
+        dc2            => 2
+      },
+      durable_writes  => true
+    }
+  }
 }
