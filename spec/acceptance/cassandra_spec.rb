@@ -350,8 +350,40 @@ describe 'cassandra class' do
 
     if $::operatingsystem != CentOS and $::operatingsystemmajrelease != 6 {
       class { 'cassandra::schema':
+        cql_types => $cql_types,
+        indexes   => {
+          'users_emails_idx' => {
+             keyspace => 'Excalibur',
+             table    => 'users',
+             keys     => 'username',
+          },
+        },
         keyspaces => $keyspaces,
-        cql_types => $cql_types
+        tables    => {
+          'users' => {
+            'keyspace' => 'mykeyspace',
+            'columns'       => {
+              'userid'      => 'int',
+              'fname'       => 'text',
+              'lname'       => 'text',
+              'PRIMARY KEY' => '(userid)',
+            },
+          },
+          'users' => {
+            'keyspace' => 'Excalibur',
+            'columns'       => {
+              'userid'          => 'text',
+              'username'        => 'FROZEN<fullname>',
+              'emails'          => 'set<text>',
+              'top_scores'      => 'list<int>',
+              'todo'            => 'map<timestamp, text>',
+              'PRIMARY KEY'     => '(userid)',
+            },
+            'options'       => [
+              "ID='5a1c395e-b41f-11e5-9f22-ba0be0483c18'"
+            ],
+          },
+        },
       }
     }
   EOS
@@ -362,6 +394,122 @@ describe 'cassandra class' do
     end
     it 'check code is idempotent' do
       expect(apply_manifest(schema_testing_create_pp,
+                            catch_failures: true).exit_code).to be_zero
+    end
+  end
+
+  schema_testing_drop__index_and_cql_type_pp = <<-EOS
+    if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == 7 {
+        $service_systemd = true
+    } elsif $::operatingsystem == 'Debian' and $::operatingsystemmajrelease == 8 {
+        $service_systemd = true
+    } else {
+        $service_systemd = false
+    }
+
+    if $::osfamily == 'RedHat' {
+        $cassandra_optutils_package = 'cassandra22-tools'
+        $cassandra_package = 'cassandra22'
+        $version = '2.2.5-1'
+    } else {
+        $cassandra_optutils_package = 'cassandra-tools'
+        $cassandra_package = 'cassandra'
+        $version = '2.2.5'
+    }
+
+    class { 'cassandra':
+      cassandra_9822              => true,
+      commitlog_directory_mode    => '0770',
+      data_file_directories_mode  => '0770',
+      listen_interface            => 'lo',
+      package_ensure              => $version,
+      package_name                => $cassandra_package,
+      rpc_interface               => 'lo',
+      saved_caches_directory_mode => '0770',
+      service_systemd             => $service_systemd
+    }
+
+    $cql_types = {
+      'address' => {
+        'keyspace' => 'Excalibur',
+        'ensure'   => 'absent'
+      }
+    }
+
+    if $::operatingsystem != CentOS and $::operatingsystemmajrelease != 6 {
+      class { 'cassandra::schema':
+        indexes   => {
+          'users_emails_idx' => {
+             ensure   => absent,
+             keyspace => 'Excalibur',
+             table    => 'users',
+          },
+        },
+        cql_types => $cql_types
+      }
+    }
+  EOS
+
+  describe '########### Schema drop (Indexes & Types).' do
+    it 'should work with no errors' do
+      apply_manifest(schema_testing_drop__index_and_cql_type_pp,
+                     catch_failures: true)
+    end
+    it 'check code is idempotent' do
+      expect(apply_manifest(schema_testing_drop__index_and_cql_type_pp,
+                            catch_failures: true).exit_code).to be_zero
+    end
+  end
+
+  schema_testing_drop_table_pp = <<-EOS
+    if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == 7 {
+        $service_systemd = true
+    } elsif $::operatingsystem == 'Debian' and $::operatingsystemmajrelease == 8 {
+        $service_systemd = true
+    } else {
+        $service_systemd = false
+    }
+
+    if $::osfamily == 'RedHat' {
+        $cassandra_optutils_package = 'cassandra22-tools'
+        $cassandra_package = 'cassandra22'
+        $version = '2.2.5-1'
+    } else {
+        $cassandra_optutils_package = 'cassandra-tools'
+        $cassandra_package = 'cassandra'
+        $version = '2.2.5'
+    }
+
+    class { 'cassandra':
+      cassandra_9822              => true,
+      commitlog_directory_mode    => '0770',
+      data_file_directories_mode  => '0770',
+      listen_interface            => 'lo',
+      package_ensure              => $version,
+      package_name                => $cassandra_package,
+      rpc_interface               => 'lo',
+      saved_caches_directory_mode => '0770',
+      service_systemd             => $service_systemd
+    }
+
+    if $::operatingsystem != CentOS and $::operatingsystemmajrelease != 6 {
+      class { 'cassandra::schema':
+        tables   => {
+          'users' => {
+             ensure   => absent,
+             keyspace => 'Excalibur',
+          },
+        },
+      }
+    }
+  EOS
+
+  describe '########### Schema drop (Tables).' do
+    it 'should work with no errors' do
+      apply_manifest(schema_testing_drop_table_pp, catch_failures: true)
+    end
+    it 'check code is idempotent' do
+      expect(apply_manifest(schema_testing_drop_table_pp,
                             catch_failures: true).exit_code).to be_zero
     end
   end
@@ -403,22 +551,14 @@ describe 'cassandra class' do
       }
     }
 
-    $cql_types = {
-      'address' => {
-        'keyspace' => 'Excalibur',
-        'ensure'   => 'absent'
-      }
-    }
-
     if $::operatingsystem != CentOS and $::operatingsystemmajrelease != 6 {
       class { 'cassandra::schema':
         keyspaces => $keyspaces,
-        cql_types => $cql_types
       }
     }
   EOS
 
-  describe '########### Schema drop.' do
+  describe '########### Schema drop (Keyspaces).' do
     it 'should work with no errors' do
       apply_manifest(schema_testing_drop_pp, catch_failures: true)
     end

@@ -78,6 +78,13 @@ class { 'cassandra::schema':
       },
     },
   },
+  indexes   => {
+    'users_emails_idx' => {
+      keyspace => 'Excalibur',
+      table    => 'users',
+      keys     => 'username',
+    },
+  },
   tables    => {
     'users' => {
       'keyspace' => 'mykeyspace',

@@ -9,6 +9,7 @@ class cassandra::schema (
   $cqlsh_password           = undef,
   $cqlsh_port               = $::cassandra::native_transport_port,
   $cqlsh_user               = 'cassandra',
+  $indexes                  = {},
   $keyspaces                = {},
   $tables                   = {},
   ) inherits ::cassandra::params {
@@ -49,6 +50,13 @@ class cassandra::schema (
     create_resources('cassandra::schema::table', $tables)
   }
 
+  # manage indexes if present
+  if $indexes {
+    create_resources('cassandra::schema::index', $indexes)
+  }
+
   # Resource Ordering
-  Cassandra::Schema::Keyspace <| |> -> Cassandra::Schema::Cql_type <| |> -> Cassandra::Schema::Table <| |>
+  Cassandra::Schema::Keyspace <| |> -> Cassandra::Schema::Cql_type <| |>
+  Cassandra::Schema::Cql_type <| |> -> Cassandra::Schema::Table <| |>
+  Cassandra::Schema::Table <| |> -> Cassandra::Schema::Index <| |>
 }

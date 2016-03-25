@@ -346,6 +346,13 @@ class { 'cassandra::schema':
       }
     },
   },
+  indexes   => {
+    'users_emails_idx' => {
+      keyspace => 'Excalibur',
+      table    => 'users',
+      keys     => 'username',
+    },
+  },
   keyspaces => {
     'Excelsior' => {
       replication_map => {
@@ -3347,8 +3354,31 @@ example code in the [Schema Maintenance](#schema-maintenance) and the
 
 #### Attributes
 
+##### `class_name`
+The name of the class to be associated with a class when creating
+a custom class.
+
+Default value *undef*
+
+##### `index`
+The name of the index.  Defaults to the name of the resource.  Set to
+*undef* if the index is not to have a name.
+
+##### `keys`
+The columns that the index is being created on.
+
+Default value *undef*
+
 ##### `keyspace`
-The name of the keyspace that the data type is to be associated with.
+The name of the keyspace that the index is to be associated with.
+
+##### `options`
+Any options to be added to the index.
+
+Default value *undef*
+
+##### `table`
+The name of the table that the index is to be associated with.
 
 ### Defined Type cassandra::schema::keyspace
 
