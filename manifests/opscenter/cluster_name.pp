@@ -27,7 +27,7 @@ define cassandra::opscenter::cluster_name(
       ensure  => directory,
       purge   => $cassandra::opscenter::config_purge,
       recurse => $cassandra::opscenter::config_purge,
-      require => Package['opscenter']
+      require => Package['opscenter'],
     }
   }
 
@@ -36,7 +36,7 @@ define cassandra::opscenter::cluster_name(
   file { $cluster_file:
     ensure  => present,
     mode    => '0644',
-    require => Package['opscenter']
+    require => Package['opscenter'],
   }
 
   if $cassandra_seed_hosts != undef {

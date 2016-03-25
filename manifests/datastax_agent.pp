@@ -28,7 +28,7 @@ class cassandra::datastax_agent (
   package { $package_name:
     ensure  => $package_ensure,
     require => Class['cassandra'],
-    notify  => Service[$service_name]
+    notify  => Service[$service_name],
   }
 
   if $stomp_interface != undef {
@@ -40,7 +40,7 @@ class cassandra::datastax_agent (
   file { $address_config_file:
     owner   => 'cassandra',
     group   => 'cassandra',
-    require => Package[$package_name]
+    require => Package[$package_name],
   }
 
   ini_setting { 'stomp_interface':
@@ -51,7 +51,7 @@ class cassandra::datastax_agent (
     setting           => 'stomp_interface',
     value             => $stomp_interface,
     require           => Package[$package_name],
-    notify            => Service[$service_name]
+    notify            => Service[$service_name],
   }
 
   if $local_interface != undef {
@@ -68,7 +68,7 @@ class cassandra::datastax_agent (
     setting           => 'local_interface',
     value             => $local_interface,
     require           => Package[$package_name],
-    notify            => Service[$service_name]
+    notify            => Service[$service_name],
   }
 
   if $hosts != undef {
@@ -85,7 +85,7 @@ class cassandra::datastax_agent (
     setting           => 'hosts',
     value             => $hosts,
     require           => Package[$package_name],
-    notify            => Service[$service_name]
+    notify            => Service[$service_name],
   }
 
   if $storage_keyspace != undef {
@@ -102,7 +102,7 @@ class cassandra::datastax_agent (
     setting           => 'storage_keyspace',
     value             => $storage_keyspace,
     require           => Package[$package_name],
-    notify            => Service[$service_name]
+    notify            => Service[$service_name],
   }
 
   if $agent_alias != undef {
@@ -119,7 +119,7 @@ class cassandra::datastax_agent (
     setting           => 'alias',
     value             => $agent_alias,
     require           => Package[$package_name],
-    notify            => Service[$service_name]
+    notify            => Service[$service_name],
   }
 
   if $async_pool_size != undef {
@@ -131,7 +131,7 @@ class cassandra::datastax_agent (
       setting           => 'async_pool_size',
       value             => $async_pool_size,
       require           => Package[$package_name],
-      notify            => Service[$service_name]
+      notify            => Service[$service_name],
     }
   }
 
@@ -144,7 +144,7 @@ class cassandra::datastax_agent (
       setting           => 'async_queue_size',
       value             => $async_queue_size,
       require           => Package[$package_name],
-      notify            => Service[$service_name]
+      notify            => Service[$service_name],
     }
   }
 
@@ -156,7 +156,7 @@ class cassandra::datastax_agent (
       key_val_separator => '=',
       setting           => 'JAVA_HOME',
       value             => $java_home,
-      notify            => Service[$service_name]
+      notify            => Service[$service_name],
     }
   }
 
