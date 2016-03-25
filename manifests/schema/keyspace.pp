@@ -19,9 +19,9 @@ define cassandra::schema::keyspace(
         $map_str = "{ 'class' : 'SimpleStrategy', 'replication_factor' : ${replication_factor} }"
       }
       'NetworkTopologyStrategy': {
-        $map_str1 = '{ \'class\' : \'NetworkTopologyStrategy\''
-        $new_map = prefix(delete($replication_map, 'keyspace_class'), '\'')
-        $map_str2 = join(join_keys_to_values($new_map, '\': '), ', ')
+        $map_str1 = "{ 'class' : 'NetworkTopologyStrategy'"
+        $new_map = prefix(delete($replication_map, 'keyspace_class'), "'")
+        $map_str2 = join(join_keys_to_values($new_map, "': "), ', ')
         $map_str = "${map_str1}, ${map_str2} }"
       }
       default: {
