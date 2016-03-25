@@ -19,6 +19,12 @@ class cassandra::datastax_agent (
   $stomp_interface      = undef,
   $storage_keyspace     = undef,
   ) inherits cassandra::params {
+  if $service_provider != undef {
+    System {
+      provider => $service_provider
+    }
+  }
+
   package { $package_name:
     ensure  => $package_ensure,
     require => Class['cassandra'],
@@ -151,12 +157,6 @@ class cassandra::datastax_agent (
       setting           => 'JAVA_HOME',
       value             => $java_home,
       notify            => Service[$service_name]
-    }
-  }
-
-  if $service_provider != undef {
-    System {
-      provider => $service_provider
     }
   }
 
