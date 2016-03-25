@@ -141,6 +141,12 @@ class cassandra::opscenter (
     $webserver_sub_process_timeout                  = undef,
     $webserver_tarball_process_timeout              = undef
   ) inherits ::cassandra::params {
+  if $service_provider != undef {
+    System {
+      provider => $service_provider
+    }
+  }
+
   # Some horrific jiggerypokery until we can deprecate the ensure parameter.
   if $ensure != present {
     if $package_ensure != present and $ensure != $package_ensure {
@@ -160,12 +166,6 @@ class cassandra::opscenter (
     ensure => $version,
     name   => $package_name,
     before => Service['opscenterd']
-  }
-
-  if $service_provider != undef {
-    System {
-      provider => $service_provider
-    }
   }
 
   if $service_systemd == true {
