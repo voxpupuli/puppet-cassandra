@@ -10,13 +10,13 @@ class cassandra::firewall_ports (
   $public_subnets              = ['0.0.0.0/0'],
   $ssh_port                    = 22,
   $opscenter_ports             = [61620, 61621],
-  $opscenter_subnets           = ['0.0.0.0/0']
+  $opscenter_subnets           = ['0.0.0.0/0'],
   ) {
   # Public connections on any node.
   $public_subnets_array = prefix($public_subnets, '200_Public_')
 
   cassandra::private::firewall_ports::rule { $public_subnets_array:
-    ports => concat($public_ports, [$ssh_port])
+    ports => concat($public_ports, [$ssh_port]),
   }
 
   # If this is a Cassandra node.
@@ -26,14 +26,14 @@ class cassandra::firewall_ports (
       '210_InterNode_')
 
     cassandra::private::firewall_ports::rule { $inter_node_subnets_array:
-      ports => $inter_node_ports
+      ports => $inter_node_ports,
     }
 
     # Client connections for Cassandra
     $client_subnets_array = prefix($client_subnets, '220_Client_')
 
     cassandra::private::firewall_ports::rule {$client_subnets_array:
-      ports => $client_ports
+      ports => $client_ports,
     }
   }
 
@@ -44,7 +44,7 @@ class cassandra::firewall_ports (
       '230_OpsCenter_')
 
     cassandra::private::firewall_ports::rule { $opscenter_subnets_opc_agent:
-      ports => $opscenter_ports
+      ports => $opscenter_ports,
     }
   }
 }

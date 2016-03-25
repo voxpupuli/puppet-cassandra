@@ -21,7 +21,7 @@ class cassandra::datastax_agent (
   ) inherits cassandra::params {
   if $service_provider != undef {
     System {
-      provider => $service_provider
+      provider => $service_provider,
     }
   }
 
@@ -176,7 +176,7 @@ class cassandra::datastax_agent (
 
     exec { 'datastax_agent_reload_systemctl':
       command     => "${::cassandra::params::systemctl} daemon-reload",
-      refreshonly => true
+      refreshonly => true,
     }
 
     file { "${systemd_path}/${service_name}.service":
@@ -186,7 +186,7 @@ class cassandra::datastax_agent (
       content => template($service_systemd_tmpl),
       mode    => '0644',
       before  => Package[$package_name],
-      notify  => Exec['datastax_agent_reload_systemctl']
+      notify  => Exec['datastax_agent_reload_systemctl'],
     }
   }
 

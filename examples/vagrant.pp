@@ -57,7 +57,7 @@ $keyspaces = {
     ensure          => present,
     replication_map => $network_topology_strategy,
     durable_writes  => true,
-  }
+  },
 }
 
 class { 'cassandra::schema':
