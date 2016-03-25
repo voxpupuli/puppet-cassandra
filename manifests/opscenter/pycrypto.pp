@@ -36,10 +36,8 @@ class cassandra::opscenter::pycrypto (
 
     # Some horrific jiggerypokery until we can deprecate the ensure parameter.
     if $ensure != present {
-      if $package_ensure != present {
-        if $ensure != $package_ensure {
-          fail('Both ensure and package_ensure attributes are set.')
-        }
+      if $package_ensure != present and $ensure != $package_ensure {
+        fail('Both ensure and package_ensure attributes are set.')
       }
 
       cassandra::private::deprecation_warning { 'cassandra::opscenter::pycrypto::ensure':
