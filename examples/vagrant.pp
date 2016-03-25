@@ -71,10 +71,36 @@ class { 'cassandra::schema':
       },
       durable_writes  => true,
     },
-  }
-}
-
-class { 'cassandra::schema':
-  keyspaces => $keyspaces,
-  cql_types => $cql_types,
+    'mykeyspace' => {
+      replication_map => {
+        keyspace_class => 'SimpleStrategy',
+        replication_factor => 1,
+      },
+    },
+  },
+  tables    => {
+    'users' => {
+      'keyspace_name' => 'mykeyspace',
+      'columns'       => {
+        'userid'      => 'int',
+        'fname'       => 'text',
+        'lname'       => 'text',
+        'PRIMARY KEY' => '(userid)',
+      },
+    },
+    'users' => {
+      'keyspace_name' => 'Excalibur',
+      'columns'       => {
+        'userid'          => 'text',
+        'username'        => 'FROZEN<fullname>',
+        'emails'          => 'set<text>',
+        'top_scores'      => 'list<int>',
+        'todo'            => 'map<timestamp, text>',
+        'PRIMARY KEY'     => '(userid)',
+      },
+      'options'       => [
+        "ID='5a1c395e-b41f-11e5-9f22-ba0be0483c18'"
+      ],
+    },
+  },
 }

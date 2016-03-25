@@ -31,6 +31,7 @@
     * [cassandra::schema](#class-cassandraschema)
     * [cassandra::schema::cql_type](#defined-type-cassandraschemacql_type)
     * [cassandra::schema::keyspace](#defined-type-cassandraschemakeyspace)
+    * [cassandra::schema::table](#defined-type-cassandraschematable)
 5. [Limitations - OS compatibility, etc.](#limitations)
 6. [Contributers](#contributers)
 
@@ -325,52 +326,59 @@ Using the `cassandra::schema` class, we can make calls to the
 data types.
 
 ```puppet
-$simple_strategy_map = {
-  keyspace_class     => 'SimpleStrategy',
-  replication_factor => 3
-}
-
-$network_topology_strategy = {
-  keyspace_class => 'NetworkTopologyStrategy',
-  DC1            => 3,
-  DC2            => 2
-}
-
-$keyspaces = {
-  'Excelsior' => {
-    ensure          => present,
-    replication_map => $simple_strategy_map,
-    durable_writes  => false
-  },
-  'Excalibur' => {
-    ensure          => present,
-    replication_map => $network_topology_strategy,
-    durable_writes  => true
-  }
-}
-
-$cql_types = {
-  'fullname'   => {
-    'keyspace' => 'Excalibur',
-    'fields'    => {
-      'firstname' => 'text',
-      'lastname'  => 'text'
-    }
-  },
-  'address' => {
-    'keyspace' => 'Excalibur',
-    'fields'   => {
-      'street'   => 'text',
-      'city'     => 'text',
-      'zip_code' => 'int',
-      'phones'   => 'set<text>'
-    }
-  }
-}
-
 class { 'cassandra::schema':
-  keyspaces => $keyspaces,
-  cql_types => $cql_types
+  cql_types => {
+    'fullname' => {
+      'keyspace' => 'Excalibur',
+      'fields'   => {
+        'firstname' => 'text',
+        'lastname'  => 'text',
+      }
+    },
+    'address'  => {
+      'keyspace' => 'Excalibur',
+      'fields'   => {
+        'street'   => 'text',
+        'city'     => 'text',
+        'zip_code' => 'int',
+        'phones'   => 'set<text>',
+      }
+    },
+  },
+  keyspaces => {
+    'Excelsior' => {
+      replication_map => {
+        keyspace_class     => 'SimpleStrategy',
+        replication_factor => 3,
+      },
+      durable_writes  => false,
+    },
+    'Excalibur' => {
+      replication_map => {
+        keyspace_class => 'NetworkTopologyStrategy',
+        dc1            => 3,
+        dc2            => 2,
+      },
+      durable_writes  => true,
+    },
+  },
+  tables    => {
+    'users' => {
+      'ensure'        => absent,
+      'keyspace_name' => 'Excalibur',
+      'columns'       => {
+        'userid'          => 'text',
+        'username'        => 'FROZEN<fullname>',
+        'emails'          => 'set<text>',
+        'top_scores'      => 'list<int>',
+        'todo'            => 'map<timestamp, text>',
+        'PRIMARY KEY'     => '(userid)',
+      },
+      'options'       => [
+        "ID='5a1c395e-b41f-11e5-9f22-ba0be0483c18'"
+      ],
+    },
+  },
 }
 ```
 
@@ -3166,6 +3174,10 @@ Default value 'cassandra'
 Creates new `cassandra::schema::keyspace` resources. Valid options: a hash to
 be passed to the `create_resources` function. Default: {}.
 
+##### `tables`
+Creates new `cassandra::schema::table` resources. Valid options: a hash to
+be passed to the `create_resources` function. Default: {}.
+
 ### Defined Type cassandra::opscenter::cluster_name
 
 With DataStax Enterprise, one can specify a remote keyspace for OpsCenter
@@ -3346,18 +3358,38 @@ $network_topology_strategy = {
 Valid values can be **present** to ensure a keyspace is created, or
 **absent** to ensure it is dropped.
 
-Default value **present**
+### Defined Type cassandra::schema::table
 
-##### `durable_writes`
-When set to false, data written to the keyspace bypasses the commit log. Be
-careful using this option because you risk losing data. Do not set this
-attribute on a keyspace using the SimpleStrategy.
+Create or drop tables within the schema.  Please see the example code in the
+[Schema Maintenance](#schema-maintenance) and the
+[Limitations - OS compatibility, etc.](#limitations) sections of this document.
 
-Default value **false**
+#### Attributes
 
 ##### `keyspace_name`
 The name of the keyspace.  This value is taken from the title given to the
 `cassandra::schema::keyspace` resource.
+
+##### `columns`
+A hash of the columns to be placed in the table.  Optional if the table is
+to be absent.
+
+Default value {}
+
+##### `ensure`
+Valid values can be **present** to ensure a keyspace is created, or
+**absent** to ensure it is dropped.
+
+Default value **present**
+
+##### `options`
+Options to be added to the table creation.
+
+Default value []
+
+
+##### `table`
+The name of the table.  Defaults to the name of the resource.
 
 ### Defined Type cassandra::private::data_directory
 

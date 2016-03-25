@@ -10,6 +10,7 @@ class cassandra::schema (
   $cqlsh_port               = $::cassandra::native_transport_port,
   $cqlsh_user               = 'cassandra',
   $keyspaces                = {},
+  $tables                   = {},
   ) inherits ::cassandra::params {
   require '::cassandra'
 
@@ -43,6 +44,11 @@ class cassandra::schema (
     create_resources('cassandra::schema::cql_type', $cql_types)
   }
 
+  # manage tables if present
+  if $tables {
+    create_resources('cassandra::schema::table', $tables)
+  }
+
   # Resource Ordering
-  Cassandra::Schema::Keyspace <| |> -> Cassandra::Schema::Cql_type <| |>
+  Cassandra::Schema::Keyspace <| |> -> Cassandra::Schema::Cql_type <| |> -> Cassandra::Schema::Table <| |>
 }
