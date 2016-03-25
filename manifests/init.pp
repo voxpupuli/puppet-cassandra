@@ -164,6 +164,12 @@ class cassandra (
   $truncate_request_timeout_in_ms                       = 60000,
   $write_request_timeout_in_ms                          = 2000
   ) inherits cassandra::params {
+  if $::cassandra::service_provider != undef {
+    Service {
+      provider => $::cassandra::service_provider
+    }
+  }
+
   if $manage_dsc_repo == true {
     require '::cassandra::datastax_repo'
     cassandra::private::deprecation_warning { 'cassandra::manage_dsc_repo':
@@ -295,12 +301,6 @@ class cassandra (
   }
 
   if $package_ensure != 'absent' and $package_ensure != 'purged' {
-    if $::cassandra::service_provider != undef {
-      Service {
-        provider => $::cassandra::service_provider
-      }
-    }
-
     if $service_refresh == true {
       service { 'cassandra':
         ensure    => $service_ensure,
