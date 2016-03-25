@@ -4,7 +4,7 @@ class cassandra::java (
   $jna_ensure       = 'present',
   $jna_package_name = undef,
   $package_ensure   = 'present',
-  $package_name     = undef
+  $package_name     = undef,
   ) {
   if $package_name == undef {
     if $::osfamily == 'RedHat' {
@@ -37,7 +37,7 @@ class cassandra::java (
     }
 
     cassandra::private::deprecation_warning { 'cassandra::java::ensure':
-      item_number => 16
+      item_number => 16,
     }
 
     $version = $ensure
