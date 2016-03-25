@@ -38,8 +38,7 @@ class cassandra::firewall_ports (
   }
 
   # Connections for DataStax Agent
-  if defined ( Class['::cassandra::datastax_agent'] ) or
-    defined ( Class['::cassandra::opscenter'] ) {
+  if defined ( Class['::cassandra::datastax_agent'] ) or defined ( Class['::cassandra::opscenter'] ) {
     $opscenter_subnets_opc_agent = prefix($opscenter_subnets,
       '230_OpsCenter_')
 
