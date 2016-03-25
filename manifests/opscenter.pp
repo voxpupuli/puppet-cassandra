@@ -597,7 +597,7 @@ class cassandra::opscenter (
     path    => $config_file,
     section => 'ldap',
     setting => 'group_search_filter_with_dn',
-    value   => $ldap_group_search_filter_with_dn
+    value   => $ldap_group_search_filter_with_dn,
   }
 
   cassandra::private::opscenter::setting { 'ldap group_search_type':
