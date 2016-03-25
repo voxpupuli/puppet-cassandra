@@ -2,6 +2,7 @@
 class cassandra::schema (
   $connection_tries         = 6,
   $connection_try_sleep     = 30,
+  $cql_types                = {},
   $cqlsh_additional_options = '',
   $cqlsh_command            = '/usr/bin/cqlsh',
   $cqlsh_host               = $::cassandra::listen_address,
@@ -37,5 +38,11 @@ class cassandra::schema (
     create_resources('cassandra::schema::keyspace', $keyspaces)
   }
 
+  # manage cql_types if present
+  if $keyspaces {
+    create_resources('cassandra::schema::cql_type', $cql_types)
+  }
+
   # Resource Ordering
+  Cassandra::Schema::Keyspace <| |> -> Cassandra::Schema::Cql_type <| |>
 }

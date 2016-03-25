@@ -329,9 +329,29 @@ describe 'cassandra class' do
       }
     }
 
+    $cql_types = {
+      'fullname'   => {
+        'keyspace' => 'Excalibur',
+        'fields'    => {
+          'firstname' => 'text',
+          'lastname'  => 'text'
+        }
+      },
+      'address' => {
+        'keyspace' => 'Excalibur',
+        'fields'   => {
+          'street'   => 'text',
+          'city'     => 'text',
+          'zip_code' => 'int',
+          'phones'   => 'set<text>'
+        }
+      }
+    }
+
     if $::operatingsystem != CentOS and $::operatingsystemmajrelease != 6 {
       class { 'cassandra::schema':
-        keyspaces => $keyspaces
+        keyspaces => $keyspaces,
+        cql_types => $cql_types
       }
     }
   EOS
@@ -383,9 +403,17 @@ describe 'cassandra class' do
       }
     }
 
+    $cql_types = {
+      'address' => {
+        'keyspace' => 'Excalibur',
+        'ensure'   => 'absent'
+      }
+    }
+
     if $::operatingsystem != CentOS and $::operatingsystemmajrelease != 6 {
       class { 'cassandra::schema':
-        keyspaces => $keyspaces
+        keyspaces => $keyspaces,
+        cql_types => $cql_types
       }
     }
   EOS

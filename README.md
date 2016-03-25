@@ -15,7 +15,7 @@
 3. [Usage - Configuration options and additional functionality](#usage)
     * [Create a Cluster in a Single Data Center](#create-a-cluster-in-a-single-data-center)
     * [Create a Cluster in Multiple Data Centers](#create-a-cluster-in-multiple-data-centers)
-    * [Create Keyspaces](#create-keyspaces)
+    * [Schema Maintenance](#schema-maintenance)
     * [OpsCenter](#opscenter)
     * [DataStax Enterprise](#datastax-enterprise)
 4. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
@@ -29,7 +29,8 @@
     * [cassandra::opscenter::pycrypto](#class-cassandraopscenterpycrypto)
     * [cassandra::optutils](#class-cassandraoptutils)
     * [cassandra::schema](#class-cassandraschema)
-    * [cassandra::schema::keyspace](#class-cassandraschemakeyspace)
+    * [cassandra::schema::cql_type](#defined-type-cassandraschemacql_type)
+    * [cassandra::schema::keyspace](#defined-type-cassandraschemakeyspace)
 5. [Limitations - OS compatibility, etc.](#limitations)
 6. [Contributers](#contributers)
 
@@ -317,10 +318,11 @@ We don't need to specify the rack name (with the rack attribute) as RAC1 is
 the default value.  Again, do not forget to either set auto_bootstrap to
 true or not set the attribute at all after initializing the cluster.
 
-### Create Keyspaces
+### Schema Maintenance
 
 Using the `cassandra::schema` class, we can make calls to the
-`cassandra::schema::keyspace` resource to create keyspaces.
+`cassandra::schema::keyspace` resource to create keyspaces and custom
+data types.
 
 ```puppet
 $simple_strategy_map = {
@@ -347,8 +349,28 @@ $keyspaces = {
   }
 }
 
+$cql_types = {
+  'fullname'   => {
+    'keyspace' => 'Excalibur',
+    'fields'    => {
+      'firstname' => 'text',
+      'lastname'  => 'text'
+    }
+  },
+  'address' => {
+    'keyspace' => 'Excalibur',
+    'fields'   => {
+      'street'   => 'text',
+      'city'     => 'text',
+      'zip_code' => 'int',
+      'phones'   => 'set<text>'
+    }
+  }
+}
+
 class { 'cassandra::schema':
-  keyspaces => $keyspaces
+  keyspaces => $keyspaces,
+  cql_types => $cql_types
 }
 ```
 
@@ -3103,6 +3125,10 @@ How much time to allow between the number of tries specified in
 
 Default value 30
 
+##### `cql_types`
+Creates new `cassandra::schema::cql_type` resources. Valid options: a hash to
+be passed to the `create_resources` function. Default: {}.
+
 ##### `cqlsh_additional_options`
 Any additional options to be passed to the **cqlsh** command.
 
@@ -3277,10 +3303,29 @@ http://docs.datastax.com/en/opscenter/5.2/opsc/configure/opscStoringCollectionDa
 for more details.  A value of *undef* will ensure the setting is not
 present in the file.  Default value *undef*
 
+### Defined Type cassandra::schema::cql_type
+
+Create or drop user defined data types within the schema.  Please see the
+example code in the [Schema Maintenance](#schema-maintenance) and the
+[Limitations - OS compatibility, etc.](#limitations) sections of this document.
+
+#### Attributes
+
+##### `keyspace`
+The name of the keyspace that the data type is to be associated with.
+
+##### `ensure`
+Valid values can be **present** to ensure a data type is created, or
+**absent** to ensure it is dropped.
+
+##### `fields`
+A hash of the fields that will be components for the data type.  See
+the example earlier in this document for the layout of the hash.
+
 ### Defined Type cassandra::schema::keyspace
 
 Create or drop keyspaces within the schema.  Please see the example code in the
-[Create Keyspaces](#create-keyspaces) and the
+[Schema Maintenance](#schema-maintenance) and the
 [Limitations - OS compatibility, etc.](#limitations) sections of this document.
 
 #### Attributes
@@ -3298,7 +3343,7 @@ $network_topology_strategy = {
 ```
 
 ##### `ensure`
-Valid values can be **present** to ensure a keyspace is create, or
+Valid values can be **present** to ensure a keyspace is created, or
 **absent** to ensure it is dropped.
 
 Default value **present**
