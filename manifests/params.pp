@@ -16,7 +16,7 @@ class cassandra::params {
       $systemd_path = '/usr/lib/systemd/system'
     }
     default: {
-      # Empty on purpose 
+      # Empty on purpose
     }
   }
 }
