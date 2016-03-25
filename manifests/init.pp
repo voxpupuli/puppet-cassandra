@@ -170,7 +170,7 @@ class cassandra (
     }
   }
 
-  if $manage_dsc_repo == true {
+  if $manage_dsc_repo {
     require '::cassandra::datastax_repo'
     cassandra::private::deprecation_warning { 'cassandra::manage_dsc_repo':
       item_number => 14,
@@ -226,7 +226,7 @@ class cassandra (
       }
 
       # A workaround for CASSANDRA-9822
-      if $cassandra_9822 == true {
+      if $cassandra_9822 {
         file { '/etc/init.d/cassandra':
           source => 'puppet:///modules/cassandra/CASSANDRA-9822/cassandra',
           mode   => '0555',
@@ -250,7 +250,7 @@ class cassandra (
     ensure => $package_ensure,
   }
 
-  if $service_systemd == true {
+  if $service_systemd {
     exec { 'cassandra_reload_systemctl':
       command     => "${::cassandra::params::systemctl} daemon-reload",
       refreshonly => true,
@@ -301,7 +301,7 @@ class cassandra (
   }
 
   if $package_ensure != 'absent' and $package_ensure != 'purged' {
-    if $service_refresh == true {
+    if $service_refresh {
       service { 'cassandra':
         ensure    => $service_ensure,
         name      => $service_name,
@@ -344,7 +344,7 @@ class cassandra (
   }
 
   if $dc_suffix != undef {
-    if $service_refresh == true {
+    if $service_refresh {
       ini_setting { 'rackdc.properties.dc_suffix':
         path    => $dc_rack_properties_file,
         section => '',
@@ -365,7 +365,7 @@ class cassandra (
   }
 
   if $prefer_local != undef {
-    if $service_refresh == true {
+    if $service_refresh {
       ini_setting { 'rackdc.properties.prefer_local':
         path    => $dc_rack_properties_file,
         section => '',

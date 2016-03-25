@@ -168,7 +168,7 @@ class cassandra::opscenter (
     before => Service['opscenterd'],
   }
 
-  if $service_systemd == true {
+  if $service_systemd {
     $systemd_path = $::cassandra::params::systemd_path
 
     exec { 'opscenter_reload_systemctl':

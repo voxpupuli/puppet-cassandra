@@ -10,7 +10,7 @@ class cassandra::opscenter::pycrypto (
   $reqd_pckgs     = ['python-devel', 'python-pip' ],
   ){
   if $::osfamily == 'RedHat' {
-    if $manage_epel == true {
+    if $manage_epel {
       package { 'epel-release':
         ensure => 'present',
         before => Package[ $reqd_pckgs ],

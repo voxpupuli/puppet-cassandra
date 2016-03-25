@@ -160,7 +160,7 @@ class cassandra::datastax_agent (
     }
   }
 
-  if $service_systemd == true {
+  if $service_systemd {
     if $::osfamily == 'Debian' {
       $systemd_path = '/lib/systemd/system'
     } else {
