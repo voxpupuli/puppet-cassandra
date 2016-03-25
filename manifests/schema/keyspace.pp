@@ -39,14 +39,14 @@ define cassandra::schema::keyspace(
 
     exec { $create_command:
       unless  => $read_command,
-      require => Exec['::cassandra::schema connection test']
+      require => Exec['::cassandra::schema connection test'],
     }
   } elsif $ensure == absent {
     $delete_script = "DROP KEYSPACE ${keyspace_name}"
     $delete_command = "${::cassandra::schema::cqlsh_opts} -e \"${delete_script}\" ${::cassandra::schema::cqlsh_conn}"
     exec { $delete_command:
       onlyif  => $read_command,
-      require => Exec['::cassandra::schema connection test']
+      require => Exec['::cassandra::schema connection test'],
     }
   } else {
     fail("Unknown action (${ensure}) for ensure attribute.")

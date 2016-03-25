@@ -13,13 +13,13 @@ class cassandra::opscenter::pycrypto (
     if $manage_epel == true {
       package { 'epel-release':
         ensure => 'present',
-        before => Package[ $reqd_pckgs ]
+        before => Package[ $reqd_pckgs ],
       }
     }
 
     package { $reqd_pckgs:
       ensure => present,
-      before => Package[$package_name]
+      before => Package[$package_name],
     }
 
     ##########################################################################
@@ -29,7 +29,7 @@ class cassandra::opscenter::pycrypto (
       ensure  => 'link',
       target  => '/usr/bin/pip',
       require => Package['python-pip'],
-      before  => Package[$package_name]
+      before  => Package[$package_name],
     }
     # End of PUP-3829 hack.
     ##########################################################################
@@ -41,7 +41,7 @@ class cassandra::opscenter::pycrypto (
       }
 
       cassandra::private::deprecation_warning { 'cassandra::opscenter::pycrypto::ensure':
-        item_number => 16
+        item_number => 16,
       }
 
       $version = $ensure
@@ -52,7 +52,7 @@ class cassandra::opscenter::pycrypto (
     package { $package_name:
       ensure   => $version,
       provider => $provider,
-      before   => Package['opscenter']
+      before   => Package['opscenter'],
     }
   }
 }
