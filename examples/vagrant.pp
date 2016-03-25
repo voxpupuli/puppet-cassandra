@@ -43,7 +43,7 @@ $keyspaces = {
       keyspace_class     => 'SimpleStrategy',
       replication_factor => 3,
     },
-    durable_writes  => false
+    durable_writes  => false,
   },
   'Excalibur' => {
     ensure          => present,
@@ -52,7 +52,7 @@ $keyspaces = {
       dc1            => 3,
       dc2            => 2,
     },
-    durable_writes  => true
+    durable_writes  => true,
   },
 }
 
@@ -62,7 +62,7 @@ $cql_types = {
     'fields'    => {
       'firstname' => 'text',
       'lastname'  => 'text',
-    }
+    },
   },
   'address' => {
     'keyspace' => 'Excalibur',
@@ -71,8 +71,8 @@ $cql_types = {
       'city'     => 'text',
       'zip_code' => 'int',
       'phones'   => 'set<text>',
-    }
-  }
+    },
+  },
 }
 
 class { 'cassandra::schema':
