@@ -18,7 +18,7 @@ define cassandra::schema::cql_type (
       unless  => $read_command,
       require => Exec['::cassandra::schema connection test'],
     }
-  } elsif ($ensure == absent) {
+  } elsif $ensure == absent {
     $delete_script = "DROP type ${keyspace}.${cql_type_name}"
     $delete_command = "${::cassandra::schema::cqlsh_opts} -e \"${delete_script}\" ${::cassandra::schema::cqlsh_conn}"
     exec { $delete_command:
