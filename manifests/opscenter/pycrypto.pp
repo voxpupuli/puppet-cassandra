@@ -12,7 +12,7 @@ class cassandra::opscenter::pycrypto (
   if $::osfamily == 'RedHat' {
     if $manage_epel {
       package { 'epel-release':
-        ensure => 'present',
+        ensure => present,
         before => Package[ $reqd_pckgs ],
       }
     }
@@ -26,7 +26,7 @@ class cassandra::opscenter::pycrypto (
     # Nasty hack to workaround PUP-3829.  Hopefully can be removed in the
     # not too distant future.
     file { '/usr/bin/pip-python':
-      ensure  => 'link',
+      ensure  => link,
       target  => '/usr/bin/pip',
       require => Package['python-pip'],
       before  => Package[$package_name],
