@@ -67,6 +67,7 @@ class cassandra::opscenter (
     $ldap_group_name_attribute                      = undef,
     $ldap_group_search_base                         = undef,
     $ldap_group_search_filter                       = undef,
+    $ldap_group_search_filter_with_dn               = undef,
     $ldap_group_search_type                         = undef,
     $ldap_ldap_security                             = undef,
     $ldap_opt_referrals                             = undef,
@@ -590,6 +591,13 @@ class cassandra::opscenter (
     section => 'ldap',
     setting => 'group_search_filter',
     value   => $ldap_group_search_filter,
+  }
+
+  cassandra::private::opscenter::setting { 'ldap group_search_filter_with_dn':
+    path    => $config_file,
+    section => 'ldap',
+    setting => 'group_search_filter_with_dn',
+    value   => $ldap_group_search_filter_with_dn
   }
 
   cassandra::private::opscenter::setting { 'ldap group_search_type':
