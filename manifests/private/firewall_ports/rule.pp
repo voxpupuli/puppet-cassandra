@@ -1,6 +1,6 @@
 # cassandra::private::firewall_ports::rule
 define cassandra::private::firewall_ports::rule(
-    $ports
+    $ports,
   ) {
   $array_var1 = split($title, '_')
   $rule_number = $array_var1[0]
@@ -12,7 +12,7 @@ define cassandra::private::firewall_ports::rule(
       action => 'accept',
       dport  => $ports,
       proto  => 'tcp',
-      source => $source
+      source => $source,
     }
   }
 }

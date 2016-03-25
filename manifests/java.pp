@@ -4,7 +4,7 @@ class cassandra::java (
   $jna_ensure       = 'present',
   $jna_package_name = undef,
   $package_ensure   = 'present',
-  $package_name     = undef
+  $package_name     = undef,
   ) {
   if $package_name == undef {
     if $::osfamily == 'RedHat' {
@@ -32,14 +32,12 @@ class cassandra::java (
 
   # Some horrific jiggerypokery until we can deprecate the ensure parameter.
   if $ensure != present {
-    if $package_ensure != present {
-      if $ensure != $package_ensure {
-        fail('Both ensure and package_ensure attributes are set.')
-      }
+    if $package_ensure != present and $ensure != $package_ensure {
+      fail('Both ensure and package_ensure attributes are set.')
     }
 
     cassandra::private::deprecation_warning { 'cassandra::java::ensure':
-      item_number => 16
+      item_number => 16,
     }
 
     $version = $ensure

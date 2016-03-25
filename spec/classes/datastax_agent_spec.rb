@@ -7,7 +7,7 @@ describe 'cassandra::datastax_agent' do
   end
 
   context 'Test for cassandra::datastax_agent.' do
-    it { should have_resource_count(5) }
+    it { should have_resource_count(8) }
     it do
       should contain_class('cassandra::datastax_agent').only_with(
         'defaults_file'    => '/etc/default/datastax-agent',
@@ -24,11 +24,17 @@ describe 'cassandra::datastax_agent' do
         'local_interface'  => nil
       )
     end
+    it { should contain_package('datastax-agent') }
+    it { should contain_service('datastax-agent') }
+
     it do
-      should contain_package('datastax-agent')
-    end
-    it do
-      should contain_service('datastax-agent')
+      should contain_file('/var/lib/datastax-agent/conf/address.yaml')
+        .with(
+          owner: 'cassandra',
+          group: 'cassandra'
+        )
+      should contain_file('/var/lib/datastax-agent/conf/address.yaml')
+        .that_requires('Package[datastax-agent]')
     end
   end
 
@@ -176,6 +182,44 @@ describe 'cassandra::datastax_agent' do
     it { should contain_ini_setting('async_queue_size').with_ensure('present') }
     it do
       should contain_ini_setting('async_queue_size').with_value('20000')
+    end
+  end
+
+  context 'Test that hosts can be set.' do
+    let :params do
+      {
+        hosts: '["1.2.3.4", "1.2.3.5"]'
+      }
+    end
+
+    it { should contain_ini_setting('hosts').with_ensure('present') }
+    it do
+      should contain_ini_setting('hosts').with_value('["1.2.3.4", "1.2.3.5"]')
+    end
+  end
+
+  context 'Test that hosts can be ignored.' do
+    it do
+      should contain_ini_setting('hosts').with_ensure('absent')
+    end
+  end
+
+  context 'Test that storage_keyspace can be set.' do
+    let :params do
+      {
+        storage_keyspace: 'OpsCenter_foobar'
+      }
+    end
+
+    it { should contain_ini_setting('storage_keyspace').with_ensure('present') }
+    it do
+      should contain_ini_setting('storage_keyspace').with_value('OpsCenter_foobar')
+    end
+  end
+
+  context 'Test that storage_keyspace can be ignored.' do
+    it do
+      should contain_ini_setting('storage_keyspace').with_ensure('absent')
     end
   end
 end

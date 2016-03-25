@@ -9,7 +9,7 @@ class cassandra::schema (
   $cqlsh_password           = undef,
   $cqlsh_port               = $::cassandra::native_transport_port,
   $cqlsh_user               = 'cassandra',
-  $keyspaces                = {}
+  $keyspaces                = {},
   ) inherits ::cassandra::params {
   require '::cassandra'
 
@@ -30,7 +30,7 @@ class cassandra::schema (
     returns   => 0,
     tries     => $connection_tries,
     try_sleep => $connection_try_sleep,
-    unless    => $connection_test
+    unless    => $connection_test,
   }
 
   # manage keyspaces if present

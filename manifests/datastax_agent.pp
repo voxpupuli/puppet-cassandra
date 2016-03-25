@@ -1,8 +1,13 @@
 # Install and configure the optional DataStax agent.
 class cassandra::datastax_agent (
-  $defaults_file        = '/etc/default/datastax-agent',
   $address_config_file  = '/var/lib/datastax-agent/conf/address.yaml',
+  $agent_alias          = undef,
+  $async_pool_size      = undef,
+  $async_queue_size     = undef,
+  $defaults_file        = '/etc/default/datastax-agent',
+  $hosts                = undef,
   $java_home            = undef,
+  $local_interface      = undef,
   $package_ensure       = 'present',
   $package_name         = 'datastax-agent',
   $service_ensure       = 'running',
@@ -12,21 +17,30 @@ class cassandra::datastax_agent (
   $service_systemd      = false,
   $service_systemd_tmpl = 'cassandra/datastax-agent.service.erb',
   $stomp_interface      = undef,
-  $local_interface      = undef,
-  $agent_alias          = undef,
-  $async_pool_size      = undef,
-  $async_queue_size     = undef,
-  ) inherits ::cassandra::params {
+  $storage_keyspace     = undef,
+  ) inherits cassandra::params {
+  if $service_provider != undef {
+    System {
+      provider => $service_provider,
+    }
+  }
+
   package { $package_name:
     ensure  => $package_ensure,
     require => Class['cassandra'],
-    notify  => Service[$service_name]
+    notify  => Service[$service_name],
   }
 
   if $stomp_interface != undef {
     $ensure = present
   } else {
     $ensure = absent
+  }
+
+  file { $address_config_file:
+    owner   => 'cassandra',
+    group   => 'cassandra',
+    require => Package[$package_name],
   }
 
   ini_setting { 'stomp_interface':
@@ -37,7 +51,7 @@ class cassandra::datastax_agent (
     setting           => 'stomp_interface',
     value             => $stomp_interface,
     require           => Package[$package_name],
-    notify            => Service[$service_name]
+    notify            => Service[$service_name],
   }
 
   if $local_interface != undef {
@@ -54,7 +68,41 @@ class cassandra::datastax_agent (
     setting           => 'local_interface',
     value             => $local_interface,
     require           => Package[$package_name],
-    notify            => Service[$service_name]
+    notify            => Service[$service_name],
+  }
+
+  if $hosts != undef {
+    $ensure_hosts = present
+  } else {
+    $ensure_hosts = absent
+  }
+
+  ini_setting { 'hosts':
+    ensure            => $ensure_hosts,
+    path              => $address_config_file,
+    section           => '',
+    key_val_separator => ': ',
+    setting           => 'hosts',
+    value             => $hosts,
+    require           => Package[$package_name],
+    notify            => Service[$service_name],
+  }
+
+  if $storage_keyspace != undef {
+    $ensure_storage_keyspace = present
+  } else {
+    $ensure_storage_keyspace = absent
+  }
+
+  ini_setting { 'storage_keyspace':
+    ensure            => $ensure_storage_keyspace,
+    path              => $address_config_file,
+    section           => '',
+    key_val_separator => ': ',
+    setting           => 'storage_keyspace',
+    value             => $storage_keyspace,
+    require           => Package[$package_name],
+    notify            => Service[$service_name],
   }
 
   if $agent_alias != undef {
@@ -71,7 +119,7 @@ class cassandra::datastax_agent (
     setting           => 'alias',
     value             => $agent_alias,
     require           => Package[$package_name],
-    notify            => Service[$service_name]
+    notify            => Service[$service_name],
   }
 
   if $async_pool_size != undef {
@@ -83,7 +131,7 @@ class cassandra::datastax_agent (
       setting           => 'async_pool_size',
       value             => $async_pool_size,
       require           => Package[$package_name],
-      notify            => Service[$service_name]
+      notify            => Service[$service_name],
     }
   }
 
@@ -96,7 +144,7 @@ class cassandra::datastax_agent (
       setting           => 'async_queue_size',
       value             => $async_queue_size,
       require           => Package[$package_name],
-      notify            => Service[$service_name]
+      notify            => Service[$service_name],
     }
   }
 
@@ -108,17 +156,11 @@ class cassandra::datastax_agent (
       key_val_separator => '=',
       setting           => 'JAVA_HOME',
       value             => $java_home,
-      notify            => Service[$service_name]
+      notify            => Service[$service_name],
     }
   }
 
-  if $service_provider != undef {
-    System {
-      provider => $service_provider
-    }
-  }
-
-  if $service_systemd == true {
+  if $service_systemd {
     if $::osfamily == 'Debian' {
       $systemd_path = '/lib/systemd/system'
     } else {
@@ -134,7 +176,7 @@ class cassandra::datastax_agent (
 
     exec { 'datastax_agent_reload_systemctl':
       command     => "${::cassandra::params::systemctl} daemon-reload",
-      refreshonly => true
+      refreshonly => true,
     }
 
     file { "${systemd_path}/${service_name}.service":
@@ -144,7 +186,7 @@ class cassandra::datastax_agent (
       content => template($service_systemd_tmpl),
       mode    => '0644',
       before  => Package[$package_name],
-      notify  => Exec['datastax_agent_reload_systemctl']
+      notify  => Exec['datastax_agent_reload_systemctl'],
     }
   }
 

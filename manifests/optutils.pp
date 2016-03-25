@@ -2,18 +2,16 @@
 class cassandra::optutils (
   $ensure         = 'present',
   $package_ensure = 'present',
-  $package_name   = $::cassandra::params::optutils_package_name
+  $package_name   = $::cassandra::params::optutils_package_name,
   ) inherits cassandra::params {
   # Some horrific jiggerypokery until we can deprecate the ensure parameter.
   if $ensure != present {
-    if $package_ensure != present {
-      if $ensure != $package_ensure {
-        fail('Both ensure and package_ensure attributes are set.')
-      }
+    if $package_ensure != present and $ensure != $package_ensure {
+      fail('Both ensure and package_ensure attributes are set.')
     }
 
     cassandra::private::deprecation_warning { 'cassandra::optutils::ensure':
-      item_number => 16
+      item_number => 16,
     }
 
     $version = $ensure
@@ -23,6 +21,6 @@ class cassandra::optutils (
 
   package { $package_name:
     ensure  => $version,
-    require => Class['cassandra']
+    require => Class['cassandra'],
   }
 }

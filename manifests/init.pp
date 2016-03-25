@@ -162,12 +162,18 @@ class cassandra (
   $trickle_fsync                                        = false,
   $trickle_fsync_interval_in_kb                         = 10240,
   $truncate_request_timeout_in_ms                       = 60000,
-  $write_request_timeout_in_ms                          = 2000
+  $write_request_timeout_in_ms                          = 2000,
   ) inherits cassandra::params {
-  if $manage_dsc_repo == true {
+  if $::cassandra::service_provider != undef {
+    Service {
+      provider => $::cassandra::service_provider,
+    }
+  }
+
+  if $manage_dsc_repo {
     require '::cassandra::datastax_repo'
     cassandra::private::deprecation_warning { 'cassandra::manage_dsc_repo':
-      item_number => 14
+      item_number => 14,
     }
   }
 
@@ -175,7 +181,7 @@ class cassandra (
     $dep_015_url = 'https://github.com/locp/cassandra/wiki/DEP-015'
     $supported_os_only = $fail_on_non_suppoted_os
     cassandra::private::deprecation_warning { 'cassandra::fail_on_non_suppoted_os':
-      item_number => 15
+      item_number => 15,
     }
   } else {
     $supported_os_only = $fail_on_non_supported_os
@@ -195,12 +201,11 @@ class cassandra (
         $cassandra_pkg = $package_name
       }
 
-      if $::operatingsystemmajrelease == 7 and
-      $::cassandra::service_provider == 'init' {
+      if $::operatingsystemmajrelease == 7 and $::cassandra::service_provider == 'init' {
         exec { "/sbin/chkconfig --add ${service_name}":
           unless  => "/sbin/chkconfig --list ${service_name}",
           require => Package[$cassandra_pkg],
-          before  => Service['cassandra']
+          before  => Service['cassandra'],
         }
       }
 
@@ -220,10 +225,10 @@ class cassandra (
       }
 
       # A workaround for CASSANDRA-9822
-      if $cassandra_9822 == true {
+      if $cassandra_9822 {
         file { '/etc/init.d/cassandra':
           source => 'puppet:///modules/cassandra/CASSANDRA-9822/cassandra',
-          mode   => '0555'
+          mode   => '0555',
         }
       }
 
@@ -244,10 +249,10 @@ class cassandra (
     ensure => $package_ensure,
   }
 
-  if $service_systemd == true {
+  if $service_systemd {
     exec { 'cassandra_reload_systemctl':
       command     => "${::cassandra::params::systemctl} daemon-reload",
-      refreshonly => true
+      refreshonly => true,
     }
 
     file { "${systemd_path}/${service_name}.service":
@@ -257,7 +262,7 @@ class cassandra (
       content => template($service_systemd_tmpl),
       mode    => '0644',
       before  => Package[$cassandra_pkg],
-      notify  => Exec[cassandra_reload_systemctl]
+      notify  => Exec[cassandra_reload_systemctl],
     }
   }
 
@@ -278,7 +283,7 @@ class cassandra (
       owner   => 'cassandra',
       group   => 'cassandra',
       mode    => $commitlog_directory_mode,
-      require => Package[$cassandra_pkg]
+      require => Package[$cassandra_pkg],
     }
   }
 
@@ -290,18 +295,12 @@ class cassandra (
       owner   => 'cassandra',
       group   => 'cassandra',
       mode    => $saved_caches_directory_mode,
-      require => Package[$cassandra_pkg]
+      require => Package[$cassandra_pkg],
     }
   }
 
   if $package_ensure != 'absent' and $package_ensure != 'purged' {
-    if $::cassandra::service_provider != undef {
-      Service {
-        provider => $::cassandra::service_provider
-      }
-    }
-
-    if $service_refresh == true {
+    if $service_refresh {
       service { 'cassandra':
         ensure    => $service_ensure,
         name      => $service_name,
@@ -314,7 +313,7 @@ class cassandra (
           Ini_setting['rackdc.properties.dc'],
           Ini_setting['rackdc.properties.rack'],
           Package[$cassandra_pkg],
-        ]
+        ],
       }
     } else {
       service { 'cassandra':
@@ -344,14 +343,14 @@ class cassandra (
   }
 
   if $dc_suffix != undef {
-    if $service_refresh == true {
+    if $service_refresh {
       ini_setting { 'rackdc.properties.dc_suffix':
         path    => $dc_rack_properties_file,
         section => '',
         setting => 'dc_suffix',
         value   => $dc_suffix,
         require => Package[$cassandra_pkg],
-        notify  => Service['cassandra']
+        notify  => Service['cassandra'],
       }
     } else {
       ini_setting { 'rackdc.properties.dc_suffix':
@@ -365,14 +364,14 @@ class cassandra (
   }
 
   if $prefer_local != undef {
-    if $service_refresh == true {
+    if $service_refresh {
       ini_setting { 'rackdc.properties.prefer_local':
         path    => $dc_rack_properties_file,
         section => '',
         setting => 'prefer_local',
         value   => $prefer_local,
         require => Package[$cassandra_pkg],
-        notify  => Service['cassandra']
+        notify  => Service['cassandra'],
       }
     } else {
       ini_setting { 'rackdc.properties.prefer_local':

@@ -1841,13 +1841,45 @@ set as the alias setting in
 which is the name the agent announces itself to OpsCenter as.
 Default value *undef*
 
+##### `async_pool_size`
+If the value is changed from the default of *undef* then this is what is
+set as the async_pool_size setting in
+**/var/lib/datastax-agent/conf/address.yaml**
+which is the pool size to use for async operations to cassandra.
+Default value *undef*
+
+##### `async_queue_size`
+If the value is changed from the default of *undef* then this is what is
+set as the async_queue_size setting in
+**/var/lib/datastax-agent/conf/address.yaml**
+which is the maximum number of queued cassandra operations.
+Default value *undef*
+
 ##### `defaults_file`
 The full path name to the file where `java_home` is set.
 Default value '/etc/default/datastax-agent'
 
+##### `hosts`
+If the value is changed from the default of *undef* then this is what is
+set as the hosts setting in
+**/var/lib/datastax-agent/conf/address.yaml**
+which is the DataStax Enterprise node or nodes responsible for storing
+OpsCenter data. By default, this will be the local node, but may be
+configured to store data on a separate cluster. The hosts option accepts
+an array of strings specifying the IP addresses of the node or nodes. For
+example, ["1.2.3.4"] or ["1.2.3.4", "1.2.3.5"].
+Default value *undef*
+
 ##### `java_home`
 If the value of this variable is left as *undef*, no action is taken.
 Otherwise the value is set as JAVA_HOME in `defaults_file`.
+Default value *undef*
+
+##### `local_interface`
+If the value is changed from the default of *undef* then this is what is
+set as the local_interface setting in
+**/var/lib/datastax-agent/conf/address.yaml**
+which is the address there the local cassandra will be contacted.
 Default value *undef*
 
 ##### `package_ensure`
@@ -1900,25 +1932,11 @@ set as the stomp_interface setting in
 which connects the agent to an OpsCenter instance.
 Default value *undef*
 
-##### `local_interface`
+##### `storage_keyspace`
 If the value is changed from the default of *undef* then this is what is
-set as the local_interface setting in
+set as the storage_keyspace setting in
 **/var/lib/datastax-agent/conf/address.yaml**
-which is the address there the local cassandra will be contacted.
-Default value *undef*
-
-##### `async_pool_size`
-If the value is changed from the default of *undef* then this is what is
-set as the async_pool_size setting in
-**/var/lib/datastax-agent/conf/address.yaml**
-which is the pool size to use for async operations to cassandra.
-Default value *undef*
-
-##### `async_queue_size`
-If the value is changed from the default of *undef* then this is what is
-set as the async_queue_size setting in
-**/var/lib/datastax-agent/conf/address.yaml**
-which is the maximum number of queued cassandra operations.
+which is keyspace that the agent uses to store data.  See also `hosts`.
 Default value *undef*
 
 ### Class: cassandra::datastax_repo
@@ -2484,7 +2502,16 @@ for more details.  A value of *undef* will ensure the setting is not present
 in the file.  Default value *undef*
 
 ##### `ldap_group_search_filter`
+Is deprecated use `ldap_group_search_filter_with_dn` instead.
+
 This sets the group_search_filter setting in the ldap section of the
+OpsCenter configuration file.  See
+http://docs.datastax.com/en/opscenter/5.2/opsc/configure/opscConfigProps_r.html
+for more details.  A value of *undef* will ensure the setting is not present
+in the file.  Default value *undef*
+
+##### `ldap_group_search_filter_with_dn`
+This sets the group_search_filter_with_dn setting in the ldap section of the
 OpsCenter configuration file.  See
 http://docs.datastax.com/en/opscenter/5.2/opsc/configure/opscConfigProps_r.html
 for more details.  A value of *undef* will ensure the setting is not present

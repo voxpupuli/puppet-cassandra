@@ -28,17 +28,6 @@ acceptance_tests () {
   return $status
 }
 
-bundle_install () {
-  echo "RVM: $RVM"
-  BUNDLE_OPS='--without development'
-
-  if [ ! -z "$RVM" ]; then
-    rvm-exec $RVM bash -c "bundle install" $BUNDLE_OPS
-  else
-    bundle install $BUNDLE_OPS
-  fi
-}
-
 deploy () {
   local_version=$( ./scripts/module_version.py --local )
 
@@ -133,52 +122,6 @@ merge () {
   git push --set-upstream origin $target
   return $?
 }
-
-unit_tests () {
-  status=0
-  bundle --version
-  gem --version
-  ruby --version
-  rvm --version
-  bundle exec rake metadata_lint || status=$?
-
-  if (( CIRCLE_NODE_INDEX >= 2 )); then
-    bundle exec rake rubocop || status=$?
-  fi
-
-  bundle exec rake lint || status=$?
-  bundle exec rake validate || status=$?
-
-  bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter \
-      -o $CIRCLE_TEST_REPORTS/rspec/puppet.xml" || status=$?
-  return $status
-}
-
-if [ -z "${CIRCLE_NODE_INDEX}" ]; then
-  echo "Not running on CircleCI parallel nodes."
-else
-  export BUNDLE_PATH="vendor/bundle_${CIRCLE_NODE_INDEX}"
-  echo "Bundle Path: $BUNDLE_PATH"
-fi
-
-# Load RVM into a shell session *as a function*
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" 
-
-case $CIRCLE_NODE_INDEX in
-  0) export RVM=1.9.3-p448
-     export PUPPET_GEM_VERSION="~> 3.0"
-     rvm use ruby-${RVM}
-     ;;
-  1) export RVM=2.1.5
-     export PUPPET_GEM_VERSION="~> 3.0"
-     rvm use ruby-${RVM}
-     ;;
-  2) export RVM=2.1.6
-     export PUPPET_GEM_VERSION="~> 4.0"
-     export STRICT_VARIABLES="yes"
-     rvm use ruby-${RVM}
-     ;;
-esac
 
 subcommand=$1 
 shift

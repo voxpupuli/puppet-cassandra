@@ -10,40 +10,38 @@ class cassandra::opscenter::pycrypto (
   $reqd_pckgs     = ['python-devel', 'python-pip' ],
   ){
   if $::osfamily == 'RedHat' {
-    if $manage_epel == true {
+    if $manage_epel {
       package { 'epel-release':
-        ensure => 'present',
-        before => Package[ $reqd_pckgs ]
+        ensure => present,
+        before => Package[ $reqd_pckgs ],
       }
     }
 
     package { $reqd_pckgs:
       ensure => present,
-      before => Package[$package_name]
+      before => Package[$package_name],
     }
 
     ##########################################################################
     # Nasty hack to workaround PUP-3829.  Hopefully can be removed in the
     # not too distant future.
     file { '/usr/bin/pip-python':
-      ensure  => 'link',
+      ensure  => link,
       target  => '/usr/bin/pip',
       require => Package['python-pip'],
-      before  => Package[$package_name]
+      before  => Package[$package_name],
     }
     # End of PUP-3829 hack.
     ##########################################################################
 
     # Some horrific jiggerypokery until we can deprecate the ensure parameter.
     if $ensure != present {
-      if $package_ensure != present {
-        if $ensure != $package_ensure {
-          fail('Both ensure and package_ensure attributes are set.')
-        }
+      if $package_ensure != present and $ensure != $package_ensure {
+        fail('Both ensure and package_ensure attributes are set.')
       }
 
       cassandra::private::deprecation_warning { 'cassandra::opscenter::pycrypto::ensure':
-        item_number => 16
+        item_number => 16,
       }
 
       $version = $ensure
@@ -54,7 +52,7 @@ class cassandra::opscenter::pycrypto (
     package { $package_name:
       ensure   => $version,
       provider => $provider,
-      before   => Package['opscenter']
+      before   => Package['opscenter'],
     }
   }
 }
