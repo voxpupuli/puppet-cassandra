@@ -43,7 +43,7 @@ class { 'cassandra::schema':
       'fields'   => {
         'firstname' => 'text',
         'lastname'  => 'text',
-      }
+      },
     },
     'address'  => {
       'keyspace' => 'Excalibur',
@@ -56,14 +56,14 @@ class { 'cassandra::schema':
     },
   },
   keyspaces => {
-    'Excelsior' => {
+    'Excelsior'  => {
       replication_map => {
         keyspace_class     => 'SimpleStrategy',
         replication_factor => 3,
       },
       durable_writes  => false,
     },
-    'Excalibur' => {
+    'Excalibur'  => {
       replication_map => {
         keyspace_class => 'NetworkTopologyStrategy',
         dc1            => 3,
@@ -73,7 +73,7 @@ class { 'cassandra::schema':
     },
     'mykeyspace' => {
       replication_map => {
-        keyspace_class => 'SimpleStrategy',
+        keyspace_class     => 'SimpleStrategy',
         replication_factor => 1,
       },
     },
@@ -86,26 +86,26 @@ class { 'cassandra::schema':
     },
   },
   tables    => {
-    'users' => {
+    'myusers' => {
       'keyspace' => 'mykeyspace',
-      'columns'       => {
+      'columns'  => {
         'userid'      => 'int',
         'fname'       => 'text',
         'lname'       => 'text',
         'PRIMARY KEY' => '(userid)',
       },
     },
-    'users' => {
+    'users'   => {
       'keyspace' => 'Excalibur',
-      'columns'       => {
-        'userid'          => 'text',
-        'username'        => 'FROZEN<fullname>',
-        'emails'          => 'set<text>',
-        'top_scores'      => 'list<int>',
-        'todo'            => 'map<timestamp, text>',
-        'PRIMARY KEY'     => '(userid)',
+      'columns'  => {
+        'userid'      => 'text',
+        'username'    => 'FROZEN<fullname>',
+        'emails'      => 'set<text>',
+        'top_scores'  => 'list<int>',
+        'todo'        => 'map<timestamp, text>',
+        'PRIMARY KEY' => '(userid)',
       },
-      'options'       => [
+      'options'  => [
         "ID='5a1c395e-b41f-11e5-9f22-ba0be0483c18'"
       ],
     },
