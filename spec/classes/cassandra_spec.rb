@@ -165,7 +165,7 @@ describe 'cassandra' do
       }
     end
 
-    it { should compile }
+    it { should contain_package('cassandra') }
   end
 
   context 'On an unsupported OS pleading tolerance' do
