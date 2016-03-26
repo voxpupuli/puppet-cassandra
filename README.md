@@ -372,7 +372,6 @@ class { 'cassandra::schema':
   },
   tables    => {
     'users' => {
-      'ensure'        => absent,
       'keyspace'      => 'Excalibur',
       'columns'       => {
         'userid'          => 'text',
