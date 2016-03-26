@@ -19,6 +19,7 @@ group :system_tests do
   gem 'fog',                    require: false
   gem 'fog-google',             '<= 0.0.9'
   gem 'hiera',                  require: false
+  gem 'metadata-json-lint',     require: false
   gem 'pry',                    require: false
   gem 'puppet-blacksmith',      require: false
   gem 'puppet-lint',            require: false

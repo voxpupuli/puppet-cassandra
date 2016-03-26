@@ -2,6 +2,12 @@
 dependencies: 
   bundler:
     without: [development]
+  override:
+    - bundle install --without development:
+        timeout: 240
+        environment:
+          PUPPET_GEM_VERSION: '~> 4.0'
+          STRICT_VARIABLES: yes
 deployment: 
   bugfix: 
     branch: /^bugfix.*/
@@ -46,6 +52,8 @@ notify:
       url: "https://webhooks.gitter.im/e/da8c065419a91983f0cf"
 test: 
   override: 
+    - bundle exec rake metadata_lint:
+        parallel: true
     - bundle exec rake rubocop:
         parallel: true
     - bundle exec rake lint:
