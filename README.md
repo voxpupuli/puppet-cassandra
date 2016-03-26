@@ -2055,10 +2055,9 @@ Default value '22'
 Only has any effect if the `cassandra::datastax_agent` or
 `cassandra::opscenter` classes are defined.
 
-Allow these TCP ports to be opened for traffic
-coming to or from OpsCenter
+Allow these TCP ports to be opened for traffic coming to or from OpsCenter
 appended to this list.
-Default value '[61620, 61621]'
+Default value [9042, 9160, 61620, 61621]
 
 ##### `opscenter_subnets`
 A list of subnets that are to be allowed connection to

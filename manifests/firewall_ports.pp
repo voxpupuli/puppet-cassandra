@@ -9,7 +9,7 @@ class cassandra::firewall_ports (
   $public_ports                = [8888],
   $public_subnets              = ['0.0.0.0/0'],
   $ssh_port                    = 22,
-  $opscenter_ports             = [61620, 61621],
+  $opscenter_ports             = [9042, 9160, 61620, 61621],
   $opscenter_subnets           = ['0.0.0.0/0'],
   ) {
   # Public connections on any node.

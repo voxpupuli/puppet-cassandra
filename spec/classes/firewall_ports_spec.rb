@@ -36,7 +36,7 @@ describe 'cassandra::firewall_ports' do
               'public_ports'        => [8888],
               'public_subnets'      => ['0.0.0.0/0'],
               'ssh_port'            => 22,
-              'opscenter_ports'     => [61_620, 61_621],
+              'opscenter_ports'     => [9042, 9160, 61_620, 61_621],
               'opscenter_subnets'   => ['0.0.0.0/0'])
     end
 
