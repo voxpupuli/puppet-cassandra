@@ -12,4 +12,4 @@ HOSTS:
       - 'yum -y install gcc tar systemd-container initscripts'
 CONFIG:
   type: foss
-  log_level: info
+  log_level: notice

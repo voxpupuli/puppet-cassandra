@@ -11,4 +11,4 @@ HOSTS:
       - 'apt-get install -y iptables sudo'
 CONFIG:
   type: foss
-  log_level: info
+  log_level: notice

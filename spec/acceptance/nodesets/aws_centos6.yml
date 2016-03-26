@@ -11,4 +11,4 @@ HOSTS:
       - 'yum -y install gcc tar'
 CONFIG:
   type: foss
-  log_level: debug
+  log_level: notice
