@@ -52,7 +52,7 @@ class { 'cassandra::schema':
         'city'     => 'text',
         'zip_code' => 'int',
         'phones'   => 'set<text>',
-      }
+      },
     },
   },
   keyspaces => {
