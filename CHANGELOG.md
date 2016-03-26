@@ -1,5 +1,44 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-03-26 - Release 1.18.0 ([diff](https://github.com/locp/cassandra/compare/1.17.0...1.18.0))
+
+### Summary
+
+Some more functionality and sub-classes for cassandra::schema.  Also some code
+and pipe-line improvements and a couple of bug fixes.
+
+### Features
+
+* The cassandra::schema class now has the following additional attributes:
+  * cql_types
+  * indexes
+  * tables
+
+  There are also corresponting defined types for those attributes:
+  * cassandra::schema::cql_type
+  * cassandra::schema::index
+  * cassandra::schema::table
+
+* The cassandra::opscenter class now has a new attribute called
+  ldap_group_search_filter_with_dn.
+
+### Bugfixes
+
+* In the firewalls class, an OpsCenter server also needs to connect to the
+  Cassandra node it is monitoring as a client.  The ports have been
+  adjusted to allow this to happen.
+* rspec-puppet version 2.4.0 was breaking our builds so pegged ourselves to
+  2.3.2.
+
+### Improvements
+
+* Some minor and non-functional improvements to the build pipe-line.
+* Carried out an audit using the Puppet plugin for SonarQube.  The number
+  of issues has been reduced from 227 (13 major, 214 minor) to 4 major issues
+  of which 2 are false positives. The remaining issues will be resolved in
+  2.0.0.
+
+
 ##2016-03-22 - Release 1.17.0 ([diff](https://github.com/locp/cassandra/compare/1.16.0...1.17.0))
 
 ### Summary
