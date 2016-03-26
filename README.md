@@ -862,11 +862,9 @@ The permissions mode of the cassandra configuration file.
 Default value '0644'
 
 ##### `config_path`
-The path to the cassandra configuration file.  If this is undef, it will be
-changed to **/etc/cassandra/default.conf** on the Red Hat family of operating
-systems or **/etc/cassandra** on Ubuntu.  Otherwise the user can specify the
-path name.
-Default value *undef*
+The path to the cassandra configuration file.
+Default value **/etc/cassandra/default.conf** on Red Hat
+or **/etc/cassandra** on Debian.
 
 ##### `concurrent_compactors`
 Number of simultaneous compactions to allow, NOT including
@@ -1303,10 +1301,8 @@ Default value 'present'
 
 ##### `package_name`
 The name of the Cassandra package which must be available from a repository.
-If this is *undef*, it will be changed to **cassandra22** on the Red Hat family
-of operating systems or **cassandra** on Debian.  Otherwise the user can
-specify the package name.
-Default value *undef*
+Default value **cassandra22** on the Red Hat family of operating systems
+or **cassandra** on Debian.
 
 ##### `partitioner`
 The partitioner is responsible for distributing groups of rows (by
@@ -2086,11 +2082,9 @@ Is passed to the package reference for the JNA package.  Valid values are
 Default value 'present'
 
 ##### `jna_package_name`
-If the default value of *undef* is left as it is, then a package called
-jna or libjna-java will be installed on a Red Hat family or Debian system
-respectively.  Alternatively, one can specify a package that is available in
-a package repository to the node.
-Default value *undef*
+The name of the JNA package.
+Default value jna or libjna-java will be installed on a Red Hat family or
+Debian system respectively.
 
 ##### `package_ensure`
 Is passed to the package reference for the JRE/JDK package.  Valid values are
@@ -2098,12 +2092,9 @@ Is passed to the package reference for the JRE/JDK package.  Valid values are
 Default value 'present'
 
 ##### `package_name`
-If the default value of *undef* is left as it is, then a package called
-java-1.8.0-openjdk-headless or openjdk-7-jre-headless will be installed
-on a Red Hat family or Debian system respectively.  Alternatively, one
-can specify a package that is available in a package repository to the
-node.
-Default value *undef*
+The name of the Java package to be installed.
+Default value java-1.8.0-openjdk-headless on Red Hat openjdk-7-jre-headless
+on Debian.
 
 ### Class: cassandra::opscenter
 

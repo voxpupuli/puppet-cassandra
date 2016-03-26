@@ -2,9 +2,9 @@
 class cassandra::java (
   $ensure           = 'present',
   $jna_ensure       = 'present',
-  $jna_package_name = undef,
+  $jna_package_name = $::cassandra::params::jna_package_name,
   $package_ensure   = 'present',
-  $package_name     = undef,
+  $package_name     = $::cassandra::params::java_package,
   ) {
   if $package_name == undef {
     if $::osfamily == 'RedHat' {

@@ -161,12 +161,6 @@ class cassandra::datastax_agent (
   }
 
   if $service_systemd {
-    if $::osfamily == 'Debian' {
-      $systemd_path = '/lib/systemd/system'
-    } else {
-      $systemd_path = '/usr/lib/systemd/system'
-    }
-
     file { '/var/run/datastax-agent':
       ensure => directory,
       owner  => 'cassandra',
@@ -179,7 +173,7 @@ class cassandra::datastax_agent (
       refreshonly => true,
     }
 
-    file { "${systemd_path}/${service_name}.service":
+    file { "${::cassandra::params::systemd_path}/${service_name}.service":
       ensure  => present,
       owner   => 'root',
       group   => 'root',
