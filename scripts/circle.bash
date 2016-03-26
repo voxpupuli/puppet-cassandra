@@ -30,6 +30,8 @@ acceptance_tests () {
       BEAKER_destroy=no BEAKER_set=$node bundle exec rake beaker || status=$?
       docker ps -a | grep -v 'CONTAINER ID' | xargs docker rm -f
     fi
+
+    ((i=i+1))
   done
 
   return $status
