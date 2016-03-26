@@ -24,7 +24,7 @@ class cassandra::params {
       $systemd_path = '/usr/lib/systemd/system'
     }
     default: {
-      $cassandra_pkg = 'cassandra22'
+      # Empty on purpose
     }
   }
 }
