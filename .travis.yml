@@ -23,7 +23,6 @@ notifications:
     urls: 
       - "https://webhooks.gitter.im/e/3477acef6dd93b015c9b"
 script: 
-  - "bundle exec rake metadata_lint"
   - "bundle exec rake lint"
   - "bundle exec rake validate"
   - "bundle exec rake spec SPEC_OPTS='--format documentation'"
