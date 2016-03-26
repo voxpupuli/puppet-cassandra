@@ -32,6 +32,7 @@ describe 'cassandra::schema::index' do
     it do
       should compile
       # rubocop:disable Metrics/LineLength
+      should contain_cassandra__schema__index('user_index')
       should contain_exec('/usr/bin/cqlsh   -e "CREATE INDEX IF NOT EXISTS user_index ON mykeyspace.users (lname)"  ')
       # rubocop:enable Metrics/LineLength
     end

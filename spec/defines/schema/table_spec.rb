@@ -89,6 +89,7 @@ describe 'cassandra::schema::table' do
     it do
       should compile
       # rubocop:disable Metrics/LineLength
+      should contain_cassandra__schema__table('users')
       should contain_exec('/usr/bin/cqlsh   -e "CREATE TABLE IF NOT EXISTS Excelsior.users (userid text, username FROZEN<fullname>, emails set<text>, top_scores list<int>, todo map<timestamp, text>, tuple<int, text,text>, PRIMARY KEY (userid)) WITH COMPACT STORAGE AND ID=\'5a1c395e-b41f-11e5-9f22-ba0be0483c18\'"  ')
       # rubocop:enable Metrics/LineLength
     end
