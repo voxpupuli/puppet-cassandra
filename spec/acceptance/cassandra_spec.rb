@@ -317,16 +317,21 @@ describe 'cassandra class' do
     }
 
     $keyspaces = {
-      'Excelsior' => {
+      'mykeyspace' => {
         ensure          => present,
         replication_map => $simple_strategy_map,
-        durable_writes  => false
+        durable_writes  => false,
       },
-      'Excalibur' => {
+      'Excelsior'  => {
+        ensure          => present,
+        replication_map => $simple_strategy_map,
+        durable_writes  => false,
+      },
+      'Excalibur'  => {
         ensure          => present,
         replication_map => $network_topology_strategy,
-        durable_writes  => true
-      }
+        durable_writes  => true,
+      },
     }
 
     $cql_types = {
