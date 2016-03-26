@@ -19,10 +19,16 @@ class cassandra::datastax_agent (
   $stomp_interface      = undef,
   $storage_keyspace     = undef,
   ) inherits cassandra::params {
+  if $service_provider != undef {
+    System {
+      provider => $service_provider,
+    }
+  }
+
   package { $package_name:
     ensure  => $package_ensure,
     require => Class['cassandra'],
-    notify  => Service[$service_name]
+    notify  => Service[$service_name],
   }
 
   if $stomp_interface != undef {
@@ -34,7 +40,7 @@ class cassandra::datastax_agent (
   file { $address_config_file:
     owner   => 'cassandra',
     group   => 'cassandra',
-    require => Package[$package_name]
+    require => Package[$package_name],
   }
 
   ini_setting { 'stomp_interface':
@@ -45,7 +51,7 @@ class cassandra::datastax_agent (
     setting           => 'stomp_interface',
     value             => $stomp_interface,
     require           => Package[$package_name],
-    notify            => Service[$service_name]
+    notify            => Service[$service_name],
   }
 
   if $local_interface != undef {
@@ -62,7 +68,7 @@ class cassandra::datastax_agent (
     setting           => 'local_interface',
     value             => $local_interface,
     require           => Package[$package_name],
-    notify            => Service[$service_name]
+    notify            => Service[$service_name],
   }
 
   if $hosts != undef {
@@ -79,7 +85,7 @@ class cassandra::datastax_agent (
     setting           => 'hosts',
     value             => $hosts,
     require           => Package[$package_name],
-    notify            => Service[$service_name]
+    notify            => Service[$service_name],
   }
 
   if $storage_keyspace != undef {
@@ -96,7 +102,7 @@ class cassandra::datastax_agent (
     setting           => 'storage_keyspace',
     value             => $storage_keyspace,
     require           => Package[$package_name],
-    notify            => Service[$service_name]
+    notify            => Service[$service_name],
   }
 
   if $agent_alias != undef {
@@ -113,7 +119,7 @@ class cassandra::datastax_agent (
     setting           => 'alias',
     value             => $agent_alias,
     require           => Package[$package_name],
-    notify            => Service[$service_name]
+    notify            => Service[$service_name],
   }
 
   if $async_pool_size != undef {
@@ -125,7 +131,7 @@ class cassandra::datastax_agent (
       setting           => 'async_pool_size',
       value             => $async_pool_size,
       require           => Package[$package_name],
-      notify            => Service[$service_name]
+      notify            => Service[$service_name],
     }
   }
 
@@ -138,7 +144,7 @@ class cassandra::datastax_agent (
       setting           => 'async_queue_size',
       value             => $async_queue_size,
       require           => Package[$package_name],
-      notify            => Service[$service_name]
+      notify            => Service[$service_name],
     }
   }
 
@@ -150,23 +156,11 @@ class cassandra::datastax_agent (
       key_val_separator => '=',
       setting           => 'JAVA_HOME',
       value             => $java_home,
-      notify            => Service[$service_name]
+      notify            => Service[$service_name],
     }
   }
 
-  if $service_provider != undef {
-    System {
-      provider => $service_provider
-    }
-  }
-
-  if $service_systemd == true {
-    if $::osfamily == 'Debian' {
-      $systemd_path = '/lib/systemd/system'
-    } else {
-      $systemd_path = '/usr/lib/systemd/system'
-    }
-
+  if $service_systemd {
     file { '/var/run/datastax-agent':
       ensure => directory,
       owner  => 'cassandra',
@@ -176,17 +170,17 @@ class cassandra::datastax_agent (
 
     exec { 'datastax_agent_reload_systemctl':
       command     => "${::cassandra::params::systemctl} daemon-reload",
-      refreshonly => true
+      refreshonly => true,
     }
 
-    file { "${systemd_path}/${service_name}.service":
+    file { "${::cassandra::params::systemd_path}/${service_name}.service":
       ensure  => present,
       owner   => 'root',
       group   => 'root',
       content => template($service_systemd_tmpl),
       mode    => '0644',
       before  => Package[$package_name],
-      notify  => Exec['datastax_agent_reload_systemctl']
+      notify  => Exec['datastax_agent_reload_systemctl'],
     }
   }
 

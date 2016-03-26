@@ -15,7 +15,7 @@
 3. [Usage - Configuration options and additional functionality](#usage)
     * [Create a Cluster in a Single Data Center](#create-a-cluster-in-a-single-data-center)
     * [Create a Cluster in Multiple Data Centers](#create-a-cluster-in-multiple-data-centers)
-    * [Create Keyspaces](#create-keyspaces)
+    * [Schema Maintenance](#schema-maintenance)
     * [OpsCenter](#opscenter)
     * [DataStax Enterprise](#datastax-enterprise)
 4. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
@@ -29,7 +29,10 @@
     * [cassandra::opscenter::pycrypto](#class-cassandraopscenterpycrypto)
     * [cassandra::optutils](#class-cassandraoptutils)
     * [cassandra::schema](#class-cassandraschema)
-    * [cassandra::schema::keyspace](#class-cassandraschemakeyspace)
+    * [cassandra::schema::cql_type](#defined-type-cassandraschemacql_type)
+    * [cassandra::schema::index](#defined-type-cassandraschemaindex)
+    * [cassandra::schema::keyspace](#defined-type-cassandraschemakeyspace)
+    * [cassandra::schema::table](#defined-type-cassandraschematable)
 5. [Limitations - OS compatibility, etc.](#limitations)
 6. [Contributers](#contributers)
 
@@ -317,38 +320,73 @@ We don't need to specify the rack name (with the rack attribute) as RAC1 is
 the default value.  Again, do not forget to either set auto_bootstrap to
 true or not set the attribute at all after initializing the cluster.
 
-### Create Keyspaces
+### Schema Maintenance
 
 Using the `cassandra::schema` class, we can make calls to the
-`cassandra::schema::keyspace` resource to create keyspaces.
+`cassandra::schema::keyspace` resource to create keyspaces and custom
+data types.
 
 ```puppet
-$simple_strategy_map = {
-  keyspace_class     => 'SimpleStrategy',
-  replication_factor => 3
-}
-
-$network_topology_strategy = {
-  keyspace_class => 'NetworkTopologyStrategy',
-  DC1            => 3,
-  DC2            => 2
-}
-
-$keyspaces = {
-  'Excelsior' => {
-    ensure          => present,
-    replication_map => $simple_strategy_map,
-    durable_writes  => false
-  },
-  'Excalibur' => {
-    ensure          => present,
-    replication_map => $network_topology_strategy,
-    durable_writes  => true
-  }
-}
-
 class { 'cassandra::schema':
-  keyspaces => $keyspaces
+  cql_types => {
+    'fullname' => {
+      'keyspace' => 'Excalibur',
+      'fields'   => {
+        'firstname' => 'text',
+        'lastname'  => 'text',
+      }
+    },
+    'address'  => {
+      'keyspace' => 'Excalibur',
+      'fields'   => {
+        'street'   => 'text',
+        'city'     => 'text',
+        'zip_code' => 'int',
+        'phones'   => 'set<text>',
+      }
+    },
+  },
+  indexes   => {
+    'users_emails_idx' => {
+      keyspace => 'Excalibur',
+      table    => 'users',
+      keys     => 'username',
+    },
+  },
+  keyspaces => {
+    'Excelsior' => {
+      replication_map => {
+        keyspace_class     => 'SimpleStrategy',
+        replication_factor => 3,
+      },
+      durable_writes  => false,
+    },
+    'Excalibur' => {
+      replication_map => {
+        keyspace_class => 'NetworkTopologyStrategy',
+        dc1            => 3,
+        dc2            => 2,
+      },
+      durable_writes  => true,
+    },
+  },
+  tables    => {
+    'users' => {
+      'ensure'        => absent,
+      'keyspace'      => 'Excalibur',
+      'columns'       => {
+        'userid'          => 'text',
+        'username'        => 'FROZEN<fullname>',
+        'emails'          => 'set<text>',
+        'top_scores'      => 'list<int>',
+        'todo'            => 'map<timestamp, text>',
+        'PRIMARY KEY'     => '(userid)',
+      },
+      'options'       => [
+        "ID='5a1c395e-b41f-11e5-9f22-ba0be0483c18'"
+      ],
+    },
+  },
 }
 ```
 
@@ -824,11 +862,9 @@ The permissions mode of the cassandra configuration file.
 Default value '0644'
 
 ##### `config_path`
-The path to the cassandra configuration file.  If this is undef, it will be
-changed to **/etc/cassandra/default.conf** on the Red Hat family of operating
-systems or **/etc/cassandra** on Ubuntu.  Otherwise the user can specify the
-path name.
-Default value *undef*
+The path to the cassandra configuration file.
+Default value **/etc/cassandra/default.conf** on Red Hat
+or **/etc/cassandra** on Debian.
 
 ##### `concurrent_compactors`
 Number of simultaneous compactions to allow, NOT including
@@ -1265,10 +1301,8 @@ Default value 'present'
 
 ##### `package_name`
 The name of the Cassandra package which must be available from a repository.
-If this is *undef*, it will be changed to **cassandra22** on the Red Hat family
-of operating systems or **cassandra** on Debian.  Otherwise the user can
-specify the package name.
-Default value *undef*
+Default value **cassandra22** on the Red Hat family of operating systems
+or **cassandra** on Debian.
 
 ##### `partitioner`
 The partitioner is responsible for distributing groups of rows (by
@@ -2047,11 +2081,9 @@ Is passed to the package reference for the JNA package.  Valid values are
 Default value 'present'
 
 ##### `jna_package_name`
-If the default value of *undef* is left as it is, then a package called
-jna or libjna-java will be installed on a Red Hat family or Debian system
-respectively.  Alternatively, one can specify a package that is available in
-a package repository to the node.
-Default value *undef*
+The name of the JNA package.
+Default value jna or libjna-java will be installed on a Red Hat family or
+Debian system respectively.
 
 ##### `package_ensure`
 Is passed to the package reference for the JRE/JDK package.  Valid values are
@@ -2059,12 +2091,9 @@ Is passed to the package reference for the JRE/JDK package.  Valid values are
 Default value 'present'
 
 ##### `package_name`
-If the default value of *undef* is left as it is, then a package called
-java-1.8.0-openjdk-headless or openjdk-7-jre-headless will be installed
-on a Red Hat family or Debian system respectively.  Alternatively, one
-can specify a package that is available in a package repository to the
-node.
-Default value *undef*
+The name of the Java package to be installed.
+Default value java-1.8.0-openjdk-headless on Red Hat openjdk-7-jre-headless
+on Debian.
 
 ### Class: cassandra::opscenter
 
@@ -2479,7 +2508,16 @@ for more details.  A value of *undef* will ensure the setting is not present
 in the file.  Default value *undef*
 
 ##### `ldap_group_search_filter`
+Is deprecated use `ldap_group_search_filter_with_dn` instead.
+
 This sets the group_search_filter setting in the ldap section of the
+OpsCenter configuration file.  See
+http://docs.datastax.com/en/opscenter/5.2/opsc/configure/opscConfigProps_r.html
+for more details.  A value of *undef* will ensure the setting is not present
+in the file.  Default value *undef*
+
+##### `ldap_group_search_filter_with_dn`
+This sets the group_search_filter_with_dn setting in the ldap section of the
 OpsCenter configuration file.  See
 http://docs.datastax.com/en/opscenter/5.2/opsc/configure/opscConfigProps_r.html
 for more details.  A value of *undef* will ensure the setting is not present
@@ -3093,6 +3131,10 @@ How much time to allow between the number of tries specified in
 
 Default value 30
 
+##### `cql_types`
+Creates new `cassandra::schema::cql_type` resources. Valid options: a hash to
+be passed to the `create_resources` function. Default: {}.
+
 ##### `cqlsh_additional_options`
 Any additional options to be passed to the **cqlsh** command.
 
@@ -3126,8 +3168,16 @@ See also `cqlsh_password`.
 
 Default value 'cassandra'
 
+##### `indexes`
+Creates new `cassandra::schema::indexes` resources. Valid options: a hash to
+be passed to the `create_resources` function. Default: {}.
+
 ##### `keyspaces`
 Creates new `cassandra::schema::keyspace` resources. Valid options: a hash to
+be passed to the `create_resources` function. Default: {}.
+
+##### `tables`
+Creates new `cassandra::schema::table` resources. Valid options: a hash to
 be passed to the `create_resources` function. Default: {}.
 
 ### Defined Type cassandra::opscenter::cluster_name
@@ -3267,10 +3317,63 @@ http://docs.datastax.com/en/opscenter/5.2/opsc/configure/opscStoringCollectionDa
 for more details.  A value of *undef* will ensure the setting is not
 present in the file.  Default value *undef*
 
+### Defined Type cassandra::schema::cql_type
+
+Create or drop user defined data types within the schema.  Please see the
+example code in the [Schema Maintenance](#schema-maintenance) and the
+[Limitations - OS compatibility, etc.](#limitations) sections of this document.
+
+#### Attributes
+
+##### `keyspace`
+The name of the keyspace that the data type is to be associated with.
+
+##### `ensure`
+Valid values can be **present** to ensure a data type is created, or
+**absent** to ensure it is dropped.
+
+##### `fields`
+A hash of the fields that will be components for the data type.  See
+the example earlier in this document for the layout of the hash.
+
+### Defined Type cassandra::schema::index
+
+Create or drop indexes within the schema.  Please see the
+example code in the [Schema Maintenance](#schema-maintenance) and the
+[Limitations - OS compatibility, etc.](#limitations) sections of this document.
+
+#### Attributes
+
+##### `class_name`
+The name of the class to be associated with a class when creating
+a custom class.
+
+Default value *undef*
+
+##### `index`
+The name of the index.  Defaults to the name of the resource.  Set to
+*undef* if the index is not to have a name.
+
+##### `keys`
+The columns that the index is being created on.
+
+Default value *undef*
+
+##### `keyspace`
+The name of the keyspace that the index is to be associated with.
+
+##### `options`
+Any options to be added to the index.
+
+Default value *undef*
+
+##### `table`
+The name of the table that the index is to be associated with.
+
 ### Defined Type cassandra::schema::keyspace
 
 Create or drop keyspaces within the schema.  Please see the example code in the
-[Create Keyspaces](#create-keyspaces) and the
+[Schema Maintenance](#schema-maintenance) and the
 [Limitations - OS compatibility, etc.](#limitations) sections of this document.
 
 #### Attributes
@@ -3288,21 +3391,41 @@ $network_topology_strategy = {
 ```
 
 ##### `ensure`
-Valid values can be **present** to ensure a keyspace is create, or
+Valid values can be **present** to ensure a keyspace is created, or
+**absent** to ensure it is dropped.
+
+### Defined Type cassandra::schema::table
+
+Create or drop tables within the schema.  Please see the example code in the
+[Schema Maintenance](#schema-maintenance) and the
+[Limitations - OS compatibility, etc.](#limitations) sections of this document.
+
+#### Attributes
+
+##### `keyspace`
+The name of the keyspace.  This value is taken from the title given to the
+`cassandra::schema::keyspace` resource.
+
+##### `columns`
+A hash of the columns to be placed in the table.  Optional if the table is
+to be absent.
+
+Default value {}
+
+##### `ensure`
+Valid values can be **present** to ensure a keyspace is created, or
 **absent** to ensure it is dropped.
 
 Default value **present**
 
-##### `durable_writes`
-When set to false, data written to the keyspace bypasses the commit log. Be
-careful using this option because you risk losing data. Do not set this
-attribute on a keyspace using the SimpleStrategy.
+##### `options`
+Options to be added to the table creation.
 
-Default value **false**
+Default value []
 
-##### `keyspace_name`
-The name of the keyspace.  This value is taken from the title given to the
-`cassandra::schema::keyspace` resource.
+
+##### `table`
+The name of the table.  Defaults to the name of the resource.
 
 ### Defined Type cassandra::private::data_directory
 

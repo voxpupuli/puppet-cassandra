@@ -1,5 +1,5 @@
 # cassandra::private::deprecation_warning
-define cassandra::private::deprecation_warning($item_number) {
+define cassandra::private::deprecation_warning($item_number,) {
   $item_name = $title
   $warning_message_1 = sprintf('%s has been deprecated and will be removed',
     $item_name)

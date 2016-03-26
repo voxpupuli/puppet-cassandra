@@ -17,26 +17,24 @@ acceptance_tests () {
   fi
 
   i=0
+  nodes=$( rake beaker_nodes | grep '^circle' )
+  nodes=$( echo $nodes )
 
-  for node in $( rake beaker_nodes | grep '^circle' ); do
+  if [ -z "${nodes}" ]; then
+    echo "ERROR: No nodes found."
+    exit 1
+  fi
+
+  for node in $nodes; do
     if [ $(($i % $CIRCLE_NODE_TOTAL)) -eq $CIRCLE_NODE_INDEX ]; then
       BEAKER_destroy=no BEAKER_set=$node bundle exec rake beaker || status=$?
       docker ps -a | grep -v 'CONTAINER ID' | xargs docker rm -f
     fi
+
+    ((i=i+1))
   done
 
   return $status
-}
-
-bundle_install () {
-  echo "RVM: $RVM"
-  BUNDLE_OPS='--without development'
-
-  if [ ! -z "$RVM" ]; then
-    rvm-exec $RVM bash -c "bundle install" $BUNDLE_OPS
-  else
-    bundle install $BUNDLE_OPS
-  fi
 }
 
 deploy () {
@@ -133,52 +131,6 @@ merge () {
   git push --set-upstream origin $target
   return $?
 }
-
-unit_tests () {
-  status=0
-  bundle --version
-  gem --version
-  ruby --version
-  rvm --version
-  bundle exec rake metadata_lint || status=$?
-
-  if (( CIRCLE_NODE_INDEX >= 2 )); then
-    bundle exec rake rubocop || status=$?
-  fi
-
-  bundle exec rake lint || status=$?
-  bundle exec rake validate || status=$?
-
-  bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter \
-      -o $CIRCLE_TEST_REPORTS/rspec/puppet.xml" || status=$?
-  return $status
-}
-
-if [ -z "${CIRCLE_NODE_INDEX}" ]; then
-  echo "Not running on CircleCI parallel nodes."
-else
-  export BUNDLE_PATH="vendor/bundle_${CIRCLE_NODE_INDEX}"
-  echo "Bundle Path: $BUNDLE_PATH"
-fi
-
-# Load RVM into a shell session *as a function*
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" 
-
-case $CIRCLE_NODE_INDEX in
-  0) export RVM=1.9.3-p448
-     export PUPPET_GEM_VERSION="~> 3.0"
-     rvm use ruby-${RVM}
-     ;;
-  1) export RVM=2.1.5
-     export PUPPET_GEM_VERSION="~> 3.0"
-     rvm use ruby-${RVM}
-     ;;
-  2) export RVM=2.1.6
-     export PUPPET_GEM_VERSION="~> 4.0"
-     export STRICT_VARIABLES="yes"
-     rvm use ruby-${RVM}
-     ;;
-esac
 
 subcommand=$1 
 shift

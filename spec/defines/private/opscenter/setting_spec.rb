@@ -1039,6 +1039,24 @@ describe 'cassandra::private::opscenter::setting' do
     end
   end
 
+  context 'ldap group_search_filter_with_dn' do
+    let(:title) { 'ldap group_search_filter_with_dn' }
+    let :params do
+      {
+         path: '/path/to/file',
+         section: 'ldap',
+         setting: 'group_search_filter_with_dn'
+      }
+    end
+
+    it do
+      should contain_ini_setting('ldap group_search_filter_with_dn').with('ensure' => 'absent',
+                                                                          'path'    => '/path/to/file',
+                                                                          'section' => 'ldap',
+                                                                          'setting' => 'group_search_filter_with_dn')
+    end
+  end
+
   context 'ldap group_search_type' do
     let(:title) { 'ldap group_search_type' }
     let :params do
