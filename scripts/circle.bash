@@ -17,8 +17,15 @@ acceptance_tests () {
   fi
 
   i=0
+  nodes=$( rake beaker_nodes | grep '^circle' )
+  nodes=$( echo $nodes )
 
-  for node in $( rake beaker_nodes | grep '^circle' ); do
+  if [ -z "${nodes}" ]; then
+    echo "ERROR: No nodes found."
+    exit 1
+  fi
+
+  for node in $nodes; do
     if [ $(($i % $CIRCLE_NODE_TOTAL)) -eq $CIRCLE_NODE_INDEX ]; then
       BEAKER_destroy=no BEAKER_set=$node bundle exec rake beaker || status=$?
       docker ps -a | grep -v 'CONTAINER ID' | xargs docker rm -f
