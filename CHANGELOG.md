@@ -4,7 +4,7 @@
 
 ### Summary
 
-Some minor and non-functional improvements.
+Bug fixes and some minor and non-functional improvements.
 
 ### Features
 
@@ -12,7 +12,9 @@ Some minor and non-functional improvements.
 
 ### Bugfixes
 
-* N/A
+* Resource ordering clarified in the cassandra::schema class.
+* The cqlsh command now attempts to connect to rpc_address, not the
+  listen_address.
 
 ### Improvements
 
