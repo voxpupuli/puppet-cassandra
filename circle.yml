@@ -2,12 +2,16 @@
 dependencies: 
   bundler:
     without: [development]
+  cache_directories:
+    - "~/.rvm/gems"
   override:
     - bundle install --without development:
         timeout: 240
         environment:
           PUPPET_GEM_VERSION: '~> 4.0'
           STRICT_VARIABLES: yes
+    post:
+      - rvm cleanup all
 deployment: 
   bugfix: 
     branch: /^bugfix.*/
