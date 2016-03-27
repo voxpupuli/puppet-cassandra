@@ -57,6 +57,7 @@ class cassandra::schema (
 
   # Resource Ordering
   Cassandra::Schema::Keyspace <| |> -> Cassandra::Schema::Cql_type <| |>
+  Cassandra::Schema::Keyspace <| |> -> Cassandra::Schema::Table <| |>
   Cassandra::Schema::Cql_type <| |> -> Cassandra::Schema::Table <| |>
   Cassandra::Schema::Table <| |> -> Cassandra::Schema::Index <| |>
 }
