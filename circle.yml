@@ -10,8 +10,8 @@ dependencies:
         environment:
           PUPPET_GEM_VERSION: '~> 4.0'
           STRICT_VARIABLES: yes
-    post:
-      - rvm cleanup all
+  post:
+    - rvm cleanup all
 deployment: 
   bugfix: 
     branch: /^bugfix.*/
