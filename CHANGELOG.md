@@ -1,5 +1,25 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-03-27 - Release 1.18.1 ([diff](https://github.com/locp/cassandra/compare/1.18.0...1.18.1))
+
+### Summary
+
+Some minor and non-functional improvements.
+
+### Features
+
+* N/A
+
+### Bugfixes
+
+* N/A
+
+### Improvements
+
+* Optimised the CircleCI build process.
+* Made some changes to the documentation to better reflect the new
+  functionality delivered in 1.18.0.
+
 ##2016-03-26 - Release 1.18.0 ([diff](https://github.com/locp/cassandra/compare/1.17.0...1.18.0))
 
 ### Summary
