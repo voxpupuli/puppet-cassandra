@@ -120,15 +120,48 @@ A Puppet module to install and manage Cassandra, DataStax Agent & OpsCenter
 
 ### Beginning with Cassandra
 
-A basic example is as follows:
+This code will install Cassandra onto a system and create a basic
+keyspace, table and index.  The node itself becomes a seed for the cluster.
 
 ```puppet
-  class { 'cassandra':
-    cluster_name    => 'MyCassandraCluster',
-    endpoint_snitch => 'GossipingPropertyFileSnitch',
-    listen_address  => "${::ipaddress}",
-    seeds           => '110.82.155.0,110.82.156.3'
-  }
+# Cassandra pre-requisites.  You may want to install your own Java
+# environment.
+include cassandra::datastax_repo
+include cassandra::java
+
+# Iinstall
+class { 'cassandra':
+  cluster_name    => 'MyCassandraCluster',
+  endpoint_snitch => 'GossipingPropertyFileSnitch',
+  listen_address  => $::ipaddress,
+  seeds           => $::ipaddress,
+  service_systemd => true,
+  require         => Class['cassandra::datastax_repo', 'cassandra::java'],
+}
+
+cassandra::schema::keyspace { 'mykeyspace':
+  replication_map => {
+    keyspace_class     => 'SimpleStrategy',
+    replication_factor => 1,
+  },
+  durable_writes  => false,
+}
+
+cassandra::schema::table { 'users':
+  columns  => {
+    user_id       => 'int',
+    fname         => 'text',
+    lname         => 'text',
+    'PRIMARY KEY' => '(user_id)',
+  },
+  keyspace => 'mykeyspace',
+}
+
+cassandra::schema::index { 'users_lname_idx':
+  table    => 'users',
+  keys     => 'lname',
+  keyspace => 'mykeyspace',
+}
 ```
 
 ### Upgrading
