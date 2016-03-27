@@ -121,7 +121,7 @@ A Puppet module to install and manage Cassandra, DataStax Agent & OpsCenter
 ### Beginning with Cassandra
 
 This code will install Cassandra onto a system and create a basic
-keyspace, table and index.  The node itself becomes a seed for the cluster.
+keyspace, table and index.
 
 ```puppet
 # Cassandra pre-requisites.  You may want to install your own Java
@@ -129,7 +129,8 @@ keyspace, table and index.  The node itself becomes a seed for the cluster.
 include cassandra::datastax_repo
 include cassandra::java
 
-# Iinstall
+# Install Cassandra on the node.  In this example, the node itself becomes
+# a seed for the cluster.
 class { 'cassandra':
   cluster_name    => 'MyCassandraCluster',
   endpoint_snitch => 'GossipingPropertyFileSnitch',
@@ -139,6 +140,7 @@ class { 'cassandra':
   require         => Class['cassandra::datastax_repo', 'cassandra::java'],
 }
 
+# Create a keyspace.
 cassandra::schema::keyspace { 'mykeyspace':
   replication_map => {
     keyspace_class     => 'SimpleStrategy',
@@ -147,6 +149,7 @@ cassandra::schema::keyspace { 'mykeyspace':
   durable_writes  => false,
 }
 
+# Create a table within the keyspace.
 cassandra::schema::table { 'users':
   columns  => {
     user_id       => 'int',
@@ -157,12 +160,18 @@ cassandra::schema::table { 'users':
   keyspace => 'mykeyspace',
 }
 
+# Add an index to the table.
 cassandra::schema::index { 'users_lname_idx':
   table    => 'users',
   keys     => 'lname',
   keyspace => 'mykeyspace',
 }
 ```
+
+This is how one would implement the example for getting started with Cassandra
+shown in
+http://wiki.apache.org/cassandra/GettingStarted (viewed 27-Mar-2016) using
+this Puppet module.
 
 ### Upgrading
 
