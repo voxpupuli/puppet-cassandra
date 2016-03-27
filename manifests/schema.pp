@@ -5,7 +5,7 @@ class cassandra::schema (
   $cql_types                = {},
   $cqlsh_additional_options = '',
   $cqlsh_command            = '/usr/bin/cqlsh',
-  $cqlsh_host               = $::cassandra::listen_address,
+  $cqlsh_host               = $::cassandra::rpc_address,
   $cqlsh_password           = undef,
   $cqlsh_port               = $::cassandra::native_transport_port,
   $cqlsh_user               = 'cassandra',
