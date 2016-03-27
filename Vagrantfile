@@ -36,7 +36,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision 'puppet' do |puppet|
     puppet.manifests_path = 'examples'
-    puppet.manifest_file = 'vagrant.pp'
+    puppet.manifest_file = 'getting_started.pp'
   end
 
   # Have something like the following in puppet/manifests/local.pp:
