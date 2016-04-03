@@ -10,6 +10,7 @@
 1. [Overview](#overview)
 2. [Setup - The basics of getting started with Cassandra](#setup)
     * [What Cassandra affects](#what-cassandra-affects)
+    * [Setup Requirements](#setup-requirements)
     * [Beginning with Cassandra](#beginning-with-cassandra)
     * [Upgrading](#upgrading)
 3. [Usage - Configuration options and additional functionality](#usage)
@@ -117,6 +118,11 @@ A Puppet module to install and manage Cassandra, DataStax Agent & OpsCenter
 #### What the cassandra::optutils class affects
 
 * Optionally installs the Cassandra support tools (e.g. cassandra22-tools).
+
+### Setup Requirements
+
+The cassandra::opscenter uses Ruby-based facts, so you must enable
+[pluginsync](http://docs.puppetlabs.com/guides/plugins_in_modules.html#enabling-pluginsync).
 
 ### Beginning with Cassandra
 
