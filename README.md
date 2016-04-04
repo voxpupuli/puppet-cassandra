@@ -1029,6 +1029,14 @@ rate; if there are three, each will throttle to half of the maximum,
 since we expect two nodes to be delivering hints simultaneously.)
 Default value: '1024'
 
+##### `hints_directory`
+The Cassandra hints directory. A new feature in Cassandra 3.x+ stores
+hints in this directory. Leaving it unset will cause cassandra to use
+whatever the environmental value of $CASSANDRA_HOME/data/hints is set to.
+If you see cassandra is trying to write to /hints in the cassandra.log, 
+you should set this to a sane value.
+Default value: *undef*
+
 ##### `index_summary_capacity_in_mb`
 A fixed memory pool size in MB for for SSTable index summaries. If left
 empty, this will default to 5% of the heap size. If the memory usage of
