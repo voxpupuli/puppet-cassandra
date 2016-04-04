@@ -59,8 +59,9 @@ describe 'cassandra class' do
     }
 
     class { '::cassandra::opscenter':
-      config_purge => true,
-      require      => Class['cassandra']
+      config_purge    => true,
+      service_systemd => $service_systemd,
+      require         => Class['cassandra'],
     }
 
     cassandra::opscenter::cluster_name { 'Cluster1':
