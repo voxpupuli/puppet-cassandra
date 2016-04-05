@@ -175,6 +175,7 @@ class cassandra::opscenter (
     exec { 'opscenter_reload_systemctl':
       command     => "${::cassandra::params::systemctl} daemon-reload",
       refreshonly => true,
+      notify      => Service['opscenterd'],
     }
 
     file { "${systemd_path}/${service_name}.service":
