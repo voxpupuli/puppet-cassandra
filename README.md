@@ -2431,12 +2431,6 @@ http://docs.datastax.com/en/opscenter/5.2/opsc/configure/opscConfigProps_r.html
 for more details.  A value of *undef* will ensure the setting is not present
 in the file.  Default value *undef*
 
-##### `orbited_longpoll`
-This sets the orbited_longpoll setting in the labs section of the OpsCenter 
-configuration file. See labs http://docs.datastax.com/en/opscenter/5.2/opsc/troubleshooting/opscTroubleshootingZeroNodes.html
-for more details.  A value of *undef* will ensure the setting is not present in 
-the file. Default value *undef*
-
 ##### `ldap_admin_group_name`
 This sets the admin_group_name setting in the ldap section of the
 OpsCenter configuration file.  See
@@ -2641,6 +2635,12 @@ OpsCenter configuration file.  See
 http://docs.datastax.com/en/opscenter/5.2/opsc/configure/opscConfigProps_r.html
 for more details.  A value of *undef* will ensure the setting is not present
 in the file.  Default value *undef*
+
+##### `orbited_longpoll`
+This sets the orbited_longpoll setting in the labs section of the OpsCenter 
+configuration file. See labs http://docs.datastax.com/en/opscenter/5.2/opsc/troubleshooting/opscTroubleshootingZeroNodes.html
+for more details.  A value of *undef* will ensure the setting is not present in 
+the file. Default value *undef*
 
 ##### `package_ensure`
 This is passed to the package reference for **opscenter**.  Valid values are
@@ -3285,8 +3285,7 @@ present in the file.  Default value *undef*
 ### Defined Type cassandra::schema::cql_type
 
 Create or drop user defined data types within the schema.  Please see the
-example code in the [Schema Maintenance](#schema-maintenance) and the
-[Limitations - OS compatibility, etc.](#limitations) sections of this document.
+[Limitations - OS compatibility, etc.](#limitations) section of this document.
 
 #### Attributes
 
@@ -3304,8 +3303,7 @@ the example earlier in this document for the layout of the hash.
 ### Defined Type cassandra::schema::index
 
 Create or drop indexes within the schema.  Please see the
-example code in the [Schema Maintenance](#schema-maintenance) and the
-[Limitations - OS compatibility, etc.](#limitations) sections of this document.
+[Limitations - OS compatibility, etc.](#limitations) section of this document.
 
 #### Attributes
 
@@ -3314,6 +3312,12 @@ The name of the class to be associated with a class when creating
 a custom class.
 
 Default value *undef*
+
+##### `keyspace`
+The name of the keyspace that the index is to be associated with.
+
+##### `table`
+The name of the table that the index is to be associated with.
 
 ##### `index`
 The name of the index.  Defaults to the name of the resource.  Set to
@@ -3324,22 +3328,15 @@ The columns that the index is being created on.
 
 Default value *undef*
 
-##### `keyspace`
-The name of the keyspace that the index is to be associated with.
-
 ##### `options`
 Any options to be added to the index.
 
 Default value *undef*
 
-##### `table`
-The name of the table that the index is to be associated with.
-
 ### Defined Type cassandra::schema::keyspace
 
 Create or drop keyspaces within the schema.  Please see the example code in the
-[Schema Maintenance](#schema-maintenance) and the
-[Limitations - OS compatibility, etc.](#limitations) sections of this document.
+[Limitations - OS compatibility, etc.](#limitations) section of this document.
 
 #### Attributes
 
@@ -3359,11 +3356,18 @@ $network_topology_strategy = {
 Valid values can be **present** to ensure a keyspace is created, or
 **absent** to ensure it is dropped.
 
+##### `durable_writes`
+When set to false, data written to the keyspace bypasses the commit log. Be
+careful using this option because you risk losing data. Set this attribute to
+false on a keyspace using the SimpleStrategy. Default value true.
+
+##### `keyspace_name`
+The name of the keyspace to be created. Defaults to the name of the resource.
+
 ### Defined Type cassandra::schema::table
 
 Create or drop tables within the schema.  Please see the example code in the
-[Schema Maintenance](#schema-maintenance) and the
-[Limitations - OS compatibility, etc.](#limitations) sections of this document.
+[Limitations - OS compatibility, etc.](#limitations) section of this document.
 
 #### Attributes
 
