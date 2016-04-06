@@ -1390,7 +1390,7 @@ NOTE: if you reduce the size, you may not get you hottest keys loaded on startup
 Default value: '0' (disable row caching)
 
 ##### `rpc_address`
-The address  bind the Thrift RPC service and native transport server to.
+The address to bind the Thrift RPC service and native transport server to.
 
 Set rpc_address OR rpc_interface, not both. Interfaces must correspond
 to a single address, IP aliasing is not supported.
