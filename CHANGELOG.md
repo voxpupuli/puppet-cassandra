@@ -1,5 +1,27 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-04-06 - Release 1.19.0 ([diff](https://github.com/locp/cassandra/compare/1.18.1...1.19.0))
+
+### Summary
+
+A new template attribute and a couple of bug fixes.
+
+### Features
+
+* The hints_directory attribute has been added to the cassandra class for
+  placing into the template.
+
+### Bugfixes
+
+* Some documentation errors that had been identified have been resolved.
+* A problem with OpsCenter and systemd has been resolved.  So far only CentOS 7
+  from the supported operating systems has been identified as being required
+  to use systemd.
+
+### Improvements
+
+* N/A
+
 ##2016-03-27 - Release 1.18.1 ([diff](https://github.com/locp/cassandra/compare/1.18.0...1.18.1))
 
 ### Summary
