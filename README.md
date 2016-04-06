@@ -175,6 +175,13 @@ this Puppet module.
 
 ### Upgrading
 
+#### Changes in 1.19.0
+
+The hints_directory documentation will cause a change in the cassandra.yaml
+file regardless of the value you set it to.  If you do not wish this to
+result in a refesh of the Cassandra service, please set service_refresh to
+false.
+
 #### Changes in 1.9.2
 
 Now that Cassandra 3 is available from the DataStax repositories, there is
@@ -1028,6 +1035,14 @@ are two nodes in the cluster, each delivery thread will use the maximum
 rate; if there are three, each will throttle to half of the maximum,
 since we expect two nodes to be delivering hints simultaneously.)
 Default value: '1024'
+
+##### `hints_directory`
+The Cassandra hints directory. A new feature in Cassandra 3.x+ stores
+hints in this directory. Leaving it unset will cause cassandra to use
+whatever the environmental value of $CASSANDRA_HOME/data/hints is set to.
+If you see cassandra is trying to write to /hints in the cassandra.log, 
+you should set this to a sane value.
+Default value: *undef*
 
 ##### `index_summary_capacity_in_mb`
 A fixed memory pool size in MB for for SSTable index summaries. If left
@@ -3496,3 +3511,4 @@ page for project specific requirements.
 1.14.0       | [#171](https://github.com/locp/cassandra/pull/171)  | [@jonen10](https://github.com/jonen10)
 1.15.0       | [#189](https://github.com/locp/cassandra/pull/189)  | [@tibers](https://github.com/tibers)
 1.18.0       | [#203](https://github.com/locp/cassandra/pull/203)  | [@Mike-Petersen](https://github.com/Mike-Petersen)
+1.19.0       | [#215](https://github.com/locp/cassandra/pull/215)  | [@tibers](https://github.com/tibers)

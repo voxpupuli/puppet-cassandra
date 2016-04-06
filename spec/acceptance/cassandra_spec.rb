@@ -603,37 +603,40 @@ describe 'cassandra class' do
   #   it { is_expected.to be_enabled }
   # end
 
-  check_against_previous_version_pp = <<-EOS
-    class { 'cassandra':
-      cassandra_9822              => true,
-      commitlog_directory_mode    => '0770',
-      data_file_directories_mode  => '0770',
-      saved_caches_directory_mode => '0770',
-    }
-  EOS
-
-  describe '########### Ensure config file does get updated unnecessarily.' do
-    it 'Initial install manifest again' do
-      apply_manifest(check_against_previous_version_pp,
-                     catch_failures: true)
-    end
-    it 'Copy the current module to the side without error.' do
-      shell('cp -R /etc/puppet/modules/cassandra /var/tmp',
-            acceptable_exit_codes: 0)
-    end
-    it 'Remove the current module without error.' do
-      shell('puppet module uninstall locp-cassandra',
-            acceptable_exit_codes: 0)
-    end
-    it 'Install the latest module from the forge.' do
-      shell('puppet module install locp-cassandra',
-            acceptable_exit_codes: 0)
-    end
-    it 'Check install works without changes with previous module version.' do
-      expect(apply_manifest(check_against_previous_version_pp,
-                            catch_failures: true).exit_code).to be_zero
-    end
-  end
+  ###########################################################################
+  # Disabling this code for now as #215 does change the template.
+  ###########################################################################
+  #  check_against_previous_version_pp = <<-EOS
+  #    class { 'cassandra':
+  #      cassandra_9822              => true,
+  #      commitlog_directory_mode    => '0770',
+  #      data_file_directories_mode  => '0770',
+  #      saved_caches_directory_mode => '0770',
+  #    }
+  #  EOS
+  #
+  #  describe '########### Ensure config file does get updated.' do
+  #    it 'Initial install manifest again' do
+  #      apply_manifest(check_against_previous_version_pp,
+  #                     catch_failures: true)
+  #    end
+  #    it 'Copy the current module to the side without error.' do
+  #      shell('cp -R /etc/puppet/modules/cassandra /var/tmp',
+  #            acceptable_exit_codes: 0)
+  #    end
+  #    it 'Remove the current module without error.' do
+  #      shell('puppet module uninstall locp-cassandra',
+  #            acceptable_exit_codes: 0)
+  #    end
+  #    it 'Install the latest module from the forge.' do
+  #      shell('puppet module install locp-cassandra',
+  #            acceptable_exit_codes: 0)
+  #    end
+  #    it 'Check install works without changes with previous module version.' do
+  #      expect(apply_manifest(check_against_previous_version_pp,
+  #                            catch_failures: true).exit_code).to be_zero
+  #    end
+  #  end
 
   describe '########### Gather service information (when in debug mode).' do
     it 'Show the cassandra system log.' do

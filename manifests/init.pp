@@ -67,6 +67,7 @@ class cassandra (
   $file_cache_size_in_mb                                = undef,
   $hinted_handoff_enabled                               = true,
   $hinted_handoff_throttle_in_kb                        = 1024,
+  $hints_directory                                      = undef,
   $incremental_backups                                  = false,
   $index_summary_capacity_in_mb                         = '',
   $index_summary_resize_interval_in_minutes             = 60,

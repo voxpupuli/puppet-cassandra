@@ -49,6 +49,9 @@ hinted_handoff_throttle_in_kb: <%= @hinted_handoff_throttle_in_kb %>
 # Consider increasing this number when you have multi-dc deployments, since
 # cross-dc handoff tends to be slower
 max_hints_delivery_threads: <%= @max_hints_delivery_threads %>
+# Cassandra hints directory. 
+# (Default: $CASSANDRA_HOME/data/hints) Set directory where hints are stored.
+<% if @hints_directory != nil %>hints_directory: <%= @hints_directory %><% else %># hints_directory:<% end %>
 
 # Maximum throttle in KBs per second, total. This will be
 # reduced proportionally to the number of nodes in the cluster.

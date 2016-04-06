@@ -40,6 +40,7 @@ describe 'cassandra' do
         disk_failure_policy: 'foo',
         endpoint_snitch: 'foo',
         hinted_handoff_enabled: 'foo',
+        hints_directory: 'hints_dir',
         incremental_backups: 'foo',
         internode_compression: 'foo',
         listen_address: 'foo',
@@ -236,6 +237,11 @@ describe 'cassandra' do
     it do
       should contain_file('/etc/cassandra.yaml')
         .with_content(/hinted_handoff_enabled: foo/)
+    end
+
+    it do
+      should contain_file('/etc/cassandra.yaml')
+        .with_content(/hints_directory: hints_dir/)
     end
 
     it do
