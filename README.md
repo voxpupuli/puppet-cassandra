@@ -175,6 +175,13 @@ this Puppet module.
 
 ### Upgrading
 
+#### Changes in 1.19.0
+
+The hints_directory documentation will cause a change in the cassandra.yaml
+file regardless of the value you set it to.  If you do not wish this to
+result in a refesh of the Cassandra service, please set service_refresh to
+false.
+
 #### Changes in 1.9.2
 
 Now that Cassandra 3 is available from the DataStax repositories, there is
@@ -3500,3 +3507,4 @@ page for project specific requirements.
 1.14.0       | [#171](https://github.com/locp/cassandra/pull/171)  | [@jonen10](https://github.com/jonen10)
 1.15.0       | [#189](https://github.com/locp/cassandra/pull/189)  | [@tibers](https://github.com/tibers)
 1.18.0       | [#203](https://github.com/locp/cassandra/pull/203)  | [@Mike-Petersen](https://github.com/Mike-Petersen)
+1.19.0       | [#215](https://github.com/locp/cassandra/pull/215)  | [@tibers](https://github.com/tibers)
