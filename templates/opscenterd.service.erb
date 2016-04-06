@@ -5,16 +5,11 @@ Description=Cassandra cluster manager opscenterd
 After=network.target
 
 [Service]
-PIDFile=/var/run/<%= @service_name %>/<%= @service_name %>.pid
-ExecStart=/etc/init.d/<%= @service_name %> start
-ExecStop=/etc/init.d/<%= @service_name %> stop
-StandardOutput=journal
-StandardError=journal
-LimitNOFILE=100000
-LimitMEMLOCK=infinity
-LimitNPROC=32768
-LimitAS=infinity
-SuccessExitStatus=143
+Environment=SYSTEMCTL_SKIP_REDIRECT=1
+ExecStart=/etc/init.d/opscenterd start
+ExecStop=/etc/init.d/opscenterd stop
+PIDFile=/var/run/opscenter/opscenterd.pid
+Type=forking
 
 [Install]
 WantedBy=multi-user.target
