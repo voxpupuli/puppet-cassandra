@@ -798,6 +798,12 @@ segment and remove it.  So a small total commitlog space will tend
 to cause more flush activity on less-active columnfamilies.
 Default value: *undef*
 
+##### `compaction_large_partition_warning_threshold_mb`
+If left as the default, then this will not be placed into the configuration
+file where it will have the functional effect of a value of 100.  Logs a
+warning when compaction partitions larger than the set value.
+Default value: *undef*
+
 ##### `compaction_throughput_mb_per_sec`
 Throttles compaction to the given total throughput across the entire
 system. The faster you insert data, the faster you need to compact in
@@ -1196,6 +1202,14 @@ modify cassandra-env.sh as directed in the file.
 
 If left as the default, NativeAllocator is assumed.
 Default value: *undef*
+
+##### `memtable_allocation_type`
+Specify the way Cassandra allocates and manages memtable memory.  Options are:
+* heap_buffers:    on heap nio buffers
+* offheap_buffers: off heap (direct) nio buffers
+* offheap_objects: native memory, eliminating nio buffer heap overhead
+
+Default value: heap_buffers
 
 ##### `memtable_cleanup_threshold`
 Ratio of occupied non-flushing memtable size to total permitted size

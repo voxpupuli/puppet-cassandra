@@ -81,6 +81,7 @@ describe 'cassandra' do
         inter_dc_tcp_nodelay: 'inter_dc_tcp_nodelay',
         max_hints_delivery_threads: 'max_hints_delivery_threads',
         max_hint_window_in_ms: 'max_hint_window_in_ms',
+        memtable_allocation_type: 'offheap_buffers',
         permissions_validity_in_ms: 'permissions_validity_in_ms',
         range_request_timeout_in_ms: 'range_request_timeout_in_ms',
         read_request_timeout_in_ms: 'read_request_timeout_in_ms',
@@ -160,7 +161,8 @@ describe 'cassandra' do
         server_encryption_protocol: 'l146',
         server_encryption_require_client_auth: 'l147',
         server_encryption_store_type: 'l148',
-        thrift_framed_transport_size_in_mb: 16
+        thrift_framed_transport_size_in_mb: 16,
+        compaction_large_partition_warning_threshold_mb: 128
       }
     end
 
@@ -458,6 +460,11 @@ describe 'cassandra' do
     it do
       should contain_file('/etc/cassandra.yaml')
         .with_content(/max_hint_window_in_ms: max_hint_window_in_ms/)
+    end
+
+    it do
+      should contain_file('/etc/cassandra.yaml')
+        .with_content(/memtable_allocation_type: offheap_buffers/)
     end
 
     it do
@@ -921,6 +928,11 @@ describe 'cassandra' do
     it do
       should contain_file('/etc/cassandra.yaml')
         .with_content(/thrift_framed_transport_size_in_mb: 16/)
+    end
+
+    it do
+      should contain_file('/etc/cassandra.yaml')
+        .with_content(/compaction_large_partition_warning_threshold_mb: 128/)
     end
 
     it { should contain_file('commitlog_directory') }

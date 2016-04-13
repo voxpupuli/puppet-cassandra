@@ -17,16 +17,8 @@ deployment:
     branch: /^bugfix.*/
     commands: 
       - "./scripts/circle.bash merge release/patch"
-  feature92:
-    branch: feature/92/schema
-    commands:
-      - "./scripts/circle.bash merge release/minor"
-  feature182:
-    branch: feature/182/service_systemd_tmpl
-    commands:
-      - "./scripts/circle.bash merge release/minor"
-  feature186:
-    branch: feature/186/additional_lines
+  feature217:
+    branch: feature/217/new_attributes
     commands:
       - "./scripts/circle.bash merge release/minor"
   improvement: 
