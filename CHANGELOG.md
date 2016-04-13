@@ -9,7 +9,7 @@ A minor release for client requirements.
 ### Features
 
 * Added the compaction_large_partition_warning_threshold_mb and
-  memtable_allocation_type to the cassandra class.
+  memtable_allocation_type attributes to the cassandra class.
 
 ### Bugfixes
 
