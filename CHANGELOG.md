@@ -1,5 +1,24 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-03-13 - Release 1.20.0 ([diff](https://github.com/locp/cassandra/compare/1.19.0...1.20.0))
+
+### Summary
+
+A minor release for client requirements.
+
+### Features
+
+* Added the compaction_large_partition_warning_threshold_mb and
+  memtable_allocation_type to the cassandra class.
+
+### Bugfixes
+
+* N/A
+
+### Improvements
+
+* N/A
+
 ##2016-04-06 - Release 1.19.0 ([diff](https://github.com/locp/cassandra/compare/1.18.1...1.19.0))
 
 ### Summary
