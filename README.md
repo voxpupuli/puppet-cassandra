@@ -3526,3 +3526,4 @@ page for project specific requirements.
 1.15.0       | [#189](https://github.com/locp/cassandra/pull/189)  | [@tibers](https://github.com/tibers)
 1.18.0       | [#203](https://github.com/locp/cassandra/pull/203)  | [@Mike-Petersen](https://github.com/Mike-Petersen)
 1.19.0       | [#215](https://github.com/locp/cassandra/pull/215)  | [@tibers](https://github.com/tibers)
+1.20.0       | [#217](https://github.com/locp/cassandra/pull/217)  | [@samyray](https://github.com/samyray)
