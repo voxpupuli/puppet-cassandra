@@ -215,7 +215,7 @@ A small bugfix release.
 
 * N/A
 
-##20016-02-27 - Release 1.14.1 ([diff](https://github.com/locp/cassandra/compare/1.14.0...1.14.1))
+##2016-02-27 - Release 1.14.1 ([diff](https://github.com/locp/cassandra/compare/1.14.0...1.14.1))
 
 ### Summary
 
