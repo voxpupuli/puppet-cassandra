@@ -32,6 +32,7 @@
     * [cassandra::schema::index](#defined-type-cassandraschemaindex)
     * [cassandra::schema::keyspace](#defined-type-cassandraschemakeyspace)
     * [cassandra::schema::table](#defined-type-cassandraschematable)
+    * [cassandra::schema::user](#defined-type-cassandraschemauser)
 5. [Limitations - OS compatibility, etc.](#limitations)
 6. [Contributers](#contributers)
 
@@ -3424,6 +3425,11 @@ Default value []
 
 ##### `table`
 The name of the table.  Defaults to the name of the resource.
+
+### Defined Type cassandra::schema::user
+
+Create or drop users.  Please see the example code in the
+[Limitations - OS compatibility, etc.](#limitations) section of this document.
 
 ### Defined Type cassandra::private::data_directory
 
