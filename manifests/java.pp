@@ -20,6 +20,12 @@ class cassandra::java (
   } else {
     $version = $package_ensure
   }
+  
+  if $::osfamily = 'Debian' {
+    file_line { 'Adding installation sources for OpenJDK 8':
+      path => '/etc/apt/sources.list',  
+      line => 'deb http://http.debian.net/debian jessie-backports main',
+  }
 
   package { $package_name:
     ensure => $version,
