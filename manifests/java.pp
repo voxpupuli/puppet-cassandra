@@ -22,7 +22,7 @@ class cassandra::java (
   }
   
   if $::osfamily == 'Debian' {
-    $deb_major_release = $::facts['os']['release']['major']
+    $deb_major_release = $::os['release']['major']
     if $deb_major_release == '8' { $deb_release_name = 'jessie' }
     if $deb_major_release == '7' { $deb_release_name = 'wheezy' }
     file_line { 'Adding installation sources for OpenJDK 8':
