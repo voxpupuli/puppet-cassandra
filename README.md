@@ -3315,7 +3315,7 @@ present in the file.  Default value *undef*
 ### Defined Type cassandra::schema::cql_type
 
 Create or drop user defined data types within the schema.  Please see the
-[Limitations - OS compatibility, etc.](#limitations) section of this document.
+[Begining with Cassandra](#beginning-with-cassandra) section of this document.
 
 #### Attributes
 
@@ -3333,7 +3333,7 @@ the example earlier in this document for the layout of the hash.
 ### Defined Type cassandra::schema::index
 
 Create or drop indexes within the schema.  Please see the
-[Limitations - OS compatibility, etc.](#limitations) section of this document.
+[Begining with Cassandra](#beginning-with-cassandra) section of this document.
 
 #### Attributes
 
@@ -3366,7 +3366,7 @@ Default value *undef*
 ### Defined Type cassandra::schema::keyspace
 
 Create or drop keyspaces within the schema.  Please see the example code in the
-[Limitations - OS compatibility, etc.](#limitations) section of this document.
+[Begining with Cassandra](#beginning-with-cassandra) section of this document.
 
 #### Attributes
 
@@ -3397,7 +3397,7 @@ The name of the keyspace to be created. Defaults to the name of the resource.
 ### Defined Type cassandra::schema::table
 
 Create or drop tables within the schema.  Please see the example code in the
-[Limitations - OS compatibility, etc.](#limitations) section of this document.
+[Begining with Cassandra](#beginning-with-cassandra) section of this document.
 
 #### Attributes
 
@@ -3429,7 +3429,7 @@ The name of the table.  Defaults to the name of the resource.
 ### Defined Type cassandra::schema::user
 
 Create or drop users.  Please see the example code in the
-[Limitations - OS compatibility, etc.](#limitations) section of this document.
+[Begining with Cassandra](#beginning-with-cassandra) section of this document.
 
 ### Defined Type cassandra::private::data_directory
 
