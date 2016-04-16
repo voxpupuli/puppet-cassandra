@@ -1,6 +1,6 @@
 # Change Log for Puppet Module locp-cassandra
 
-##2016-03-13 - Release 1.20.0 ([diff](https://github.com/locp/cassandra/compare/1.19.0...1.20.0))
+##2016-04-13 - Release 1.20.0 ([diff](https://github.com/locp/cassandra/compare/1.19.0...1.20.0))
 
 ### Summary
 
