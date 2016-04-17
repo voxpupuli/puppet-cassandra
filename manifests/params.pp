@@ -8,7 +8,7 @@ class cassandra::params {
     'Debian': {
       $cassandra_pkg = 'cassandra'
       $config_path = '/etc/cassandra'
-      $java_package = 'openjdk-8-jre-headless'
+      $java_package = 'openjdk-7-jre-headless'
       $jna_package_name = 'libjna-java'
       $optutils_package_name = 'cassandra-tools'
       $systemctl = '/bin/systemctl'
