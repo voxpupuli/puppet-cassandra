@@ -13,7 +13,29 @@ describe 'cassandra class' do
     if $::osfamily == 'RedHat' {
       $cassandra_package = 'cassandra20'
       $version = '2.0.17-1'
+
+      class { 'cassandra::java':
+        before => Class['cassandra']
+      }
     } else {
+      class { 'cassandra::java':
+        aptkey       => {
+          'openjdk-r' => {
+            id     => 'DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
+            server => 'keyserver.ubuntu.com',
+          },
+        },
+        aptsource    => {
+          'openjdk-r' => {
+            location => 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu',
+            comment  => 'OpenJDK builds (all archs)',
+            release  => 'trusty',
+            repos    => 'main',
+          },
+        },
+        package_name => 'openjdk-8-jdk',
+      }
+
       $cassandra_package = 'cassandra'
       $version = '2.0.17'
 
@@ -21,10 +43,6 @@ describe 'cassandra class' do
         unless  => '/usr/bin/test -O /etc/apt/sources.list.d/datastax.list',
         require => Class['cassandra::opscenter']
       }
-    }
-
-    class { 'cassandra::java':
-      before => Class['cassandra']
     }
 
     class { 'cassandra::datastax_repo': } ->
