@@ -22,12 +22,15 @@ class cassandra::java (
   }
   
   if $::osfamily == 'Debian' {
-    $deb_major_release = $::os['release']['major']
-    if $deb_major_release == '8' { $deb_release_name = 'jessie' }
-    if $deb_major_release == '7' { $deb_release_name = 'wheezy' }
     file_line { 'Adding installation sources for OpenJDK 8':
-      path  => '/etc/apt/sources.list',
-      line => "deb http://http.debian.net/debian $deb_release_name-backports main",
+      path   => '/etc/apt/sources.list',
+      line   => "deb http://http.debian.net/debian ${::lsbdistcodename}-backports main",
+      before => Package[$package_name],
+    } ~>
+    exec { 'cassandra::java::apt_update':
+      refreshonly => true,
+      command     => '/bin/true',
+      require     => Exec['apt_update'],
     }
   }
 
