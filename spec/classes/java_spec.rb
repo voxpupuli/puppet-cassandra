@@ -5,7 +5,7 @@ describe 'cassandra::java' do
       'class apt () {}',
       'class apt::update () {}',
       'define apt::key ($id, $server) {}',
-      'define apt::source ($location, $comment, $release, $repos) {}',
+      'define apt::source ($location, $comment, $release, $repos) {}'
     ]
   end
 
@@ -136,7 +136,7 @@ describe 'cassandra::java' do
 
     let :params do
       {
-        :yumrepo => {
+        yumrepo: {
           'ACME' => {
             'baseurl' => 'http://yum.acme.org/repos',
             'descr'   => 'YUM Repository for ACME Products'
@@ -162,13 +162,13 @@ describe 'cassandra::java' do
 
     let :params do
       {
-        :aptkey => {
+        aptkey: {
           'openjdk-r' => {
             'id'     => 'DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
             'server' => 'keyserver.ubuntu.com'
           }
         },
-        :aptsource => {
+        aptsource: {
           'openjdk-r' => {
             'comment'  => 'OpenJDK builds (all archs)',
             'location' => 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu',
