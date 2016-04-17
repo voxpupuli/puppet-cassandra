@@ -137,7 +137,7 @@ describe 'cassandra::java' do
 
     let :params do
       {
-        :yumrepo => {
+        yumrepo: {
           'ACME' => {
             'baseurl' => 'http://yum.acme.org/repos',
             'descr'   => 'YUM Repository for ACME Products'
