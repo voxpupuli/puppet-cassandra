@@ -522,7 +522,7 @@ describe 'cassandra class' do
     end
   end
 
-   cassandra_uninstall22_pp = <<-EOS
+  cassandra_uninstall22_pp = <<-EOS
      if $::osfamily == 'RedHat' {
          $cassandra_optutils_package = 'cassandra22-tools'
          $cassandra_package = 'cassandra22'
@@ -530,7 +530,7 @@ describe 'cassandra class' do
          $cassandra_optutils_package = 'cassandra-tools'
          $cassandra_package = 'cassandra'
      }
-  
+
      package { $cassandra_optutils_package:
        ensure => absent
      } ->
@@ -538,8 +538,8 @@ describe 'cassandra class' do
        ensure => absent
      }
    EOS
-  
-   cassandra_upgrade30_pp = <<-EOS
+
+  cassandra_upgrade30_pp = <<-EOS
      if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == 7 {
          $service_systemd = true
      } elsif $::operatingsystem == 'Debian'
@@ -548,7 +548,7 @@ describe 'cassandra class' do
      } else {
          $service_systemd = false
      }
-  
+
      if $::osfamily == 'RedHat' {
          $cassandra_optutils_package = 'cassandra30-tools'
          $cassandra_package = 'cassandra30'
@@ -558,7 +558,7 @@ describe 'cassandra class' do
          $cassandra_package = 'cassandra'
          $version = '3.0.3'
       }
-  
+
      class { 'cassandra':
        cassandra_9822              => true,
        commitlog_directory_mode    => '0770',
@@ -570,33 +570,33 @@ describe 'cassandra class' do
        saved_caches_directory_mode => '0770',
        service_systemd             => $service_systemd
      }
-  
+
      class { 'cassandra::optutils':
        ensure       => $version,
        package_name => $cassandra_optutils_package,
        require      => Class['cassandra']
      }
    EOS
-  
-   describe '########### Uninstall Cassandra 2.2.' do
-     it 'should work with no errors' do
-       apply_manifest(cassandra_uninstall22_pp, catch_failures: true)
-     end
-   end
-   describe '########### Cassandra 3.0 installation.' do
-     it 'should work with no errors' do
-       apply_manifest(cassandra_upgrade30_pp, catch_failures: true)
-     end
-     it 'check code is idempotent' do
-       expect(apply_manifest(cassandra_upgrade30_pp,
-                             catch_failures: true).exit_code).to be_zero
-     end
+
+  describe '########### Uninstall Cassandra 2.2.' do
+    it 'should work with no errors' do
+      apply_manifest(cassandra_uninstall22_pp, catch_failures: true)
     end
-  
-   describe service('cassandra') do
-     it { is_expected.to be_running }
-     it { is_expected.to be_enabled }
-   end
+  end
+  describe '########### Cassandra 3.0 installation.' do
+    it 'should work with no errors' do
+      apply_manifest(cassandra_upgrade30_pp, catch_failures: true)
+    end
+    it 'check code is idempotent' do
+      expect(apply_manifest(cassandra_upgrade30_pp,
+                            catch_failures: true).exit_code).to be_zero
+    end
+  end
+
+  describe service('cassandra') do
+    it { is_expected.to be_running }
+    it { is_expected.to be_enabled }
+  end
 
   check_against_previous_version_pp = <<-EOS
     class { 'cassandra':
