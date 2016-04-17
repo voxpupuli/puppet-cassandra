@@ -23,7 +23,10 @@ describe 'cassandra class' do
       }
     }
 
-    class { 'cassandra::java': } ->
+    class { 'cassandra::java':
+      before => Class['cassandra']
+    }
+
     class { 'cassandra::datastax_repo': } ->
     file { '/var/lib/cassandra':
       ensure => directory,
