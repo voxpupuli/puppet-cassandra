@@ -2065,6 +2065,16 @@ A class to install an appropriate Java package.
 
 #### Attributes
 
+##### `aptkey`
+If supplied, this should be a hash of *apt::key* resources that will be passed
+to the create_resources function.  This is ignored on non-Debian systems.
+Default value *undef*
+
+##### `aptsource`
+If supplied, this should be a hash of *apt::source* resources that will be
+passed to the create_resources function.  This is ignored on non-Red Hat
+systems.  Default value *undef*
+
 ##### `ensure`
 Is deprecated (see https://github.com/locp/cassandra/wiki/DEP-016).  Use
 `package_ensure` instead.
@@ -2088,6 +2098,11 @@ Default value 'present'
 The name of the Java package to be installed.
 Default value java-1.8.0-openjdk-headless on Red Hat openjdk-7-jre-headless
 on Debian.
+
+##### `yumrepo`
+If supplied, this should be a hash of *yumrepo* resources that will be passed
+to the create_resources function.  This is ignored on non-Red Hat systems.
+Default value *undef*
 
 ### Class: cassandra::opscenter
 

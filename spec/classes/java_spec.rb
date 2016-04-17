@@ -1,5 +1,15 @@
 require 'spec_helper'
 describe 'cassandra::java' do
+  let(:pre_condition) do
+    [
+      'class apt () {}',
+      'class apt::update () {}',
+      'define apt::key ($id, $source) {}',
+      'define apt::source ($location, $comment, $release, $include) {}',
+      # 'class yumrepo ($baseurl, $descr) {}'
+    ]
+  end
+
   context 'On a RedHat OS with defaults for all parameters' do
     let :facts do
       {
@@ -10,6 +20,7 @@ describe 'cassandra::java' do
     it do
       should contain_class('cassandra::java')
     end
+
     it { should contain_package('java-1.8.0-openjdk-headless') }
     it { should contain_package('jna') }
   end
@@ -42,7 +53,7 @@ describe 'cassandra::java' do
     end
 
     it { should contain_class('cassandra::java') }
-    it { should contain_package('openjdk-8-jre-headless') }
+    it { should contain_package('openjdk-7-jre-headless') }
     it { should contain_package('libjna-java') }
     it { should have_resource_count(2) }
   end
@@ -60,7 +71,7 @@ describe 'cassandra::java' do
     end
 
     # rubocop:disable Metrics/LineLength
-    it { should contain_package('openjdk-8-jre-headless').with_ensure('2.1.13') }
+    it { should contain_package('openjdk-7-jre-headless').with_ensure('2.1.13') }
     # rubocop:enable Metrics/LineLength
   end
 
@@ -114,6 +125,32 @@ describe 'cassandra::java' do
 
     it do
       should contain_package('foobar-jna').with(ensure: 'latest')
+    end
+  end
+
+  context 'Ensure that a YUM repo can be specified.' do
+    let :facts do
+      {
+        osfamily: 'RedHat'
+      }
+    end
+
+    let :params do
+      {
+        :yumrepo => {
+          'ACME' => {
+            'baseurl' => 'http://yum.acme.org/repos',
+            'descr'   => 'YUM Repository for ACME Products'
+          }
+        }
+      }
+    end
+
+    it do
+      should contain_yumrepo('ACME').with(
+        baseurl: 'http://yum.acme.org/repos',
+        descr: 'YUM Repository for ACME Products'
+      )
     end
   end
 end
