@@ -4,9 +4,8 @@ describe 'cassandra::java' do
     [
       'class apt () {}',
       'class apt::update () {}',
-      'define apt::key ($id, $source) {}',
-      'define apt::source ($location, $comment, $release, $include) {}',
-      # 'class yumrepo ($baseurl, $descr) {}'
+      'define apt::key ($id, $server) {}',
+      'define apt::source ($location, $comment, $release, $repos) {}',
     ]
   end
 
@@ -137,7 +136,7 @@ describe 'cassandra::java' do
 
     let :params do
       {
-        yumrepo: {
+        :yumrepo => {
           'ACME' => {
             'baseurl' => 'http://yum.acme.org/repos',
             'descr'   => 'YUM Repository for ACME Products'
@@ -151,6 +150,47 @@ describe 'cassandra::java' do
         baseurl: 'http://yum.acme.org/repos',
         descr: 'YUM Repository for ACME Products'
       )
+    end
+  end
+
+  context 'Ensure that Apt key and source can be specified.' do
+    let :facts do
+      {
+        osfamily: 'Debian'
+      }
+    end
+
+    let :params do
+      {
+        :aptkey => {
+          'openjdk-r' => {
+            'id'     => 'DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
+            'server' => 'keyserver.ubuntu.com'
+          }
+        },
+        :aptsource => {
+          'openjdk-r' => {
+            'comment'  => 'OpenJDK builds (all archs)',
+            'location' => 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu',
+            'repos'    => 'main',
+            'release'  => 'trusty'
+          }
+        }
+      }
+    end
+
+    it do
+      should contain_apt__key('openjdk-r').with(
+        id: 'DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
+        server: 'keyserver.ubuntu.com'
+      )
+      should contain_apt__source('openjdk-r').with(
+        comment: 'OpenJDK builds (all archs)',
+        location: 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu',
+        repos: 'main',
+        release: 'trusty'
+      )
+      should contain_exec('cassandra::java::apt_update')
     end
   end
 end
