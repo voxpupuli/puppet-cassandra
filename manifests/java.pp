@@ -25,9 +25,17 @@ class cassandra::java (
     $deb_major_release = $::os['release']['major']
     if $deb_major_release == '8' { $deb_release_name = 'jessie' }
     if $deb_major_release == '7' { $deb_release_name = 'wheezy' }
+    if $deb_major_release == '6' { $deb_release_name = 'squeeze' }
     file_line { 'Adding installation sources for OpenJDK 8':
       path  => '/etc/apt/sources.list',
       line => "deb http://http.debian.net/debian $deb_release_name-backports main",
+    }
+    # This is horrible.
+    # See here: http://backports.debian.org/Instructions/#index3h2
+    # tl;dr - apt will not automatically install backports in debian
+    exec { 'Install Cassandra from backports':
+      path    => '/usr/sbin',
+      command => "apt-get -t $deb_release_name-backports install $package_name",
     }
   }
 
