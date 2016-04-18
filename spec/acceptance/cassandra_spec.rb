@@ -604,6 +604,7 @@ describe 'cassandra class' do
        cassandra_9822              => true,
        commitlog_directory_mode    => '0770',
        data_file_directories_mode  => '0770',
+       hints_directory             => '/var/lib/cassandra/hints',
        listen_interface            => 'lo',
        package_ensure              => $version,
        package_name                => $cassandra_package,
@@ -640,11 +641,34 @@ describe 'cassandra class' do
   end
 
   check_against_previous_version_pp = <<-EOS
+    if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == 7 {
+      $service_systemd = true
+    } elsif $::operatingsystem == 'Debian'
+      and $::operatingsystemmajrelease == 8 {
+        $service_systemd = true
+    } else {
+      $service_systemd = false
+    }
+
+    if $::osfamily == 'RedHat' {
+      $cassandra_optutils_package = 'cassandra30-tools'
+      $cassandra_package = 'cassandra30'
+      $version = '3.0.3-1'
+    } else {
+      $cassandra_optutils_package = 'cassandra-tools'
+      $cassandra_package = 'cassandra'
+      $version = '3.0.3'
+    }
+
     class { 'cassandra':
       cassandra_9822              => true,
       commitlog_directory_mode    => '0770',
       data_file_directories_mode  => '0770',
+      hints_directory             => '/var/lib/cassandra/hints',
+      package_ensure              => $version,
+      package_name                => $cassandra_package,
       saved_caches_directory_mode => '0770',
+      service_systemd             => $service_systemd,
     }
   EOS
 
