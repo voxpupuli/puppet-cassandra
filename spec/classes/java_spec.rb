@@ -42,7 +42,7 @@ describe 'cassandra::java' do
     end
 
     it { should contain_class('cassandra::java') }
-    it { should contain_package('openjdk-7-jre-headless') }
+    it { should contain_package('openjdk-8-jre-headless') }
     it { should contain_package('libjna-java') }
     it { should have_resource_count(2) }
   end
@@ -60,7 +60,7 @@ describe 'cassandra::java' do
     end
 
     # rubocop:disable Metrics/LineLength
-    it { should contain_package('openjdk-7-jre-headless').with_ensure('2.1.13') }
+    it { should contain_package('openjdk-8-jre-headless').with_ensure('2.1.13') }
     # rubocop:enable Metrics/LineLength
   end
 
