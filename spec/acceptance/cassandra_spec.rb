@@ -18,22 +18,42 @@ describe 'cassandra class' do
         before => Class['cassandra']
       }
     } else {
-      class { 'cassandra::java':
-        aptkey       => {
-          'openjdk-r' => {
-            id     => 'DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
-            server => 'keyserver.ubuntu.com',
+      if $::lsbdistid == 'Ubuntu' {
+        class { 'cassandra::java':
+          aptkey       => {
+            'openjdk-r' => {
+              id     => 'DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
+              server => 'keyserver.ubuntu.com',
+            },
           },
-        },
-        aptsource    => {
-          'openjdk-r' => {
-            location => 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu',
-            comment  => 'OpenJDK builds (all archs)',
-            release  => 'trusty',
-            repos    => 'main',
+          aptsource    => {
+            'openjdk-r' => {
+              location => 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu',
+              comment  => 'OpenJDK builds (all archs)',
+              release  => $::lsbdistcodename,
+              repos    => 'main',
+            },
           },
-        },
-        package_name => 'openjdk-8-jdk',
+          package_name => 'openjdk-8-jdk',
+        }
+      } else {
+        class { 'cassandra::java':
+          aptkey       => {
+            'ZuluJDK' => {
+              id     => '27BC0C8CB3D81623F59BDADCB1998361219BD9C9',
+              server => 'keyserver.ubuntu.com',
+            },
+          },
+          aptsource    => {
+            'ZuluJDK' => {
+              location => 'http://repos.azulsystems.com/debian',
+              comment  => 'Zulu OpenJDK 8 for Debian',
+              release  => 'stable',
+              repos    => 'main',
+            },
+          },
+          package_name => 'zulu-8',
+        }
       }
 
       $cassandra_package = 'cassandra'
