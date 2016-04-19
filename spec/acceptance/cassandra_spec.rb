@@ -698,9 +698,7 @@ describe 'cassandra class' do
 
   describe '########### Gather service information (when in debug mode).' do
     it 'Show the cassandra system log.' do
-      # rubocop:disable Metrics/LineLength
-      shell("grep -v -e '^INFO' -e '^\s*INFO' arse.txt /var/log/cassandra/system.log")
-      # rubocop:enable Metrics/LineLength
+      shell("grep -v -e '^INFO' -e '^\s*INFO' /var/log/cassandra/system.log")
     end
   end
 end
