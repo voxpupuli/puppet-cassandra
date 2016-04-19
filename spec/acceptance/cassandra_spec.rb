@@ -610,7 +610,7 @@ describe 'cassandra class' do
        package_name                => $cassandra_package,
        rpc_interface               => 'lo',
        saved_caches_directory_mode => '0770',
-       service_systemd             => $service_systemd
+       #service_systemd             => $service_systemd
      }
 
      class { 'cassandra::optutils':
@@ -625,6 +625,7 @@ describe 'cassandra class' do
       apply_manifest(cassandra_uninstall22_pp, catch_failures: true)
     end
   end
+
   describe '########### Cassandra 3.0 installation.' do
     it 'should work with no errors' do
       apply_manifest(cassandra_upgrade30_pp, catch_failures: true)
