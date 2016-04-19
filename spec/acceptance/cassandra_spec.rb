@@ -630,6 +630,11 @@ describe 'cassandra class' do
     it 'should work with no errors' do
       apply_manifest(cassandra_upgrade30_pp, catch_failures: true)
     end
+
+    it 'Give Cassandra 3.0 a minute to fully come alive.' do
+      sleep 60
+    end
+
     it 'check code is idempotent' do
       expect(apply_manifest(cassandra_upgrade30_pp,
                             catch_failures: true).exit_code).to be_zero
