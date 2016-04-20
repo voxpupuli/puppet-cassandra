@@ -96,7 +96,8 @@ describe 'cassandra class' do
 
     class { '::cassandra::opscenter::pycrypto':
       manage_epel => true,
-      before      => Class['::cassandra::opscenter']
+      before      => Class['::cassandra::opscenter'],
+      require     => Class['::cassandra'],
     }
 
     class { '::cassandra::opscenter':
