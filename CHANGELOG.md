@@ -25,7 +25,7 @@ acceptance tests to be run against Cassandra 3.
 
 * Acceptance testing of Cassandra 3.
 
-##2016-03-13 - Release 1.20.0 ([diff](https://github.com/locp/cassandra/compare/1.19.0...1.20.0))
+##2016-04-13 - Release 1.20.0 ([diff](https://github.com/locp/cassandra/compare/1.19.0...1.20.0))
 
 ### Summary
 
@@ -240,7 +240,7 @@ A small bugfix release.
 
 * N/A
 
-##20016-02-27 - Release 1.14.1 ([diff](https://github.com/locp/cassandra/compare/1.14.0...1.14.1))
+##2016-02-27 - Release 1.14.1 ([diff](https://github.com/locp/cassandra/compare/1.14.0...1.14.1))
 
 ### Summary
 

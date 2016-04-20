@@ -17,7 +17,7 @@ acceptance_tests () {
   fi
 
   i=0
-  nodes=$( rake beaker_nodes | grep '^circle' )
+  nodes=$( bundle exec rake beaker_nodes | grep '^circle' )
   nodes=$( echo $nodes )
 
   if [ -z "${nodes}" ]; then
