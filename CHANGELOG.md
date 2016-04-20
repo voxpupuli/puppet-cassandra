@@ -1,5 +1,30 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-04-20 - Release 1.21.0 ([diff](https://github.com/locp/cassandra/compare/1.20.0...1.21.0))
+
+### Summary
+
+Some minor bug fixes.  Also some features and improvements that allow
+acceptance tests to be run against Cassandra 3.
+
+### Features
+
+* Added the following attributes to cassandra::java:
+
+  * aptkey
+  * aptsource
+  * yumrepo
+
+### Bugfixes
+
+* Corrected some errors in the README and CHANGELOG.
+* Fixed problems with TravisCI builds.
+* Fixed problems with CircleCI builds.
+
+### Improvements
+
+* Acceptance testing of Cassandra 3.
+
 ##2016-03-13 - Release 1.20.0 ([diff](https://github.com/locp/cassandra/compare/1.19.0...1.20.0))
 
 ### Summary
