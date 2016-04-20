@@ -2065,6 +2065,16 @@ A class to install an appropriate Java package.
 
 #### Attributes
 
+##### `aptkey`
+If supplied, this should be a hash of *apt::key* resources that will be passed
+to the create_resources function.  This is ignored on non-Debian systems.
+Default value *undef*
+
+##### `aptsource`
+If supplied, this should be a hash of *apt::source* resources that will be
+passed to the create_resources function.  This is ignored on non-Red Hat
+systems.  Default value *undef*
+
 ##### `ensure`
 Is deprecated (see https://github.com/locp/cassandra/wiki/DEP-016).  Use
 `package_ensure` instead.
@@ -2088,6 +2098,11 @@ Default value 'present'
 The name of the Java package to be installed.
 Default value java-1.8.0-openjdk-headless on Red Hat openjdk-7-jre-headless
 on Debian.
+
+##### `yumrepo`
+If supplied, this should be a hash of *yumrepo* resources that will be passed
+to the create_resources function.  This is ignored on non-Red Hat systems.
+Default value *undef*
 
 ### Class: cassandra::opscenter
 
@@ -3508,7 +3523,8 @@ page for project specific requirements.
 
 **Release**  | **PR/Issue**                                        | **Contributer**
 -------------|-----------------------------------------------------|----------------------------------------------------
-1.20.0       | [#217](https://github.com/locp/cassandra/pull/217)  | [@samyray](https://github.com/samyray)
+1.21.0       | [#226](https://github.com/locp/cassandra/pull/226)  | [@tibers](https://github.com/tibers)
+1.20.0       | [#217](https://github.com/locp/cassandra/issues/217)| [@samyray](https://github.com/samyray)
 1.19.0       | [#215](https://github.com/locp/cassandra/pull/215)  | [@tibers](https://github.com/tibers)
 1.18.0       | [#203](https://github.com/locp/cassandra/pull/203)  | [@Mike-Petersen](https://github.com/Mike-Petersen)
 1.15.0       | [#189](https://github.com/locp/cassandra/pull/189)  | [@tibers](https://github.com/tibers)
