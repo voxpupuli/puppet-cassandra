@@ -21,6 +21,7 @@
     * [cassandra](#class-cassandra)
     * [cassandra::datastax_agent](#class-cassandradatastax_agent)
     * [cassandra::datastax_repo](#class-cassandradatastax_repo)
+    * [cassandra::env](#class-cassandraenv)
     * [cassandra::firewall_ports](#class-cassandrafirewall_ports)
     * [cassandra::java](#class-cassandrajava)
     * [cassandra::opscenter](#class-cassandraopscenter)
@@ -448,6 +449,7 @@ cassandra::opscenter::cluster_name { 'Cluster1':
 * [cassandra](#class-cassandra)
 * [cassandra::datastax_agent](#class-cassandradatastax_agent)
 * [cassandra::datastax_repo](#class-cassandradatastax_repo)
+* [cassandra::env](#class-cassandraenv)
 * [cassandra::firewall_ports](#class-cassandrafirewall_ports)
 * [cassandra::java](#class-cassandrajava)
 * [cassandra::opscenter](#class-cassandraopscenter)
@@ -1981,6 +1983,29 @@ will set the `location` attribute on an `apt::source` to
 On the Debian family, this is passed as the `release` attribute to an
 `apt::source` resource.  On the Red Hat family, it is ignored.
 Default value 'stable'
+
+### Class: cassandra::env
+
+A class for altering the environment file for Cassandra.
+
+#### Attributes
+
+##### `environment_file`
+The full path name of the environment file.  On the RedHat family this will
+default to `/etc/cassandra/default.conf/cassandra-env.sh` on Debian, the
+default is `/etc/cassandra/cassandra-env.sh`.
+
+##### `file_lines`
+If set, then the [create_resources](https://docs.puppet.com/puppet/latest/reference/function.html#createresources)
+will be used to create an array of
+[file_line](https://forge.puppet.com/puppetlabs/stdlib#file_line) resources
+where the path attribute is set to `$cassandra::env::environment_file`
+Default *undef*
+
+##### `service_refresh`
+If the Cassandra service is to be notified if the environment file is changed.
+Set to false if this is not wanted.
+Default value true.
 
 ### Class: cassandra::firewall_ports
 
