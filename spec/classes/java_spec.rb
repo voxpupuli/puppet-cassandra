@@ -1,5 +1,14 @@
 require 'spec_helper'
 describe 'cassandra::java' do
+  let(:pre_condition) do
+    [
+      'class apt () {}',
+      'class apt::update () {}',
+      'define apt::key ($id, $server) {}',
+      'define apt::source ($location, $comment, $release, $repos) {}'
+    ]
+  end
+
   context 'On a RedHat OS with defaults for all parameters' do
     let :facts do
       {
@@ -10,6 +19,7 @@ describe 'cassandra::java' do
     it do
       should contain_class('cassandra::java')
     end
+
     it { should contain_package('java-1.8.0-openjdk-headless') }
     it { should contain_package('jna') }
   end
@@ -114,6 +124,73 @@ describe 'cassandra::java' do
 
     it do
       should contain_package('foobar-jna').with(ensure: 'latest')
+    end
+  end
+
+  context 'Ensure that a YUM repo can be specified.' do
+    let :facts do
+      {
+        osfamily: 'RedHat'
+      }
+    end
+
+    let :params do
+      {
+        yumrepo: {
+          'ACME' => {
+            'baseurl' => 'http://yum.acme.org/repos',
+            'descr'   => 'YUM Repository for ACME Products'
+          }
+        }
+      }
+    end
+
+    it do
+      should contain_yumrepo('ACME').with(
+        baseurl: 'http://yum.acme.org/repos',
+        descr: 'YUM Repository for ACME Products'
+      )
+    end
+  end
+
+  context 'Ensure that Apt key and source can be specified.' do
+    let :facts do
+      {
+        osfamily: 'Debian'
+      }
+    end
+
+    let :params do
+      {
+        aptkey: {
+          'openjdk-r' => {
+            'id'     => 'DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
+            'server' => 'keyserver.ubuntu.com'
+          }
+        },
+        aptsource: {
+          'openjdk-r' => {
+            'comment'  => 'OpenJDK builds (all archs)',
+            'location' => 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu',
+            'repos'    => 'main',
+            'release'  => 'trusty'
+          }
+        }
+      }
+    end
+
+    it do
+      should contain_apt__key('openjdk-r').with(
+        id: 'DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
+        server: 'keyserver.ubuntu.com'
+      )
+      should contain_apt__source('openjdk-r').with(
+        comment: 'OpenJDK builds (all archs)',
+        location: 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu',
+        repos: 'main',
+        release: 'trusty'
+      )
+      should contain_exec('cassandra::java::apt_update')
     end
   end
 end

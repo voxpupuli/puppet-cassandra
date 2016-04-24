@@ -17,8 +17,8 @@ deployment:
     branch: /^bugfix.*/
     commands: 
       - "./scripts/circle.bash merge release/patch"
-  feature217:
-    branch: feature/217/new_attributes
+  feature226:
+    branch: pull/226/debian_jdk_8
     commands:
       - "./scripts/circle.bash merge release/minor"
   improvement: 

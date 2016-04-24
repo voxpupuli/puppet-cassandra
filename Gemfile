@@ -18,6 +18,7 @@ group :system_tests do
   gem 'docker-api',             require: false
   gem 'fog',                    require: false
   gem 'fog-google',             '<= 0.0.9'
+  gem 'google-api-client',      '<= 0.9.4'
   gem 'hiera',                  require: false
   gem 'metadata-json-lint',     require: false
   gem 'pry',                    require: false
