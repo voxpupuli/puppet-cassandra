@@ -27,4 +27,6 @@ class cassandra::params {
       # Empty on purpose
     }
   }
+
+  $environment_file = "${config_path}/cassandra-env.sh"
 }
