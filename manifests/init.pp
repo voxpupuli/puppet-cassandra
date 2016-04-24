@@ -195,7 +195,7 @@ class cassandra (
       if $::operatingsystemmajrelease == 7 and $::cassandra::service_provider == 'init' {
         exec { "/sbin/chkconfig --add ${service_name}":
           unless  => "/sbin/chkconfig --list ${service_name}",
-          require => Package[$package_name],
+          require => Package['cassandra'],
           before  => Service['cassandra'],
         }
       }
@@ -218,8 +218,9 @@ class cassandra (
     }
   }
 
-  package { $package_name:
+  package { 'cassandra':
     ensure => $package_ensure,
+    name   => $package_name,
   }
 
   if $service_systemd {
@@ -234,7 +235,7 @@ class cassandra (
       group   => 'root',
       content => template($service_systemd_tmpl),
       mode    => '0644',
-      before  => Package[$package_name],
+      before  => Package['cassandra'],
       notify  => Exec[cassandra_reload_systemctl],
     }
   }
@@ -247,7 +248,7 @@ class cassandra (
     group   => 'cassandra',
     content => template($cassandra_yaml_tmpl),
     mode    => $config_file_mode,
-    require => Package[$package_name],
+    require => Package['cassandra'],
   }
 
   if ! defined( File[$commitlog_directory] ) {
@@ -256,7 +257,7 @@ class cassandra (
       owner   => 'cassandra',
       group   => 'cassandra',
       mode    => $commitlog_directory_mode,
-      require => Package[$package_name],
+      require => Package['cassandra'],
     }
   }
 
@@ -268,7 +269,7 @@ class cassandra (
       owner   => 'cassandra',
       group   => 'cassandra',
       mode    => $saved_caches_directory_mode,
-      require => Package[$package_name],
+      require => Package['cassandra'],
     }
   }
 
@@ -285,7 +286,7 @@ class cassandra (
           File[$saved_caches_directory],
           Ini_setting['rackdc.properties.dc'],
           Ini_setting['rackdc.properties.rack'],
-          Package[$package_name],
+          Package['cassandra'],
         ],
       }
     } else {
@@ -304,7 +305,7 @@ class cassandra (
     section => '',
     setting => 'dc',
     value   => $dc,
-    require => Package[$package_name],
+    require => Package['cassandra'],
   }
 
   ini_setting { 'rackdc.properties.rack':
@@ -312,7 +313,7 @@ class cassandra (
     section => '',
     setting => 'rack',
     value   => $rack,
-    require => Package[$package_name],
+    require => Package['cassandra'],
   }
 
   if $dc_suffix != undef {
@@ -322,7 +323,7 @@ class cassandra (
         section => '',
         setting => 'dc_suffix',
         value   => $dc_suffix,
-        require => Package[$package_name],
+        require => Package['cassandra'],
         notify  => Service['cassandra'],
       }
     } else {
@@ -331,7 +332,7 @@ class cassandra (
         section => '',
         setting => 'dc_suffix',
         value   => $dc_suffix,
-        require => Package[$package_name],
+        require => Package['cassandra'],
       }
     }
   }
@@ -343,7 +344,7 @@ class cassandra (
         section => '',
         setting => 'prefer_local',
         value   => $prefer_local,
-        require => Package[$package_name],
+        require => Package['cassandra'],
         notify  => Service['cassandra'],
       }
     } else {
@@ -352,7 +353,7 @@ class cassandra (
         section => '',
         setting => 'prefer_local',
         value   => $prefer_local,
-        require => Package[$package_name],
+        require => Package['cassandra'],
       }
     }
   }

@@ -30,7 +30,7 @@ describe 'cassandra' do
         'enable' => 'true'
       )
     end
-    it { should contain_package('cassandra22') }
+    it { should contain_package('cassandra').with(name: 'cassandra22') }
     it { is_expected.not_to contain_yumrepo('datastax') }
     it do
       should contain_ini_setting('rackdc.properties.dc').with(
@@ -115,7 +115,10 @@ describe 'cassandra' do
     it do
       is_expected.to contain_file('/etc/dse/cassandra/cassandra.yaml')
       is_expected.to contain_file('/usr/lib/systemd/system/dse.service')
-      is_expected.to contain_package('dse-full').with_ensure('4.7.0-1')
+      is_expected.to contain_package('cassandra').with(
+        ensure: '4.7.0-1',
+        name: 'dse-full'
+      )
       is_expected.to contain_service('cassandra').with_name('dse')
     end
   end
