@@ -52,9 +52,7 @@ describe 'cassandra::schema::user' do
     end
 
     it do
-      # rubocop:disable Metrics/LineLength
       should contain_exec('/usr/bin/cqlsh   -e "DROP USER akers"  ')
-      # rubocop:enable Metrics/LineLength
     end
   end
 
