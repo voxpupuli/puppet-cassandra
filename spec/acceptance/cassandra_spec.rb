@@ -79,6 +79,7 @@ describe 'cassandra class' do
       ensure => directory,
     } ->
     class { 'cassandra':
+      authenticator               => 'PasswordAuthenticator',
       cassandra_9822              => true,
       cassandra_yaml_tmpl         => 'cassandra/cassandra20.yaml.erb',
       commitlog_directory_mode    => '0770',
@@ -131,6 +132,7 @@ describe 'cassandra class' do
     }
 
     class { 'cassandra':
+      authenticator               => 'PasswordAuthenticator',
       cassandra_9822              => true,
       cassandra_yaml_tmpl         => 'cassandra/cassandra20.yaml.erb',
       commitlog_directory_mode    => '0770',
@@ -211,6 +213,7 @@ describe 'cassandra class' do
     }
 
     class { 'cassandra':
+      authenticator               => 'PasswordAuthenticator',
       cassandra_9822              => true,
       commitlog_directory_mode    => '0770',
       data_file_directories_mode  => '0770',
@@ -245,6 +248,17 @@ describe 'cassandra class' do
   end
 
   cassandra_uninstall21_pp = <<-EOS
+    Exec {
+      path => [
+        '/usr/local/bin',
+        '/opt/local/bin',
+        '/usr/bin',
+        '/usr/sbin',
+        '/bin',
+        '/sbin'],
+      logoutput => true,
+    }
+
     if $::osfamily == 'RedHat' {
         $cassandra_optutils_package = 'cassandra21-tools'
         $cassandra_package = 'cassandra21'
@@ -255,7 +269,8 @@ describe 'cassandra class' do
 
     package { [$cassandra_optutils_package, $cassandra_package ]:
       ensure => absent
-    }
+    } ->
+    exec { 'rm -rf /var/lib/cassandra/*/*': }
   EOS
 
   describe '########### Uninstall Cassandra 2.1.' do
@@ -284,6 +299,7 @@ describe 'cassandra class' do
     }
 
     class { 'cassandra':
+      authenticator               => 'PasswordAuthenticator',
       cassandra_9822              => true,
       commitlog_directory_mode    => '0770',
       data_file_directories_mode  => '0770',
@@ -337,6 +353,7 @@ describe 'cassandra class' do
     }
 
     class { 'cassandra':
+      authenticator               => 'PasswordAuthenticator',
       cassandra_9822              => true,
       commitlog_directory_mode    => '0770',
       data_file_directories_mode  => '0770',
@@ -361,6 +378,8 @@ describe 'cassandra class' do
 
     if $::operatingsystem != CentOS and $::operatingsystemmajrelease != 6 {
       class { 'cassandra::schema':
+        cqlsh_password => 'cassandra',
+        cqlsh_user     => 'cassandra',
         indexes   => {
           'users_lname_idx' => {
              keyspace => 'mykeyspace',
@@ -378,6 +397,18 @@ describe 'cassandra class' do
               'lname'       => 'text',
               'PRIMARY KEY' => '(userid)',
             },
+          },
+        },
+        users     => {
+          'spillman' => {
+            password => 'Niner27',
+          },
+          'akers'    => {
+            password  => 'Niner2',
+            superuser => true,
+          },
+          'boone'    => {
+            password => 'Niner75',
           },
         },
       }
@@ -414,6 +445,7 @@ describe 'cassandra class' do
     }
 
     class { 'cassandra':
+      authenticator               => 'PasswordAuthenticator',
       cassandra_9822              => true,
       commitlog_directory_mode    => '0770',
       data_file_directories_mode  => '0770',
@@ -434,19 +466,34 @@ describe 'cassandra class' do
 
     if $::operatingsystem != CentOS and $::operatingsystemmajrelease != 6 {
       class { 'cassandra::schema':
-        indexes   => {
+        cqlsh_password => 'cassandra',
+        cql_types      => $cql_types,
+        cqlsh_user     => 'cassandra',
+        indexes        => {
           'users_emails_idx' => {
              ensure   => absent,
              keyspace => 'Excalibur',
              table    => 'users',
           },
         },
-        cql_types => $cql_types
+        users          => {
+          'spillman' => {
+            ensure   => absent,
+            password => 'Niner27',
+          },
+          'akers'    => {
+            password  => 'Niner2',
+            superuser => true,
+          },
+          'boone'    => {
+            password => 'Niner75',
+          },
+        },
       }
     }
   EOS
 
-  describe '########### Schema drop (Indexes & Types).' do
+  describe '########### Schema drop (Indexes, Users & Types).' do
     it 'should work with no errors' do
       apply_manifest(schema_testing_drop__index_and_cql_type_pp,
                      catch_failures: true)
@@ -477,6 +524,7 @@ describe 'cassandra class' do
     }
 
     class { 'cassandra':
+      authenticator               => 'PasswordAuthenticator',
       cassandra_9822              => true,
       commitlog_directory_mode    => '0770',
       data_file_directories_mode  => '0770',
@@ -490,7 +538,9 @@ describe 'cassandra class' do
 
     if $::operatingsystem != CentOS and $::operatingsystemmajrelease != 6 {
       class { 'cassandra::schema':
-        tables   => {
+        cqlsh_password => 'cassandra',
+        cqlsh_user     => 'cassandra',
+        tables         => {
           'users' => {
              ensure   => absent,
              keyspace => 'Excalibur',
@@ -530,6 +580,7 @@ describe 'cassandra class' do
     }
 
     class { 'cassandra':
+      authenticator               => 'PasswordAuthenticator',
       cassandra_9822              => true,
       commitlog_directory_mode    => '0770',
       data_file_directories_mode  => '0770',
@@ -549,7 +600,9 @@ describe 'cassandra class' do
 
     if $::operatingsystem != CentOS and $::operatingsystemmajrelease != 6 {
       class { 'cassandra::schema':
-        keyspaces => $keyspaces,
+        cqlsh_password => 'cassandra',
+        cqlsh_user     => 'cassandra',
+        keyspaces      => $keyspaces,
       }
     }
   EOS
@@ -602,6 +655,7 @@ describe 'cassandra class' do
       }
 
      class { 'cassandra':
+       authenticator               => 'PasswordAuthenticator',
        cassandra_9822              => true,
        commitlog_directory_mode    => '0770',
        data_file_directories_mode  => '0770',
@@ -611,7 +665,6 @@ describe 'cassandra class' do
        package_name                => $cassandra_package,
        rpc_interface               => 'lo',
        saved_caches_directory_mode => '0770',
-       #service_systemd             => $service_systemd
      }
 
      class { 'cassandra::optutils':
@@ -668,6 +721,7 @@ describe 'cassandra class' do
     }
 
     class { 'cassandra':
+      authenticator               => 'PasswordAuthenticator',
       cassandra_9822              => true,
       commitlog_directory_mode    => '0770',
       data_file_directories_mode  => '0770',
