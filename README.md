@@ -33,6 +33,7 @@
     * [cassandra::schema::index](#defined-type-cassandraschemaindex)
     * [cassandra::schema::keyspace](#defined-type-cassandraschemakeyspace)
     * [cassandra::schema::table](#defined-type-cassandraschematable)
+    * [cassandra::schema::user](#defined-type-cassandraschemauser)
 5. [Limitations - OS compatibility, etc.](#limitations)
 6. [Contributers](#contributers)
 
@@ -133,6 +134,7 @@ include cassandra::java
 # Install Cassandra on the node.  In this example, the node itself becomes
 # a seed for the cluster.
 class { 'cassandra':
+  authenticator   => 'PasswordAuthenticator',
   cluster_name    => 'MyCassandraCluster',
   endpoint_snitch => 'GossipingPropertyFileSnitch',
   listen_address  => $::ipaddress,
@@ -141,38 +143,50 @@ class { 'cassandra':
   require         => Class['cassandra::datastax_repo', 'cassandra::java'],
 }
 
-# Create a keyspace.
-cassandra::schema::keyspace { 'mykeyspace':
-  replication_map => {
-    keyspace_class     => 'SimpleStrategy',
-    replication_factor => 1,
+class { 'cassandra::schema':
+  cqlsh_password => 'cassandra',
+  cqlsh_user     => 'cassandra',
+  indexes        => {
+    'users_lname_idx' => {
+      table    => 'users',
+      keys     => 'lname',
+      keyspace => 'mykeyspace',
+    },
   },
-  durable_writes  => false,
-}
-
-# Create a table within the keyspace.
-cassandra::schema::table { 'users':
-  columns  => {
-    user_id       => 'int',
-    fname         => 'text',
-    lname         => 'text',
-    'PRIMARY KEY' => '(user_id)',
+  keyspaces      => {
+    'mykeyspace' => {
+      durable_writes  => false,
+      replication_map => {
+        keyspace_class     => 'SimpleStrategy',
+        replication_factor => 1,
+      },
+    }
   },
-  keyspace => 'mykeyspace',
-}
-
-# Add an index to the table.
-cassandra::schema::index { 'users_lname_idx':
-  table    => 'users',
-  keys     => 'lname',
-  keyspace => 'mykeyspace',
+  tables         => {
+    'users' => {
+      columns  => {
+        user_id       => 'int',
+        fname         => 'text',
+        lname         => 'text',
+        'PRIMARY KEY' => '(user_id)',
+      },
+      keyspace => 'mykeyspace',
+    },
+  },
+  users          => {
+    'spillman' => {
+      password => 'Niner27',
+    },
+    'akers'    => {
+      password  => 'Niner2',
+      superuser => true,
+    },
+    'boone'    => {
+      password => 'Niner75',
+    },
+  },
 }
 ```
-
-This is how one would implement the example for getting started with Cassandra
-shown in
-http://wiki.apache.org/cassandra/GettingStarted (viewed 27-Mar-2016) using
-this Puppet module.
 
 ### Upgrading
 
@@ -3354,7 +3368,7 @@ present in the file.  Default value *undef*
 ### Defined Type cassandra::schema::cql_type
 
 Create or drop user defined data types within the schema.  Please see the
-[Limitations - OS compatibility, etc.](#limitations) section of this document.
+[Begining with Cassandra](#beginning-with-cassandra) section of this document.
 
 #### Attributes
 
@@ -3372,7 +3386,7 @@ the example earlier in this document for the layout of the hash.
 ### Defined Type cassandra::schema::index
 
 Create or drop indexes within the schema.  Please see the
-[Limitations - OS compatibility, etc.](#limitations) section of this document.
+[Begining with Cassandra](#beginning-with-cassandra) section of this document.
 
 #### Attributes
 
@@ -3405,7 +3419,7 @@ Default value *undef*
 ### Defined Type cassandra::schema::keyspace
 
 Create or drop keyspaces within the schema.  Please see the example code in the
-[Limitations - OS compatibility, etc.](#limitations) section of this document.
+[Begining with Cassandra](#beginning-with-cassandra) section of this document.
 
 #### Attributes
 
@@ -3436,7 +3450,7 @@ The name of the keyspace to be created. Defaults to the name of the resource.
 ### Defined Type cassandra::schema::table
 
 Create or drop tables within the schema.  Please see the example code in the
-[Limitations - OS compatibility, etc.](#limitations) section of this document.
+[Begining with Cassandra](#beginning-with-cassandra) section of this document.
 
 #### Attributes
 
@@ -3464,6 +3478,28 @@ Default value []
 
 ##### `table`
 The name of the table.  Defaults to the name of the resource.
+
+### Defined Type cassandra::schema::user
+
+Create or drop users.  Please see the example code in the
+[Begining with Cassandra](#beginning-with-cassandra) section of this document.
+To use this class, a suitable `authenticator` (e.g. PasswordAuthenticator)
+must be set in the Cassandra class.
+
+#### Attributes
+
+##### `ensure`
+Valid values can be **present** to ensure a user is created, or **absent** to
+remove the user if it exists.  Default value true.
+
+##### `password`
+A password for the user.  Default value *undef*.
+
+##### `superuser`
+If the user is to be a super-user on the system.  Default value false.
+
+##### `user_name`
+The name of the user.  Defaults to the name of the resource.
 
 ### Defined Type cassandra::private::data_directory
 
@@ -3528,10 +3564,10 @@ From release 1.6.0 of this module, regular updates of the Cassandra 1.X
 template will cease and testing against this template will cease.  Testing
 against the template for versions of Cassandra >= 2.X will continue.
 
-When creating key spaces, the settings will only be used to create a new
-key space if it does not currently exist.  If a change is made to the
-Puppet manifest but the key space already exits, this change will not
-be reflected.
+When creating key spaces, indexes, cql_types and users the settings will only
+be used to create a new resource if it does not currently exist.  If a change
+is made to the Puppet manifest but the resource already exits, this change
+will not be reflected.
 
 ## Contributers
 

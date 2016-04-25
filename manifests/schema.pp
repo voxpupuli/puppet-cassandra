@@ -12,6 +12,7 @@ class cassandra::schema (
   $indexes                  = {},
   $keyspaces                = {},
   $tables                   = {},
+  $users                    = {},
   ) inherits ::cassandra::params {
   require '::cassandra'
 
@@ -55,9 +56,15 @@ class cassandra::schema (
     create_resources('cassandra::schema::index', $indexes)
   }
 
+  # manage users if present
+  if $users {
+    create_resources('cassandra::schema::user', $users)
+  }
+
   # Resource Ordering
   Cassandra::Schema::Keyspace <| |> -> Cassandra::Schema::Cql_type <| |>
   Cassandra::Schema::Keyspace <| |> -> Cassandra::Schema::Table <| |>
   Cassandra::Schema::Cql_type <| |> -> Cassandra::Schema::Table <| |>
   Cassandra::Schema::Table <| |> -> Cassandra::Schema::Index <| |>
+  Cassandra::Schema::Index <| |> -> Cassandra::Schema::User <| |>
 }
