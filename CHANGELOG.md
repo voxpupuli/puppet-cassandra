@@ -1,5 +1,27 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-04-25 - Release 1.22.0 ([diff](https://github.com/locp/cassandra/compare/1.21.0...1.22.0))
+
+### Summary
+
+Two new features.
+
+### Features
+
+* Allow the creation and dropping of users with the following:
+  * A new defined type cassandra::schema::user
+  * The new attribute cassandra::schema::users
+* Allow the manipulation of the environment file with the new class
+  cassandra::env.
+
+### Bugfixes
+
+* N/A
+
+### Improvements
+
+* N/A
+
 ##2016-04-20 - Release 1.21.0 ([diff](https://github.com/locp/cassandra/compare/1.20.0...1.21.0))
 
 ### Summary
