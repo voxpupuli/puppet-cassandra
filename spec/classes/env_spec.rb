@@ -9,7 +9,8 @@ describe '::cassandra::env' do
          $section,
          $key_val_separator       = nil,
          $setting,
-         $value                   = nil) {}'
+         $value                   = nil) {}',
+      'define file_line($line, $path, $match) {}'
     ]
   end
 
@@ -40,12 +41,12 @@ describe '::cassandra::env' do
       }
     end
 
-    let :parameters do
+    let :params do
       {
-        file_lines => {
+        'file_lines' => {
           'MAX_HEAP_SIZE 4GB' => {
-            line: 'MAX_HEAP_SIZE="4G"',
-            match: '^#MAX_HEAP_SIZE="4G"$'
+            'line'  => 'MAX_HEAP_SIZE="4G"',
+            'match' => '^#MAX_HEAP_SIZE="4G"$'
           }
         }
       }
@@ -56,6 +57,7 @@ describe '::cassandra::env' do
         .with(
           environment_file: '/etc/cassandra/cassandra-env.sh'
         )
+      should contain_file_line('MAX_HEAP_SIZE 4GB')
     end
   end
 end
