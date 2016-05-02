@@ -274,8 +274,8 @@ class cassandra (
   }
 
   if $package_ensure != 'absent' and $package_ensure != 'purged' {
-    if $service_refresh and defined(Package[ $package_name ]) {
-      service { 'cassandra':
+    if $service_refresh {
+      ensure_resource('service', 'cassandra', {
         ensure    => $service_ensure,
         name      => $service_name,
         enable    => $service_enable,
@@ -288,7 +288,7 @@ class cassandra (
           Ini_setting['rackdc.properties.rack'],
           Package['cassandra'],
         ],
-      }
+      })
     } else {
       service { 'cassandra':
         ensure => $service_ensure,
