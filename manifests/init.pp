@@ -274,7 +274,7 @@ class cassandra (
   }
 
   if $package_ensure != 'absent' and $package_ensure != 'purged' {
-    if $service_refresh {
+    if $service_refresh and defined(Package[ $package_name ]) {
       service { 'cassandra':
         ensure    => $service_ensure,
         name      => $service_name,
