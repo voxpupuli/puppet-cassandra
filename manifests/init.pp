@@ -289,7 +289,6 @@ class cassandra (
           Ini_setting['rackdc.properties.rack'],
           Package['cassandra'],
         ],
-      })
     } else {
       service { 'cassandra':
         ensure => $service_ensure,
