@@ -276,11 +276,11 @@ class cassandra (
   if $package_ensure != 'absent' and $package_ensure != 'purged' {
     if $service_refresh {
       service { 'cassandra':
-        after     => File[ "$config_path/$snitch_properties_file" ],
         ensure    => $service_ensure,
         name      => $service_name,
         enable    => $service_enable,
         subscribe => [
+	  File[$config_path/$snitch_properties_file],
           File[$commitlog_directory],
           File[$config_file],
           File[$data_file_directories],
@@ -292,10 +292,19 @@ class cassandra (
       }
     } else {
       service { 'cassandra':
-        after  => File[ "$config_path/$snitch_properties_file" ],
-        ensure => $service_ensure,
-        name   => $service_name,
-        enable => $service_enable,
+        ensure  => $service_ensure,
+        name    => $service_name,
+        enable  => $service_enable,
+        require => [
+          File[$config_path/$snitch_properties_file],
+          File[$commitlog_directory],
+          File[$config_file],
+          File[$data_file_directories],
+          File[$saved_caches_directory],
+          Ini_setting['rackdc.properties.dc'],
+          Ini_setting['rackdc.properties.rack'],
+          Package['cassandra'],
+        ],
       }
     }
   }
