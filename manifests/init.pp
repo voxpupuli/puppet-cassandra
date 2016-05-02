@@ -275,7 +275,8 @@ class cassandra (
 
   if $package_ensure != 'absent' and $package_ensure != 'purged' {
     if $service_refresh {
-      ensure_resource('service', 'cassandra', {
+      service { 'cassandra':
+        after     => File[ "$config_path/$snitch_properties_file" ],
         ensure    => $service_ensure,
         name      => $service_name,
         enable    => $service_enable,
