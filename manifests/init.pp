@@ -292,6 +292,7 @@ class cassandra (
       }
     } else {
       service { 'cassandra':
+        after  => File[ "$config_path/$snitch_properties_file" ],
         ensure => $service_ensure,
         name   => $service_name,
         enable => $service_enable,
