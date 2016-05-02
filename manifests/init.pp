@@ -280,7 +280,6 @@ class cassandra (
         name      => $service_name,
         enable    => $service_enable,
         subscribe => [
-	  File[$dc_rack_properties_file],
           File[$commitlog_directory],
           File[$config_file],
           File[$data_file_directories],
@@ -296,7 +295,6 @@ class cassandra (
         name    => $service_name,
         enable  => $service_enable,
         require => [
-          File[$dc_rack_properties_file],
           File[$commitlog_directory],
           File[$config_file],
           File[$data_file_directories],
