@@ -1,5 +1,25 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-05-03 - Release 1.22.1 ([diff](https://github.com/locp/cassandra/compare/1.22.0...1.22.1))
+
+### Summary
+
+A non-functional release for a minor improvement and a bug fix.
+
+### Features
+
+* N/A
+
+### Bugfixes
+
+* Fixes a problem with resource ordering if the service_refresh attribute
+  is set to false.
+
+### Improvements
+
+* Test coverage in Coveralls is now back at 100%
+  (https://coveralls.io/github/locp/cassandra).
+
 ##2016-04-25 - Release 1.22.0 ([diff](https://github.com/locp/cassandra/compare/1.21.0...1.22.0))
 
 ### Summary
