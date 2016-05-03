@@ -15,7 +15,7 @@ class cassandra::schema (
   $keyspaces                = {},
   $tables                   = {},
   $users                    = {},
-  $client_version	    = $::cassandra::package_name,
+  $client_version           = $::cassandra::package_name,
   ) inherits ::cassandra::params {
   require '::cassandra'
 
