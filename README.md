@@ -3584,6 +3584,8 @@ page for project specific requirements.
 
 **Release**  | **PR/Issue**                                        | **Contributer**
 -------------|-----------------------------------------------------|----------------------------------------------------
+1.22.1       | [#233](https://github.com/locp/cassandra/pull/233)  | [@tibers](https://github.com/tibers)
+1.22.1       | [#232](https://github.com/locp/cassandra/issues/232)| [@tibers](https://github.com/tibers)
 1.21.0       | [#226](https://github.com/locp/cassandra/pull/226)  | [@tibers](https://github.com/tibers)
 1.20.0       | [#217](https://github.com/locp/cassandra/issues/217)| [@samyray](https://github.com/samyray)
 1.19.0       | [#215](https://github.com/locp/cassandra/pull/215)  | [@tibers](https://github.com/tibers)

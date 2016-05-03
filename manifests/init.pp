@@ -291,9 +291,18 @@ class cassandra (
       }
     } else {
       service { 'cassandra':
-        ensure => $service_ensure,
-        name   => $service_name,
-        enable => $service_enable,
+        ensure  => $service_ensure,
+        name    => $service_name,
+        enable  => $service_enable,
+        require => [
+          File[$commitlog_directory],
+          File[$config_file],
+          File[$data_file_directories],
+          File[$saved_caches_directory],
+          Ini_setting['rackdc.properties.dc'],
+          Ini_setting['rackdc.properties.rack'],
+          Package['cassandra'],
+        ],
       }
     }
   }
