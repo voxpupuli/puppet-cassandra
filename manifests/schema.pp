@@ -30,9 +30,9 @@ class cassandra::schema (
     $cmdline_login = ''
   }
 
-  file { "${cqlsh_client_config}":
+  file { "$cqlsh_client_config":
     ensure  => file,
-    content => template("${cqlsh_client_tmpl}"),
+    content => template("$cqlsh_client_tmpl"),
   }
 
   $cqlsh_opts = "${cqlsh_command} ${cmdline_login} ${cqlsh_additional_options}"
