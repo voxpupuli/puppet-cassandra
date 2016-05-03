@@ -9,17 +9,30 @@ class cassandra::schema (
   $cqlsh_password           = undef,
   $cqlsh_port               = $::cassandra::native_transport_port,
   $cqlsh_user               = 'cassandra',
+  $cqlsh_client_tmpl        = 'cassandra/cqlshrc.erb',
+  $cqlsh_client_config      = '/var/tmp/puppetcqlshrc',
   $indexes                  = {},
   $keyspaces                = {},
   $tables                   = {},
   $users                    = {},
+  $client_version	    = $::cassandra::package_name,
   ) inherits ::cassandra::params {
   require '::cassandra'
 
   if $cqlsh_password != undef {
-    $cmdline_login = "-u ${cqlsh_user} -p ${cqlsh_password}"
+    if $client_version == 'cassandra20' {
+      # required for legacy support
+      $cmdline_login = "-u ${cqlsh_user} -p ${cqlsh_password}"
+    } else {
+      $cmdline_login = "--cqlshrc=${cqlsh_client_config}"
+    }
   } else {
     $cmdline_login = ''
+  }
+
+  file { "${cqlsh_client_config}":
+    ensure  => file,
+    content => template("${cqlsh_client_tmpl}"),
   }
 
   $cqlsh_opts = "${cqlsh_command} ${cmdline_login} ${cqlsh_additional_options}"
