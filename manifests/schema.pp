@@ -32,6 +32,7 @@ class cassandra::schema (
 
   file { $cqlsh_client_config :
     ensure  => file,
+    mode    => '0600',
     content => template( $cqlsh_client_tmpl ),
   }
 
