@@ -29,10 +29,12 @@ At the very least, before submitting your pull request or patch, the following
 tests should pass with no errors or warnings:
 
 ```bash
-bundle update             # Update/install your bundle
-bundle exec rake lint     # Run puppet-lint
-bundle exec rake validate # Check syntax of Ruby files and call :syntax and :metadata
-bundle exec rake spec     # Run spec tests in a clean fixtures directory
+bundle update                  # Update/install your bundle.
+bundle exec rake metadata_lint # Ensure metadata is correct.
+bundle exec rake rubocop       # Ensure unit test code is linted.
+bundle exec rake lint          # Run puppet-lint
+bundle exec rake validate      # Check syntax of Ruby files and call :syntax and :metadata
+bundle exec rake spec          # Run spec tests in a clean fixtures directory
 ```
 
 ### Beaker Tests (Acceptance Testing)
