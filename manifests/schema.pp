@@ -10,7 +10,7 @@ class cassandra::schema (
   $cqlsh_port               = $::cassandra::native_transport_port,
   $cqlsh_user               = 'cassandra',
   $cqlsh_client_tmpl        = 'cassandra/cqlshrc.erb',
-  $cqlsh_client_config      = '/var/tmp/puppetcqlshrc',
+  $cqlsh_client_config      = undef,
   $indexes                  = {},
   $keyspaces                = {},
   $tables                   = {},
@@ -30,13 +30,15 @@ class cassandra::schema (
     $cmdline_login = ''
   }
 
-  file { $cqlsh_client_config :
-    ensure  => file,
-    group   => $::gid,
-    user    => $::id,
-    mode    => '0600',
-    content => template( $cqlsh_client_tmpl ),
-    before  => Exec['::cassandra::schema connection test'],
+  if $cqlsh_client_config != undef {
+    file { $cqlsh_client_config :
+      ensure  => file,
+      group   => $::gid,
+      mode    => '0600',
+      owner   => $::id,
+      content => template( $cqlsh_client_tmpl ),
+      before  => Exec['::cassandra::schema connection test'],
+    }
   }
 
   $cqlsh_opts = "${cqlsh_command} ${cmdline_login} ${cqlsh_additional_options}"
