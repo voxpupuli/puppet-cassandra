@@ -3188,6 +3188,20 @@ Any additional options to be passed to the **cqlsh** command.
 
 Default value ''
 
+##### `cqlsh_client_config`
+Set this to a file name (e.g. **/root/.puppetcqlshrc**) that will then be used
+to contain the credentials for connecting to Cassandra.  This is a more
+secure option than having the credentials appearing on the command line.  This
+option is only available in Cassandra 2.1.
+
+Default value *undef*
+
+##### `cqlsh_client_tmpl`
+The location of the template for configuring the credentials for the cqlsh
+client.  This is ignored unless `cqlsh_client_config` is set.
+
+Default value 'cassandra/cqlshrc.erb'
+
 ##### `cqlsh_command`
 The full path to the **cqlsh** command.
 
@@ -3200,7 +3214,7 @@ Default value `$::cassandra::listen_address`
 
 ##### `cqlsh_password`
 If credentials are require for connecting, specify the password here.
-See also `cqlsh_user`.
+See also `cqlsh_user`.  See also `cqlsh_client_config`.
 
 Default value *undef*
 
@@ -3212,7 +3226,7 @@ Default value `$::cassandra::native_transport_port`
 
 ##### `cqlsh_user`
 If credentials are require for connecting, specify the password here.
-See also `cqlsh_password`.
+See also `cqlsh_password`.  See also `cqlsh_client_config`.
 
 Default value 'cassandra'
 
