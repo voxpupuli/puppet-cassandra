@@ -32,8 +32,11 @@ class cassandra::schema (
 
   file { $cqlsh_client_config :
     ensure  => file,
+    group   => $::gid,
+    user    => $::id,
     mode    => '0600',
     content => template( $cqlsh_client_tmpl ),
+    before  => Exec['::cassandra::schema connection test'],
   }
 
   $cqlsh_opts = "${cqlsh_command} ${cmdline_login} ${cqlsh_additional_options}"
