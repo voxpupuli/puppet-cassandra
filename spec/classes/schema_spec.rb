@@ -40,6 +40,7 @@ describe 'cassandra::schema' do
 
     it do
       read_command = '/usr/bin/cqlsh   -e \'DESC KEYSPACES\' localhost 9042'
+
       should contain_exec('::cassandra::schema connection test')
         .only_with(command: read_command,
                    returns: 0,
@@ -72,6 +73,15 @@ describe 'cassandra::schema' do
         owner: 'root',
         content: /username = cassandra/
       )
+
+      read_command = "/usr/bin/cqlsh --cqlshrc=/root/.puppetcqlshrc  -e 'DESC KEYSPACES'  "
+
+      should contain_exec('::cassandra::schema connection test')
+        .only_with(command: read_command,
+                   returns: 0,
+                   tries: 6,
+                   try_sleep: 30,
+                   unless: read_command)
     end
   end
 
@@ -99,6 +109,15 @@ describe 'cassandra::schema' do
         owner: 'root',
         content: /password = topsecret/
       )
+
+      read_command = "/usr/bin/cqlsh --cqlshrc=/root/.puppetcqlshrc  -e 'DESC KEYSPACES'  "
+
+      should contain_exec('::cassandra::schema connection test')
+        .only_with(command: read_command,
+                   returns: 0,
+                   tries: 6,
+                   try_sleep: 30,
+                   unless: read_command)
     end
   end
 
@@ -113,6 +132,17 @@ describe 'cassandra::schema' do
       {
         cqlsh_password: 'topsecret'
       }
+    end
+
+    it do
+      read_command = "/usr/bin/cqlsh -u cassandra -p topsecret  -e 'DESC KEYSPACES'  "
+
+      should contain_exec('::cassandra::schema connection test')
+        .only_with(command: read_command,
+                   returns: 0,
+                   tries: 6,
+                   try_sleep: 30,
+                   unless: read_command)
     end
   end
 end
