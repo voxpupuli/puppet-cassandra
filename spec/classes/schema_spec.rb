@@ -2,7 +2,6 @@ require 'spec_helper'
 describe 'cassandra::schema' do
   let(:pre_condition) do
     [
-      'define template($path) {}',
       'define ini_setting($ensure = nil,
          $path,
          $section,
