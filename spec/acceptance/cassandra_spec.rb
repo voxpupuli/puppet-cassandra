@@ -481,9 +481,9 @@ describe 'cassandra class' do
 
     if $::operatingsystem != CentOS and $::operatingsystemmajrelease != 6 {
       class { 'cassandra::schema':
-        cqlsh_password => 'cassandra',
         cql_types      => $cql_types,
-        cqlsh_user     => 'cassandra',
+        cqlsh_user     => 'akers',
+        cqlsh_password => 'Niner2',
         indexes        => {
           'users_emails_idx' => {
              ensure   => absent,
@@ -494,7 +494,6 @@ describe 'cassandra class' do
         users          => {
           'spillman' => {
             ensure   => absent,
-            password => 'Niner27',
           },
           'akers'    => {
             password  => 'Niner2',
@@ -519,7 +518,7 @@ describe 'cassandra class' do
     end
   end
 
-  schema_testing_drop_table_pp = <<-EOS
+  schema_testing_drop_user_pp = <<-EOS
     if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == 7 {
         $service_systemd = true
     } elsif $::operatingsystem == 'Debian' and $::operatingsystemmajrelease == 8 {
@@ -553,24 +552,24 @@ describe 'cassandra class' do
 
     if $::operatingsystem != CentOS and $::operatingsystemmajrelease != 6 {
       class { 'cassandra::schema':
-        cqlsh_password => 'cassandra',
-        cqlsh_user     => 'cassandra',
-        tables         => {
-          'users' => {
-             ensure   => absent,
-             keyspace => 'Excalibur',
+        cqlsh_password      => 'Niner2',
+        cqlsh_user          => 'akers',
+        cqlsh_client_config => '/root/.puppetcqlshrc',
+        users               => {
+          'boone' => {
+            ensure => absent,
           },
         },
       }
     }
   EOS
 
-  describe '########### Schema drop (Tables).' do
+  describe '########### Drop the boone user.' do
     it 'should work with no errors' do
-      apply_manifest(schema_testing_drop_table_pp, catch_failures: true)
+      apply_manifest(schema_testing_drop_user_pp, catch_failures: true)
     end
     it 'check code is idempotent' do
-      expect(apply_manifest(schema_testing_drop_table_pp,
+      expect(apply_manifest(schema_testing_drop_user_pp,
                             catch_failures: true).exit_code).to be_zero
     end
   end
@@ -615,8 +614,8 @@ describe 'cassandra class' do
 
     if $::operatingsystem != CentOS and $::operatingsystemmajrelease != 6 {
       class { 'cassandra::schema':
-        cqlsh_password => 'cassandra',
-        cqlsh_user     => 'cassandra',
+        cqlsh_password => 'Niner2',
+        cqlsh_user     => 'akers',
         keyspaces      => $keyspaces,
       }
     }
