@@ -15,20 +15,8 @@ class cassandra::schema (
   $keyspaces                = {},
   $tables                   = {},
   $users                    = {},
-  $client_version           = $::cassandra::package_name,
   ) inherits ::cassandra::params {
   require '::cassandra'
-
-  if $cqlsh_password != undef {
-    if $client_version == 'cassandra20' {
-      # required for legacy support
-      $cmdline_login = "-u ${cqlsh_user} -p ${cqlsh_password}"
-    } else {
-      $cmdline_login = "--cqlshrc=${cqlsh_client_config}"
-    }
-  } else {
-    $cmdline_login = ''
-  }
 
   if $cqlsh_client_config != undef {
     file { $cqlsh_client_config :
@@ -38,6 +26,15 @@ class cassandra::schema (
       owner   => $::id,
       content => template( $cqlsh_client_tmpl ),
       before  => Exec['::cassandra::schema connection test'],
+    }
+
+    $cmdline_login = "--cqlshrc=${cqlsh_client_config}"
+  } else {
+    if $cqlsh_password != undef {
+      warning('You may want to consider using the cqlsh_client_config attribute')
+      $cmdline_login = "-u ${cqlsh_user} -p ${cqlsh_password}"
+    } else {
+      $cmdline_login = ''
     }
   }
 
