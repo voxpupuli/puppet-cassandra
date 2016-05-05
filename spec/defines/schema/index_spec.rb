@@ -31,10 +31,8 @@ describe 'cassandra::schema::index' do
 
     it do
       should compile
-      # rubocop:disable Metrics/LineLength
       should contain_cassandra__schema__index('user_index')
       should contain_exec('/usr/bin/cqlsh   -e "CREATE INDEX IF NOT EXISTS user_index ON mykeyspace.users (lname)"  ')
-      # rubocop:enable Metrics/LineLength
     end
   end
 
@@ -58,9 +56,7 @@ describe 'cassandra::schema::index' do
 
     it do
       should compile
-      # rubocop:disable Metrics/LineLength
       should contain_exec('/usr/bin/cqlsh   -e "CREATE CUSTOM INDEX IF NOT EXISTS user_index ON Excelsior.users (email) USING \'path.to.the.IndexClass\'"  ')
-      # rubocop:enable Metrics/LineLength
     end
   end
   context 'Create a custom index with options.' do
@@ -84,9 +80,7 @@ describe 'cassandra::schema::index' do
 
     it do
       should compile
-      # rubocop:disable Metrics/LineLength
       should contain_exec('/usr/bin/cqlsh   -e "CREATE CUSTOM INDEX IF NOT EXISTS user_index ON Excelsior.users (email) USING \'path.to.the.IndexClass\' WITH OPTIONS = {\'storage\': \'/mnt/ssd/indexes/\'}"  ')
-      # rubocop:enable Metrics/LineLength
     end
   end
 
@@ -110,9 +104,7 @@ describe 'cassandra::schema::index' do
 
     it do
       should compile
-      # rubocop:disable Metrics/LineLength
       should contain_exec('/usr/bin/cqlsh   -e "DROP INDEX Excelsior.user_index"  ')
-      # rubocop:enable Metrics/LineLength
     end
   end
 

@@ -37,10 +37,8 @@ describe 'cassandra::java' do
     end
 
     it do
-      # rubocop:disable Metrics/LineLength
       should contain_package('java-1.8.0-openjdk-headless').with_ensure('2.1.13-1')
       should contain_cassandra__private__deprecation_warning('cassandra::java::ensure')
-      # rubocop:enable Metrics/LineLength
     end
   end
 
@@ -69,9 +67,7 @@ describe 'cassandra::java' do
       }
     end
 
-    # rubocop:disable Metrics/LineLength
     it { should contain_package('openjdk-7-jre-headless').with_ensure('2.1.13') }
-    # rubocop:enable Metrics/LineLength
   end
 
   context 'With both ensure and package_ensure set differently (RedHat)' do
@@ -103,9 +99,7 @@ describe 'cassandra::java' do
       }
     end
 
-    # rubocop:disable Metrics/LineLength
     it { should contain_package('openjdk-7-jre-headless').with_ensure('2.1.13') }
-    # rubocop:enable Metrics/LineLength
   end
 
   context 'With package names set to foobar' do

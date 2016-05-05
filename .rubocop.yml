@@ -1,8 +1,3 @@
 ---
-AllCops:
-  Exclude:
-    - 'spec/classes/datastax_agent_spec.rb'
-    - 'spec/classes/opscenter_spec.rb'
-    - 'spec/defines/opscenter/cluster_name_spec.rb'
-    - 'spec/defines/private/opscenter/setting_spec.rb'
-    - 'vendor/**/*'
+Metrics/LineLength:
+  Enabled: false

@@ -29,9 +29,7 @@ describe 'cassandra::schema::user' do
     end
 
     it do
-      # rubocop:disable Metrics/LineLength
       should contain_exec('/usr/bin/cqlsh   -e "CREATE USER IF NOT EXISTS akers WITH PASSWORD \'Niner2\' SUPERUSER"  ')
-      # rubocop:enable Metrics/LineLength
     end
   end
 

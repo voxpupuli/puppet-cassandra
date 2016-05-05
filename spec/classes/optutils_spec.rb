@@ -57,9 +57,7 @@ describe 'cassandra::optutils' do
 
     it do
       should contain_package('cassandra22-tools').with_ensure('2.1.13-1')
-      # rubocop:disable Metrics/LineLength
       should contain_cassandra__private__deprecation_warning('cassandra::optutils::ensure')
-      # rubocop:enable Metrics/LineLength
     end
   end
 
