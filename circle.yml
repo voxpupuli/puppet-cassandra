@@ -21,6 +21,10 @@ deployment:
     branch: pull/226/debian_jdk_8
     commands:
       - "./scripts/circle.bash merge release/minor"
+  feature237:
+    branch: feature/237/file
+    commands:
+      - "./scripts/circle.bash merge release/minor"
   improvement: 
     branch: /^improvement.*/
     commands: 
