@@ -17,8 +17,8 @@ deployment:
     branch: /^bugfix.*/
     commands: 
       - "./scripts/circle.bash merge release/patch"
-  feature226:
-    branch: pull/226/debian_jdk_8
+  feature231:
+    branch: feature/231/client_security
     commands:
       - "./scripts/circle.bash merge release/minor"
   improvement: 
