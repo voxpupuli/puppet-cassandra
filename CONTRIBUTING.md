@@ -48,3 +48,8 @@ for node in $( bundle exec rake beaker_nodes ); do
   BEAKER_destroy=onpass bundle exec rake beaker || break
 done
 ```
+
+### Further Reading
+
+* *RSpec tests for your Puppet manifests* <http://rspec-puppet.com/>
+* *Beaker Info* <https://github.com/puppetlabs/beaker/tree/master/docs>
