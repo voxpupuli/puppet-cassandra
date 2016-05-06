@@ -58,9 +58,7 @@ describe 'cassandra::opscenter::pycrypto' do
     end
     it do
       should contain_package('pycrypto').with_ensure('2.1.13-1')
-      # rubocop:disable Metrics/LineLength
       should contain_cassandra__private__deprecation_warning('cassandra::opscenter::pycrypto::ensure')
-      # rubocop:enable Metrics/LineLength
     end
   end
 

@@ -9,6 +9,8 @@ class cassandra::schema (
   $cqlsh_password           = undef,
   $cqlsh_port               = $::cassandra::native_transport_port,
   $cqlsh_user               = 'cassandra',
+  $cqlsh_client_tmpl        = 'cassandra/cqlshrc.erb',
+  $cqlsh_client_config      = undef,
   $indexes                  = {},
   $keyspaces                = {},
   $tables                   = {},
@@ -16,10 +18,24 @@ class cassandra::schema (
   ) inherits ::cassandra::params {
   require '::cassandra'
 
-  if $cqlsh_password != undef {
-    $cmdline_login = "-u ${cqlsh_user} -p ${cqlsh_password}"
+  if $cqlsh_client_config != undef {
+    file { $cqlsh_client_config :
+      ensure  => file,
+      group   => $::gid,
+      mode    => '0600',
+      owner   => $::id,
+      content => template( $cqlsh_client_tmpl ),
+      before  => Exec['::cassandra::schema connection test'],
+    }
+
+    $cmdline_login = "--cqlshrc=${cqlsh_client_config}"
   } else {
-    $cmdline_login = ''
+    if $cqlsh_password != undef {
+      warning('You may want to consider using the cqlsh_client_config attribute')
+      $cmdline_login = "-u ${cqlsh_user} -p ${cqlsh_password}"
+    } else {
+      $cmdline_login = ''
+    }
   }
 
   $cqlsh_opts = "${cqlsh_command} ${cmdline_login} ${cqlsh_additional_options}"

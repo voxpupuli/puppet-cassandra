@@ -112,9 +112,7 @@ describe 'cassandra' do
         'rpc_server_type' => 'sync',
         'saved_caches_directory' => '/var/lib/cassandra/saved_caches',
         'saved_caches_directory_mode' => '0750',
-        # rubocop:disable Metrics/LineLength
         'seed_provider_class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
-        # rubocop:enable Metrics/LineLength
         'seeds' => '127.0.0.1',
         'server_encryption_internode' => 'none',
         'server_encryption_keystore' => 'conf/.keystore',
@@ -146,9 +144,7 @@ describe 'cassandra' do
     end
 
     it do
-      # rubocop:disable Metrics/LineLength
       should contain_cassandra__private__data_directory('/var/lib/cassandra/data')
-      # rubocop:enable Metrics/LineLength
     end
   end
 
@@ -212,10 +208,8 @@ describe 'cassandra' do
     end
 
     it do
-      # rubocop:disable Metrics/LineLength
       should contain_cassandra__private__deprecation_warning('cassandra::manage_dsc_repo')
       should contain_cassandra__private__deprecation_warning('cassandra::fail_on_non_suppoted_os')
-      # rubocop:enable Metrics/LineLength
     end
   end
 
@@ -236,44 +230,36 @@ describe 'cassandra' do
       }
     end
     it do
-      # rubocop:disable Metrics/LineLength
       should contain_ini_setting('rackdc.properties.dc')
         .with('path' => '/etc/cassandra/default.conf/cassandra-topology.properties',
               'section' => '',
               'setting' => 'dc',
               'value'   => 'NYC')
-      # rubocop:enable Metrics/LineLength
     end
     it do
-      # rubocop:disable Metrics/LineLength
       should contain_ini_setting('rackdc.properties.rack')
         .with('path' => '/etc/cassandra/default.conf/cassandra-topology.properties',
               'section' => '',
               'setting' => 'rack',
               'value'   => 'R101')
-      # rubocop:enable Metrics/LineLength
     end
     it do
       should contain_service('cassandra')
         .that_subscribes_to('Ini_setting[rackdc.properties.dc_suffix]')
-      # rubocop:disable Metrics/LineLength
       should contain_ini_setting('rackdc.properties.dc_suffix')
         .with('path' => '/etc/cassandra/default.conf/cassandra-topology.properties',
               'section' => '',
               'setting' => 'dc_suffix',
               'value'   => '_1_cassandra')
-      # rubocop:enable Metrics/LineLength
     end
     it do
       should contain_service('cassandra')
         .that_subscribes_to('Ini_setting[rackdc.properties.prefer_local]')
-      # rubocop:disable Metrics/LineLength
       should contain_ini_setting('rackdc.properties.prefer_local')
         .with('path' => '/etc/cassandra/default.conf/cassandra-topology.properties',
               'section' => '',
               'setting' => 'prefer_local',
               'value'   => 'true')
-      # rubocop:enable Metrics/LineLength
     end
   end
 

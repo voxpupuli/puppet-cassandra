@@ -29,9 +29,9 @@ describe 'cassandra::schema::user' do
     end
 
     it do
-      # rubocop:disable Metrics/LineLength
-      should contain_exec('/usr/bin/cqlsh   -e "CREATE USER IF NOT EXISTS akers WITH PASSWORD \'Niner2\' SUPERUSER"  ')
-      # rubocop:enable Metrics/LineLength
+      should contain_exec('Create user (akers)').with(
+        command: '/usr/bin/cqlsh   -e "CREATE USER IF NOT EXISTS akers WITH PASSWORD \'Niner2\' SUPERUSER"  '
+      )
     end
   end
 
@@ -52,7 +52,9 @@ describe 'cassandra::schema::user' do
     end
 
     it do
-      should contain_exec('/usr/bin/cqlsh   -e "DROP USER akers"  ')
+      should contain_exec('Delete user (akers)').with(
+        command: '/usr/bin/cqlsh   -e "DROP USER akers"  '
+      )
     end
   end
 

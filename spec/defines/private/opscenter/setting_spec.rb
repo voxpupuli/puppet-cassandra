@@ -1043,9 +1043,9 @@ describe 'cassandra::private::opscenter::setting' do
     let(:title) { 'ldap group_search_filter_with_dn' }
     let :params do
       {
-         path: '/path/to/file',
-         section: 'ldap',
-         setting: 'group_search_filter_with_dn'
+        path: '/path/to/file',
+        section: 'ldap',
+        setting: 'group_search_filter_with_dn'
       }
     end
 
