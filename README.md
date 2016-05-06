@@ -22,6 +22,7 @@
     * [cassandra::datastax_agent](#class-cassandradatastax_agent)
     * [cassandra::datastax_repo](#class-cassandradatastax_repo)
     * [cassandra::env](#class-cassandraenv)
+    * [cassandra::file](#class-cassandrafile)
     * [cassandra::firewall_ports](#class-cassandrafirewall_ports)
     * [cassandra::java](#class-cassandrajava)
     * [cassandra::opscenter](#class-cassandraopscenter)
@@ -464,6 +465,7 @@ cassandra::opscenter::cluster_name { 'Cluster1':
 * [cassandra::datastax_agent](#class-cassandradatastax_agent)
 * [cassandra::datastax_repo](#class-cassandradatastax_repo)
 * [cassandra::env](#class-cassandraenv)
+* [cassandra::file](#class-cassandrafile)
 * [cassandra::firewall_ports](#class-cassandrafirewall_ports)
 * [cassandra::java](#class-cassandrajava)
 * [cassandra::opscenter](#class-cassandraopscenter)
@@ -2009,6 +2011,32 @@ use the cassandra::file class instead.
 
 ##### `environment_file`
 The full path name of the environment file.  On the RedHat family this will
+default to `/etc/cassandra/default.conf/cassandra-env.sh` on Debian, the
+default is `/etc/cassandra/cassandra-env.sh`.
+
+##### `file_lines`
+If set, then the [create_resources](https://docs.puppet.com/puppet/latest/reference/function.html#createresources)
+will be used to create an array of
+[file_line](https://forge.puppet.com/puppetlabs/stdlib#file_line) resources
+where the path attribute is set to `$cassandra::env::environment_file`
+Default *undef*
+
+##### `service_refresh`
+If the Cassandra service is to be notified if the environment file is changed.
+Set to false if this is not wanted.
+Default value true.
+
+### Class: cassandra::file
+
+A class for altering file relative to the configuration directory.
+
+#### Attributes
+
+##### `file`
+The name of the file relative to the `config_path`.
+
+##### `config_path`
+The path to the configuration directory.  On the RedHat family this will
 default to `/etc/cassandra/default.conf/cassandra-env.sh` on Debian, the
 default is `/etc/cassandra/cassandra-env.sh`.
 

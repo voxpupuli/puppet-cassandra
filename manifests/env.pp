@@ -7,6 +7,10 @@ class cassandra::env(
   include cassandra
   include stdlib
 
+  cassandra::private::deprecation_warning { 'cassandra::env':
+    item_number => 17,
+  }
+
   if $file_lines != undef {
     if $service_refresh {
       $default_file_line = {
