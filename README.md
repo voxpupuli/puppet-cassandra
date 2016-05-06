@@ -2002,6 +2002,9 @@ Default value 'stable'
 
 A class for altering the environment file for Cassandra.
 
+This class is now deprecated and will be removed in a future release.  Please
+use the cassandra::file class instead.
+
 #### Attributes
 
 ##### `environment_file`
