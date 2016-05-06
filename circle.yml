@@ -21,6 +21,10 @@ deployment:
     branch: feature/231/client_security
     commands:
       - "./scripts/circle.bash merge release/minor"
+  feature237:
+    branch: feature/237/file
+    commands:
+      - "./scripts/circle.bash merge release/minor"
   improvement: 
     branch: /^improvement.*/
     commands: 

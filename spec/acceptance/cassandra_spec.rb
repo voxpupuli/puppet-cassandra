@@ -319,7 +319,8 @@ describe 'cassandra class' do
 
     $heap_new_size = $::processorcount * 100
 
-    class { 'cassandra::env':
+    class { 'cassandra::file':
+      file       => 'cassandra-env.sh',
       file_lines => {
         'MAX_HEAP_SIZE' => {
           line  => 'MAX_HEAP_SIZE="1024M"',
