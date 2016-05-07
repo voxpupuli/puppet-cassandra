@@ -26,5 +26,5 @@ script:
   - "bundle exec rake lint"
   - "bundle exec rake validate"
   - "bundle exec rake spec SPEC_OPTS='--format documentation'"
-  - "sh .travis/acceptance.sh"
+  - "sh scripts/travis_acceptance.sh"
 sudo: false

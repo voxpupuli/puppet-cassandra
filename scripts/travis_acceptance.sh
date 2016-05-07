@@ -48,7 +48,7 @@ fi
 # Provision the AWS node.
 #############################################################################
 tar xvf secrets.tar
-instance_info=`ruby .travis/provision.rb`
+instance_info=`ruby scripts/travis_provision.rb`
 instance_id=`echo $instance_info | cut -d: -f1`
 instance_public_ip_address=`echo $instance_info | cut -d: -f2`
 
@@ -66,7 +66,7 @@ sleep_period=10
 
 while [ $ssh_attempt -lt $ssh_retries ]; do
   scp -i secrets/travis.pem -B -o "StrictHostKeyChecking no" \
-    .travis/payload.sh $REMOTE_USER@${instance_public_ip_address}:/var/tmp
+    scripts/travis_payload.sh $REMOTE_USER@${instance_public_ip_address}:/var/tmp
 
   if [ $? -ne 0 ]; then
     echo "Attempt $ssh_attempt of $ssh_retries failed."
@@ -84,5 +84,5 @@ ssh -i ./secrets/travis.pem -o "StrictHostKeyChecking no" \
   $GITREPO $TRAVIS_BRANCH
 status=$?
 
-ruby .travis/destroy.rb $instance_id
+ruby scripts/travis_destroy.rb $instance_id
 exit $status
