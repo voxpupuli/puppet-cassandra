@@ -76,7 +76,7 @@ done
 # Execute Payload
 ssh -i ./secrets/travis.pem -o "StrictHostKeyChecking no" \
   $REMOTE_USER@${instance_public_ip_address} /var/tmp/payload.sh \
-  $GITREPO $TRAVIS_BRANCH
+  $GITREPO $TRAVIS_BRANCH $TRAVIS_JOB_ID $TRAVIS_JOBS_TOTAL
 status=$?
 
 ruby scripts/travis_destroy.rb $instance_id
