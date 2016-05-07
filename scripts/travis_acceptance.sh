@@ -77,7 +77,7 @@ done
 
 # Execute Payload
 ssh -i ./secrets/travis.pem -o "StrictHostKeyChecking no" \
-  $REMOTE_USER@${instance_public_ip_address} /var/tmp/payload.sh \
+  $REMOTE_USER@${instance_public_ip_address} /var/tmp/travis_payload.sh \
   $GITREPO $TRAVIS_BRANCH $NODE_NUMBER $NODE_TOTAL
 status=$?
 
