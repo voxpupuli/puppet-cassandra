@@ -9,8 +9,10 @@
 export FOG_RC=./secrets/fog.rc
 export GITREPO='https://github.com/locp/cassandra.git'
 export REMOTE_USER="ec2-user"
-export NODE_TOTAL=$( ruby -e "require 'yaml'; t = YAML.load_file('.travis.yml'); print t['matrix']['include'].count" )
-export NODE_NUMBER=$( echo $TRAVIS_JOB_NUMBER | cut -d. -f2 )
+
+NODE_TOTAL=$( ruby -e "require 'yaml'; t = YAML.load_file('.travis.yml'); print t['matrix']['include'].count" )
+NODE_NUMBER=$( echo $TRAVIS_JOB_NUMBER | cut -d. -f2 )
+(( NODE_NUMBER -= 1 ))
 
 echo "NODE_NUMBER         : $NODE_NUMBER"
 echo "NODE_TOTAL          : $NODE_TOTAL"
