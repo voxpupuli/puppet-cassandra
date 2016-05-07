@@ -9,12 +9,14 @@
 export FOG_RC=./secrets/fog.rc
 export GITREPO='https://github.com/locp/cassandra.git'
 export REMOTE_USER="ec2-user"
-export TRAVIS_JOBS_TOTAL=$( ruby -e "require 'yaml'; t = YAML.load_file('.travis.yml'); print t['matrix']['include'].count" )
+export NODE_TOTAL=$( ruby -e "require 'yaml'; t = YAML.load_file('.travis.yml'); print t['matrix']['include'].count" )
+export NODE_NUMBER=$( echo $TRAVIS_JOB_NUMBER | cut -d. -f2 )
 
+echo "NODE_NUMBER         : $NODE_NUMBER"
+echo "NODE_TOTAL          : $NODE_TOTAL"
 echo "TRAVIS_BUILD_ID     : $TRAVIS_BUILD_ID"
 echo "TRAVIS_BUILD_NUMBER : $TRAVIS_BUILD_ID"
 echo "TRAVIS_JOB_ID       : $TRAVIS_JOB_ID"
-echo "TRAVIS_JOBS_TOTAL   : $TRAVIS_JOBS_TOTAL"
 echo "TRAVIS_JOB_NUMBER   : $TRAVIS_JOB_NUMBER"
 echo "TRAVIS_TEST_RESULT  : $TRAVIS_TEST_RESULT"
 
@@ -76,7 +78,7 @@ done
 # Execute Payload
 ssh -i ./secrets/travis.pem -o "StrictHostKeyChecking no" \
   $REMOTE_USER@${instance_public_ip_address} /var/tmp/payload.sh \
-  $GITREPO $TRAVIS_BRANCH $TRAVIS_JOB_ID $TRAVIS_JOBS_TOTAL
+  $GITREPO $TRAVIS_BRANCH $NODE_NUMBER $NODE_TOTAL
 status=$?
 
 ruby scripts/travis_destroy.rb $instance_id
