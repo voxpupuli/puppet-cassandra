@@ -1,5 +1,26 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-05-07 - Release 1.23.0 ([diff](https://github.com/locp/cassandra/compare/1.22.1...1.23.0))
+
+### Summary
+
+A couple of new features, a non-functional improvement and a bugfix.
+
+### Features
+
+* Added the cassandra::file class.
+* Added the following attributes to the cassandra::schema class:
+  * cqlsh_client_tmpl
+  * cqlsh_client_config
+
+### Bugfixes
+
+* Fixed a daft error that stopped beaker tests running on CentOS 7.
+
+### Improvements
+
+* Improved how fast the beaker/acceptance tests are run from TravisCI.
+
 ##2016-05-03 - Release 1.22.1 ([diff](https://github.com/locp/cassandra/compare/1.22.0...1.22.1))
 
 ### Summary
