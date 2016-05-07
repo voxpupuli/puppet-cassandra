@@ -57,7 +57,7 @@ echo "Instance Public IP Address: $instance_public_ip_address"
 # Upload Payload
 ssh_retries=10
 ssh_attempt=1
-sleep_period=10
+sleep_period=20
 
 while [ $ssh_attempt -lt $ssh_retries ]; do
   scp -i secrets/travis.pem -B -o "StrictHostKeyChecking no" \
