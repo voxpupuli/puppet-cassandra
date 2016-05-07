@@ -12,7 +12,7 @@ export REMOTE_USER="ec2-user"
 
 NODE_TOTAL=$( ruby -e "require 'yaml'; t = YAML.load_file('.travis.yml'); print t['matrix']['include'].count" )
 NODE_NUMBER=$( echo $TRAVIS_JOB_NUMBER | cut -d. -f2 )
-NODE_NUMER=`expr $NODE_NUMER - 1`
+NODE_NUMBER=`expr $NODE_NUMBER - 1`
 
 echo "NODE_NUMBER         : $NODE_NUMBER"
 echo "NODE_TOTAL          : $NODE_TOTAL"
