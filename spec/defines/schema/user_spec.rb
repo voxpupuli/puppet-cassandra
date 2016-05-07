@@ -29,6 +29,7 @@ describe 'cassandra::schema::user' do
     end
 
     it do
+      should contain_cassandra__schema__user('akers').with_ensure('present')
       should contain_exec('Create user (akers)').with(
         command: '/usr/bin/cqlsh   -e "CREATE USER IF NOT EXISTS akers WITH PASSWORD \'Niner2\' SUPERUSER"  '
       )
