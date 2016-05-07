@@ -39,7 +39,17 @@ describe 'cassandra class' do
       }
     }
 
-    if $::operatingsystem != CentOS and $::operatingsystemmajrelease != 6 {
+    if $::operatingsystem != CentOS {
+      $os_ok = true
+    } else {
+      if $::operatingsystemmajrelease != 6 {
+        $os_ok = true
+      } else {
+        $os_ok = false
+      }
+    }
+
+    if $os_ok {
       class { 'cassandra::schema':
         cqlsh_password => 'Niner2',
         cqlsh_user     => 'akers',
