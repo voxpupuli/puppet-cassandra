@@ -1,5 +1,16 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-05-10 - Release 1.23.1 ([diff](https://github.com/locp/cassandra/compare/1.23.0...1.23.1))
+
+### Summary
+
+A minor bugfix that fixes a problem that would only affect module developers,
+not users of the module.
+
+### Bugfixes
+
+* Rubocop 0.4.0 is stricter so implemented changes that were flagged by it.
+
 ##2016-05-07 - Release 1.23.0 ([diff](https://github.com/locp/cassandra/compare/1.22.1...1.23.0))
 
 ### Summary
@@ -27,10 +38,6 @@ A couple of new features, a non-functional improvement and a bugfix.
 
 A non-functional release for a minor improvement and a bug fix.
 
-### Features
-
-* N/A
-
 ### Bugfixes
 
 * Fixes a problem with resource ordering if the service_refresh attribute
@@ -54,14 +61,6 @@ Two new features.
   * The new attribute cassandra::schema::users
 * Allow the manipulation of the environment file with the new class
   cassandra::env.
-
-### Bugfixes
-
-* N/A
-
-### Improvements
-
-* N/A
 
 ##2016-04-20 - Release 1.21.0 ([diff](https://github.com/locp/cassandra/compare/1.20.0...1.21.0))
 
@@ -99,14 +98,6 @@ A minor release for client requirements.
 * Added the compaction_large_partition_warning_threshold_mb and
   memtable_allocation_type attributes to the cassandra class.
 
-### Bugfixes
-
-* N/A
-
-### Improvements
-
-* N/A
-
 ##2016-04-06 - Release 1.19.0 ([diff](https://github.com/locp/cassandra/compare/1.18.1...1.19.0))
 
 ### Summary
@@ -125,19 +116,11 @@ A new template attribute and a couple of bug fixes.
   from the supported operating systems has been identified as being required
   to use systemd.
 
-### Improvements
-
-* N/A
-
 ##2016-03-27 - Release 1.18.1 ([diff](https://github.com/locp/cassandra/compare/1.18.0...1.18.1))
 
 ### Summary
 
 Bug fixes and some minor and non-functional improvements.
-
-### Features
-
-* N/A
 
 ### Bugfixes
 
@@ -200,14 +183,6 @@ Another small change that is an emergency requirement for a client.
 
 * Added the `storage_keyspace` attribute to the cassandra::datastax_agent class.
 
-### Bugfixes
-
-* N/A
-
-### Improvements
-
-* N/A
-
 ##2016-03-15 - Release 1.16.0 ([diff](https://github.com/locp/cassandra/compare/1.15.1...1.16.0))
 
 ### Summary
@@ -222,23 +197,11 @@ A smaller release than usual, but containing changes required for a client.
 
 * The **address.yaml** file for the DataStax agent is now owned by the cassandra user.
 
-### Improvements
-
-* N/A
-
 ##2016-03-11 - Release 1.15.1 ([diff](https://github.com/locp/cassandra/compare/1.15.0...1.15.1))
 
 ### Summary
 
 A small improvement.
-
-### Features
-
-* N/A
-
-### Bugfixes
-
-* N/A
 
 ### Improvements
 
@@ -291,27 +254,15 @@ pipeline and new features.
 
 A small bugfix release.
 
-### Features
-
-* N/A
-
 ### Bugfixes
 
 * Removed `Restart=always` from the Systemd configuration files.
-
-### Improvements
-
-* N/A
 
 ##2016-02-27 - Release 1.14.1 ([diff](https://github.com/locp/cassandra/compare/1.14.0...1.14.1))
 
 ### Summary
 
 A non-functional release of improvements and a bugfix.
-
-### Features
-
-* N/A
 
 ### Bugfixes
 
@@ -388,29 +339,17 @@ bug fixes and some non-functional improvements.
 
 More bug fixes.
 
-### Features
-
-* N/A
-
 ### Bugfixes
 
 * Fixed a problem with the Red Hat family and systemd not starting the
   service and reporting all service stops as failures, regardless of
   if they were or not.
 
-### Improvements
-
-* N/A
-
 ##2016-02-08 - Release 1.12.1 ([diff](https://github.com/locp/cassandra/compare/1.12.0...1.12.1))
 
 ### Summary
 
 This is a non-functional release.  Some bug fixes and release improvements.
-
-### Features
-
-* N/A
 
 ### Bugfixes
 
@@ -454,10 +393,6 @@ New features added to the main class.  Also some non-functional improvements.
 * The addition of the listen_interface and rpc_interface attributes to the
   main class.
 
-### Bugfixes
-
-* N/A
-
 ### Improvements
 
 * Added more detail to the attributes to the main class in the README.
@@ -481,10 +416,6 @@ A feature release with minor improvements.
 * Optionally allow a systemd system file be inserted with the
   cassandra::service_systemd attribute.
 
-### Bugfixes
-
-* N/A
-
 ### Improvements
 
 * Allow the files resources specified with in the cassandra attributes:
@@ -500,19 +431,11 @@ A feature release with minor improvements.
 
 A bug fix release that deals with some problems with Cassandra 3.
 
-### Features
-
-* N/A
-
 ### Bugfixes
 
 * Attempt to mitigate against problems with Debian attempting to install Cassandra 3 when
   installing the dsc22 package.
 * Also reverted the project home to the GitHub project page.
-
-### Improvements
-
-* N/A
 
 ##2015-11-09 - Release 1.9.1 ([diff](https://github.com/locp/cassandra/compare/1.9.0...1.9.1))
 
@@ -520,18 +443,10 @@ A bug fix release that deals with some problems with Cassandra 3.
 
 A bug fix release.
 
-### Features
-
-* N/A
-
 ### Bugfixes
 
 * The default value for the permissions mode of the Cassandra configuration
   file were far too open.  Changed from 0666 to 0644.
-
-### Improvements
-
-* N/A
 
 ##2015-10-25 - Release 1.9.0 ([diff](https://github.com/locp/cassandra/compare/1.8.1...1.9.0))
 
@@ -582,18 +497,10 @@ change log documentation.
 
 A minor bug fix.
 
-### Features
-
-* N/A
-
 ### Bugfixes
 
 * Fixed an edge case issue concerning users that may have been using the
   fail_on_non_supported_os before it was fixed in 1.8.0.
-
-### Improvements
-
-* N/A
 
 ##2015-10-06 - Release 1.8.0 ([diff](https://github.com/locp/cassandra/compare/1.7.1...1.8.0))
 
@@ -620,18 +527,10 @@ Some new features a minor bug fix and some non-functional improvements.
 
 A minor bug fix that incorrctly gave a failed build status for the module.
 
-### Features
-
-* N/A
-
 ### Bugfixes
 
 * Fixed a problem that was showing the status of the module build as an
   error since the release of the fog-google gem version 0.1.1.
-
-### Improvements
-
-* N/A
 
 ##2015-10-01 - Release 1.7.0 ([diff](https://github.com/locp/cassandra/compare/1.6.0...1.7.0))
 
@@ -684,10 +583,6 @@ non-functional improvements in the automated unit tests.
   commitlog_directory, data_file_directories and the saved_caches_directory
   in the cassandra class.
 
-### Bugfixes
-
-* N/A
-
 ### Improvements
 
 * Uncovered resources in the unit testing are now tested.
@@ -736,10 +631,6 @@ cassandra.yaml file.
   * rpc_send_buff_size_in_bytes
   * streaming_socket_timeout_in_ms
   * stream_throughput_outbound_megabits_per_sec
-
-### Bugfixes
-
-* N/A
 
 ### Improvements
 
