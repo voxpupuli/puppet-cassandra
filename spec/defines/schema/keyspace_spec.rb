@@ -20,7 +20,8 @@ describe 'cassandra::schema::keyspace' do
           'dc1' => '3',
           'dc2' => '2'
         },
-        'keyspace_class').returns('dc1' => '3', 'dc2' => '2')
+        'keyspace_class'
+      ).returns('dc1' => '3', 'dc2' => '2')
     end
     MockFunction.new('join') do |f|
       f.stubbed.with(
@@ -28,7 +29,8 @@ describe 'cassandra::schema::keyspace' do
           '\'dc1\': ' => '3',
           '\'dc2\': ' => '2'
         },
-        ', ').returns('\'dc1\': 3, \'dc2\': 2')
+        ', '
+      ).returns('\'dc1\': 3, \'dc2\': 2')
     end
     MockFunction.new('join_keys_to_values') do |f|
       f.stubbed.with(
@@ -36,14 +38,16 @@ describe 'cassandra::schema::keyspace' do
           '\'dc1' => '3',
           '\'dc2' => '2'
         },
-        '\': ').returns('\'dc1\': ' => '3', '\'dc2\': ' => '2')
+        '\': '
+      ).returns('\'dc1\': ' => '3', '\'dc2\': ' => '2')
     end
     MockFunction.new('prefix') do |f|
       f.stubbed.with(
         {
           'dc1' => '3',
           'dc2' => '2'
-        }, '\'').returns('\'dc1' => '3', '\'dc2' => '2')
+        }, '\''
+      ).returns('\'dc1' => '3', '\'dc2' => '2')
     end
   end
 

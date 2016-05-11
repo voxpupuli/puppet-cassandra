@@ -18,7 +18,8 @@ describe 'cassandra::schema::table' do
         [
           'COMPACT STORAGE',
           'ID=\'5a1c395e-b41f-11e5-9f22-ba0be0483c18\''
-        ]).returns(2)
+        ]
+      ).returns(2)
     end
     MockFunction.new('delete') do |f|
       f.stubbed.with('userid text, username FROZEN<fullname>, emails set<text>, top_scores list<int>, todo map<timestamp, text>, COLLECTION-TYPE tuple<int, text,text>, PRIMARY KEY (userid)', 'COLLECTION-TYPE ').returns('userid text, username FROZEN<fullname>, emails set<text>, top_scores list<int>, todo map<timestamp, text>, tuple<int, text,text>, PRIMARY KEY (userid)')
@@ -27,13 +28,15 @@ describe 'cassandra::schema::table' do
       f.stubbed.with(
         [
           'COMPACT STORAGE', 'ID=\'5a1c395e-b41f-11e5-9f22-ba0be0483c18\''
-        ], ' AND ').returns("COMPACT STORAGE AND ID='5a1c395e-b41f-11e5-9f22-ba0be0483c18'")
+        ], ' AND '
+      ).returns("COMPACT STORAGE AND ID='5a1c395e-b41f-11e5-9f22-ba0be0483c18'")
       f.stubbed.with(
         [
           'userid text', 'username FROZEN<fullname>', 'emails set<text>',
           'top_scores list<int>', 'todo map<timestamp, text>',
           'COLLECTION-TYPE tuple<int, text,text>', 'PRIMARY KEY (userid)'
-        ], ', ').returns('userid text, username FROZEN<fullname>, emails set<text>, top_scores list<int>, todo map<timestamp, text>, COLLECTION-TYPE tuple<int, text,text>, PRIMARY KEY (userid)')
+        ], ', '
+      ).returns('userid text, username FROZEN<fullname>, emails set<text>, top_scores list<int>, todo map<timestamp, text>, COLLECTION-TYPE tuple<int, text,text>, PRIMARY KEY (userid)')
     end
     MockFunction.new('join_keys_to_values') do |f|
       f.stubbed.with(
@@ -43,12 +46,14 @@ describe 'cassandra::schema::table' do
           'todo' => 'map<timestamp, text>',
           'COLLECTION-TYPE' => 'tuple<int, text,text>',
           'PRIMARY KEY' => '(userid)'
-        }, ' ').returns(
-          [
-            'userid text', 'username FROZEN<fullname>', 'emails set<text>',
-            'top_scores list<int>', 'todo map<timestamp, text>',
-            'COLLECTION-TYPE tuple<int, text,text>', 'PRIMARY KEY (userid)'
-          ])
+        }, ' '
+      ).returns(
+        [
+          'userid text', 'username FROZEN<fullname>', 'emails set<text>',
+          'top_scores list<int>', 'todo map<timestamp, text>',
+          'COLLECTION-TYPE tuple<int, text,text>', 'PRIMARY KEY (userid)'
+        ]
+      )
     end
   end
 
