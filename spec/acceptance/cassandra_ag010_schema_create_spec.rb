@@ -4,8 +4,6 @@ describe 'cassandra class' do
   schema_testing_create_pp = <<-EOS
     if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == 7 {
         $service_systemd = true
-    } elsif $::operatingsystem == 'Debian' and $::operatingsystemmajrelease == 8 {
-        $service_systemd = true
     } else {
         $service_systemd = false
     }
