@@ -2,12 +2,6 @@ require 'spec_helper_acceptance'
 
 describe 'cassandra class' do
   cassandra_install_pp = <<-EOS
-    if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == 7 {
-      $service_systemd = true
-    } else {
-      $service_systemd = false
-    }
-
     if $::osfamily == 'RedHat' {
       $cassandra_package = 'cassandra20'
       $version = '2.0.17-1'
@@ -85,11 +79,9 @@ describe 'cassandra class' do
       package_ensure              => $version,
       package_name                => $cassandra_package,
       saved_caches_directory_mode => '0770',
-      service_systemd             => $service_systemd
     }
 
     class { '::cassandra::datastax_agent':
-      service_systemd => $service_systemd,
       require         => Class['cassandra']
     }
 
@@ -101,7 +93,6 @@ describe 'cassandra class' do
 
     class { '::cassandra::opscenter':
       config_purge    => true,
-      service_systemd => $service_systemd,
       require         => Class['cassandra'],
     }
 

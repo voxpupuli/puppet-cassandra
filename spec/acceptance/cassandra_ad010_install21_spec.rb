@@ -2,12 +2,6 @@ require 'spec_helper_acceptance'
 
 describe 'cassandra class' do
   cassandra_upgrade21_pp = <<-EOS
-    if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == 7 {
-        $service_systemd = true
-    } else {
-        $service_systemd = false
-    }
-
     if $::osfamily == 'RedHat' {
         $cassandra_optutils_package = 'cassandra21-tools'
         $cassandra_package = 'cassandra21'
@@ -28,7 +22,6 @@ describe 'cassandra class' do
       package_name                => $cassandra_package,
       rpc_interface               => 'lo',
       saved_caches_directory_mode => '0770',
-      service_systemd             => $service_systemd
     }
 
     class { 'cassandra::optutils':

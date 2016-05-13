@@ -2,12 +2,6 @@ require 'spec_helper_acceptance'
 
 describe 'cassandra class' do
   cassandra_upgrade30_pp = <<-EOS
-     if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == 7 {
-         $service_systemd = true
-     } else {
-         $service_systemd = false
-     }
-
      if $::osfamily == 'RedHat' {
          $cassandra_optutils_package = 'cassandra30-tools'
          $cassandra_package = 'cassandra30'
