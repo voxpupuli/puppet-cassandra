@@ -28,7 +28,7 @@ describe 'cassandra' do
     it do
       should contain_service('cassandra').with(
         'ensure'          => 'running',
-        'enable'          => 'true',
+        'enable'          => 'true'
       )
     end
     it { should contain_package('cassandra').with(name: 'cassandra22') }
