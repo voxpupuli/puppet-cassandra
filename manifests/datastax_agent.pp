@@ -14,7 +14,7 @@ class cassandra::datastax_agent (
   $service_enable       = true,
   $service_name         = 'datastax-agent',
   $service_provider     = undef,
-  $service_systemd      = false,
+  $service_systemd      = $::cassandra::params::service_systemd,
   $service_systemd_tmpl = 'cassandra/datastax-agent.service.erb',
   $stomp_interface      = undef,
   $storage_keyspace     = undef,

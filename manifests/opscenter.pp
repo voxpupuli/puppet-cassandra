@@ -121,7 +121,7 @@ class cassandra::opscenter (
     $service_ensure                                 = 'running',
     $service_name                                   = 'opscenterd',
     $service_provider                               = undef,
-    $service_systemd                                = false,
+    $service_systemd                                = $::cassandra::params::service_systemd,
     $service_systemd_tmpl                           = 'cassandra/opscenterd.service.erb',
     $spark_base_master_proxy_port                   = undef,
     $stat_reporter_initial_sleep                    = undef,

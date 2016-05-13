@@ -147,7 +147,7 @@ class cassandra (
   $service_name                                         = 'cassandra',
   $service_provider                                     = undef,
   $service_refresh                                      = true,
-  $service_systemd                                      = false,
+  $service_systemd                                      = $::cassandra::params::service_systemd,
   $service_systemd_tmpl                                 = 'cassandra/cassandra.service.erb',
   $snapshot_before_compaction                           = false,
   $snitch_properties_file
