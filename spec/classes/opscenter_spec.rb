@@ -1,4 +1,5 @@
 require 'spec_helper'
+
 describe 'cassandra::opscenter' do
   let(:pre_condition) do
     [
@@ -11,21 +12,33 @@ describe 'cassandra::opscenter' do
     ]
   end
 
-  context 'Systemd (Red Hat).' do
+  context 'Systemd (Red Hat 6).' do
     let :facts do
       {
-        osfamily: 'RedHat'
+        osfamily: 'RedHat',
+        operatingsystemmajrelease: 6
       }
     end
 
-    let :params do
+    it { should have_resource_count(256) }
+
+    it do
+      should contain_class('cassandra::opscenter').with_service_systemd(false)
+    end
+  end
+
+  context 'Systemd (Red Hat 7).' do
+    let :facts do
       {
-        service_systemd: true
+        osfamily: 'RedHat',
+        operatingsystemmajrelease: 7
       }
     end
+
     it { should have_resource_count(258) }
 
     it do
+      should contain_class('cassandra::opscenter').with_service_systemd(true)
       should contain_exec('opscenter_reload_systemctl').with(refreshonly: true)
       should contain_file('/usr/lib/systemd/system/opscenterd.service')
     end

@@ -15,19 +15,20 @@ describe 'cassandra' do
     ]
   end
 
-  context 'On a RedHat OS with defaults for all parameters' do
+  context 'On a RedHat 6 OS with defaults for all parameters' do
     let :facts do
       {
+        operatingsystemmajrelease: 6,
         osfamily: 'RedHat'
       }
     end
 
-    it { should contain_class('cassandra') }
+    it { should contain_class('cassandra').with_service_systemd(false) }
     it { should contain_file('/etc/cassandra/default.conf/cassandra.yaml') }
     it do
       should contain_service('cassandra').with(
-        'ensure' => 'running',
-        'enable' => 'true'
+        'ensure'          => 'running',
+        'enable'          => 'true',
       )
     end
     it { should contain_package('cassandra').with(name: 'cassandra22') }
