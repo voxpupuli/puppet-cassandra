@@ -140,7 +140,6 @@ class { 'cassandra':
   endpoint_snitch => 'GossipingPropertyFileSnitch',
   listen_address  => $::ipaddress,
   seeds           => $::ipaddress,
-  service_systemd => true,
   require         => Class['cassandra::datastax_repo', 'cassandra::java'],
 }
 
@@ -439,7 +438,6 @@ class { 'cassandra':
   package_ensure  => '4.7.0-1',
   package_name    => 'dse-full',
   service_name    => 'dse',
-  service_systemd => true
 }
 ```
 
@@ -1738,7 +1736,7 @@ better where *systemd_path* will be:
 * `/usr/lib/systemd/system` on the Red Hat family.
 * `/lib/systemd/system` on Debian the familiy.
 
-Default value false
+Default value is true on CentOS 7, false on everything else.
 
 ##### `service_systemd_tmpl`
 The location for the template for the systemd service file.  This attribute
@@ -1941,7 +1939,7 @@ better where *systemd_path* will be:
 * `/usr/lib/systemd/system` on the Red Hat family.
 * `/lib/systemd/system` on Debian the familiy.
 
-Default value false
+Default value is true on CentOS 7, false on everything else.
 
 ##### `service_systemd_tmpl`
 The location for the template for the systemd service file.  This attribute
@@ -2995,7 +2993,7 @@ better where *systemd_path* will be:
 * `/usr/lib/systemd/system` on the Red Hat family.
 * `/lib/systemd/system` on Debian the familiy.
 
-Default value false
+Default value is true on CentOS 7, false on everything else.
 
 ##### `service_systemd_tmpl`
 The location for the template for the systemd service file.  This attribute
