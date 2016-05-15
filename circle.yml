@@ -17,6 +17,10 @@ deployment:
     branch: /^bugfix.*/
     commands: 
       - "./scripts/circle.bash merge release/patch"
+  feature141:
+    branch: feature/141/v2
+    commands:
+      - "./scripts/circle.bash merge release/major"
   feature231:
     branch: feature/231/client_security
     commands:
