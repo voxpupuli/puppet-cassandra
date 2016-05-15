@@ -24,6 +24,20 @@ class { 'cassandra':
   require         => Class['cassandra::datastax_repo', 'cassandra::java'],
 }
 
+class { 'cassandra::datastax_agent':
+  settings => {
+    'agent_alias'     => {
+      'value' => 'foobar',
+    },
+    'stomp_interface' => {
+       'value' => 'localhost',
+    },
+    'async_pool_size' => {
+      ensure => absent,
+    }
+  }
+}
+
 class { 'cassandra::schema':
   cqlsh_password => 'cassandra',
   cqlsh_user     => 'cassandra',
