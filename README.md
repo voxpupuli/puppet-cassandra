@@ -477,6 +477,7 @@ cassandra::opscenter::cluster_name { 'Cluster1':
 ### Private Defined Types
 
 * cassandra::private::data_directory
+* cassandra::private::datastax_agent::setting
 * cassandra::private::deprecation_warning
 * cassandra::private::firewall_ports::rule
 * cassandra::private::opscenter::setting
@@ -1854,54 +1855,33 @@ Default value: '2000'
 A class for installing the DataStax Agent and to point it at an OpsCenter
 instance.
 
+Example:
+
+```puppet
+class { 'cassandra::datastax_agent':
+  settings => {
+    'agent_alias'     => {
+      'value' => 'foobar',
+    },
+    'stomp_interface' => {
+       'value' => 'localhost',
+    },
+    'async_pool_size' => {
+      ensure => absent,
+    }
+  }
+}
+```
+
 #### Attributes
-
-##### `agent_alias`
-If the value is changed from the default of *undef* then this is what is
-set as the alias setting in
-**/var/lib/datastax-agent/conf/address.yaml**
-which is the name the agent announces itself to OpsCenter as.
-Default value *undef*
-
-##### `async_pool_size`
-If the value is changed from the default of *undef* then this is what is
-set as the async_pool_size setting in
-**/var/lib/datastax-agent/conf/address.yaml**
-which is the pool size to use for async operations to cassandra.
-Default value *undef*
-
-##### `async_queue_size`
-If the value is changed from the default of *undef* then this is what is
-set as the async_queue_size setting in
-**/var/lib/datastax-agent/conf/address.yaml**
-which is the maximum number of queued cassandra operations.
-Default value *undef*
 
 ##### `defaults_file`
 The full path name to the file where `java_home` is set.
 Default value '/etc/default/datastax-agent'
 
-##### `hosts`
-If the value is changed from the default of *undef* then this is what is
-set as the hosts setting in
-**/var/lib/datastax-agent/conf/address.yaml**
-which is the DataStax Enterprise node or nodes responsible for storing
-OpsCenter data. By default, this will be the local node, but may be
-configured to store data on a separate cluster. The hosts option accepts
-an array of strings specifying the IP addresses of the node or nodes. For
-example, ["1.2.3.4"] or ["1.2.3.4", "1.2.3.5"].
-Default value *undef*
-
 ##### `java_home`
 If the value of this variable is left as *undef*, no action is taken.
 Otherwise the value is set as JAVA_HOME in `defaults_file`.
-Default value *undef*
-
-##### `local_interface`
-If the value is changed from the default of *undef* then this is what is
-set as the local_interface setting in
-**/var/lib/datastax-agent/conf/address.yaml**
-which is the address there the local cassandra will be contacted.
 Default value *undef*
 
 ##### `package_ensure`
@@ -1946,20 +1926,6 @@ The location for the template for the systemd service file.  This attribute
 only has any effect if `service_systemd` is set to true.
 
 Default value `cassandra/datastax-agent.service.erb`
-
-##### `stomp_interface`
-If the value is changed from the default of *undef* then this is what is
-set as the stomp_interface setting in
-**/var/lib/datastax-agent/conf/address.yaml**
-which connects the agent to an OpsCenter instance.
-Default value *undef*
-
-##### `storage_keyspace`
-If the value is changed from the default of *undef* then this is what is
-set as the storage_keyspace setting in
-**/var/lib/datastax-agent/conf/address.yaml**
-which is keyspace that the agent uses to store data.  See also `hosts`.
-Default value *undef*
 
 ### Class: cassandra::datastax_repo
 
