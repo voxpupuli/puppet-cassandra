@@ -69,7 +69,7 @@ A Puppet module to install and manage Cassandra, DataStax Agent & OpsCenter
   improve service interaction on the RedHat family or
   /lib/systemd/system/datastax-agent.service on the Debian family.
 
-#### What the cassandra::datastax_agent class affects
+#### What the cassandra::datastax_repo class affects
 
 * Optionally configures a Yum repository to install the Cassandra packages
   from (on Red Hat).
