@@ -77,6 +77,8 @@ class cassandra::datastax_agent (
     $defaults = {
       path              => $address_config_file,
       key_val_separator => ': ',
+      require           => Package[$package_name],
+      notify            => Service['datastax-agent'],
     }
 
     create_ini_settings($settings, $defaults)
