@@ -19,7 +19,7 @@ describe 'cassandra::datastax_agent' do
     end
   end
 
-  context 'Test for cassandra::datastax_agent.' do
+  context 'Test for cassandra::datastax_agent with defaults.' do
     it { should have_resource_count(3) }
     it do
       should contain_class('cassandra::datastax_agent').only_with(
@@ -113,30 +113,6 @@ describe 'cassandra::datastax_agent' do
         command: '/bin/systemctl daemon-reload',
         refreshonly: true
       )
-    end
-  end
-
-  context 'Test settings' do
-    let :facts do
-      {
-        osfamily: 'Debian'
-      }
-    end
-
-    let :params do
-      {
-        settings: {
-          'agent_alias' => {
-            'value' => 'foobar'
-          },
-          'stomp_interface' => {
-            'value' => '192.168.0.42'
-          },
-          'async_pool_size' => {
-            'ensure' => 'absent'
-          }
-        }
-      }
     end
   end
 end
