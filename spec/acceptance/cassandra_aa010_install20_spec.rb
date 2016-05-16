@@ -57,19 +57,7 @@ describe 'cassandra class' do
       }
     }
 
-    class { 'cassandra::datastax_repo':
-      settings => {
-        'agent_alias'     => {
-          'value' => 'foobar',
-        },
-        'stomp_interface' => {
-           'value' => 'localhost',
-        },
-        'async_pool_size' => {
-          ensure => absent,
-        }
-      }
-    } ->
+    class { 'cassandra::datastax_repo': } ->
     file { '/var/lib/cassandra':
       ensure => directory,
     } ->
@@ -94,7 +82,18 @@ describe 'cassandra class' do
     }
 
     class { '::cassandra::datastax_agent':
-      require         => Class['cassandra']
+      settings => {
+        'agent_alias'     => {
+          'value' => 'foobar',
+        },
+        'stomp_interface' => {
+           'value' => 'localhost',
+        },
+        'async_pool_size' => {
+          ensure => absent,
+        }
+      },
+      require  => Class['cassandra']
     }
 
     class { '::cassandra::opscenter::pycrypto':
