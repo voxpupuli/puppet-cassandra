@@ -57,7 +57,19 @@ describe 'cassandra class' do
       }
     }
 
-    class { 'cassandra::datastax_repo': } ->
+    class { 'cassandra::datastax_repo':
+      settings => {
+        'agent_alias'     => {
+          'value' => 'foobar',
+        },
+        'stomp_interface' => {
+           'value' => 'localhost',
+        },
+        'async_pool_size' => {
+          ensure => absent,
+        }
+      }
+    } ->
     file { '/var/lib/cassandra':
       ensure => directory,
     } ->
