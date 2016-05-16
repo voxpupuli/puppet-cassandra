@@ -26,16 +26,21 @@ class { 'cassandra':
 
 class { 'cassandra::datastax_agent':
   settings => {
-    'agent_alias'     => {
-      'value' => 'foobar',
-    },
-    'stomp_interface' => {
-       'value' => 'localhost',
-    },
-    'async_pool_size' => {
-      ensure => absent,
+    '' => {
+      'agent_alias'     => {
+        'setting' => 'agent_alias',
+        'value'   => 'foobar',
+      },
+      'stomp_interface' => {
+        'setting' => 'stomp_interface',
+        'value'   => 'localhost',
+      },
+      'async_pool_size' => {
+        'ensure' => absent,
+      },
     }
-  }
+  },
+  require  => Class['cassandra'],
 }
 
 class { 'cassandra::schema':
@@ -80,7 +85,7 @@ class { 'cassandra::schema':
       password => 'Niner75',
     },
     'lucan'    => {
-      ensure => absent
+      'ensure' => absent
     },
   },
 }
@@ -90,12 +95,12 @@ $heap_new_size = $::processorcount * 100
 class { 'cassandra::env':
   file_lines => {
     'MAX_HEAP_SIZE' => {
-      line              => 'MAX_HEAP_SIZE="1024M"',
-      match             => '#MAX_HEAP_SIZE="4G"',
+      line  => 'MAX_HEAP_SIZE="1024M"',
+      match => '#MAX_HEAP_SIZE="4G"',
     },
-    'HEAP_NEWSIZE' => {
-      line              => "HEAP_NEWSIZE='${heap_new_size}M'",
-      match             => '#HEAP_NEWSIZE="800M"',
+    'HEAP_NEWSIZE'  => {
+      line  => "HEAP_NEWSIZE='${heap_new_size}M'",
+      match => '#HEAP_NEWSIZE="800M"',
     }
   }
 }
