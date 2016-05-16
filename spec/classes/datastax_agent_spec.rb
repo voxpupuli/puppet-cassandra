@@ -13,9 +13,9 @@ describe 'cassandra::datastax_agent' do
   end
 
   let!(:stdlib_stubs) do
-    MockFunction.new('validate_hash') do |f|
+    MockFunction.new('validate_hash') do |_f|
     end
-    MockFunction.new('create_ini_settings') do |f|
+    MockFunction.new('create_ini_settings') do |_f|
     end
   end
 
