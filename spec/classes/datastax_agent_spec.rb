@@ -1,10 +1,42 @@
 require 'spec_helper'
+
 describe 'cassandra::datastax_agent' do
-  let(:pre_condition) do
-    [
-      'define create_ini_settings ($settings, $defaults) {}',
-      'define ini_setting ($ensure, $path, $section, $key_val_separator, $setting, $value) {}'
-    ]
+  let!(:stdlib_stubs) do
+    MockFunction.new('validate_hash') do |f|
+      f.stubbed.with(
+        'agent_alias' => {
+          'value' => 'foobar'
+        },
+        'stomp_interface' => {
+          'value' => '192.168.0.42'
+        },
+        'async_pool_size' => {
+          'ensure' => 'absent'
+        }
+      )
+    end
+
+    MockFunction.new('create_ini_settings') do |f|
+      f.stubbed.with(
+        {
+          'agent_alias' => {
+            'value' => 'foobar'
+          },
+          'stomp_interface' => {
+            'value' => '192.168.0.42'
+          },
+          'async_pool_size' => {
+            'ensure' => 'absent'
+          }
+        },
+        {
+          'path'              => '/var/lib/datastax-agent/conf/address.yaml',
+          'key_val_separator' => ': ',
+          'require'           => 'Package[datastax-agent]',
+          'notify'            => 'Service[datastax-agent]'
+        }
+      )
+    end
   end
 
   context 'Test for cassandra::datastax_agent.' do
@@ -113,7 +145,7 @@ describe 'cassandra::datastax_agent' do
 
     let :params do
       {
-        settings => {
+        settings: {
           'agent_alias' => {
             'value' => 'foobar'
           },
@@ -125,6 +157,10 @@ describe 'cassandra::datastax_agent' do
           }
         }
       }
+    end
+
+    it do
+      should contain_validate_hash
     end
   end
 end
