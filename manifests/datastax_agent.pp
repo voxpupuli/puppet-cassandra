@@ -74,6 +74,8 @@ class cassandra::datastax_agent (
   }
 
   if $settings {
+    validate_hash($settings)
+
     $defaults = {
       path              => $address_config_file,
       key_val_separator => ': ',
