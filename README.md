@@ -477,7 +477,6 @@ cassandra::opscenter::cluster_name { 'Cluster1':
 ### Private Defined Types
 
 * cassandra::private::data_directory
-* cassandra::private::datastax_agent::setting
 * cassandra::private::deprecation_warning
 * cassandra::private::firewall_ports::rule
 * cassandra::private::opscenter::setting
@@ -1855,19 +1854,24 @@ Default value: '2000'
 A class for installing the DataStax Agent and to point it at an OpsCenter
 instance.
 
-Example:
+In this example set agent_alias to foobar, stomp_interface to localhost and
+ensure that async_pool_size is absent from the file:
 
 ```puppet
 class { 'cassandra::datastax_agent':
   settings => {
-    'agent_alias'     => {
-      'value' => 'foobar',
-    },
-    'stomp_interface' => {
-       'value' => 'localhost',
-    },
-    'async_pool_size' => {
-      ensure => absent,
+    '' => {
+      'agent_alias'     => {
+        'setting' => 'agent_alias',
+        'value'   => 'foobar',
+      },
+      'stomp_interface' => {
+        'setting' => 'stomp_interface',
+        'value'   => 'localhost',
+      },
+      'async_pool_size' => {
+        'ensure' => absent,
+      },
     }
   }
 }
@@ -1926,6 +1930,22 @@ The location for the template for the systemd service file.  This attribute
 only has any effect if `service_systemd` is set to true.
 
 Default value `cassandra/datastax-agent.service.erb`
+
+##### `settings`
+A hash that is passed to
+[create_ini_settings](https://github.com/puppetlabs/puppetlabs-inifile#function-create_ini_settings)
+with the following additional defaults:
+
+```puppet
+{
+  path              => $address_config_file,
+  key_val_separator => ': ',
+  require           => Package[$package_name],
+  notify            => Service['datastax-agent'],
+}
+```
+
+Default value {}
 
 ### Class: cassandra::datastax_repo
 
