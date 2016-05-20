@@ -75,8 +75,6 @@ class cassandra::datastax_agent (
   }
 
   if $settings {
-    validate_hash($settings)
-
     $defaults = {
       path              => $address_config_file,
       key_val_separator => ': ',
@@ -84,6 +82,11 @@ class cassandra::datastax_agent (
       notify            => Service['datastax-agent'],
     }
 
-    create_ini_settings($settings, $defaults)
+    $full_settings = {
+      '' => $settings
+    }
+
+    validate_hash($full_settings)
+    create_ini_settings($full_settings, $defaults)
   }
 }

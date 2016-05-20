@@ -407,7 +407,9 @@ node /^node\d+$/ {
     before          => Class['cassandra::datastax_agent']
   } ->
   class { 'cassandra::datastax_agent':
-    stomp_interface => '110.82.157.6'
+    settings => {
+      'stomp_interface' => '110.82.157.6'
+    }
   }
 }
 
@@ -1860,20 +1862,18 @@ ensure that async_pool_size is absent from the file:
 ```puppet
 class { 'cassandra::datastax_agent':
   settings => {
-    '' => {
-      'agent_alias'     => {
-        'setting' => 'agent_alias',
-        'value'   => 'foobar',
-      },
-      'stomp_interface' => {
-        'setting' => 'stomp_interface',
-        'value'   => 'localhost',
-      },
-      'async_pool_size' => {
-        'ensure' => absent,
-      },
-    }
-  }
+    'agent_alias'     => {
+      'setting' => 'agent_alias',
+      'value'   => 'foobar',
+    },
+    'stomp_interface' => {
+      'setting' => 'stomp_interface',
+      'value'   => 'localhost',
+    },
+    'async_pool_size' => {
+      'ensure' => absent,
+    },
+  },
 }
 ```
 

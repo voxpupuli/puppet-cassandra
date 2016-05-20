@@ -26,18 +26,16 @@ class { 'cassandra':
 
 class { 'cassandra::datastax_agent':
   settings => {
-    '' => {
-      'agent_alias'     => {
-        'setting' => 'agent_alias',
-        'value'   => 'foobar',
-      },
-      'stomp_interface' => {
-        'setting' => 'stomp_interface',
-        'value'   => 'localhost',
-      },
-      'async_pool_size' => {
-        'ensure' => absent,
-      },
+    'agent_alias'     => {
+      'setting' => 'agent_alias',
+      'value'   => 'foobar',
+    },
+    'stomp_interface' => {
+      'setting' => 'stomp_interface',
+      'value'   => 'localhost',
+    },
+    'async_pool_size' => {
+      'ensure' => absent,
     }
   },
   require  => Class['cassandra'],
