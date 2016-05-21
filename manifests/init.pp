@@ -201,6 +201,30 @@ class cassandra (
       }
     }
     'Debian': {
+      # Provide a workaround for CASSANDRA-2356
+      exec { 'CASSANDRA-2356':
+        path    => ['/sbin', '/bin', '/usr/sbin', '/usr/bin'],
+        command => '/etc/init.d/cassandra stop && rm -rf /var/lib/cassandra/*',
+        creates => "${$config_path}/CASSANDRA-2356",
+        user    => 'root',
+        require => [
+          Package['cassandra'],
+          File["${$config_path}/CASSANDRA-2356"],
+        ],
+      }
+
+      file { "${$config_path}/CASSANDRA-2356":
+        source  => 'puppet:///modules/cassandra/CASSANDRA-2356',
+        owner   => 'cassandra',
+        group   => 'cassandra',
+        mode    => '0644',
+        require => [
+          Package['cassandra'],
+          Exec['CASSANDRA-2356'],
+        ],
+      }
+      # End of workaround for CASSANDRA-2356
+
       # A workaround for CASSANDRA-9822
       if $cassandra_9822 {
         file { '/etc/init.d/cassandra':
