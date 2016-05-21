@@ -1,0 +1,7 @@
+#############################################################################
+# CASSANDRA-2356 (https://issues.apache.org/jira/browse/CASSANDRA-2356)
+#
+# This file has been placed here by Puppet as a workaround for the bug
+# mentioned above.  DO NOT remove this file otherwise subsequent
+# runs of Puppet may result in data loss.
+#############################################################################

@@ -49,6 +49,22 @@ describe 'cassandra' do
               'setting' => 'rack',
               'value'   => 'RAC1')
     end
+
+    it do
+      should contain_exec('CASSANDRA-2356').with(
+        path: ['/sbin', '/bin', '/usr/sbin', '/usr/bin'],
+        command: '/etc/init.d/cassandra stop && rm -rf /var/lib/cassandra/*',
+        creates: '/etc/cassandra/CASSANDRA-2356',
+        user: 'root'
+      )
+
+      should contain_file('/etc/cassandra/CASSANDRA-2356').with(
+        source: 'puppet:///modules/cassandra/CASSANDRA-2356',
+        owner: 'cassandra',
+        group: 'cassandra',
+        mode: '0644'
+      )
+    end
   end
 
   context 'On a Debian OS with manage_dsc_repo set to true' do
