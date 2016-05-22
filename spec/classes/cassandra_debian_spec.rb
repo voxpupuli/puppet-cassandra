@@ -15,6 +15,13 @@ describe 'cassandra' do
     ]
   end
 
+  let!(:stdlib_stubs) do
+    MockFunction.new('strftime') do |f|
+      f.stubbed.with('/var/lib/cassandra-%F')
+       .returns('/var/lib/cassandra-YYYY-MM-DD')
+    end
+  end
+
   context 'On a Debian OS with defaults for all parameters' do
     let :facts do
       {
@@ -51,10 +58,19 @@ describe 'cassandra' do
     end
 
     it do
-      should contain_exec('CASSANDRA-2356').with(
-        path: ['/sbin', '/bin', '/usr/sbin', '/usr/bin'],
-        command: '/etc/init.d/cassandra stop && rm -rf /var/lib/cassandra/*',
+      should contain_exec('CASSANDRA-2356 Stop Cassandra').with(
+        command: '/etc/init.d/cassandra stop',
         creates: '/etc/cassandra/CASSANDRA-2356',
+        user: 'root'
+      )
+
+      should contain_exec('CASSANDRA-2356 Backup Data').with(
+        command: '/bin/cp -Rp /var/lib/cassandra /var/lib/cassandra-YYYY-MM-DD',
+        user: 'root'
+      )
+
+      should contain_exec('CASSANDRA-2356 Remove Data').with(
+        command: '/bin/rm -rf /var/lib/cassandra/*/*',
         user: 'root'
       )
 

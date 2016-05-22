@@ -14,6 +14,13 @@ describe '::cassandra::env' do
     ]
   end
 
+  let!(:stdlib_stubs) do
+    MockFunction.new('strftime') do |f|
+      f.stubbed.with('/var/lib/cassandra-%F')
+       .returns('/var/lib/cassandra-YYYY-MM-DD')
+    end
+  end
+
   context 'On a RedHat OS with defaults for all parameters' do
     let :facts do
       {

@@ -4,4 +4,7 @@
 # This file has been placed here by Puppet as a workaround for the bug
 # mentioned above.  DO NOT remove this file otherwise subsequent
 # runs of Puppet may result in data loss.
+#
+# If the Puppet module does attempt to clear the data, it will attempt to
+# make a copy at /var/lib/cassandra-YYYY-MM-DD.
 #############################################################################

@@ -11,6 +11,13 @@ describe 'cassandra::schema' do
     ]
   end
 
+  let!(:stdlib_stubs) do
+    MockFunction.new('strftime') do |f|
+      f.stubbed.with('/var/lib/cassandra-%F')
+       .returns('/var/lib/cassandra-YYYY-MM-DD')
+    end
+  end
+
   context 'Test that a connection test is made.' do
     let :facts do
       {
