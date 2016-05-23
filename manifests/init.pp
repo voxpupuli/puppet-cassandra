@@ -238,10 +238,10 @@ class cassandra (
       }
 
       file { "${$config_path}/CASSANDRA-2356":
-        source  => 'puppet:///modules/cassandra/CASSANDRA-2356',
-        owner   => 'cassandra',
-        group   => 'cassandra',
-        mode    => '0644',
+        source => 'puppet:///modules/cassandra/CASSANDRA-2356',
+        owner  => 'cassandra',
+        group  => 'cassandra',
+        mode   => '0644',
       }
       # End of workaround for CASSANDRA-2356
 
