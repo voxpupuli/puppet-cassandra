@@ -54,12 +54,15 @@ A Puppet module to install and manage Cassandra, DataStax Agent & OpsCenter
 * On CentOS 7 if the `init` service provider is used, then cassandra
   is added as a system service.
 * Optionally ensures that the Cassandra service is enabled and running.
-* On Ubuntu systems, optionally replace ```/etc/init.d/cassandra``` with a
-  workaround for
-  [CASSANDRA-9822](https://issues.apache.org/jira/browse/CASSANDRA-9822).
 * Optionally creates a file /usr/lib/systemd/system/cassandra.service to
   improve service interaction on the RedHat family or
   /lib/systemd/system/cassandra.service on the Debian family.
+* On Debian systems:
+  * Optionally replace ```/etc/init.d/cassandra``` with a workaround for
+  [CASSANDRA-9822](https://issues.apache.org/jira/browse/CASSANDRA-9822).
+  * Optionally provide with a workaround for
+  [CASSANDRA-2356](https://issues.apache.org/jira/browse/CASSANDRA-2356).
+
 
 #### What the cassandra::datastax_agent class affects
 
@@ -74,7 +77,7 @@ A Puppet module to install and manage Cassandra, DataStax Agent & OpsCenter
 * Optionally configures a Yum repository to install the Cassandra packages
   from (on Red Hat).
 * Optionally configures an Apt repository to install the Cassandra packages
-  from (on Ubuntu).
+  from (on Debian).
 
 #### What the cassandra::firewall_ports class affects
 
@@ -565,12 +568,24 @@ How long a coordinator should continue to retry a CAS operation
 that contends with other proposals for the same row.
 Default value: '1000'
 
+##### `cassandra_2356`
+If set to true, this will provide a workaround for
+[CASSANDRA-2356](https://issues.apache.org/jira/browse/CASSANDRA-2356).
+
+WARNING:  On an already working system, have at least one successful
+run of Puppet on your Cassandra nodes before setting this option to true
+to avoid data loss and/or service impact.
+
+This option is silently ignored on the Red Hat family of operating systems as
+this bug only affects Debian systems.
+Default value 'false'
+
 ##### `cassandra_9822`
 If set to true, this will apply a patch to the init file for the Cassandra
 service as a workaround for
 [CASSANDRA-9822](https://issues.apache.org/jira/browse/CASSANDRA-9822).  This
 option is silently ignored on the Red Hat family of operating systems as
-this bug only affects Ubuntu systems.
+this bug only affects Debian systems.
 Default value 'false'
 
 ##### `cassandra_yaml_tmpl`

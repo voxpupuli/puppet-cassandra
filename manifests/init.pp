@@ -16,6 +16,7 @@ class cassandra (
   $broadcast_address                                    = undef,
   $broadcast_rpc_address                                = undef,
   $cas_contention_timeout_in_ms                         = 1000,
+  $cassandra_2356                                       = false,
   $cassandra_9822                                       = false,
   $cassandra_yaml_tmpl
     = 'cassandra/cassandra.yaml.erb',
@@ -204,31 +205,36 @@ class cassandra (
     }
     'Debian': {
       # Provide a workaround for CASSANDRA-2356
-      $cassandra_2356_backup_dir = strftime('/var/lib/cassandra-%F')
+      if $cassandra_2356 {
+        $cassandra_2356_backup_dir = strftime('/var/lib/cassandra-%F')
 
-      # The stop init script can resturn 0 of stop was successful or 1 if it
-      # was already stopped.
-      exec { 'CASSANDRA-2356 Stop Cassandra':
-        command => '/etc/init.d/cassandra stop',
-        creates => "${$config_path}/CASSANDRA-2356",
-        returns => [0, 1],
-        user    => 'root',
-        require => Package['cassandra'],
-        notify  => Service['cassandra'],
-      } ~>
-      exec { 'CASSANDRA-2356 Backup Data':
-        command     => "/bin/cp -Rp /var/lib/cassandra ${cassandra_2356_backup_dir}",
-        onlyif      => '/usr/bin/test -d /var/lib/cassandra',
-        user        => 'root',
-        refreshonly => true,
-        require     => Package['cassandra'],
-        notify      => Service['cassandra'],
-      } ~>
-      exec { 'CASSANDRA-2356 Remove Data':
-        command     => '/bin/rm -rf /var/lib/cassandra/*/*',
-        refreshonly => true,
-        user        => 'root',
-        before      => File[$config_file],
+        # The stop init script can resturn 0 of stop was successful or 1 if it
+        # was already stopped.
+        exec { 'CASSANDRA-2356 Stop Cassandra':
+          command => '/etc/init.d/cassandra stop',
+          creates => "${$config_path}/CASSANDRA-2356",
+          returns => [0, 1],
+          user    => 'root',
+          before  => File["${$config_path}/CASSANDRA-2356"],
+          require => Package['cassandra'],
+          notify  => [Exec['CASSANDRA-2356 Backup Data'], Service['cassandra']],
+        }
+
+        exec { 'CASSANDRA-2356 Backup Data':
+          command     => "/bin/cp -Rp /var/lib/cassandra ${cassandra_2356_backup_dir}",
+          onlyif      => '/usr/bin/test -d /var/lib/cassandra',
+          user        => 'root',
+          refreshonly => true,
+          require     => Package['cassandra'],
+          notify      => [Exec['CASSANDRA-2356 Remove Data'], Service['cassandra']],
+        }
+
+        exec { 'CASSANDRA-2356 Remove Data':
+          command     => '/bin/rm -rf /var/lib/cassandra/*/*',
+          refreshonly => true,
+          user        => 'root',
+          before      => [File[$config_file], Service['cassandra']],
+        }
       }
 
       file { "${$config_path}/CASSANDRA-2356":
@@ -236,7 +242,6 @@ class cassandra (
         owner   => 'cassandra',
         group   => 'cassandra',
         mode    => '0644',
-        require => Exec['CASSANDRA-2356 Stop Cassandra'],
       }
       # End of workaround for CASSANDRA-2356
 

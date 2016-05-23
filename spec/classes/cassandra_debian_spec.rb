@@ -55,6 +55,27 @@ describe 'cassandra' do
               'section' => '',
               'setting' => 'rack',
               'value'   => 'RAC1')
+
+      should contain_file('/etc/cassandra/CASSANDRA-2356').with(
+        source: 'puppet:///modules/cassandra/CASSANDRA-2356',
+        owner: 'cassandra',
+        group: 'cassandra',
+        mode: '0644'
+      )
+    end
+  end
+
+  context 'CASSANDRA-2356 Workaround' do
+    let :facts do
+      {
+        osfamily: 'Debian'
+      }
+    end
+
+    let :params do
+      {
+        cassandra_2356: true
+      }
     end
 
     it do
@@ -72,13 +93,6 @@ describe 'cassandra' do
       should contain_exec('CASSANDRA-2356 Remove Data').with(
         command: '/bin/rm -rf /var/lib/cassandra/*/*',
         user: 'root'
-      )
-
-      should contain_file('/etc/cassandra/CASSANDRA-2356').with(
-        source: 'puppet:///modules/cassandra/CASSANDRA-2356',
-        owner: 'cassandra',
-        group: 'cassandra',
-        mode: '0644'
       )
     end
   end

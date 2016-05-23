@@ -80,6 +80,7 @@ describe 'cassandra class' do
     } ->
     class { 'cassandra':
       authenticator               => 'PasswordAuthenticator',
+      cassandra_2356              => true,
       cassandra_9822              => true,
       cassandra_yaml_tmpl         => 'cassandra/cassandra20.yaml.erb',
       commitlog_directory_mode    => '0770',
