@@ -566,17 +566,15 @@ How long a coordinator should continue to retry a CAS operation
 that contends with other proposals for the same row.
 Default value: '1000'
 
-##### `cassandra_2356`
-If set to true, this will provide a workaround for
-[CASSANDRA-2356](https://issues.apache.org/jira/browse/CASSANDRA-2356).
-
-WARNING:  On an already working system, have at least one successful
-run of Puppet on your Cassandra nodes before setting this option to true
-to avoid data loss and/or service impact.
+##### `cassandra_2356_sleep_seconds`
+This will provide a workaround for
+[CASSANDRA-2356](https://issues.apache.org/jira/browse/CASSANDRA-2356) by
+sleeping for the specifed number of seconds after an event involving the
+Cassandra package.
 
 This option is silently ignored on the Red Hat family of operating systems as
 this bug only affects Debian systems.
-Default value 'false'
+Default value 5
 
 ##### `cassandra_9822`
 If set to true, this will apply a patch to the init file for the Cassandra
