@@ -304,7 +304,7 @@ class cassandra (
       owner   => 'cassandra',
       group   => 'cassandra',
       mode    => $saved_caches_directory_mode,
-      require => File[$config_file,
+      require => File[$config_file],
       before  => Package['cassandra'],
     }
   }
