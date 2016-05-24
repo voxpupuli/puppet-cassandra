@@ -273,8 +273,8 @@ class cassandra (
 
   file { $config_path_recurse:
     ensure => 'directory',
-    group  => 'root',
-    owner  => 'root',
+    group  => 'cassandra',
+    owner  => 'cassandra',
     mode   => '0755',
   }
 
