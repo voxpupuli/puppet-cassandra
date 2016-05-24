@@ -30,7 +30,7 @@ describe 'cassandra' do
     end
   end
 
-  context 'Test the dc and rack properties with defaults.' do
+  context 'Test the dc and rack properties with defaults (Debian).' do
     let :facts do
       {
         osfamily: 'Debian'
@@ -45,6 +45,25 @@ describe 'cassandra' do
       should contain_file('/etc/cassandra/cassandra-rackdc.properties')
         .with_content(/^#dc_suffix=$/)
       should contain_file('/etc/cassandra/cassandra-rackdc.properties')
+        .with_content(/^# prefer_local=true$/)
+    end
+  end
+
+  context 'Test the dc and rack properties with defaults (RedHat).' do
+    let :facts do
+      {
+        osfamily: 'RedHat'
+      }
+    end
+
+    it do
+      should contain_file('/etc/cassandra/default.conf/cassandra-rackdc.properties')
+        .with_content(/^dc=DC1/)
+      should contain_file('/etc/cassandra/default.conf/cassandra-rackdc.properties')
+        .with_content(/^rack=RAC1$/)
+      should contain_file('/etc/cassandra/default.conf/cassandra-rackdc.properties')
+        .with_content(/^#dc_suffix=$/)
+      should contain_file('/etc/cassandra/default.conf/cassandra-rackdc.properties')
         .with_content(/^# prefer_local=true$/)
     end
   end

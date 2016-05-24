@@ -182,6 +182,8 @@ describe 'cassandra' do
     it do
       should contain_file('/etc/cassandra.yaml')
         .with_content(/authenticator: foo/)
+      should contain_file('/etc/cassandra-rackdc.properties')
+      should contain_file('/etc')
     end
 
     it do

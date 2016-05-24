@@ -50,6 +50,8 @@ describe 'cassandra' do
     it { is_expected.not_to contain_apt__key('datastaxkey') }
     it { is_expected.not_to contain_apt__source('datastax') }
     it { is_expected.not_to contain_exec('update-cassandra-repos') }
+    it { should contain_exec('CASSANDRA-2356 sleep') }
+    it { should contain_file('/etc/cassandra').with_ensure('directory') }
   end
 
   context 'On a Debian OS with manage_dsc_repo set to true' do

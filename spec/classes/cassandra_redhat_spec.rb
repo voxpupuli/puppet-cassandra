@@ -40,6 +40,7 @@ describe 'cassandra' do
     end
 
     it { should contain_class('cassandra') }
+    it { should contain_file('/etc/cassandra/default.conf') }
     it { should contain_file('/etc/cassandra/default.conf/cassandra.yaml') }
     it do
       should contain_service('cassandra').with(
@@ -114,9 +115,11 @@ describe 'cassandra' do
     end
 
     it do
-      is_expected.to contain_file('/etc/dse/cassandra/cassandra.yaml')
-      is_expected.to contain_file('/usr/lib/systemd/system/dse.service')
-      is_expected.to contain_package('cassandra').with(
+      should contain_file('/etc/dse/cassandra/cassandra.yaml')
+      should contain_file('/etc/dse/cassandra')
+      should contain_file('/usr/lib/systemd/system/dse.service')
+      should contain_file('/etc/dse/cassandra/cassandra-rackdc.properties')
+      should contain_package('cassandra').with(
         ensure: '4.7.0-1',
         name: 'dse-full'
       )

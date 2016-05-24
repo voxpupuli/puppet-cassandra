@@ -50,11 +50,10 @@ describe 'cassandra' do
     end
 
     it do
+      should contain_user('cassandra')
+      should contain_group('cassandra')
       should contain_file('/etc/cassandra/default.conf/cassandra.yaml')
         .with_content(/^key_cache_size_in_mb:$/)
-    end
-
-    it do
       should contain_class('cassandra').only_with(
         'additional_lines' => [],
         'authenticator' => 'AllowAllAuthenticator',
