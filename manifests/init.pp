@@ -16,7 +16,7 @@ class cassandra (
   $broadcast_address                                    = undef,
   $broadcast_rpc_address                                = undef,
   $cas_contention_timeout_in_ms                         = 1000,
-  $cassandra_2356                                       = false,
+  $cassandra_2356_sleep_seconds                         = 5,
   $cassandra_9822                                       = false,
   $cassandra_yaml_tmpl
     = 'cassandra/cassandra.yaml.erb',
@@ -212,6 +212,15 @@ class cassandra (
           mode   => '0555',
           before => Package['cassandra'],
         }
+      }
+      # Sleep after package install and before service resource to prevent
+      # possible duplicate processes arising from CASSANDRA-2356.
+      exec { 'CASSANDRA-2356 sleep':
+        command     => "/bin/sleep ${cassandra_2356_sleep_seconds}",
+        refreshonly => true,
+        user        => 'root',
+        subscribe   => Package['cassandra'],
+        before      => Service['cassandra'],
       }
     }
     default: {
