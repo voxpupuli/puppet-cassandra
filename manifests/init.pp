@@ -272,7 +272,7 @@ class cassandra (
     ensure => 'directory',
     group  => 'root',
     owner  => 'root',
-    mode   => '755',
+    mode   => '0755',
   }
 
   file { $config_file:
@@ -345,11 +345,11 @@ class cassandra (
 
   $dc_rack_properties_file = "${config_path}/${snitch_properties_file}"
   file { $dc_rack_properties_file:
-    source => 'puppet:///modules/cassandra/cassandra-rackdc.properties',
     ensure  => 'file',
+    source  => 'puppet:///modules/cassandra/cassandra-rackdc.properties',
     owner   => 'root',
     group   => 'root',
-    mode    => '644',
+    mode    => '0644',
     require => File[$config_path_recurse],
   }
 
@@ -368,7 +368,7 @@ class cassandra (
     setting => 'rack',
     value   => $rack,
     require => File[$dc_rack_properties_file],
-    before      => Package['cassandra'],
+    before  => Package['cassandra'],
   }
 
   if $dc_suffix != undef {
@@ -378,7 +378,7 @@ class cassandra (
         section => '',
         setting => 'dc_suffix',
         value   => $dc_suffix,
-        require     => File[$dc_rack_properties_file],
+        require => File[$dc_rack_properties_file],
         before  => Package['cassandra'],
         notify  => Service['cassandra'],
       }
