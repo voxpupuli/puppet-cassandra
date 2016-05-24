@@ -60,8 +60,6 @@ A Puppet module to install and manage Cassandra, DataStax Agent & OpsCenter
 * On Debian systems:
   * Optionally replace ```/etc/init.d/cassandra``` with a workaround for
   [CASSANDRA-9822](https://issues.apache.org/jira/browse/CASSANDRA-9822).
-  * Optionally provide with a workaround for
-  [CASSANDRA-2356](https://issues.apache.org/jira/browse/CASSANDRA-2356).
 
 
 #### What the cassandra::datastax_agent class affects
