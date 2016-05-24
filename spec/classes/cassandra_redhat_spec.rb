@@ -50,22 +50,6 @@ describe 'cassandra' do
     it { should contain_package('cassandra').with(name: 'cassandra22') }
     it { is_expected.not_to contain_yumrepo('datastax') }
     it do
-      should contain_ini_setting('rackdc.properties.dc').with(
-        'path'    => '/etc/cassandra/default.conf/cassandra-rackdc.properties',
-        'section' => '',
-        'setting' => 'dc',
-        'value'   => 'DC1'
-      )
-    end
-    it do
-      should contain_ini_setting('rackdc.properties.rack').with(
-        'path'    => '/etc/cassandra/default.conf/cassandra-rackdc.properties',
-        'section' => '',
-        'setting' => 'rack',
-        'value'   => 'RAC1'
-      )
-    end
-    it do
       should contain_file('/var/lib/cassandra/data').with(
         'ensure' => 'directory',
         'owner'  => 'cassandra',

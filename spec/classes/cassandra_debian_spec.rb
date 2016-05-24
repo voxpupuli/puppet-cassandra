@@ -50,20 +50,6 @@ describe 'cassandra' do
     it { is_expected.not_to contain_apt__key('datastaxkey') }
     it { is_expected.not_to contain_apt__source('datastax') }
     it { is_expected.not_to contain_exec('update-cassandra-repos') }
-    it do
-      should contain_ini_setting('rackdc.properties.dc')
-        .with('path' => '/etc/cassandra/cassandra-rackdc.properties',
-              'section' => '',
-              'setting' => 'dc',
-              'value'   => 'DC1')
-    end
-    it do
-      should contain_ini_setting('rackdc.properties.rack')
-        .with('path' => '/etc/cassandra/cassandra-rackdc.properties',
-              'section' => '',
-              'setting' => 'rack',
-              'value'   => 'RAC1')
-    end
   end
 
   context 'On a Debian OS with manage_dsc_repo set to true' do

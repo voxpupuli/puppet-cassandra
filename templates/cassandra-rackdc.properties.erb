@@ -16,12 +16,12 @@
 
 # These properties are used with GossipingPropertyFileSnitch and will
 # indicate the rack and dc for this node
-dc=DC1
-rack=RAC1
+dc=<%= @dc %>
+rack=<%= @rack %>
 
 # Add a suffix to a datacenter name. Used by the Ec2Snitch and Ec2MultiRegionSnitch
 # to append a string to the EC2 region name.
-#dc_suffix=
+<% if @dc_suffix != nil %>dc_suffix=<%= @dc_suffix %><% else %>#dc_suffix=<% end %>
 
 # Uncomment the following line to make this snitch prefer the internal ip when possible, as the Ec2MultiRegionSnitch does.
-# prefer_local=true
+<% if @prefer_local != nil %>prefer_local=<%= @prefer_local %><% else %># prefer_local=true<% end %>

@@ -17,6 +17,8 @@ describe 'cassandra' do
 
   let!(:stdlib_stubs) do
     MockFunction.new('concat') do |f|
+      f.stubbed.with([], '')
+       .returns([''])
       f.stubbed.with([], '/etc/cassandra')
        .returns(['/etc/cassandra'])
       f.stubbed.with([], '/etc/cassandra/default.conf')
@@ -118,6 +120,7 @@ describe 'cassandra' do
         'permissions_validity_in_ms' => 2000,
         # 'prefer_local' => nil,
         'rack' => 'RAC1',
+        'rackdc_tmpl' => 'cassandra/cassandra-rackdc.properties.erb',
         'range_request_timeout_in_ms' => 10_000,
         'read_request_timeout_in_ms' => 5000,
         'request_scheduler' => 'org.apache.cassandra.scheduler.NoScheduler',
@@ -208,7 +211,7 @@ describe 'cassandra' do
       should contain_service('cassandra').with(provider: 'base')
     end
 
-    it { should have_resource_count(13) }
+    it { should have_resource_count(11) }
   end
 
   context 'Deprecation warnings.' do
@@ -230,56 +233,6 @@ describe 'cassandra' do
     end
   end
 
-  context 'Test the dc and rack properties.' do
-    let :facts do
-      {
-        osfamily: 'RedHat'
-      }
-    end
-
-    let :params do
-      {
-        snitch_properties_file: 'cassandra-topology.properties',
-        dc: 'NYC',
-        rack: 'R101',
-        dc_suffix: '_1_cassandra',
-        prefer_local: 'true'
-      }
-    end
-    it do
-      should contain_ini_setting('rackdc.properties.dc')
-        .with('path' => '/etc/cassandra/default.conf/cassandra-topology.properties',
-              'section' => '',
-              'setting' => 'dc',
-              'value'   => 'NYC')
-    end
-    it do
-      should contain_ini_setting('rackdc.properties.rack')
-        .with('path' => '/etc/cassandra/default.conf/cassandra-topology.properties',
-              'section' => '',
-              'setting' => 'rack',
-              'value'   => 'R101')
-    end
-    it do
-      should contain_service('cassandra')
-        .that_subscribes_to('Ini_setting[rackdc.properties.dc_suffix]')
-      should contain_ini_setting('rackdc.properties.dc_suffix')
-        .with('path' => '/etc/cassandra/default.conf/cassandra-topology.properties',
-              'section' => '',
-              'setting' => 'dc_suffix',
-              'value'   => '_1_cassandra')
-    end
-    it do
-      should contain_service('cassandra')
-        .that_subscribes_to('Ini_setting[rackdc.properties.prefer_local]')
-      should contain_ini_setting('rackdc.properties.prefer_local')
-        .with('path' => '/etc/cassandra/default.conf/cassandra-topology.properties',
-              'section' => '',
-              'setting' => 'prefer_local',
-              'value'   => 'true')
-    end
-  end
-
   context 'Ensure cassandra service can be stopped and disabled.' do
     let :facts do
       {
@@ -298,16 +251,6 @@ describe 'cassandra' do
         .with('ensure' => 'stopped',
               'name'      => 'cassandra',
               'enable'    => 'false')
-    end
-    it do
-      should contain_service('cassandra')
-        .that_subscribes_to('File[/etc/cassandra/cassandra.yaml]')
-      should contain_service('cassandra')
-        .that_subscribes_to('Ini_setting[rackdc.properties.dc]')
-      should contain_service('cassandra')
-        .that_subscribes_to('Ini_setting[rackdc.properties.rack]')
-      should contain_service('cassandra')
-        .that_subscribes_to('Package[cassandra]')
     end
   end
 
