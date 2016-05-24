@@ -84,7 +84,6 @@ class cassandra (
   $key_cache_keys_to_save                               = undef,
   $key_cache_save_period                                = 14400,
   $key_cache_size_in_mb                                 = '',
-  $varlib_dir                                           = '/var/lib/cassandra',
   $listen_address                                       = 'localhost',
   $listen_interface                                     = undef,
   $manage_dsc_repo                                      = false,
@@ -259,12 +258,13 @@ class cassandra (
   }
 
   user { 'cassandra':
-    ensure  => 'present',
-    comment => 'Cassandra database,,,',
-    gid     => 'cassandra',
-    home    => '/var/lib/cassandra',
-    shell   => '/bin/false',
-    require => Group ['cassandra']
+    ensure     => 'present',
+    comment    => 'Cassandra database,,,',
+    gid        => 'cassandra',
+    home       => '/var/lib/cassandra',
+    shell      => '/bin/false',
+    managehome => true,
+    require    => Group['cassandra']
   }
 
   $config_path_recurse = concat ($config_path_parents, $config_path)
@@ -285,22 +285,13 @@ class cassandra (
     before  => Package['cassandra'],
   }
 
-  file { $varlib_dir:
-    ensure  => directory,
-    owner   => 'cassandra',
-    group   => 'cassandra',
-    mode    => '755',
-    require => File[$config_file],
-    before  => Package['cassandra'],
-  }
-
   if ! defined( File[$commitlog_directory] ) {
     file { $commitlog_directory:
       ensure  => directory,
       owner   => 'cassandra',
       group   => 'cassandra',
       mode    => $commitlog_directory_mode,
-      require => File[$config_file, $varlib_dir],
+      require => File[$config_file],
       before  => Package['cassandra'],
     }
   }
@@ -313,7 +304,7 @@ class cassandra (
       owner   => 'cassandra',
       group   => 'cassandra',
       mode    => $saved_caches_directory_mode,
-      require => File[$config_file, $varlib_dir],
+      require => File[$config_file,
       before  => Package['cassandra'],
     }
   }
