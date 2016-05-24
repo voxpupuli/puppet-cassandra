@@ -51,6 +51,7 @@ class cassandra (
   $concurrent_writes                                    = 32,
   $config_file_mode                                     = '0644',
   $config_path                                          = $::cassandra::params::config_path,
+  $config_path_parents                                  = $::cassandra::params::config_path_parents,
   $counter_cache_save_period                            = 7200,
   $counter_write_request_timeout_in_ms                  = 5000,
   $cross_node_timeout                                   = false,
@@ -83,6 +84,7 @@ class cassandra (
   $key_cache_keys_to_save                               = undef,
   $key_cache_save_period                                = 14400,
   $key_cache_size_in_mb                                 = '',
+  $varlib_dir                                           = '/var/lib/cassandra',
   $listen_address                                       = 'localhost',
   $listen_interface                                     = undef,
   $manage_dsc_repo                                      = false,
@@ -204,52 +206,11 @@ class cassandra (
       }
     }
     'Debian': {
-      # Provide a workaround for CASSANDRA-2356
-      if $cassandra_2356 {
-        $cassandra_2356_backup_dir = strftime('/var/lib/cassandra-%F')
-
-        # The stop init script can resturn 0 of stop was successful or 1 if it
-        # was already stopped.
-        exec { 'CASSANDRA-2356 Stop Cassandra':
-          command => '/etc/init.d/cassandra stop',
-          creates => "${$config_path}/CASSANDRA-2356",
-          returns => [0, 1],
-          user    => 'root',
-          before  => File["${$config_path}/CASSANDRA-2356"],
-          require => Package['cassandra'],
-          notify  => [Exec['CASSANDRA-2356 Backup Data'], Service['cassandra']],
-        }
-
-        exec { 'CASSANDRA-2356 Backup Data':
-          command     => "/bin/cp -Rp /var/lib/cassandra ${cassandra_2356_backup_dir}",
-          onlyif      => '/usr/bin/test -d /var/lib/cassandra',
-          user        => 'root',
-          refreshonly => true,
-          require     => Package['cassandra'],
-          notify      => [Exec['CASSANDRA-2356 Remove Data'], Service['cassandra']],
-        }
-
-        exec { 'CASSANDRA-2356 Remove Data':
-          command     => '/bin/rm -rf /var/lib/cassandra/*/*',
-          refreshonly => true,
-          user        => 'root',
-          before      => [File[$config_file], Service['cassandra']],
-        }
-      }
-
-      file { "${$config_path}/CASSANDRA-2356":
-        source => 'puppet:///modules/cassandra/CASSANDRA-2356',
-        owner  => 'cassandra',
-        group  => 'cassandra',
-        mode   => '0644',
-      }
-      # End of workaround for CASSANDRA-2356
-
-      # A workaround for CASSANDRA-9822
       if $cassandra_9822 {
         file { '/etc/init.d/cassandra':
           source => 'puppet:///modules/cassandra/CASSANDRA-9822/cassandra',
           mode   => '0555',
+          before => Package['cassandra'],
         }
       }
     }
@@ -284,13 +245,44 @@ class cassandra (
     }
   }
 
+  group { 'cassandra':
+    ensure  => 'present',
+  }
+
+  user { 'cassandra':
+    ensure  => 'present',
+    comment => 'Cassandra database,,,',
+    gid     => 'cassandra',
+    home    => '/var/lib/cassandra',
+    shell   => '/bin/false',
+    require => Group ['cassandra']
+  }
+
+  $config_path_recurse = concat ($config_path_parents, $config_path)
+  file { $config_path_recurse:
+    ensure => 'directory',
+    group  => 'root',
+    owner  => 'root',
+    mode   => '755',
+  }
+
   file { $config_file:
     ensure  => present,
     owner   => 'cassandra',
     group   => 'cassandra',
     content => template($cassandra_yaml_tmpl),
     mode    => $config_file_mode,
-    require => Package['cassandra'],
+    require => [ User['cassandra'], File[$config_path_recurse] ],
+    before  => Package['cassandra'],
+  }
+
+  file { $varlib_dir:
+    ensure  => directory,
+    owner   => 'cassandra',
+    group   => 'cassandra',
+    mode    => '755',
+    require => File[$config_file],
+    before  => Package['cassandra'],
   }
 
   if ! defined( File[$commitlog_directory] ) {
@@ -299,7 +291,8 @@ class cassandra (
       owner   => 'cassandra',
       group   => 'cassandra',
       mode    => $commitlog_directory_mode,
-      require => File[$config_file],
+      require => File[$config_file, $varlib_dir],
+      before  => Package['cassandra'],
     }
   }
 
@@ -311,7 +304,8 @@ class cassandra (
       owner   => 'cassandra',
       group   => 'cassandra',
       mode    => $saved_caches_directory_mode,
-      require => File[$config_file],
+      require => File[$config_file, $varlib_dir],
+      before  => Package['cassandra'],
     }
   }
 
@@ -350,13 +344,22 @@ class cassandra (
   }
 
   $dc_rack_properties_file = "${config_path}/${snitch_properties_file}"
+  file { $dc_rack_properties_file:
+    source => 'puppet:///modules/cassandra/cassandra-rackdc.properties',
+    ensure  => 'file',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '644',
+    require => File[$config_path_recurse],
+  }
 
   ini_setting { 'rackdc.properties.dc':
     path    => $dc_rack_properties_file,
     section => '',
     setting => 'dc',
     value   => $dc,
-    require => Package['cassandra'],
+    require => File[$dc_rack_properties_file],
+    before  =>  Package['cassandra'],
   }
 
   ini_setting { 'rackdc.properties.rack':
@@ -364,7 +367,8 @@ class cassandra (
     section => '',
     setting => 'rack',
     value   => $rack,
-    require => Package['cassandra'],
+    require => File[$dc_rack_properties_file],
+    before      => Package['cassandra'],
   }
 
   if $dc_suffix != undef {
@@ -374,7 +378,8 @@ class cassandra (
         section => '',
         setting => 'dc_suffix',
         value   => $dc_suffix,
-        require => Package['cassandra'],
+        require     => File[$dc_rack_properties_file],
+        before  => Package['cassandra'],
         notify  => Service['cassandra'],
       }
     } else {
@@ -383,7 +388,8 @@ class cassandra (
         section => '',
         setting => 'dc_suffix',
         value   => $dc_suffix,
-        require => Package['cassandra'],
+        require => File[$dc_rack_properties_file],
+        before  => Package['cassandra'],
       }
     }
   }
@@ -395,7 +401,8 @@ class cassandra (
         section => '',
         setting => 'prefer_local',
         value   => $prefer_local,
-        require => Package['cassandra'],
+        require => File[$dc_rack_properties_file],
+        before  => Package['cassandra'],
         notify  => Service['cassandra'],
       }
     } else {
@@ -404,7 +411,8 @@ class cassandra (
         section => '',
         setting => 'prefer_local',
         value   => $prefer_local,
-        require => Package['cassandra'],
+        require => File[$dc_rack_properties_file],
+        before  => Package['cassandra'],
       }
     }
   }
