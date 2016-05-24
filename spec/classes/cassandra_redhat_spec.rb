@@ -15,6 +15,23 @@ describe 'cassandra' do
     ]
   end
 
+  let!(:stdlib_stubs) do
+    MockFunction.new('concat') do |f|
+      f.stubbed.with([], '/etc/cassandra')
+       .returns(['/etc/cassandra'])
+      f.stubbed.with([], '/etc/cassandra/default.conf')
+       .returns(['/etc/cassandra/default.conf'])
+      f.stubbed.with(['/etc/cassandra'], '/etc/cassandra/default.conf')
+       .returns(['/etc/cassandra', '/etc/cassandra/default.conf'])
+      f.stubbed.with(['/etc/cassandra'], '/etc/dse/cassandra')
+       .returns(['/etc/cassandra', '/etc/dse/cassandra'])
+    end
+    MockFunction.new('strftime') do |f|
+      f.stubbed.with('/var/lib/cassandra-%F')
+       .returns('/var/lib/cassandra-YYYY-MM-DD')
+    end
+  end
+
   context 'On a RedHat OS with defaults for all parameters' do
     let :facts do
       {

@@ -16,6 +16,14 @@ describe 'cassandra' do
   end
 
   let!(:stdlib_stubs) do
+    MockFunction.new('concat') do |f|
+      f.stubbed.with([], '/etc/cassandra')
+       .returns(['/etc/cassandra'])
+      f.stubbed.with([], '/etc/cassandra/default.conf')
+       .returns(['/etc/cassandra/default.conf'])
+      f.stubbed.with(['/etc/cassandra'], '/etc/cassandra/default.conf')
+       .returns(['/etc/cassandra', '/etc/cassandra/default.conf'])
+    end
     MockFunction.new('strftime') do |f|
       f.stubbed.with('/var/lib/cassandra-%F')
        .returns('/var/lib/cassandra-YYYY-MM-DD')
@@ -53,7 +61,7 @@ describe 'cassandra' do
         'batchlog_replay_throttle_in_kb' => 1024,
         'batch_size_warn_threshold_in_kb' => 5,
         'cas_contention_timeout_in_ms' => 1000,
-        'cassandra_2356' => false,
+        'cassandra_2356_sleep_seconds' => 5,
         'cassandra_9822' => false,
         'cassandra_yaml_tmpl' => 'cassandra/cassandra.yaml.erb',
         'client_encryption_enabled' => false,
@@ -74,6 +82,7 @@ describe 'cassandra' do
         'concurrent_writes' => 32,
         'config_file_mode' => '0644',
         'config_path' => '/etc/cassandra/default.conf',
+        'config_path_parents' => ['/etc/cassandra'],
         'counter_cache_save_period' => 7200,
         'counter_cache_size_in_mb' => '',
         'counter_write_request_timeout_in_ms' => 5000,
@@ -199,7 +208,7 @@ describe 'cassandra' do
       should contain_service('cassandra').with(provider: 'base')
     end
 
-    it { should have_resource_count(9) }
+    it { should have_resource_count(13) }
   end
 
   context 'Deprecation warnings.' do
@@ -305,24 +314,23 @@ describe 'cassandra' do
   context 'Test that interface can be specified instead of an IP address.' do
     let :facts do
       {
-        osfamily: 'RedHat'
+        osfamily: 'Debian'
       }
     end
 
     let :params do
       {
-        config_path: '/etc',
         listen_interface: 'ethX',
         rpc_interface: 'ethY'
       }
     end
 
     it do
-      should contain_file('/etc/cassandra.yaml')
+      should contain_file('/etc/cassandra/cassandra.yaml')
         .with_content(/listen_interface: ethX/)
     end
     it do
-      should contain_file('/etc/cassandra.yaml')
+      should contain_file('/etc/cassandra/cassandra.yaml')
         .with_content(/rpc_interface: ethY/)
     end
   end
@@ -330,23 +338,22 @@ describe 'cassandra' do
   context 'Test that additional lines can be specified.' do
     let :facts do
       {
-        osfamily: 'RedHat'
+        osfamily: 'Debian'
       }
     end
 
     let :params do
       {
-        config_path: '/etc',
         additional_lines: ['# Hello,', '# world!']
       }
     end
 
     it do
-      should contain_file('/etc/cassandra.yaml')
+      should contain_file('/etc/cassandra/cassandra.yaml')
         .with_content(/# Hello,/)
     end
     it do
-      should contain_file('/etc/cassandra.yaml')
+      should contain_file('/etc/cassandra/cassandra.yaml')
         .with_content(/# world!/)
     end
   end
