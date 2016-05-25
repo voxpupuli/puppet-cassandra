@@ -58,6 +58,7 @@ describe 'cassandra' do
         .that_comes_before('Service[cassandra]')
         .that_subscribes_to('Package[cassandra]')
 
+      should contain_group('cassandra')
       should contain_user('cassandra')
         .that_requires('Group[cassandra]')
 
