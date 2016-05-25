@@ -1,5 +1,29 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2015-05-25 - Release 1.24.0 ([diff](https://github.com/locp/cassandra/compare/1.23.1...1.24.0))
+
+### Summary
+
+A Debian-centric release.  Debian 8 is now supported and a workaround for
+[CASSANDRA-2356](https://issues.apache.org/jira/browse/CASSANDRA-2356)
+(which only affects Debian.
+
+
+### Features
+
+* New attributes to the `::cassandra` class are:
+  * cassandra_2356_sleep_seconds
+  * config_path_parents
+  * rackdc_tmpl
+
+### Bugfixes
+
+* CASSANDRA-2356
+
+### Improvements
+
+* Debian 8 is now part of the acceptance testing release process.
+
 ##2016-05-10 - Release 1.23.1 ([diff](https://github.com/locp/cassandra/compare/1.23.0...1.23.1))
 
 ### Summary
