@@ -3649,6 +3649,9 @@ page for project specific requirements.
 
 **Release**  | **PR/Issue**                                        | **Contributer**
 -------------|-----------------------------------------------------|----------------------------------------------------
+1.24.0       | [#247](https://github.com/locp/cassandra/pull/247)  | [@ericy-jana](https://github.com/ericy-jana)
+1.24.0       | [#246](https://github.com/locp/cassandra/pull/246)  | [@ericy-jana](https://github.com/ericy-jana)
+1.24.0       | [#245](https://github.com/locp/cassandra/issues/245)| [@ericy-jana](https://github.com/ericy-jana)
 1.23.0       | [#235](https://github.com/locp/cassandra/pull/235)  | [@tibers](https://github.com/tibers)
 1.22.1       | [#233](https://github.com/locp/cassandra/pull/233)  | [@tibers](https://github.com/tibers)
 1.22.1       | [#232](https://github.com/locp/cassandra/issues/232)| [@tibers](https://github.com/tibers)
