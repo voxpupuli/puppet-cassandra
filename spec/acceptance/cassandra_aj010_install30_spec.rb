@@ -26,6 +26,8 @@ describe 'cassandra class' do
        cassandra_9822              => true,
        commitlog_directory_mode    => '0770',
        data_file_directories_mode  => '0770',
+       dc                          => 'LON',
+       rack                        => 'R101',
        hints_directory             => '/var/lib/cassandra/hints',
        listen_interface            => 'lo',
        package_ensure              => $version,

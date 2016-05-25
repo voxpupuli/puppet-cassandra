@@ -84,6 +84,8 @@ describe 'cassandra class' do
       cassandra_yaml_tmpl         => 'cassandra/cassandra20.yaml.erb',
       commitlog_directory_mode    => '0770',
       data_file_directories_mode  => '0770',
+      dc                          => 'LON',
+      rack                        => 'R101',
       package_ensure              => $version,
       package_name                => $cassandra_package,
       saved_caches_directory_mode => '0770',

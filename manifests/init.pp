@@ -288,6 +288,16 @@ class cassandra (
     before  => Package['cassandra'],
   }
 
+  file { $dc_rack_properties_file:
+    ensure  => 'file',
+    content => template($rackdc_tmpl),
+    owner   => 'cassandra',
+    group   => 'cassandra',
+    mode    => '0644',
+    require => [ User['cassandra'], File[$config_path_recurse] ],
+    before  => Package['cassandra'],
+  }
+
   if ! defined( File[$commitlog_directory] ) {
     file { $commitlog_directory:
       ensure  => directory,
@@ -342,14 +352,5 @@ class cassandra (
         ],
       }
     }
-  }
-
-  file { $dc_rack_properties_file:
-    ensure  => 'file',
-    content => template($rackdc_tmpl),
-    owner   => 'cassandra',
-    group   => 'cassandra',
-    mode    => '0644',
-    require => File[$config_path_recurse],
   }
 }
