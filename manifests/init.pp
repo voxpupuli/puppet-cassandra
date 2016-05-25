@@ -200,6 +200,14 @@ class cassandra (
 
   case $::osfamily {
     'RedHat': {
+      $config_file_require = Package['cassandra']
+      $config_file_before  = []
+      $config_path_recurse_require = Package['cassandra']
+      $dc_rack_properties_file_require = Package['cassandra']
+      $dc_rack_properties_file_before  = []
+      $data_dir_require = Package['cassandra']
+      $data_dir_before = []
+
       if $::operatingsystemmajrelease == 7 and $::cassandra::service_provider == 'init' {
         exec { "/sbin/chkconfig --add ${service_name}":
           unless  => "/sbin/chkconfig --list ${service_name}",
@@ -209,6 +217,14 @@ class cassandra (
       }
     }
     'Debian': {
+      $config_file_require = [ User['cassandra'], File[$config_path_recurse] ]
+      $config_file_before  = Package['cassandra']
+      $config_path_recurse_require = []
+      $dc_rack_properties_file_require = [ User['cassandra'], File[$config_path_recurse] ]
+      $dc_rack_properties_file_before  = Package['cassandra']
+      $data_dir_require = File[$config_file]
+      $data_dir_before = Package['cassandra']
+
       if $cassandra_9822 {
         file { '/etc/init.d/cassandra':
           source => 'puppet:///modules/cassandra/CASSANDRA-9822/cassandra',
@@ -225,6 +241,21 @@ class cassandra (
         subscribe   => Package['cassandra'],
         before      => Service['cassandra'],
       }
+
+      group { 'cassandra':
+        ensure  => 'present',
+      }
+
+      user { 'cassandra':
+        ensure     => 'present',
+        comment    => 'Cassandra database,,,',
+        gid        => 'cassandra',
+        home       => '/var/lib/cassandra',
+        shell      => '/bin/false',
+        managehome => true,
+        require    => Group['cassandra']
+      }
+      # End of CASSANDRA-2356 specific resources.
     }
     default: {
       if $supported_os_only {
@@ -257,25 +288,12 @@ class cassandra (
     }
   }
 
-  group { 'cassandra':
-    ensure  => 'present',
-  }
-
-  user { 'cassandra':
-    ensure     => 'present',
-    comment    => 'Cassandra database,,,',
-    gid        => 'cassandra',
-    home       => '/var/lib/cassandra',
-    shell      => '/bin/false',
-    managehome => true,
-    require    => Group['cassandra']
-  }
-
   file { $config_path_recurse:
-    ensure => 'directory',
-    group  => 'cassandra',
-    owner  => 'cassandra',
-    mode   => '0755',
+    ensure  => 'directory',
+    group   => 'cassandra',
+    owner   => 'cassandra',
+    mode    => '0755',
+    require => $config_path_recurse_require,
   }
 
   file { $config_file:
@@ -284,8 +302,8 @@ class cassandra (
     group   => 'cassandra',
     content => template($cassandra_yaml_tmpl),
     mode    => $config_file_mode,
-    require => [ User['cassandra'], File[$config_path_recurse] ],
-    before  => Package['cassandra'],
+    require => $config_file_require,
+    before  => $config_file_before,
   }
 
   file { $dc_rack_properties_file:
@@ -294,8 +312,8 @@ class cassandra (
     owner   => 'cassandra',
     group   => 'cassandra',
     mode    => '0644',
-    require => [ User['cassandra'], File[$config_path_recurse] ],
-    before  => Package['cassandra'],
+    require => $dc_rack_properties_file_require,
+    before  => $dc_rack_properties_file_before,
   }
 
   if ! defined( File[$commitlog_directory] ) {
@@ -304,8 +322,8 @@ class cassandra (
       owner   => 'cassandra',
       group   => 'cassandra',
       mode    => $commitlog_directory_mode,
-      require => File[$config_file],
-      before  => Package['cassandra'],
+      require => $data_dir_require,
+      before  => $data_dir_before,
     }
   }
 
@@ -317,8 +335,8 @@ class cassandra (
       owner   => 'cassandra',
       group   => 'cassandra',
       mode    => $saved_caches_directory_mode,
-      require => File[$config_file],
-      before  => Package['cassandra'],
+      require => $data_dir_require,
+      before  => $data_dir_before,
     }
   }
 

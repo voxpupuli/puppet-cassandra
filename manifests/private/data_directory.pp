@@ -6,8 +6,8 @@ define cassandra::private::data_directory( $directory_name = $title, ) {
       owner   => 'cassandra',
       group   => 'cassandra',
       mode    => $::cassandra::data_file_directories_mode,
-      require => File[$::cassandra::config_file],
-      before  => Package['cassandra']
+      require => $::cassandra::data_dir_require,
+      before  => $::cassandra::data_dir_before,
     }
   }
 }

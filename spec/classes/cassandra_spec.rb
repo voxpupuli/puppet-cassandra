@@ -50,8 +50,6 @@ describe 'cassandra' do
     end
 
     it do
-      should contain_user('cassandra')
-      should contain_group('cassandra')
       should contain_file('/etc/cassandra/default.conf/cassandra.yaml')
         .with_content(/^key_cache_size_in_mb:$/)
       should contain_class('cassandra').only_with(
@@ -210,7 +208,7 @@ describe 'cassandra' do
       should contain_service('cassandra').with(provider: 'base')
     end
 
-    it { should have_resource_count(11) }
+    it { should have_resource_count(9) }
   end
 
   context 'Deprecation warnings.' do
