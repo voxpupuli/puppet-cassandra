@@ -54,12 +54,13 @@ A Puppet module to install and manage Cassandra, DataStax Agent & OpsCenter
 * On CentOS 7 if the `init` service provider is used, then cassandra
   is added as a system service.
 * Optionally ensures that the Cassandra service is enabled and running.
-* On Ubuntu systems, optionally replace ```/etc/init.d/cassandra``` with a
-  workaround for
-  [CASSANDRA-9822](https://issues.apache.org/jira/browse/CASSANDRA-9822).
 * Optionally creates a file /usr/lib/systemd/system/cassandra.service to
   improve service interaction on the RedHat family or
   /lib/systemd/system/cassandra.service on the Debian family.
+* On Debian systems:
+  * Optionally replace ```/etc/init.d/cassandra``` with a workaround for
+  [CASSANDRA-9822](https://issues.apache.org/jira/browse/CASSANDRA-9822).
+
 
 #### What the cassandra::datastax_agent class affects
 
@@ -74,7 +75,7 @@ A Puppet module to install and manage Cassandra, DataStax Agent & OpsCenter
 * Optionally configures a Yum repository to install the Cassandra packages
   from (on Red Hat).
 * Optionally configures an Apt repository to install the Cassandra packages
-  from (on Ubuntu).
+  from (on Debian).
 
 #### What the cassandra::firewall_ports class affects
 
@@ -565,12 +566,22 @@ How long a coordinator should continue to retry a CAS operation
 that contends with other proposals for the same row.
 Default value: '1000'
 
+##### `cassandra_2356_sleep_seconds`
+This will provide a workaround for
+[CASSANDRA-2356](https://issues.apache.org/jira/browse/CASSANDRA-2356) by
+sleeping for the specifed number of seconds after an event involving the
+Cassandra package.
+
+This option is silently ignored on the Red Hat family of operating systems as
+this bug only affects Debian systems.
+Default value 5
+
 ##### `cassandra_9822`
 If set to true, this will apply a patch to the init file for the Cassandra
 service as a workaround for
 [CASSANDRA-9822](https://issues.apache.org/jira/browse/CASSANDRA-9822).  This
 option is silently ignored on the Red Hat family of operating systems as
-this bug only affects Ubuntu systems.
+this bug only affects Debian systems.
 Default value 'false'
 
 ##### `cassandra_yaml_tmpl`
@@ -861,6 +872,11 @@ Default value '0644'
 The path to the cassandra configuration file.
 Default value **/etc/cassandra/default.conf** on Red Hat
 or **/etc/cassandra** on Debian.
+
+##### `config_path_parents`
+The higest level directories to be owned by the cassandra user on the
+node being controlled.  Defaults to [] on Debian family and
+['/etc/cassandra'] on the Red Hat family.
 
 ##### `concurrent_compactors`
 Number of simultaneous compactions to allow, NOT including
@@ -1363,6 +1379,10 @@ Sets the value for rack in *config_path*/*snitch_properties_file* see
 http://docs.datastax.com/en/cassandra/2.1/cassandra/architecture/architectureSnitchesAbout_c.html
 for more details.
 Default value 'RAC1'
+
+##### `rackdc_tmpl`
+The template for creating the snitch properties file.
+Default value 'cassandra/cassandra-rackdc.properties.erb'
 
 ##### `range_request_timeout_in_ms`
 How long the coordinator should wait for seq or index scans to complete.
@@ -3629,6 +3649,9 @@ page for project specific requirements.
 
 **Release**  | **PR/Issue**                                        | **Contributer**
 -------------|-----------------------------------------------------|----------------------------------------------------
+1.24.0       | [#247](https://github.com/locp/cassandra/pull/247)  | [@ericy-jana](https://github.com/ericy-jana)
+1.24.0       | [#246](https://github.com/locp/cassandra/pull/246)  | [@ericy-jana](https://github.com/ericy-jana)
+1.24.0       | [#245](https://github.com/locp/cassandra/issues/245)| [@ericy-jana](https://github.com/ericy-jana)
 1.23.0       | [#235](https://github.com/locp/cassandra/pull/235)  | [@tibers](https://github.com/tibers)
 1.22.1       | [#233](https://github.com/locp/cassandra/pull/233)  | [@tibers](https://github.com/tibers)
 1.22.1       | [#232](https://github.com/locp/cassandra/issues/232)| [@tibers](https://github.com/tibers)
