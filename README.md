@@ -873,6 +873,11 @@ The path to the cassandra configuration file.
 Default value **/etc/cassandra/default.conf** on Red Hat
 or **/etc/cassandra** on Debian.
 
+##### `config_path_parents`
+The higest level directories to be owned by the cassandra user on the
+node being controlled.  Defaults to [] on Debian family and
+['/etc/cassandra'] on the Red Hat family.
+
 ##### `concurrent_compactors`
 Number of simultaneous compactions to allow, NOT including
 validation "compactions" for anti-entropy repair.  Simultaneous
@@ -1374,6 +1379,10 @@ Sets the value for rack in *config_path*/*snitch_properties_file* see
 http://docs.datastax.com/en/cassandra/2.1/cassandra/architecture/architectureSnitchesAbout_c.html
 for more details.
 Default value 'RAC1'
+
+##### `rackdc_tmpl`
+The template for creating the snitch properties file.
+Default value 'cassandra/cassandra-rackdc.properties.erb'
 
 ##### `range_request_timeout_in_ms`
 How long the coordinator should wait for seq or index scans to complete.
