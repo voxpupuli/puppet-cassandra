@@ -16,6 +16,23 @@ describe 'cassandra' do
   end
 
   context 'On a RedHat 6 OS with defaults for all parameters' do
+    let!(:stdlib_stubs) do
+      MockFunction.new('concat') do |f|
+        f.stubbed.with([], '/etc/cassandra')
+         .returns(['/etc/cassandra'])
+        f.stubbed.with([], '/etc/cassandra/default.conf')
+         .returns(['/etc/cassandra/default.conf'])
+        f.stubbed.with(['/etc/cassandra'], '/etc/cassandra/default.conf')
+         .returns(['/etc/cassandra', '/etc/cassandra/default.conf'])
+        f.stubbed.with(['/etc/cassandra'], '/etc/dse/cassandra')
+         .returns(['/etc/cassandra', '/etc/dse/cassandra'])
+      end
+      MockFunction.new('strftime') do |f|
+        f.stubbed.with('/var/lib/cassandra-%F')
+         .returns('/var/lib/cassandra-YYYY-MM-DD')
+      end
+    end
+
     let :facts do
       {
         operatingsystemmajrelease: 6,
@@ -24,6 +41,8 @@ describe 'cassandra' do
     end
 
     it { should contain_class('cassandra').with_service_systemd(false) }
+    it { should contain_class('cassandra') }
+    it { should contain_file('/etc/cassandra/default.conf') }
     it { should contain_file('/etc/cassandra/default.conf/cassandra.yaml') }
     it do
       should contain_service('cassandra').with(
@@ -33,22 +52,6 @@ describe 'cassandra' do
     end
     it { should contain_package('cassandra').with(name: 'cassandra22') }
     it { is_expected.not_to contain_yumrepo('datastax') }
-    it do
-      should contain_ini_setting('rackdc.properties.dc').with(
-        'path'    => '/etc/cassandra/default.conf/cassandra-rackdc.properties',
-        'section' => '',
-        'setting' => 'dc',
-        'value'   => 'DC1'
-      )
-    end
-    it do
-      should contain_ini_setting('rackdc.properties.rack').with(
-        'path'    => '/etc/cassandra/default.conf/cassandra-rackdc.properties',
-        'section' => '',
-        'setting' => 'rack',
-        'value'   => 'RAC1'
-      )
-    end
     it do
       should contain_file('/var/lib/cassandra/data').with(
         'ensure' => 'directory',
@@ -114,9 +117,11 @@ describe 'cassandra' do
     end
 
     it do
-      is_expected.to contain_file('/etc/dse/cassandra/cassandra.yaml')
-      is_expected.to contain_file('/usr/lib/systemd/system/dse.service')
-      is_expected.to contain_package('cassandra').with(
+      should contain_file('/etc/dse/cassandra/cassandra.yaml')
+      should contain_file('/etc/dse/cassandra')
+      should contain_file('/usr/lib/systemd/system/dse.service')
+      should contain_file('/etc/dse/cassandra/cassandra-rackdc.properties')
+      should contain_package('cassandra').with(
         ensure: '4.7.0-1',
         name: 'dse-full'
       )

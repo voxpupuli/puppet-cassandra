@@ -9,18 +9,35 @@
 
 # Cassandra pre-requisites
 include cassandra::datastax_repo
-include cassandra::java
+class { 'cassandra::java':
+  aptkey       => {
+    'openjdk-r' => {
+      id     => 'DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
+      server => 'keyserver.ubuntu.com',
+    },
+  },
+  aptsource    => {
+    'openjdk-r' => {
+      location => 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu',
+      comment  => 'OpenJDK builds (all archs)',
+      release  => $::lsbdistcodename,
+      repos    => 'main',
+    },
+  },
+  package_name => 'openjdk-8-jdk',
+}
 
 # Create a cluster called MyCassandraCluster which uses the
 # GossipingPropertyFileSnitch.  In this very basic example
 # the node itself becomes a seed for the cluster.
 class { 'cassandra':
   authenticator   => 'PasswordAuthenticator',
+  cassandra_9822  => true,
   cluster_name    => 'MyCassandraCluster',
   endpoint_snitch => 'GossipingPropertyFileSnitch',
   listen_address  => $::ipaddress,
   seeds           => $::ipaddress,
-  service_systemd => true,
+  #service_systemd => true,
   require         => Class['cassandra::datastax_repo', 'cassandra::java'],
 }
 
@@ -39,6 +56,10 @@ class { 'cassandra::datastax_agent':
     }
   },
   require  => Class['cassandra'],
+}
+
+class { 'cassandra::optutils':
+  require => Class['cassandra']
 }
 
 class { 'cassandra::schema':

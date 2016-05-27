@@ -14,8 +14,8 @@ source $HOME/.rvm/scripts/rvm
 echo "Cloning the $GITBRANCH branch from $GITREPO into workspace."
 git clone -b $GITBRANCH $GITREPO workspace
 cd workspace
-gem install --no-rdoc bundler rake
-bundle install --without development
+#gem install --no-rdoc bundler rake
+#bundle install --without development
 status=0
 i=0
 
