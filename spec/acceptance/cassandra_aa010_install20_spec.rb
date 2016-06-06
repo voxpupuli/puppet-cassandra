@@ -53,7 +53,7 @@ describe 'cassandra class' do
 
       exec { '/bin/chown root:root /etc/apt/sources.list.d/datastax.list':
         unless  => '/usr/bin/test -O /etc/apt/sources.list.d/datastax.list',
-        require => Class['cassandra::opscenter']
+        require => Class['cassandra::datastax_agent']
       }
     }
 
