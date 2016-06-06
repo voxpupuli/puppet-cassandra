@@ -66,7 +66,6 @@ class cassandra (
   $dynamic_snitch_update_interval_in_ms                 = 100,
   $endpoint_snitch                                      = 'SimpleSnitch',
   $fail_on_non_supported_os                             = true,
-  $fail_on_non_suppoted_os                              = undef,
   $file_cache_size_in_mb                                = undef,
   $hinted_handoff_enabled                               = true,
   $hinted_handoff_throttle_in_kb                        = 1024,
@@ -86,7 +85,6 @@ class cassandra (
   $key_cache_size_in_mb                                 = '',
   $listen_address                                       = 'localhost',
   $listen_interface                                     = undef,
-  $manage_dsc_repo                                      = false,
   $max_hints_delivery_threads                           = 2,
   $max_hint_window_in_ms                                = 10800000,
   $memory_allocator                                     = undef,
@@ -181,23 +179,6 @@ class cassandra (
   $config_path_recurse = concat ($config_path_parents, $config_path)
   $dc_rack_properties_file = "${config_path}/${snitch_properties_file}"
 
-  if $manage_dsc_repo {
-    require '::cassandra::datastax_repo'
-    cassandra::private::deprecation_warning { 'cassandra::manage_dsc_repo':
-      item_number => 14,
-    }
-  }
-
-  if $fail_on_non_suppoted_os != undef {
-    $dep_015_url = 'https://github.com/locp/cassandra/wiki/DEP-015'
-    $supported_os_only = $fail_on_non_suppoted_os
-    cassandra::private::deprecation_warning { 'cassandra::fail_on_non_suppoted_os':
-      item_number => 15,
-    }
-  } else {
-    $supported_os_only = $fail_on_non_supported_os
-  }
-
   case $::osfamily {
     'RedHat': {
       $config_file_require = Package['cassandra']
@@ -258,7 +239,7 @@ class cassandra (
       # End of CASSANDRA-2356 specific resources.
     }
     default: {
-      if $supported_os_only {
+      if $fail_on_non_supported_os {
         fail("OS family ${::osfamily} not supported")
       } else {
         warning("OS family ${::osfamily} not supported")

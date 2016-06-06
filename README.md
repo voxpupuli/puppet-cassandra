@@ -1087,14 +1087,6 @@ Setting this to any value effectively means that `listen_address` address
 is ignored.
 Default value *undef*
 
-##### `manage_dsc_repo`
-DEPRECATION WARNING:  This option is deprecated.  Please include the
-the ::cassandra::datastax_repo instead.
-
-If set to true then a repository will be setup so that packages can be
-downloaded from DataStax community.
-Default value 'false'
-
 ##### `max_hints_delivery_threads`
 Number of threads with which to deliver hints; Consider increasing this number
 when you have multi-dc deployments, since cross-dc handoff tends to be slower.
@@ -1889,32 +1881,6 @@ On the Debian family, this is passed as the `release` attribute to an
 `apt::source` resource.  On the Red Hat family, it is ignored.
 Default value 'stable'
 
-### Class: cassandra::env
-
-A class for altering the environment file for Cassandra.
-
-This class is now deprecated and will be removed in a future release.  Please
-use the cassandra::file class instead.
-
-#### Attributes
-
-##### `environment_file`
-The full path name of the environment file.  On the RedHat family this will
-default to `/etc/cassandra/default.conf/cassandra-env.sh` on Debian, the
-default is `/etc/cassandra/cassandra-env.sh`.
-
-##### `file_lines`
-If set, then the [create_resources](https://docs.puppet.com/puppet/latest/reference/function.html#createresources)
-will be used to create an array of
-[file_line](https://forge.puppet.com/puppetlabs/stdlib#file_line) resources
-where the path attribute is set to `$cassandra::env::environment_file`
-Default *undef*
-
-##### `service_refresh`
-If the Cassandra service is to be notified if the environment file is changed.
-Set to false if this is not wanted.
-Default value true.
-
 ### Class: cassandra::file
 
 A class for altering file relative to the configuration directory.
@@ -2030,10 +1996,6 @@ If supplied, this should be a hash of *apt::source* resources that will be
 passed to the create_resources function.  This is ignored on non-Red Hat
 systems.  Default value *undef*
 
-##### `ensure`
-Is deprecated (see https://github.com/locp/cassandra/wiki/DEP-016).  Use
-`package_ensure` instead.
-
 ##### `jna_ensure`
 Is passed to the package reference for the JNA package.  Valid values are
 **present** or a version number.
@@ -2064,10 +2026,6 @@ Default value *undef*
 A class to install the optional Cassandra tools package.
 
 #### Attributes
-
-##### `ensure`
-Is deprecated (see https://github.com/locp/cassandra/wiki/DEP-016).  Use
-`package_ensure` instead.
 
 ##### `package_ensure`
 The status of the package specified in **package_name**.  Can be

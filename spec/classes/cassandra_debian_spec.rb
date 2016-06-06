@@ -120,42 +120,6 @@ describe 'cassandra' do
     end
   end
 
-  context 'On a Debian OS with manage_dsc_repo set to true' do
-    let :facts do
-      {
-        osfamily: 'Debian',
-        lsbdistid: 'Ubuntu',
-        lsbdistrelease: '14.04'
-      }
-    end
-
-    let :params do
-      {
-        manage_dsc_repo: true,
-        service_name: 'foobar_service'
-      }
-    end
-
-    it { should contain_class('apt') }
-    it { should contain_class('apt::update') }
-
-    it do
-      is_expected.to contain_apt__key('datastaxkey')
-        .with('id' => '7E41C00F85BFC1706C4FFFB3350200F2B999A372',
-              'source' => 'http://debian.datastax.com/debian/repo_key')
-    end
-
-    it do
-      is_expected.to contain_apt__source('datastax')
-        .with('location' => 'http://debian.datastax.com/community',
-              'comment'  => 'DataStax Repo for Apache Cassandra',
-              'release'  => 'stable')
-    end
-
-    it { is_expected.to contain_exec('update-cassandra-repos') }
-    it { is_expected.to contain_service('cassandra') }
-  end
-
   context 'CASSANDRA-9822 not activated on Debian (default)' do
     let :facts do
       {

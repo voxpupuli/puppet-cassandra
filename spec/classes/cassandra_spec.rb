@@ -105,7 +105,6 @@ describe 'cassandra' do
         'key_cache_save_period' => 14_400,
         'key_cache_size_in_mb'  => '',
         'listen_address' => 'localhost',
-        'manage_dsc_repo' => false,
         'max_hints_delivery_threads' => 2,
         'max_hint_window_in_ms' => 10_800_000,
         'memtable_allocation_type' => 'heap_buffers',
@@ -165,24 +164,6 @@ describe 'cassandra' do
     end
   end
 
-  context 'On an unsupported OS pleading tolerance (with dyslexia)' do
-    let :facts do
-      {
-        osfamily: 'Darwin'
-      }
-    end
-    let :params do
-      {
-        config_file_mode: '0755',
-        config_path: '/etc/cassandra',
-        fail_on_non_suppoted_os: false,
-        package_name: 'cassandra'
-      }
-    end
-
-    it { should contain_package('cassandra') }
-  end
-
   context 'On an unsupported OS pleading tolerance' do
     let :facts do
       {
@@ -209,25 +190,6 @@ describe 'cassandra' do
     end
 
     it { should have_resource_count(9) }
-  end
-
-  context 'Deprecation warnings.' do
-    let :facts do
-      {
-        osfamily: 'RedHat'
-      }
-    end
-    let :params do
-      {
-        manage_dsc_repo: true,
-        fail_on_non_suppoted_os: false
-      }
-    end
-
-    it do
-      should contain_cassandra__private__deprecation_warning('cassandra::manage_dsc_repo')
-      should contain_cassandra__private__deprecation_warning('cassandra::fail_on_non_suppoted_os')
-    end
   end
 
   context 'Ensure cassandra service can be stopped and disabled.' do
