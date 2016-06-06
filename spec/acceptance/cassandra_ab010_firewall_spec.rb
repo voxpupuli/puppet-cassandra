@@ -22,7 +22,6 @@ describe 'cassandra class' do
     }
 
     include '::cassandra::datastax_agent'
-    include '::cassandra::opscenter'
 
     # This really sucks but Docker, CentOS 6 and iptables don't play nicely
     # together.  Therefore we can't test the firewall on this platform :-(
@@ -43,11 +42,6 @@ describe 'cassandra class' do
   end
 
   describe service('datastax-agent') do
-    it { is_expected.to be_running }
-    it { is_expected.to be_enabled }
-  end
-
-  describe service('opscenterd') do
     it { is_expected.to be_running }
     it { is_expected.to be_enabled }
   end

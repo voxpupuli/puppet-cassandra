@@ -97,21 +97,6 @@ describe 'cassandra class' do
       },
       require  => Class['cassandra']
     }
-
-    class { '::cassandra::opscenter::pycrypto':
-      manage_epel => true,
-      before      => Class['::cassandra::opscenter'],
-      require     => Class['::cassandra'],
-    }
-
-    class { '::cassandra::opscenter':
-      config_purge    => true,
-      require         => Class['cassandra'],
-    }
-
-    cassandra::opscenter::cluster_name { 'Cluster1':
-      cassandra_seed_hosts => 'host1,host2',
-    }
   EOS
 
   describe '########### Cassandra 2.0 installation.' do
