@@ -15,14 +15,27 @@ include cassandra::java
 # GossipingPropertyFileSnitch.  In this very basic example
 # the node itself becomes a seed for the cluster.
 class { 'cassandra':
-  authenticator   => 'PasswordAuthenticator',
   cassandra_9822  => true,
-  cluster_name    => 'MyCassandraCluster',
-  endpoint_snitch => 'GossipingPropertyFileSnitch',
-  listen_address  => $::ipaddress,
-  seeds           => $::ipaddress,
-  #service_systemd => true,
-  require         => Class['cassandra::datastax_repo', 'cassandra::java'],
+  settings        => {
+    'authenticator'               => 'PasswordAuthenticator',
+    'cluster_name'                => 'MyCassandraCluster',
+    'commitlog_sync'              => 'periodic',
+    'commitlog_sync_period_in_ms' => 10000,
+    'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
+    'listen_address'              => $::ipaddress,
+    'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
+    'seed_provider'               => [
+      {
+        'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
+        'parameters' => [ 
+          {
+            'seeds' => 'localhost',
+          },
+        ],
+      },
+    ],
+  },
+  require                         => Class['cassandra::datastax_repo', 'cassandra::java'],
 }
 
 class { 'cassandra::datastax_agent':
