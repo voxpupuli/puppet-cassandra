@@ -9,23 +9,7 @@
 
 # Cassandra pre-requisites
 include cassandra::datastax_repo
-class { 'cassandra::java':
-  aptkey       => {
-    'openjdk-r' => {
-      id     => 'DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
-      server => 'keyserver.ubuntu.com',
-    },
-  },
-  aptsource    => {
-    'openjdk-r' => {
-      location => 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu',
-      comment  => 'OpenJDK builds (all archs)',
-      release  => $::lsbdistcodename,
-      repos    => 'main',
-    },
-  },
-  package_name => 'openjdk-8-jdk',
-}
+include cassandra::java
 
 # Create a cluster called MyCassandraCluster which uses the
 # GossipingPropertyFileSnitch.  In this very basic example
@@ -111,7 +95,8 @@ class { 'cassandra::schema':
 
 $heap_new_size = $::processorcount * 100
 
-class { 'cassandra::env':
+class { 'cassandra::file':
+  file       => 'cassandra-env.sh',
   file_lines => {
     'MAX_HEAP_SIZE' => {
       line  => 'MAX_HEAP_SIZE="1024M"',
