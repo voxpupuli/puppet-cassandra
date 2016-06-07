@@ -26,17 +26,10 @@ describe 'cassandra::schema' do
     end
   end
 
-  context 'Test that a connection test is made.' do
+  context 'Ensure that a connection test is made.' do
     let :facts do
       {
         osfamily: 'RedHat'
-      }
-    end
-
-    let :params do
-      {
-        cqlsh_host: 'localhost',
-        cqlsh_port: 9042
       }
     end
 
@@ -89,7 +82,7 @@ describe 'cassandra::schema' do
         content: /username = cassandra/
       )
 
-      read_command = "/usr/bin/cqlsh --cqlshrc=/root/.puppetcqlshrc  -e 'DESC KEYSPACES'  "
+      read_command = "/usr/bin/cqlsh --cqlshrc=/root/.puppetcqlshrc  -e 'DESC KEYSPACES' localhost 9042"
 
       should contain_exec('::cassandra::schema connection test')
         .only_with(command: read_command,
@@ -125,7 +118,7 @@ describe 'cassandra::schema' do
         content: /password = topsecret/
       )
 
-      read_command = "/usr/bin/cqlsh --cqlshrc=/root/.puppetcqlshrc  -e 'DESC KEYSPACES'  "
+      read_command = "/usr/bin/cqlsh --cqlshrc=/root/.puppetcqlshrc  -e 'DESC KEYSPACES' localhost 9042"
 
       should contain_exec('::cassandra::schema connection test')
         .only_with(command: read_command,
@@ -150,7 +143,7 @@ describe 'cassandra::schema' do
     end
 
     it do
-      read_command = "/usr/bin/cqlsh -u cassandra -p topsecret  -e 'DESC KEYSPACES'  "
+      read_command = "/usr/bin/cqlsh -u cassandra -p topsecret  -e 'DESC KEYSPACES' localhost 9042"
 
       should contain_exec('::cassandra::schema connection test')
         .only_with(command: read_command,

@@ -10,21 +10,37 @@ describe 'cassandra class' do
          $cassandra_optutils_package = 'cassandra-tools'
          $cassandra_package = 'cassandra'
          $version = '3.0.3'
-      }
+     }
 
      class { 'cassandra':
-       authenticator               => 'PasswordAuthenticator',
-       cassandra_9822              => true,
-       commitlog_directory_mode    => '0770',
-       data_file_directories_mode  => '0770',
-       dc                          => 'LON',
-       rack                        => 'R101',
-       hints_directory             => '/var/lib/cassandra/hints',
-       listen_interface            => 'lo',
-       package_ensure              => $version,
-       package_name                => $cassandra_package,
-       rpc_interface               => 'lo',
-       saved_caches_directory_mode => '0770',
+      cassandra_9822              => true,
+      dc                          => 'LON',
+      package_ensure              => $version,
+      package_name                => $cassandra_package,
+      rack                        => 'R101',
+      settings                    => {
+        'authenticator'               => 'PasswordAuthenticator',
+        'cluster_name'                => 'MyCassandraCluster',
+        'commitlog_directory'         => '/var/lib/cassandra/commitlog',
+        'commitlog_sync'              => 'periodic',
+        'commitlog_sync_period_in_ms' => 10000,
+        'data_file_directories'       => ['/var/lib/cassandra/data'],
+        'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
+        'listen_address'              => $::ipaddress,
+        'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
+        'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
+        'seed_provider'               => [
+          {
+            'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
+            'parameters' => [
+              {
+                'seeds' => $::ipaddress,
+              },
+            ],
+          },
+        ],
+        'start_native_transport'      => true,
+      },
      }
 
      class { 'cassandra::optutils':

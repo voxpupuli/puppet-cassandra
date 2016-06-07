@@ -70,21 +70,10 @@ describe 'cassandra' do
         .that_requires(['File[/etc/cassandra]', 'User[cassandra]'])
         .that_comes_before('Package[cassandra]')
 
-      should contain_file('/var/lib/cassandra/commitlog')
-        .that_requires('File[/etc/cassandra/cassandra.yaml]')
-        .that_comes_before('Package[cassandra]')
-
-      should contain_file('/var/lib/cassandra/saved_caches')
-        .that_requires('File[/etc/cassandra/cassandra.yaml]')
-        .that_comes_before('Package[cassandra]')
-
       should contain_service('cassandra')
         .that_subscribes_to(
           [
-            'File[/var/lib/cassandra/commitlog]',
             'File[/etc/cassandra/cassandra.yaml]',
-            'File[/var/lib/cassandra/data]',
-            'File[/var/lib/cassandra/saved_caches]',
             'File[/etc/cassandra/cassandra-rackdc.properties]',
             'Package[cassandra]'
           ]
@@ -109,10 +98,7 @@ describe 'cassandra' do
       should contain_service('cassandra')
         .that_requires(
           [
-            'File[/var/lib/cassandra/commitlog]',
             'File[/etc/cassandra/cassandra.yaml]',
-            'File[/var/lib/cassandra/data]',
-            'File[/var/lib/cassandra/saved_caches]',
             'File[/etc/cassandra/cassandra-rackdc.properties]',
             'Package[cassandra]'
           ]

@@ -42,7 +42,7 @@ describe 'cassandra::schema::user' do
     it do
       should contain_cassandra__schema__user('akers').with_ensure('present')
       should contain_exec('Create user (akers)').with(
-        command: '/usr/bin/cqlsh   -e "CREATE USER IF NOT EXISTS akers WITH PASSWORD \'Niner2\' SUPERUSER"  '
+        command: '/usr/bin/cqlsh   -e "CREATE USER IF NOT EXISTS akers WITH PASSWORD \'Niner2\' SUPERUSER" localhost 9042'
       )
     end
   end
@@ -65,7 +65,7 @@ describe 'cassandra::schema::user' do
 
     it do
       should contain_exec('Delete user (akers)').with(
-        command: '/usr/bin/cqlsh   -e "DROP USER akers"  '
+        command: '/usr/bin/cqlsh   -e "DROP USER akers" localhost 9042'
       )
     end
   end

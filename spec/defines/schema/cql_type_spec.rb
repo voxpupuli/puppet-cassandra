@@ -55,7 +55,7 @@ describe 'cassandra::schema::cql_type' do
     it { should contain_class('cassandra::schema') }
     it { should contain_cassandra__schema__cql_type('fullname') }
     it do
-      should contain_exec('/usr/bin/cqlsh   -e "CREATE TYPE IF NOT EXISTS Excelsior.fullname (firstname text, lastname text)"  ')
+      should contain_exec('/usr/bin/cqlsh   -e "CREATE TYPE IF NOT EXISTS Excelsior.fullname (firstname text, lastname text)" localhost 9042')
     end
   end
 
@@ -78,7 +78,7 @@ describe 'cassandra::schema::cql_type' do
 
     it do
       should compile
-      should contain_exec('/usr/bin/cqlsh   -e "DROP type Excalibur.address"  ')
+      should contain_exec('/usr/bin/cqlsh   -e "DROP type Excalibur.address" localhost 9042')
     end
   end
 

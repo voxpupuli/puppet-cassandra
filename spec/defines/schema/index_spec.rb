@@ -43,7 +43,7 @@ describe 'cassandra::schema::index' do
     it do
       should compile
       should contain_cassandra__schema__index('user_index')
-      should contain_exec('/usr/bin/cqlsh   -e "CREATE INDEX IF NOT EXISTS user_index ON mykeyspace.users (lname)"  ')
+      should contain_exec('/usr/bin/cqlsh   -e "CREATE INDEX IF NOT EXISTS user_index ON mykeyspace.users (lname)" localhost 9042')
     end
   end
 
@@ -67,7 +67,7 @@ describe 'cassandra::schema::index' do
 
     it do
       should compile
-      should contain_exec('/usr/bin/cqlsh   -e "CREATE CUSTOM INDEX IF NOT EXISTS user_index ON Excelsior.users (email) USING \'path.to.the.IndexClass\'"  ')
+      should contain_exec('/usr/bin/cqlsh   -e "CREATE CUSTOM INDEX IF NOT EXISTS user_index ON Excelsior.users (email) USING \'path.to.the.IndexClass\'" localhost 9042')
     end
   end
   context 'Create a custom index with options.' do
@@ -91,7 +91,7 @@ describe 'cassandra::schema::index' do
 
     it do
       should compile
-      should contain_exec('/usr/bin/cqlsh   -e "CREATE CUSTOM INDEX IF NOT EXISTS user_index ON Excelsior.users (email) USING \'path.to.the.IndexClass\' WITH OPTIONS = {\'storage\': \'/mnt/ssd/indexes/\'}"  ')
+      should contain_exec('/usr/bin/cqlsh   -e "CREATE CUSTOM INDEX IF NOT EXISTS user_index ON Excelsior.users (email) USING \'path.to.the.IndexClass\' WITH OPTIONS = {\'storage\': \'/mnt/ssd/indexes/\'}" localhost 9042')
     end
   end
 
@@ -115,7 +115,7 @@ describe 'cassandra::schema::index' do
 
     it do
       should compile
-      should contain_exec('/usr/bin/cqlsh   -e "DROP INDEX Excelsior.user_index"  ')
+      should contain_exec('/usr/bin/cqlsh   -e "DROP INDEX Excelsior.user_index" localhost 9042')
     end
   end
 

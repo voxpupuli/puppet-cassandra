@@ -13,15 +13,34 @@ describe 'cassandra class' do
     }
 
     class { 'cassandra':
-      authenticator               => 'PasswordAuthenticator',
       cassandra_9822              => true,
-      commitlog_directory_mode    => '0770',
-      data_file_directories_mode  => '0770',
-      listen_interface            => 'lo',
+      dc                          => 'LON',
       package_ensure              => $version,
       package_name                => $cassandra_package,
-      rpc_interface               => 'lo',
-      saved_caches_directory_mode => '0770',
+      rack                        => 'R101',
+      settings                    => {
+        'authenticator'               => 'PasswordAuthenticator',
+        'cluster_name'                => 'MyCassandraCluster',
+        'commitlog_directory'         => '/var/lib/cassandra/commitlog',
+        'commitlog_sync'              => 'periodic',
+        'commitlog_sync_period_in_ms' => 10000,
+        'data_file_directories'       => ['/var/lib/cassandra/data'],
+        'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
+        'listen_address'              => $::ipaddress,
+        'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
+        'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
+        'seed_provider'               => [
+          {
+            'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
+            'parameters' => [
+              {
+                'seeds' => $::ipaddress,
+              },
+            ],
+          },
+        ],
+        'start_native_transport'      => true,
+      },
     }
 
     $cql_types = {
@@ -44,6 +63,7 @@ describe 'cassandra class' do
     if $os_ok {
       class { 'cassandra::schema':
         cql_types      => $cql_types,
+        cqlsh_host     => $::ipaddress,
         cqlsh_user     => 'akers',
         cqlsh_password => 'Niner2',
       }

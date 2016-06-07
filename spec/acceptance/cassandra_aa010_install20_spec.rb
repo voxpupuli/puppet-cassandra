@@ -58,29 +58,35 @@ describe 'cassandra class' do
     }
 
     class { 'cassandra::datastax_repo': } ->
-    file { '/var/lib/cassandra':
-      ensure => directory,
-    } ->
-    file { '/var/lib/cassandra/commitlog':
-      ensure => directory,
-    } ->
-    file { '/var/lib/cassandra/caches':
-      ensure => directory,
-    } ->
-    file { [ '/var/lib/cassandra/data' ]:
-      ensure => directory,
-    } ->
     class { 'cassandra':
-      authenticator               => 'PasswordAuthenticator',
       cassandra_9822              => true,
-      cassandra_yaml_tmpl         => 'cassandra/cassandra20.yaml.erb',
-      commitlog_directory_mode    => '0770',
-      data_file_directories_mode  => '0770',
       dc                          => 'LON',
-      rack                        => 'R101',
       package_ensure              => $version,
       package_name                => $cassandra_package,
-      saved_caches_directory_mode => '0770',
+      rack                        => 'R101',
+      settings                    => {
+        'authenticator'               => 'PasswordAuthenticator',
+        'cluster_name'                => 'MyCassandraCluster',
+        'commitlog_directory'         => '/var/lib/cassandra/commitlog',
+        'commitlog_sync'              => 'periodic',
+        'commitlog_sync_period_in_ms' => 10000,
+        'data_file_directories'       => ['/var/lib/cassandra/data'],
+        'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
+        'listen_address'              => $::ipaddress,
+        'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
+        'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
+        'seed_provider'               => [
+          {
+            'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
+            'parameters' => [
+              {
+                'seeds' => $::ipaddress,
+              },
+            ],
+          },
+        ],
+        'start_native_transport'      => true,
+      },
     }
 
     class { '::cassandra::datastax_agent':

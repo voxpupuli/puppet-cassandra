@@ -53,30 +53,6 @@ describe 'cassandra' do
     it { should contain_package('cassandra').with(name: 'cassandra22') }
     it { is_expected.not_to contain_yumrepo('datastax') }
     it do
-      should contain_file('/var/lib/cassandra/data').with(
-        'ensure' => 'directory',
-        'owner'  => 'cassandra',
-        'group'  => 'cassandra',
-        'mode'   => '0750'
-      )
-    end
-    it do
-      should contain_file('/var/lib/cassandra/commitlog').with(
-        'ensure' => 'directory',
-        'owner'  => 'cassandra',
-        'group'  => 'cassandra',
-        'mode'   => '0750'
-      )
-    end
-    it do
-      should contain_file('/var/lib/cassandra/saved_caches').with(
-        'ensure' => 'directory',
-        'owner'  => 'cassandra',
-        'group'  => 'cassandra',
-        'mode'   => '0750'
-      )
-    end
-    it do
       is_expected
         .not_to contain_file('/usr/lib/systemd/system/cassandra.service')
     end

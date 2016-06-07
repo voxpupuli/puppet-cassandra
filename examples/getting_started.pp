@@ -15,31 +15,22 @@ include cassandra::java
 # GossipingPropertyFileSnitch.  In this very basic example
 # the node itself becomes a seed for the cluster.
 
-$commitlog_directory = '/var/lib/cassandra/commitlog'
-$data_file_directories = ['/var/lib/cassandra/data']
-$saved_caches_directory = '/var/lib/cassandra/saved_caches'
-$rpc_address = $::ipaddress
-
 class { 'cassandra':
-  commitlog_directory    => $commitlog_directory,
-  data_file_directories  => $data_file_directories,
-  rpc_address            => $rpc_address,
   settings               => {
     'authenticator'               => 'PasswordAuthenticator',
     'cluster_name'                => 'MyCassandraCluster',
-    'commitlog_directory'         => $commitlog_directory,
+    'commitlog_directory'         => '/var/lib/cassandra/commitlog',
     'commitlog_sync'              => 'periodic',
     'commitlog_sync_period_in_ms' => 10000,
-    'data_file_directories'       => $data_file_directories,
+    'data_file_directories'       => ['/var/lib/cassandra/data'],
     'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
     'listen_address'              => $::ipaddress,
     'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
-    'rpc_address'                 => $rpc_address,
-    'saved_caches_directory'      => $saved_caches_directory,
+    'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
     'seed_provider'               => [
       {
         'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
-        'parameters' => [ 
+        'parameters' => [
           {
             'seeds' => $::ipaddress,
           },
@@ -48,7 +39,6 @@ class { 'cassandra':
     ],
     'start_native_transport'      => true,
   },
-  saved_caches_directory => $saved_caches_directory,
   require                => Class['cassandra::datastax_repo', 'cassandra::java'],
 }
 
@@ -76,6 +66,7 @@ class { 'cassandra::optutils':
 class { 'cassandra::schema':
   cqlsh_password => 'cassandra',
   cqlsh_user     => 'cassandra',
+  cqlsh_host     => $::ipaddress,
   indexes        => {
     'users_lname_idx' => {
       table    => 'users',
