@@ -93,7 +93,6 @@ describe 'cassandra' do
       {
         package_ensure: '4.7.0-1',
         package_name: 'dse-full',
-        cluster_name: 'DSE Cluster',
         config_path: '/etc/dse/cassandra',
         service_name: 'dse',
         service_systemd: true

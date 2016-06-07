@@ -6,28 +6,25 @@
 class cassandra (
   $cassandra_2356_sleep_seconds                         = 5,
   $cassandra_9822                                       = false,
-  $cassandra_yaml_tmpl
-    = 'cassandra/cassandra.yaml.erb',
-  $commitlog_directory
-    = '/var/lib/cassandra/commitlog',
+  $cassandra_yaml_tmpl                                  = 'cassandra/cassandra.yaml.erb',
+  $commitlog_directory                                  = '/var/lib/cassandra/commitlog',
   $commitlog_directory_mode                             = '0750',
   $config_file_mode                                     = '0644',
   $config_path                                          = $::cassandra::params::config_path,
   $config_path_parents                                  = $::cassandra::params::config_path_parents,
-  $data_file_directories
-    = ['/var/lib/cassandra/data'],
+  $data_file_directories                                = ['/var/lib/cassandra/data'],
   $data_file_directories_mode                           = '0750',
   $dc                                                   = 'DC1',
   $dc_suffix                                            = undef,
   $fail_on_non_supported_os                             = true,
+  $native_transport_port                                = 9042,
   $package_ensure                                       = 'present',
   $package_name                                         = $::cassandra::params::cassandra_pkg,
   $prefer_local                                         = undef,
   $rack                                                 = 'RAC1',
-  $rackdc_tmpl
-    = 'cassandra/cassandra-rackdc.properties.erb',
-  $saved_caches_directory
-    = '/var/lib/cassandra/saved_caches',
+  $rackdc_tmpl                                          = 'cassandra/cassandra-rackdc.properties.erb',
+  $rpc_address                                          = 'localhost',
+  $saved_caches_directory                               = '/var/lib/cassandra/saved_caches',
   $saved_caches_directory_mode                          = '0750',
   $service_enable                                       = true,
   $service_ensure                                       = 'running',
@@ -37,8 +34,7 @@ class cassandra (
   $service_systemd                                      = $::cassandra::params::service_systemd,
   $service_systemd_tmpl                                 = 'cassandra/cassandra.service.erb',
   $settings                                             = {},
-  $snitch_properties_file
-    = 'cassandra-rackdc.properties',
+  $snitch_properties_file                               = 'cassandra-rackdc.properties',
   ) inherits cassandra::params {
   if $service_provider != undef {
     Service {
