@@ -10,6 +10,7 @@ class cassandra (
     = 'cassandra/cassandra.yaml.erb',
   $commitlog_directory
     = '/var/lib/cassandra/commitlog',
+  $commitlog_directory_mode                             = '0750',
   $config_file_mode                                     = '0644',
   $config_path                                          = $::cassandra::params::config_path,
   $config_path_parents                                  = $::cassandra::params::config_path_parents,
