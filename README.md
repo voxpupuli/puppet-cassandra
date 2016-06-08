@@ -20,7 +20,6 @@
     * [cassandra](#class-cassandra)
     * [cassandra::datastax_agent](#class-cassandradatastax_agent)
     * [cassandra::datastax_repo](#class-cassandradatastax_repo)
-    * [cassandra::env](#class-cassandraenv)
     * [cassandra::file](#class-cassandrafile)
     * [cassandra::firewall_ports](#class-cassandrafirewall_ports)
     * [cassandra::java](#class-cassandrajava)
@@ -356,7 +355,6 @@ true or not set the attribute at all after initializing the cluster.
 * [cassandra](#class-cassandra)
 * [cassandra::datastax_agent](#class-cassandradatastax_agent)
 * [cassandra::datastax_repo](#class-cassandradatastax_repo)
-* [cassandra::env](#class-cassandraenv)
 * [cassandra::file](#class-cassandrafile)
 * [cassandra::firewall_ports](#class-cassandrafirewall_ports)
 * [cassandra::java](#class-cassandrajava)
@@ -1648,14 +1646,14 @@ The name of the file relative to the `config_path`.
 
 ##### `config_path`
 The path to the configuration directory.  On the RedHat family this will
-default to `/etc/cassandra/default.conf/cassandra-env.sh` on Debian, the
-default is `/etc/cassandra/cassandra-env.sh`.
+default to `/etc/cassandra/default.conf` on Debian, the
+default is `/etc/cassandra`.
 
 ##### `file_lines`
 If set, then the [create_resources](https://docs.puppet.com/puppet/latest/reference/function.html#createresources)
 will be used to create an array of
 [file_line](https://forge.puppet.com/puppetlabs/stdlib#file_line) resources
-where the path attribute is set to `$cassandra::env::environment_file`
+where the path attribute is set to `${config_path}/${file}`
 Default *undef*
 
 ##### `service_refresh`
