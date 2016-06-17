@@ -7,7 +7,8 @@ After=network.target
 [Service]
 PIDFile=/var/run/<%= @service_name %>/<%= @service_name %>.pid
 ExecStart=/etc/init.d/<%= @service_name %> start
-ExecStop=/etc/init.d/<%= @service_name %> stop
+ExecStop=/usr/bin/kill $MAINPID
+ExecStopPost=/usr/bin/rm -f /var/lock/subsys/<%= @service_name %>
 StandardOutput=journal
 StandardError=journal
 LimitNOFILE=100000
@@ -15,6 +16,7 @@ LimitMEMLOCK=infinity
 LimitNPROC=32768
 LimitAS=infinity
 SuccessExitStatus=143
+TimeoutStopSec=5
 
 [Install]
 WantedBy=multi-user.target
