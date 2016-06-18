@@ -1,5 +1,16 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-06-18 - Release 1.24.1 ([diff](https://github.com/locp/cassandra/compare/1.24.0...1.24.1))
+
+### Summary
+
+Really only affects CentOS 7 as all the other supported operating systems do
+not require the systemd file to be installed.
+
+### Bugfixes
+
+* Change the way that systemd shuts Cassandra down.
+
 ##2015-05-25 - Release 1.24.0 ([diff](https://github.com/locp/cassandra/compare/1.23.1...1.24.0))
 
 ### Summary
