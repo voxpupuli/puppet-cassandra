@@ -1,5 +1,15 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-06-20 - Release 1.24.2 ([diff](https://github.com/locp/cassandra/compare/1.24.1...1.24.2))
+
+### Summary
+
+A non-functional bug fix.
+
+### Bugfixes
+
+* The release of the specinfra gem (2.59.1) caused problems with our build.  Pinned now to 2.59.0.
+
 ##2016-06-18 - Release 1.24.1 ([diff](https://github.com/locp/cassandra/compare/1.24.0...1.24.1))
 
 ### Summary
