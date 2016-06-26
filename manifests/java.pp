@@ -23,7 +23,7 @@ class cassandra::java (
   } else {
     $version = $package_ensure
   }
-  
+
   if $::osfamily == 'RedHat' and $yumrepo != undef {
     $yumrepo_defaults = {
       'before' => Package[$package_name],
