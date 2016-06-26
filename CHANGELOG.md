@@ -1,5 +1,16 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-06-26 - Release 1.24.3 ([diff](https://github.com/locp/cassandra/compare/1.24.2...1.24.3))
+
+### Summary
+
+A couple non-functional bug fixes.
+
+### Bugfixes
+
+* The new version of RuboCop flagged code changes required in the Vagrantfile.
+* The new version of Puppet Lint flagged code changes required in cassandra::java.
+
 ##2016-06-20 - Release 1.24.2 ([diff](https://github.com/locp/cassandra/compare/1.24.1...1.24.2))
 
 ### Summary
