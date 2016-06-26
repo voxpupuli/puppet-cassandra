@@ -31,6 +31,7 @@ group :system_tests do
   gem 'rspec-puppet-utils',     require: false
   gem 'rubocop',                require: false
   gem 'serverspec',             require: false
+  gem 'specinfra',              '<= 2.59.0'
   gem 'spdx-licenses',          '<= 1.0.0'
   gem 'travis',                 require: false
   gem 'travis-lint',            require: false

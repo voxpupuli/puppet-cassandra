@@ -1,5 +1,37 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-06-26 - Release 1.24.3 ([diff](https://github.com/locp/cassandra/compare/1.24.2...1.24.3))
+
+### Summary
+
+A couple of non-functional bug fixes.
+
+### Bugfixes
+
+* The new version of RuboCop flagged code changes required in the Vagrantfile.
+* The new version of Puppet Lint flagged code changes required in cassandra::java.
+
+##2016-06-20 - Release 1.24.2 ([diff](https://github.com/locp/cassandra/compare/1.24.1...1.24.2))
+
+### Summary
+
+A non-functional bug fix.
+
+### Bugfixes
+
+* The release of the specinfra gem (2.59.1) caused problems with our build.  Pinned now to 2.59.0.
+
+##2016-06-18 - Release 1.24.1 ([diff](https://github.com/locp/cassandra/compare/1.24.0...1.24.1))
+
+### Summary
+
+Really only affects CentOS 7 as all the other supported operating systems do
+not require the systemd file to be installed.
+
+### Bugfixes
+
+* Change the way that systemd shuts Cassandra down.
+
 ##2015-05-25 - Release 1.24.0 ([diff](https://github.com/locp/cassandra/compare/1.23.1...1.24.0))
 
 ### Summary
