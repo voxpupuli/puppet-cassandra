@@ -4,7 +4,7 @@
 
 ### Summary
 
-A couple non-functional bug fixes.
+A couple of non-functional bug fixes.
 
 ### Bugfixes
 
