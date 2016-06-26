@@ -25,8 +25,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # generate list of puppet modules to be installed from metadata.json
   metadata_json_file = "#{File.dirname(__FILE__)}/metadata.json"
   if File.exist?(metadata_json_file)
-    JSON.parse(File.read(metadata_json_file))['dependencies']
-      .each do |key, _value|
+    JSON.parse(File.read(metadata_json_file))['dependencies'].each do |key, _value|
       module_name = key['name'].to_s
       config.vm.provision 'shell',
                           inline: "puppet module install #{module_name}"
