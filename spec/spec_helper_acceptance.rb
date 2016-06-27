@@ -3,7 +3,7 @@ require 'pry'
 
 hosts.each do |host|
   if host.name =~ /ubuntu.*1604/
-    host.install_package("puppet")
+    host.install_package('puppet')
   else
     install_puppet_on(host)
   end
