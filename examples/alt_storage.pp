@@ -1,15 +1,34 @@
 #############################################################################
-# This is for placing in the getting started section of the README file.
-#############################################################################
-# Install Cassandra 2.2.5 onto a system and create a basic keyspace, table
-# and index.  The node itself becomes a seed for the cluster.
-#
-# Tested on CentOS 7
+# Specify different storage locations
 #############################################################################
 
 # Cassandra pre-requisites
 include cassandra::datastax_repo
 include cassandra::java
+
+# Specify the storage locations
+$commitlog_directory = '/appdata/cassandra/commitlog'
+$data_file_directory = '/appdata/cassandra/data'
+$saved_caches_directory = '/appdata/cassandra/saved_caches'
+
+file { '/appdata':
+  ensure => directory,
+  mode   => '0755',
+} ->
+file { '/appdata/cassandra':
+  ensure  => directory,
+  owner   => 'cassandra',
+  group   => 'cassandra',
+  require => Package['cassandra'],
+  before  => Service['cassandra'],
+} ->
+file { [$commitlog_directory, $data_file_directory, $saved_caches_directory]:
+  ensure  => directory,
+  owner   => 'cassandra',
+  group   => 'cassandra',
+  require => Package['cassandra'],
+  before  => Service['cassandra'],
+}
 
 # Create a cluster called MyCassandraCluster which uses the
 # GossipingPropertyFileSnitch.  In this very basic example
@@ -19,14 +38,14 @@ class { 'cassandra':
   settings => {
     'authenticator'               => 'PasswordAuthenticator',
     'cluster_name'                => 'MyCassandraCluster',
-    'commitlog_directory'         => '/var/lib/cassandra/commitlog',
+    'commitlog_directory'         => $commitlog_directory,
     'commitlog_sync'              => 'periodic',
     'commitlog_sync_period_in_ms' => 10000,
-    'data_file_directories'       => ['/var/lib/cassandra/data'],
+    'data_file_directories'       => [$data_file_directory],
     'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
     'listen_address'              => $::ipaddress,
     'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
-    'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
+    'saved_caches_directory'      => $saved_caches_directory,
     'seed_provider'               => [
       {
         'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
