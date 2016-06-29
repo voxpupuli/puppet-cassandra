@@ -92,25 +92,45 @@ This code will install Cassandra onto a system and create a basic
 keyspace, table and index.
 
 ```puppet
-# Cassandra pre-requisites.  You may want to install your own Java
-# environment.
+# Cassandra pre-requisites
 include cassandra::datastax_repo
 include cassandra::java
 
-# Install Cassandra on the node.  In this example, the node itself becomes
-# a seed for the cluster.
+# Create a cluster called MyCassandraCluster which uses the
+# GossipingPropertyFileSnitch.  In this very basic example
+# the node itself becomes a seed for the cluster.
+
 class { 'cassandra':
-  authenticator   => 'PasswordAuthenticator',
-  cluster_name    => 'MyCassandraCluster',
-  endpoint_snitch => 'GossipingPropertyFileSnitch',
-  listen_address  => $::ipaddress,
-  seeds           => $::ipaddress,
-  require         => Class['cassandra::datastax_repo', 'cassandra::java'],
+  settings => {
+    'authenticator'               => 'PasswordAuthenticator',
+    'cluster_name'                => 'MyCassandraCluster',
+    'commitlog_directory'         => '/var/lib/cassandra/commitlog',
+    'commitlog_sync'              => 'periodic',
+    'commitlog_sync_period_in_ms' => 10000,
+    'data_file_directories'       => ['/var/lib/cassandra/data'],
+    'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
+    'listen_address'              => $::ipaddress,
+    'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
+    'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
+    'seed_provider'               => [
+      {
+        'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
+        'parameters' => [
+          {
+            'seeds' => $::ipaddress,
+          },
+        ],
+      },
+    ],
+    'start_native_transport'      => true,
+  },
+  require  => Class['cassandra::datastax_repo', 'cassandra::java'],
 }
 
 class { 'cassandra::schema':
   cqlsh_password => 'cassandra',
   cqlsh_user     => 'cassandra',
+  cqlsh_host     => $::ipaddress,
   indexes        => {
     'users_lname_idx' => {
       table    => 'users',
@@ -148,6 +168,9 @@ class { 'cassandra::schema':
     },
     'boone'    => {
       password => 'Niner75',
+    },
+    'lucan'    => {
+      'ensure' => absent
     },
   },
 }
@@ -1046,12 +1069,7 @@ The number(s) of the port(s) to be opened.
 ## Limitations
 
 Tested on the Red Hat family versions 6 and 7, Ubuntu 12.04 and 14.04,
-Debian 7 Puppet (CE) 3.7.5 and DSC 2.  Currently this module does not support
-Cassandra 3 but this is planned for the near future.
-
-From release 1.6.0 of this module, regular updates of the Cassandra 1.X
-template will cease and testing against this template will cease.  Testing
-against the template for versions of Cassandra >= 2.X will continue.
+Debian 7 Puppet (CE) 3.7.5 and DSC 2.1, 2.2, 2.3 and 3.0.
 
 When creating key spaces, indexes, cql_types and users the settings will only
 be used to create a new resource if it does not currently exist.  If a change
