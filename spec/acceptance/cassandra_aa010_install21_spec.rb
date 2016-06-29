@@ -3,8 +3,8 @@ require 'spec_helper_acceptance'
 describe 'cassandra class' do
   cassandra_install_pp = <<-EOS
     if $::osfamily == 'RedHat' {
-      $cassandra_package = 'cassandra20'
-      $version = '2.0.17-1'
+      $cassandra_package = 'cassandra21'
+      $version = '2.1.0-1'
 
       class { 'cassandra::java':
         before => Class['cassandra']
@@ -49,7 +49,7 @@ describe 'cassandra class' do
       }
 
       $cassandra_package = 'cassandra'
-      $version = '2.0.17'
+      $version = '2.1.0'
 
       exec { '/bin/chown root:root /etc/apt/sources.list.d/datastax.list':
         unless  => '/usr/bin/test -O /etc/apt/sources.list.d/datastax.list',
@@ -90,7 +90,7 @@ describe 'cassandra class' do
     }
 
     class { '::cassandra::datastax_agent':
-      settings => {
+      settings       => {
         'agent_alias'     => {
           'value' => 'foobar',
         },
@@ -101,11 +101,12 @@ describe 'cassandra class' do
           ensure => absent,
         }
       },
-      require  => Class['cassandra']
+      service_systemd => false,
+      require         => Class['cassandra']
     }
   EOS
 
-  describe '########### Cassandra 2.0 installation.' do
+  describe '########### Cassandra 2.1 installation.' do
     it 'should work with no errors' do
       apply_manifest(cassandra_install_pp, catch_failures: true)
     end
