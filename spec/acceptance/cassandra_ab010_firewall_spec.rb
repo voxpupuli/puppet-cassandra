@@ -3,11 +3,11 @@ require 'spec_helper_acceptance'
 describe 'cassandra class' do
   firewall_config_pp = <<-EOS
     if $::osfamily == 'RedHat' {
-      $cassandra_package = 'cassandra20'
-      $version = '2.0.17-1'
+      $cassandra_package = 'cassandra21'
+      $version = '2.1.0-1'
     } else {
       $cassandra_package = 'cassandra'
-      $version = '2.0.17'
+      $version = '2.1.0'
     }
 
     class { 'cassandra':
