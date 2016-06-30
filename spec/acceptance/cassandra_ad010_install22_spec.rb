@@ -48,22 +48,6 @@ describe 'cassandra class' do
       package_name   => $cassandra_optutils_package,
       require        => Class['cassandra']
     }
-
-    $heap_new_size = $::processorcount * 100
-
-    class { 'cassandra::file':
-      file       => 'cassandra-env.sh',
-      file_lines => {
-        'MAX_HEAP_SIZE' => {
-          line  => 'MAX_HEAP_SIZE="1024M"',
-          match => '#MAX_HEAP_SIZE="4G"',
-        },
-        'HEAP_NEWSIZE' => {
-          line  => "HEAP_NEWSIZE='${heap_new_size}M'",
-          match => '#HEAP_NEWSIZE="800M"',
-        }
-      }
-    }
   EOS
 
   describe '########### Cassandra 2.2 installation.' do

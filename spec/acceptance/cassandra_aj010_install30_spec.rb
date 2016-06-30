@@ -26,6 +26,7 @@ describe 'cassandra class' do
         'commitlog_sync_period_in_ms' => 10000,
         'data_file_directories'       => ['/var/lib/cassandra/data'],
         'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
+        'hints_directory'             => '/var/lib/cassandra/hints',
         'listen_address'              => $::ipaddress,
         'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
         'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
@@ -44,9 +45,9 @@ describe 'cassandra class' do
      }
 
      class { 'cassandra::optutils':
-       ensure       => $version,
-       package_name => $cassandra_optutils_package,
-       require      => Class['cassandra']
+       package_ensure => $version,
+       package_name   => $cassandra_optutils_package,
+       require        => Class['cassandra']
      }
    EOS
 

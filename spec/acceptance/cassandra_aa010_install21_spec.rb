@@ -3,6 +3,7 @@ require 'spec_helper_acceptance'
 describe 'cassandra class' do
   cassandra_install_pp = <<-EOS
     if $::osfamily == 'RedHat' {
+      $cassandra_optutils_package = 'cassandra21-tools'
       $cassandra_package = 'cassandra21'
       $version = '2.1.0-1'
 
@@ -10,6 +11,10 @@ describe 'cassandra class' do
         before => Class['cassandra']
       }
     } else {
+      $cassandra_optutils_package = 'cassandra-tools'
+      $cassandra_package = 'cassandra'
+      $version = '2.1.0'
+
       if $::lsbdistid == 'Ubuntu' {
         class { 'cassandra::java':
           aptkey       => {
@@ -47,10 +52,6 @@ describe 'cassandra class' do
           package_name => 'zulu-8',
         }
       }
-
-      $cassandra_package = 'cassandra'
-      $version = '2.1.0'
-
       exec { '/bin/chown root:root /etc/apt/sources.list.d/datastax.list':
         unless  => '/usr/bin/test -O /etc/apt/sources.list.d/datastax.list',
         require => Class['cassandra::datastax_agent']
@@ -87,6 +88,12 @@ describe 'cassandra class' do
         ],
         'start_native_transport'      => true,
       },
+    }
+
+    class { 'cassandra::optutils':
+      package_ensure => $version,
+      package_name   => $cassandra_optutils_package,
+      require        => Class['cassandra']
     }
 
     class { '::cassandra::datastax_agent':
