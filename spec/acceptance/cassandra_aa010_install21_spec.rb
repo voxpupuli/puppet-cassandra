@@ -5,7 +5,7 @@ describe 'cassandra class' do
     if $::osfamily == 'RedHat' {
       $cassandra_optutils_package = 'cassandra21-tools'
       $cassandra_package = 'cassandra21'
-      $version = '2.1.0-1'
+      $version = '2.1.13-1'
 
       class { 'cassandra::java':
         before => Class['cassandra']
@@ -13,7 +13,7 @@ describe 'cassandra class' do
     } else {
       $cassandra_optutils_package = 'cassandra-tools'
       $cassandra_package = 'cassandra'
-      $version = '2.1.0'
+      $version = '2.1.13'
 
       if $::lsbdistid == 'Ubuntu' {
         class { 'cassandra::java':

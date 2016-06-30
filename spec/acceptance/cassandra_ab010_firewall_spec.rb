@@ -4,10 +4,10 @@ describe 'cassandra class' do
   firewall_config_pp = <<-EOS
     if $::osfamily == 'RedHat' {
       $cassandra_package = 'cassandra21'
-      $version = '2.1.0-1'
+      $version = '2.1.13-1'
     } else {
       $cassandra_package = 'cassandra'
-      $version = '2.1.0'
+      $version = '2.1.13'
     }
 
     class { 'cassandra':
