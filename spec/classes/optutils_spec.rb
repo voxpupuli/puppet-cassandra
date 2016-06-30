@@ -10,7 +10,6 @@ describe 'cassandra::optutils' do
     it { should have_resource_count(1) }
     it do
       should contain_class('cassandra::optutils').with(
-        ensure: 'present',
         package_ensure: 'present'
       )
     end
@@ -32,7 +31,7 @@ describe 'cassandra::optutils' do
     let :params do
       {
         package_name: 'foobar-java',
-        ensure: '42'
+        package_ensure: '42'
       }
     end
 
@@ -40,24 +39,6 @@ describe 'cassandra::optutils' do
       should contain_package('foobar-java').with(
         ensure: 42
       )
-    end
-  end
-
-  context 'On a RedHat OS with ensure set.' do
-    let :facts do
-      {
-        osfamily: 'RedHat'
-      }
-    end
-    let :params do
-      {
-        ensure: '2.1.13-1'
-      }
-    end
-
-    it do
-      should contain_package('cassandra22-tools').with_ensure('2.1.13-1')
-      should contain_cassandra__private__deprecation_warning('cassandra::optutils::ensure')
     end
   end
 
@@ -69,38 +50,6 @@ describe 'cassandra::optutils' do
     end
     let :params do
       {
-        package_ensure: '2.1.13'
-      }
-    end
-
-    it { should contain_package('cassandra-tools').with_ensure('2.1.13') }
-  end
-
-  context 'With both ensure and package_ensure set differently (RedHat)' do
-    let :facts do
-      {
-        osfamily: 'RedHat'
-      }
-    end
-    let :params do
-      {
-        package_ensure: '2.1.13-1',
-        ensure: 'latest'
-      }
-    end
-
-    it { should raise_error(Puppet::Error) }
-  end
-
-  context 'With both ensure and package_ensure set the same (Debian)' do
-    let :facts do
-      {
-        osfamily: 'Debian'
-      }
-    end
-    let :params do
-      {
-        ensure: '2.1.13',
         package_ensure: '2.1.13'
       }
     end
