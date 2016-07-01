@@ -9,7 +9,6 @@ class cassandra (
   $cassandra_yaml_tmpl                                  = 'cassandra/cassandra.yaml.erb',
   $config_file_mode                                     = '0644',
   $config_path                                          = $::cassandra::params::config_path,
-  $config_path_parents                                  = $::cassandra::params::config_path_parents,
   $dc                                                   = 'DC1',
   $dc_suffix                                            = undef,
   $fail_on_non_supported_os                             = true,
@@ -35,14 +34,13 @@ class cassandra (
   }
 
   $config_file = "${config_path}/cassandra.yaml"
-  $config_path_recurse = concat ($config_path_parents, $config_path)
   $dc_rack_properties_file = "${config_path}/${snitch_properties_file}"
 
   case $::osfamily {
     'RedHat': {
       $config_file_require = Package['cassandra']
       $config_file_before  = []
-      $config_path_recurse_require = Package['cassandra']
+      $config_path_require = Package['cassandra']
       $dc_rack_properties_file_require = Package['cassandra']
       $dc_rack_properties_file_before  = []
       $data_dir_require = Package['cassandra']
@@ -57,10 +55,10 @@ class cassandra (
       }
     }
     'Debian': {
-      $config_file_require = [ User['cassandra'], File[$config_path_recurse] ]
+      $config_file_require = [ User['cassandra'], File[$config_path] ]
       $config_file_before  = Package['cassandra']
-      $config_path_recurse_require = []
-      $dc_rack_properties_file_require = [ User['cassandra'], File[$config_path_recurse] ]
+      $config_path_require = []
+      $dc_rack_properties_file_require = [ User['cassandra'], File[$config_path] ]
       $dc_rack_properties_file_before  = Package['cassandra']
       $data_dir_require = File[$config_file]
       $data_dir_before = Package['cassandra']
@@ -128,12 +126,12 @@ class cassandra (
     }
   }
 
-  file { $config_path_recurse:
+  file { $config_path:
     ensure  => 'directory',
     group   => 'cassandra',
     owner   => 'cassandra',
     mode    => '0755',
-    require => $config_path_recurse_require,
+    require => $config_path_require,
   }
 
   file { $config_file:

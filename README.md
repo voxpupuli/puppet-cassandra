@@ -431,11 +431,6 @@ The path to the cassandra configuration file.
 Default value **/etc/cassandra/default.conf** on Red Hat
 or **/etc/cassandra** on Debian.
 
-##### `config_path_parents`
-The higest level directories to be owned by the cassandra user on the
-node being controlled.  Defaults to [] on Debian family and
-['/etc/cassandra'] on the Red Hat family.
-
 ##### `dc`
 Sets the value for dc in *config_path*/*snitch_properties_file* see
 http://docs.datastax.com/en/cassandra/2.1/cassandra/architecture/architectureSnitchesAbout_c.html

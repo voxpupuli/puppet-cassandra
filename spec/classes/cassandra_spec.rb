@@ -57,7 +57,6 @@ describe 'cassandra' do
         'cassandra_yaml_tmpl' => 'cassandra/cassandra.yaml.erb',
         'config_file_mode' => '0644',
         'config_path' => '/etc/cassandra/default.conf',
-        'config_path_parents' => ['/etc/cassandra'],
         'dc' => 'DC1',
         'dc_suffix' => nil,
         'fail_on_non_supported_os' => true,
