@@ -13,6 +13,7 @@
     * [Beginning with Cassandra](#beginning-with-cassandra)
     * [Upgrading](#upgrading)
 3. [Usage - Configuration options and additional functionality](#usage)
+    * [Setup a keyspace and users](#setup-a-keyspace-and-users)
     * [Create a Cluster in a Single Data Center](#create-a-cluster-in-a-single-data-center)
     * [Create a Cluster in Multiple Data Centers](#create-a-cluster-in-multiple-data-centers)
     * [DataStax Enterprise](#datastax-enterprise)
@@ -126,54 +127,6 @@ class { 'cassandra':
   },
   require  => Class['cassandra::datastax_repo', 'cassandra::java'],
 }
-
-class { 'cassandra::schema':
-  cqlsh_password => 'cassandra',
-  cqlsh_user     => 'cassandra',
-  cqlsh_host     => $::ipaddress,
-  indexes        => {
-    'users_lname_idx' => {
-      table    => 'users',
-      keys     => 'lname',
-      keyspace => 'mykeyspace',
-    },
-  },
-  keyspaces      => {
-    'mykeyspace' => {
-      durable_writes  => false,
-      replication_map => {
-        keyspace_class     => 'SimpleStrategy',
-        replication_factor => 1,
-      },
-    }
-  },
-  tables         => {
-    'users' => {
-      columns  => {
-        user_id       => 'int',
-        fname         => 'text',
-        lname         => 'text',
-        'PRIMARY KEY' => '(user_id)',
-      },
-      keyspace => 'mykeyspace',
-    },
-  },
-  users          => {
-    'spillman' => {
-      password => 'Niner27',
-    },
-    'akers'    => {
-      password  => 'Niner2',
-      superuser => true,
-    },
-    'boone'    => {
-      password => 'Niner75',
-    },
-    'lucan'    => {
-      'ensure' => absent
-    },
-  },
-}
 ```
 
 ### Upgrading
@@ -266,6 +219,73 @@ Also there is now a class for installing the optional utilities:
   service_ensure.
 
 ## Usage
+
+### Setup a keyspace and users
+
+We assume that authentication has been enabled for the cassandra
+cluster and we are connecting with the default user name and password
+('cassandra/cassandra').
+
+In this example, we create a keyspace (mykeyspace) with a table called
+'users' and an index called 'users_lname_idx'.
+
+We also add three users (to Cassandra, not the mykeyspace.users
+table) called spillman, akers and boone.  We also ensure that a user
+called lucan is absent.
+
+```puppet
+class { 'cassandra':
+  ...
+}
+
+class { 'cassandra::schema':
+  cqlsh_password => 'cassandra',
+  cqlsh_user     => 'cassandra',
+  cqlsh_host     => $::ipaddress,
+  indexes        => {
+    'users_lname_idx' => {
+      table    => 'users',
+      keys     => 'lname',
+      keyspace => 'mykeyspace',
+    },
+  },
+  keyspaces      => {
+    'mykeyspace' => {
+      durable_writes  => false,
+      replication_map => {
+        keyspace_class     => 'SimpleStrategy',
+        replication_factor => 1,
+      },
+    }
+  },
+  tables         => {
+    'users' => {
+      columns  => {
+        user_id       => 'int',
+        fname         => 'text',
+        lname         => 'text',
+        'PRIMARY KEY' => '(user_id)',
+      },
+      keyspace => 'mykeyspace',
+    },
+  },
+  users          => {
+    'spillman' => {
+      password => 'Niner27',
+    },
+    'akers'    => {
+      password  => 'Niner2',
+      superuser => true,
+    },
+    'boone'    => {
+      password => 'Niner75',
+    },
+    'lucan'    => {
+      'ensure' => absent
+    },
+  },
+}
+```
 
 ### Create a Cluster in a Single Data Center
 
