@@ -28,6 +28,4 @@ class cassandra::params {
       $service_systemd = false
     }
   }
-
-  $environment_file = "${config_path}/cassandra-env.sh"
 }
