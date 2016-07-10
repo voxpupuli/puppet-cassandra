@@ -105,7 +105,6 @@ describe 'cassandra class' do
     }
 
     class { '::cassandra::datastax_agent':
-      service_systemd => $service_systemd,
       settings       => {
         'agent_alias'     => {
           'value' => 'foobar',
