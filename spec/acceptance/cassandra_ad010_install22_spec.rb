@@ -3,10 +3,17 @@ require 'spec_helper_acceptance'
 describe 'cassandra class' do
   cassandra_upgrade22_pp = <<-EOS
     if $::osfamily == 'RedHat' {
+      if $::operatingsystemmajrelease >- 7 {
+        $service_systemd = true
+      } else {
+        $service_systemd = false
+      }
+
         $cassandra_optutils_package = 'cassandra22-tools'
         $cassandra_package = 'cassandra22'
         $version = '2.2.5-1'
     } else {
+        $service_systemd = false
         $cassandra_optutils_package = 'cassandra-tools'
         $cassandra_package = 'cassandra'
         $version = '2.2.5'
@@ -18,6 +25,7 @@ describe 'cassandra class' do
       package_ensure              => $version,
       package_name                => $cassandra_package,
       rack                        => 'R101',
+      service_systemd             => $service_systemd,
       settings                    => {
         'authenticator'               => 'PasswordAuthenticator',
         'cluster_name'                => 'MyCassandraCluster',

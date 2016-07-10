@@ -512,7 +512,7 @@ better where *systemd_path* will be:
 * `/usr/lib/systemd/system` on the Red Hat family.
 * `/lib/systemd/system` on Debian the familiy.
 
-Default value is true on CentOS 7, false on everything else.
+Default value false
 
 ##### `service_systemd_tmpl`
 The location for the template for the systemd service file.  This attribute

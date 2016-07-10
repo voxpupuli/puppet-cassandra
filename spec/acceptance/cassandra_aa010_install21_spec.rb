@@ -3,6 +3,12 @@ require 'spec_helper_acceptance'
 describe 'cassandra class' do
   cassandra_install_pp = <<-EOS
     if $::osfamily == 'RedHat' {
+      if $::operatingsystemmajrelease >- 7 {
+        $service_systemd = true
+      } else {
+        $service_systemd = false
+      }
+
       $cassandra_optutils_package = 'cassandra21-tools'
       $cassandra_package = 'cassandra21'
       $version = '2.1.13-1'
@@ -11,6 +17,7 @@ describe 'cassandra class' do
         before => Class['cassandra']
       }
     } else {
+      $service_systemd = false
       $cassandra_optutils_package = 'cassandra-tools'
       $cassandra_package = 'cassandra'
       $version = '2.1.13'
@@ -65,6 +72,7 @@ describe 'cassandra class' do
       package_ensure              => $version,
       package_name                => $cassandra_package,
       rack                        => 'R101',
+      service_systemd             => $service_systemd,
       settings                    => {
         'authenticator'               => 'PasswordAuthenticator',
         'cluster_name'                => 'MyCassandraCluster',
@@ -97,6 +105,7 @@ describe 'cassandra class' do
     }
 
     class { '::cassandra::datastax_agent':
+      service_systemd => $service_systemd,
       settings       => {
         'agent_alias'     => {
           'value' => 'foobar',

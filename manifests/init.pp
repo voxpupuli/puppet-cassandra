@@ -22,7 +22,7 @@ class cassandra (
   $service_name                                         = 'cassandra',
   $service_provider                                     = undef,
   $service_refresh                                      = true,
-  $service_systemd                                      = $::cassandra::params::service_systemd,
+  $service_systemd                                      = false,
   $service_systemd_tmpl                                 = 'cassandra/cassandra.service.erb',
   $settings                                             = {},
   $snitch_properties_file                               = 'cassandra-rackdc.properties',

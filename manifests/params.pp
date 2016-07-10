@@ -11,7 +11,6 @@ class cassandra::params {
       $java_package = 'openjdk-7-jre-headless'
       $jna_package_name = 'libjna-java'
       $optutils_package_name = 'cassandra-tools'
-      $service_systemd = false
       $systemctl = '/bin/systemctl'
       $systemd_path = '/lib/systemd/system'
     }
@@ -23,15 +22,6 @@ class cassandra::params {
       $optutils_package_name = 'cassandra22-tools'
       $systemctl = '/usr/bin/systemctl'
       $systemd_path = '/usr/lib/systemd/system'
-
-      case $::operatingsystemmajrelease {
-        7: {
-            $service_systemd = true
-        }
-        default: {
-            $service_systemd = false
-        }
-      }
     }
     default: {
       $config_path_parents = []
