@@ -15,8 +15,19 @@ include cassandra::java
 # GossipingPropertyFileSnitch.  In this very basic example
 # the node itself becomes a seed for the cluster.
 
+if $::osfamily == 'RedHat' {
+  if $::operatingsystemmajrelease >= 7 {
+    $service_systemd = true
+  } else {
+    $service_systemd = false
+  }
+} else {
+  $service_systemd = false
+}
+
 class { 'cassandra':
-  settings => {
+  service_systemd => $service_systemd,
+  settings        => {
     'authenticator'               => 'PasswordAuthenticator',
     'cluster_name'                => 'MyCassandraCluster',
     'commitlog_directory'         => '/var/lib/cassandra/commitlog',
@@ -39,7 +50,7 @@ class { 'cassandra':
     ],
     'start_native_transport'      => true,
   },
-  require  => Class['cassandra::datastax_repo', 'cassandra::java'],
+  require         => Class['cassandra::datastax_repo', 'cassandra::java'],
 }
 
 class { 'cassandra::datastax_agent':
