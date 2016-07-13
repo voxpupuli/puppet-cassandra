@@ -60,6 +60,7 @@ class cassandra (
   $data_file_directories_mode                           = '0750',
   $dc                                                   = 'DC1',
   $dc_suffix                                            = undef,
+  $disk_access_mode                                     = undef,
   $disk_failure_policy                                  = 'stop',
   $dynamic_snitch_badness_threshold                     = 0.1,
   $dynamic_snitch_reset_interval_in_ms                  = 600000,
