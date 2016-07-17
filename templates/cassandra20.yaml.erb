@@ -729,6 +729,11 @@ inter_dc_tcp_nodelay: <%= @inter_dc_tcp_nodelay %>
 # (non-seed) nodes automatically migrate the right data to themselves. When
 # initializing a fresh cluster without data, add auto_bootstrap: false.
 <% if @auto_bootstrap != nil %>auto_bootstrap: <%= @auto_bootstrap %><% else %>#auto_bootstrap: true<% end %>
+
+# Disk access mode set to mmap - http://www.datastax.com/dev/blog/cassandra-and-windows-past-present-and-future
+# tl;dr - don't enable in windows or 32bit Linux.
+# This is a default in 2.1+ but not enabled in 2.0. It works in 2.0.
+<% if @disk_access_mode != nil %>disk_access_mode: <%= @disk_access_mode %><% else %># disk_access_mode: mmap<% end %>
 <% if !@additional_lines.empty? -%>
 
 <% @additional_lines.each do |additional_line| -%>

@@ -172,7 +172,8 @@ describe 'cassandra' do
         server_encryption_protocol: 'l146',
         server_encryption_require_client_auth: 'l147',
         server_encryption_store_type: 'l148',
-        thrift_framed_transport_size_in_mb: 16
+        thrift_framed_transport_size_in_mb: 16,
+        disk_access_mode: 'auto'
       }
     end
 
@@ -898,6 +899,11 @@ describe 'cassandra' do
     it do
       should contain_file('/etc/cassandra.yaml')
         .with_content(/thrift_framed_transport_size_in_mb: 16/)
+    end
+
+    it do
+      should contain_file('/etc/cassandra.yaml')
+        .with_content(/disk_access_mode: auto/)
     end
 
     it { should contain_file('commitlog_directory') }
