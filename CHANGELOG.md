@@ -1,5 +1,15 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-07-17 - Release 1.25.0 ([diff](https://github.com/locp/cassandra/compare/1.24.3...1.25.0))
+
+### Summary
+
+A feature release.
+
+### Features
+
+* The `cassandra` class now has a `disk_access_mode` attribute.
+
 ##2016-06-26 - Release 1.24.3 ([diff](https://github.com/locp/cassandra/compare/1.24.2...1.24.3))
 
 ### Summary
