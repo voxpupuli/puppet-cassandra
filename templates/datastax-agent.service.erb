@@ -5,7 +5,7 @@ Description=DataStax Agent
 After=network.target
 
 [Service]
-PIDFile=/var/run/<%= @service_name %>/<%= @service_name %>-monitor.pid
+PIDFile=/var/run/<%= @service_name %>/<%= @service_name %>.pid
 ExecStart=/etc/init.d/<%= @service_name %> start
 StandardOutput=journal
 StandardError=journal
