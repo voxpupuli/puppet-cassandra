@@ -20,6 +20,7 @@ group :system_tests do
   gem 'fog-google',             '<= 0.0.9'
   gem 'google-api-client',      '<= 0.9.4'
   gem 'hiera',                  require: false
+  gem 'json_pure',              '<= 2.0.1'
   gem 'metadata-json-lint',     require: false
   gem 'pry',                    require: false
   gem 'puppet-blacksmith',      require: false
@@ -29,7 +30,7 @@ group :system_tests do
   gem 'rspec_junit_formatter',  '0.2.2'
   gem 'rspec-puppet',           '<= 2.3.2'
   gem 'rspec-puppet-utils',     require: false
-  gem 'rubocop',                require: false
+  gem 'rubocop',                '<= 0.41.2'
   gem 'serverspec',             require: false
   gem 'specinfra',              '<= 2.59.0'
   gem 'spdx-licenses',          '<= 1.0.0'
