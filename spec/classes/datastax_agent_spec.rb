@@ -125,7 +125,8 @@ describe 'cassandra::datastax_agent' do
     end
 
     it do
-      check_pid_file_name = /PIDFile=\/var\/run\/datastax-agent\/datastax-agent-monitor.pid/
+      check_pid_file_name = /PIDFile=(.*)datastax-agent-monitor.pid/
+
       should contain_file('/usr/lib/systemd/system/datastax-agent.service')
         .with_content(check_pid_file_name)
     end
