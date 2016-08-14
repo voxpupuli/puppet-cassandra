@@ -33,6 +33,7 @@ group :system_tests do
   gem 'serverspec',             require: false
   gem 'specinfra',              '<= 2.59.0'
   gem 'spdx-licenses',          '<= 1.0.0'
+  gem 'tins',                   '<= 1.6.0'
   gem 'travis',                 require: false
   gem 'travis-lint',            require: false
 end
