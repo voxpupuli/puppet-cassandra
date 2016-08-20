@@ -1,5 +1,12 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-08-14 - Release 1.25.1 ([diff](https://github.com/locp/cassandra/compare/1.25.0...1.25.1))
+
+### Summary
+
+Bugfix to ensure that the name of the PID file for the DataStax Agent service
+matches with the service name.
+
 ##2016-07-17 - Release 1.25.0 ([diff](https://github.com/locp/cassandra/compare/1.24.3...1.25.0))
 
 ### Summary

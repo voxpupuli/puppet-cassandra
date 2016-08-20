@@ -3,7 +3,9 @@ require 'spec_helper_acceptance'
 describe 'cassandra class' do
   cassandra_install_pp = <<-EOS
     if $::osfamily == 'RedHat' {
-      if $::operatingsystemmajrelease >- 7 {
+      $skip = false
+
+      if $::operatingsystemmajrelease >= 7 {
         $service_systemd = true
       } else {
         $service_systemd = false
@@ -11,7 +13,7 @@ describe 'cassandra class' do
 
       $cassandra_optutils_package = 'cassandra21-tools'
       $cassandra_package = 'cassandra21'
-      $version = '2.1.13-1'
+      $version = '2.1.15-1'
 
       class { 'cassandra::java':
         before => Class['cassandra']
@@ -20,9 +22,15 @@ describe 'cassandra class' do
       $service_systemd = false
       $cassandra_optutils_package = 'cassandra-tools'
       $cassandra_package = 'cassandra'
-      $version = '2.1.13'
+      $version = '2.1.15'
 
       if $::lsbdistid == 'Ubuntu' {
+        if $::operatingsystemmajrelease >= 16 {
+          $skip = true
+        } else {
+          $skip = false
+        }
+
         class { 'cassandra::java':
           aptkey       => {
             'openjdk-r' => {
@@ -41,6 +49,8 @@ describe 'cassandra class' do
           package_name => 'openjdk-8-jdk',
         }
       } else {
+        $skip = false
+
         class { 'cassandra::java':
           aptkey       => {
             'ZuluJDK' => {
@@ -65,59 +75,47 @@ describe 'cassandra class' do
       }
     }
 
-    class { 'cassandra::datastax_repo': } ->
-    class { 'cassandra':
-      cassandra_9822              => true,
-      dc                          => 'LON',
-      package_ensure              => $version,
-      package_name                => $cassandra_package,
-      rack                        => 'R101',
-      service_systemd             => $service_systemd,
-      settings                    => {
-        'authenticator'               => 'PasswordAuthenticator',
-        'cluster_name'                => 'MyCassandraCluster',
-        'commitlog_directory'         => '/var/lib/cassandra/commitlog',
-        'commitlog_sync'              => 'periodic',
-        'commitlog_sync_period_in_ms' => 10000,
-        'data_file_directories'       => ['/var/lib/cassandra/data'],
-        'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
-        'listen_address'              => $::ipaddress,
-        'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
-        'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
-        'seed_provider'               => [
-          {
-            'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
-            'parameters' => [
-              {
-                'seeds' => $::ipaddress,
-              },
-            ],
-          },
-        ],
-        'start_native_transport'      => true,
-      },
-    }
+    class { 'cassandra::datastax_repo': }
 
-    class { 'cassandra::optutils':
-      package_ensure => $version,
-      package_name   => $cassandra_optutils_package,
-      require        => Class['cassandra']
-    }
+    if $skip == false {
+      class { 'cassandra':
+        cassandra_9822              => true,
+        dc                          => 'LON',
+        package_ensure              => $version,
+        package_name                => $cassandra_package,
+        rack                        => 'R101',
+        service_systemd             => $service_systemd,
+        settings                    => {
+          'authenticator'               => 'PasswordAuthenticator',
+          'cluster_name'                => 'MyCassandraCluster',
+          'commitlog_directory'         => '/var/lib/cassandra/commitlog',
+          'commitlog_sync'              => 'periodic',
+          'commitlog_sync_period_in_ms' => 10000,
+          'data_file_directories'       => ['/var/lib/cassandra/data'],
+          'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
+          'listen_address'              => $::ipaddress,
+          'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
+          'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
+          'seed_provider'               => [
+            {
+              'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
+              'parameters' => [
+                {
+                  'seeds' => $::ipaddress,
+                },
+              ],
+            },
+          ],
+          'start_native_transport'      => true,
+        },
+        require                     => Class['cassandra::datastax_repo'],
+      }
 
-    class { '::cassandra::datastax_agent':
-      settings       => {
-        'agent_alias'     => {
-          'value' => 'foobar',
-        },
-        'stomp_interface' => {
-           'value' => 'localhost',
-        },
-        'async_pool_size' => {
-          ensure => absent,
-        }
-      },
-      service_systemd => false,
-      require         => Class['cassandra']
+      class { 'cassandra::optutils':
+        package_ensure => $version,
+        package_name   => $cassandra_optutils_package,
+        require        => Class['cassandra']
+      }
     }
   EOS
 

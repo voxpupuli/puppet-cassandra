@@ -5,11 +5,11 @@ describe 'cassandra class' do
     if $::osfamily == 'RedHat' {
         $cassandra_optutils_package = 'cassandra22-tools'
         $cassandra_package = 'cassandra22'
-        $version = '2.2.5-1'
+        $version = '2.2.7-1'
     } else {
         $cassandra_optutils_package = 'cassandra-tools'
         $cassandra_package = 'cassandra'
-        $version = '2.2.5'
+        $version = '2.2.7'
     }
 
     class { 'cassandra':

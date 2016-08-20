@@ -36,9 +36,11 @@ describe '::cassandra::file' do
       }
     end
 
+    let(:title) { 'cassandra-env.sh' }
+
     let :params do
       {
-        file: 'cassandra-env.sh',
+        config_path: '/etc/cassandra',
         'file_lines' => {
           'MAX_HEAP_SIZE 4GB' => {
             'line'  => 'MAX_HEAP_SIZE="4G"',
