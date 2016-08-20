@@ -1,11 +1,12 @@
 # cassandra::file
-class cassandra::file(
-  $file,
+define cassandra::file(
+  $file             = $title,
   $config_path      = $::cassandra::params::config_path,
   $file_lines       = undef,
   $service_refresh  = true,
-  ) inherits cassandra::params {
+  ) {
   include cassandra
+  include cassandra::params
   include stdlib
 
   $path = "${config_path}/${file}"
