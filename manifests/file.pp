@@ -4,8 +4,9 @@ define cassandra::file(
   $config_path      = $::cassandra::config_path,
   $file_lines       = undef,
   $service_refresh  = true,
-  ) inherits cassandra::params {
+  ) {
   include cassandra
+  include cassandra::params
   include stdlib
 
   $path = "${config_path}/${file}"
