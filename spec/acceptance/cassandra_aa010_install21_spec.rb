@@ -1,7 +1,7 @@
 require 'spec_helper_acceptance'
 
 describe 'cassandra class' do
-  cassandra_install_pp = <<-EOS
+  cassandra_install22_pp = <<-EOS
     if $::osfamily == 'RedHat' {
       $skip = false
 
@@ -11,9 +11,9 @@ describe 'cassandra class' do
         $service_systemd = false
       }
 
-      $cassandra_optutils_package = 'cassandra21-tools'
-      $cassandra_package = 'cassandra21'
-      $version = '2.1.15-1'
+      $cassandra_optutils_package = 'cassandra22-tools'
+      $cassandra_package = 'cassandra22'
+      $version = '2.2.5-1'
 
       class { 'cassandra::java':
         before => Class['cassandra']
@@ -22,7 +22,7 @@ describe 'cassandra class' do
       $service_systemd = false
       $cassandra_optutils_package = 'cassandra-tools'
       $cassandra_package = 'cassandra'
-      $version = '2.1.15'
+      $version = '2.2.5'
 
       if $::lsbdistid == 'Ubuntu' {
         if $::operatingsystemmajrelease >= 16 {
@@ -119,12 +119,12 @@ describe 'cassandra class' do
     }
   EOS
 
-  describe '########### Cassandra 2.1 installation.' do
+  describe '########### Cassandra 2.2 installation.' do
     it 'should work with no errors' do
-      apply_manifest(cassandra_install_pp, catch_failures: true)
+      apply_manifest(cassandra_install22_pp, catch_failures: true)
     end
     it 'check code is idempotent' do
-      expect(apply_manifest(cassandra_install_pp,
+      expect(apply_manifest(cassandra_install22_pp,
                             catch_failures: true).exit_code).to be_zero
     end
   end
