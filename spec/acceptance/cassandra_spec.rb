@@ -238,73 +238,34 @@ describe 'cassandra class' do
     end
 
     schema_testing_drop_type_pp = <<-EOS
-    if $::osfamily == 'RedHat' {
-        $cassandra_optutils_package = 'cassandra22-tools'
-        $cassandra_package = 'cassandra22'
-        $version = '#{version}-1'
-    } else {
-        $cassandra_optutils_package = 'cassandra-tools'
-        $cassandra_package = 'cassandra'
-        $version = '#{version}'
-    }
+     #{cassandra_install_pp}
 
-    class { 'cassandra':
-      cassandra_9822              => true,
-      dc                          => 'LON',
-      package_ensure              => $version,
-      package_name                => $cassandra_package,
-      rack                        => 'R101',
-      settings                    => {
-        'authenticator'               => 'PasswordAuthenticator',
-        'cluster_name'                => 'MyCassandraCluster',
-        'commitlog_directory'         => '/var/lib/cassandra/commitlog',
-        'commitlog_sync'              => 'periodic',
-        'commitlog_sync_period_in_ms' => 10000,
-        'data_file_directories'       => ['/var/lib/cassandra/data'],
-        'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
-        'listen_address'              => $::ipaddress,
-        'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
-        'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
-        'seed_provider'               => [
-          {
-            'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
-            'parameters' => [
-              {
-                'seeds' => $::ipaddress,
-              },
-            ],
-          },
-        ],
-        'start_native_transport'      => true,
-      },
-    }
+     $cql_types = {
+       'fullname' => {
+         'keyspace' => 'mykeyspace',
+         'ensure'   => 'absent'
+       }
+     }
 
-    $cql_types = {
-      'fullname' => {
-        'keyspace' => 'mykeyspace',
-        'ensure'   => 'absent'
-      }
-    }
+     if $::operatingsystem != CentOS {
+       $os_ok = true
+     } else {
+       if $::operatingsystemmajrelease != 6 {
+         $os_ok = true
+       } else {
+         $os_ok = false
+       }
+     }
 
-    if $::operatingsystem != CentOS {
-      $os_ok = true
-    } else {
-      if $::operatingsystemmajrelease != 6 {
-        $os_ok = true
-      } else {
-        $os_ok = false
-      }
-    }
-
-    if $os_ok {
-      class { 'cassandra::schema':
-        cql_types      => $cql_types,
-        cqlsh_host     => $::ipaddress,
-        cqlsh_user     => 'akers',
-        cqlsh_password => 'Niner2',
-      }
-    }
-  EOS
+     if $os_ok {
+       class { 'cassandra::schema':
+         cql_types      => $cql_types,
+         cqlsh_host     => $::ipaddress,
+         cqlsh_user     => 'akers',
+         cqlsh_password => 'Niner2',
+       }
+     }
+    EOS
 
     describe '########### Schema drop type.' do
       it 'should work with no errors' do
@@ -318,71 +279,32 @@ describe 'cassandra class' do
     end
 
     schema_testing_drop_user_pp = <<-EOS
-    if $::osfamily == 'RedHat' {
-        $cassandra_optutils_package = 'cassandra22-tools'
-        $cassandra_package = 'cassandra22'
-        $version = '#{version}-1'
-    } else {
-        $cassandra_optutils_package = 'cassandra-tools'
-        $cassandra_package = 'cassandra'
-        $version = '#{version}'
-    }
+      #{cassandra_install_pp}
 
-    class { 'cassandra':
-      cassandra_9822              => true,
-      dc                          => 'LON',
-      package_ensure              => $version,
-      package_name                => $cassandra_package,
-      rack                        => 'R101',
-      settings                    => {
-        'authenticator'               => 'PasswordAuthenticator',
-        'cluster_name'                => 'MyCassandraCluster',
-        'commitlog_directory'         => '/var/lib/cassandra/commitlog',
-        'commitlog_sync'              => 'periodic',
-        'commitlog_sync_period_in_ms' => 10000,
-        'data_file_directories'       => ['/var/lib/cassandra/data'],
-        'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
-        'listen_address'              => $::ipaddress,
-        'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
-        'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
-        'seed_provider'               => [
-          {
-            'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
-            'parameters' => [
-              {
-                'seeds' => $::ipaddress,
-              },
-            ],
-          },
-        ],
-        'start_native_transport'      => true,
-      },
-    }
-
-    if $::operatingsystem != CentOS {
-      $os_ok = true
-    } else {
-      if $::operatingsystemmajrelease != 6 {
+      if $::operatingsystem != CentOS {
         $os_ok = true
       } else {
-        $os_ok = false
+        if $::operatingsystemmajrelease != 6 {
+          $os_ok = true
+        } else {
+          $os_ok = false
+        }
       }
-    }
 
-    if $os_ok {
-      class { 'cassandra::schema':
-        cqlsh_password      => 'Niner2',
-        cqlsh_host          => $::ipaddress,
-        cqlsh_user          => 'akers',
-        cqlsh_client_config => '/root/.puppetcqlshrc',
-        users               => {
-          'boone' => {
-            ensure => absent,
+      if $os_ok {
+        class { 'cassandra::schema':
+          cqlsh_password      => 'Niner2',
+          cqlsh_host          => $::ipaddress,
+          cqlsh_user          => 'akers',
+          cqlsh_client_config => '/root/.puppetcqlshrc',
+          users               => {
+            'boone' => {
+              ensure => absent,
+            },
           },
-        },
-      }
-    }
-  EOS
+        }
+     }
+    EOS
 
     describe '########### Drop the boone user.' do
       it 'should work with no errors' do
@@ -395,59 +317,20 @@ describe 'cassandra class' do
     end
 
     schema_testing_drop_index_pp = <<-EOS
-    if $::osfamily == 'RedHat' {
-        $cassandra_optutils_package = 'cassandra22-tools'
-        $cassandra_package = 'cassandra22'
-        $version = '#{version}-1'
-    } else {
-        $cassandra_optutils_package = 'cassandra-tools'
-        $cassandra_package = 'cassandra'
-        $version = '#{version}'
-    }
+      #{cassandra_install_pp}
 
-    class { 'cassandra':
-      cassandra_9822              => true,
-      dc                          => 'LON',
-      package_ensure              => $version,
-      package_name                => $cassandra_package,
-      rack                        => 'R101',
-      settings                    => {
-        'authenticator'               => 'PasswordAuthenticator',
-        'cluster_name'                => 'MyCassandraCluster',
-        'commitlog_directory'         => '/var/lib/cassandra/commitlog',
-        'commitlog_sync'              => 'periodic',
-        'commitlog_sync_period_in_ms' => 10000,
-        'data_file_directories'       => ['/var/lib/cassandra/data'],
-        'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
-        'listen_address'              => $::ipaddress,
-        'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
-        'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
-        'seed_provider'               => [
-          {
-            'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
-            'parameters' => [
-              {
-                'seeds' => $::ipaddress,
-              },
-            ],
-          },
-        ],
-        'start_native_transport'      => true,
-      },
-    }
-
-    if $::operatingsystem != CentOS {
-      $os_ok = true
-    } else {
-      if $::operatingsystemmajrelease != 6 {
+      if $::operatingsystem != CentOS {
         $os_ok = true
       } else {
-        $os_ok = false
+        if $::operatingsystemmajrelease != 6 {
+          $os_ok = true
+        } else {
+          $os_ok = false
+        }
       }
-    }
 
-    if $os_ok {
-      class { 'cassandra::schema':
+      if $os_ok {
+        class { 'cassandra::schema':
         cqlsh_host     => $::ipaddress,
         cqlsh_user     => 'akers',
         cqlsh_password => 'Niner2',
@@ -456,11 +339,11 @@ describe 'cassandra class' do
              ensure   => absent,
              keyspace => 'mykeyspace',
              table    => 'users',
+            },
           },
-        },
+        }
       }
-    }
-  EOS
+    EOS
 
     describe '########### Schema drop index.' do
       it 'should work with no errors' do
@@ -474,71 +357,32 @@ describe 'cassandra class' do
     end
 
     schema_testing_drop_pp = <<-EOS
-    if $::osfamily == 'RedHat' {
-        $cassandra_optutils_package = 'cassandra22-tools'
-        $cassandra_package = 'cassandra22'
-        $version = '#{version}-1'
-    } else {
-        $cassandra_optutils_package = 'cassandra-tools'
-        $cassandra_package = 'cassandra'
-        $version = '#{version}'
-    }
+      #{cassandra_install_pp}
 
-    class { 'cassandra':
-      cassandra_9822              => true,
-      dc                          => 'LON',
-      package_ensure              => $version,
-      package_name                => $cassandra_package,
-      rack                        => 'R101',
-      settings                    => {
-        'authenticator'               => 'PasswordAuthenticator',
-        'cluster_name'                => 'MyCassandraCluster',
-        'commitlog_directory'         => '/var/lib/cassandra/commitlog',
-        'commitlog_sync'              => 'periodic',
-        'commitlog_sync_period_in_ms' => 10000,
-        'data_file_directories'       => ['/var/lib/cassandra/data'],
-        'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
-        'listen_address'              => $::ipaddress,
-        'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
-        'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
-        'seed_provider'               => [
-          {
-            'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
-            'parameters' => [
-              {
-                'seeds' => $::ipaddress,
-              },
-            ],
-          },
-        ],
-        'start_native_transport'      => true,
-      },
-    }
-
-    if $::operatingsystem != CentOS {
-      $os_ok = true
-    } else {
-      if $::operatingsystemmajrelease != 6 {
+      if $::operatingsystem != CentOS {
         $os_ok = true
       } else {
-        $os_ok = false
+        if $::operatingsystemmajrelease != 6 {
+          $os_ok = true
+        } else {
+          $os_ok = false
+        }
       }
-    }
 
-    if $os_ok {
-      class { 'cassandra::schema':
-        cqlsh_host     => $ipaddress,
-        cqlsh_password => 'Niner2',
-        cqlsh_user     => 'akers',
-        tables         => {
-          'users' => {
-            ensure   => absent,
-            keyspace => 'mykeyspace',
+      if $os_ok {
+        class { 'cassandra::schema':
+          cqlsh_host     => $ipaddress,
+          cqlsh_password => 'Niner2',
+          cqlsh_user     => 'akers',
+          tables         => {
+            'users' => {
+              ensure   => absent,
+              keyspace => 'mykeyspace',
+            },
           },
-        },
+        }
       }
-    }
-  EOS
+    EOS
 
     describe '########### Schema drop (table).' do
       it 'should work with no errors' do
@@ -551,72 +395,33 @@ describe 'cassandra class' do
     end
 
     schema_testing_drop_pp = <<-EOS
-    if $::osfamily == 'RedHat' {
-        $cassandra_optutils_package = 'cassandra22-tools'
-        $cassandra_package = 'cassandra22'
-        $version = '#{version}-1'
-    } else {
-        $cassandra_optutils_package = 'cassandra-tools'
-        $cassandra_package = 'cassandra'
-        $version = '#{version}'
-    }
+      #{cassandra_install_pp}
 
-    class { 'cassandra':
-      cassandra_9822              => true,
-      dc                          => 'LON',
-      package_ensure              => $version,
-      package_name                => $cassandra_package,
-      rack                        => 'R101',
-      settings                    => {
-        'authenticator'               => 'PasswordAuthenticator',
-        'cluster_name'                => 'MyCassandraCluster',
-        'commitlog_directory'         => '/var/lib/cassandra/commitlog',
-        'commitlog_sync'              => 'periodic',
-        'commitlog_sync_period_in_ms' => 10000,
-        'data_file_directories'       => ['/var/lib/cassandra/data'],
-        'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
-        'listen_address'              => $::ipaddress,
-        'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
-        'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
-        'seed_provider'               => [
-          {
-            'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
-            'parameters' => [
-              {
-                'seeds' => $::ipaddress,
-              },
-            ],
-          },
-        ],
-        'start_native_transport'      => true,
-      },
-    }
-
-    $keyspaces = {
-      'mykeyspace' => {
-        ensure => absent,
+      $keyspaces = {
+        'mykeyspace' => {
+          ensure => absent,
+        }
       }
-    }
 
-    if $::operatingsystem != CentOS {
-      $os_ok = true
-    } else {
-      if $::operatingsystemmajrelease != 6 {
+      if $::operatingsystem != CentOS {
         $os_ok = true
       } else {
-        $os_ok = false
+        if $::operatingsystemmajrelease != 6 {
+          $os_ok = true
+        } else {
+          $os_ok = false
+        }
       }
-    }
 
-    if $os_ok {
-      class { 'cassandra::schema':
-        cqlsh_host     => $::ipaddress,
-        cqlsh_password => 'Niner2',
-        cqlsh_user     => 'akers',
-        keyspaces      => $keyspaces,
+      if $os_ok {
+        class { 'cassandra::schema':
+          cqlsh_host     => $::ipaddress,
+          cqlsh_password => 'Niner2',
+          cqlsh_user     => 'akers',
+          keyspaces      => $keyspaces,
+        }
       }
-    }
-  EOS
+    EOS
 
     describe '########### Schema drop (Keyspaces).' do
       it 'should work with no errors' do
