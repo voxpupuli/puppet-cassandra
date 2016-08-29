@@ -1,7 +1,7 @@
 require 'spec_helper_acceptance'
 
 describe 'cassandra class' do
-  cassandra_version = ['2.2.7']
+  cassandra_version = ['2.2.7', '3.0.3']
 
   cassandra_version.each do |version|
     cassandra_install_pp = <<-EOS
@@ -14,9 +14,15 @@ describe 'cassandra class' do
           $service_systemd = false
         }
 
-        $cassandra_optutils_package = 'cassandra22-tools'
-        $cassandra_package = 'cassandra22'
         $version = '#{version}-1'
+
+        if $version == '2.2.7-1' {
+          $cassandra_optutils_package = 'cassandra22-tools'
+          $cassandra_package = 'cassandra22'
+        } else {
+          $cassandra_optutils_package = 'cassandra30-tools'
+          $cassandra_package = 'cassandra30'
+        }
 
         class { 'cassandra::java':
           before => Class['cassandra']
@@ -80,6 +86,36 @@ describe 'cassandra class' do
 
       class { 'cassandra::datastax_repo': }
 
+      $initial_settings = {
+        'authenticator'               => 'PasswordAuthenticator',
+        'cluster_name'                => 'MyCassandraCluster',
+        'commitlog_directory'         => '/var/lib/cassandra/commitlog',
+        'commitlog_sync'              => 'periodic',
+        'commitlog_sync_period_in_ms' => 10000,
+        'data_file_directories'       => ['/var/lib/cassandra/data'],
+        'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
+        'listen_address'              => $::ipaddress,
+        'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
+        'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
+        'seed_provider'               => [
+          {
+            'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
+            'parameters' => [
+              {
+                'seeds' => $::ipaddress,
+              },
+            ],
+          },
+        ],
+        'start_native_transport'      => true,
+      }
+
+      if $version =~ /^2/ {
+        $settings = $initial_settings
+      } else {
+        $settings = merge($initial_settings, { 'hints_directory' => '/var/lib/cassandra/hints' })
+      }
+
       if $skip == false {
         class { 'cassandra':
           cassandra_9822              => true,
@@ -88,29 +124,7 @@ describe 'cassandra class' do
           package_name                => $cassandra_package,
           rack                        => 'R101',
           service_systemd             => $service_systemd,
-          settings                    => {
-            'authenticator'               => 'PasswordAuthenticator',
-            'cluster_name'                => 'MyCassandraCluster',
-            'commitlog_directory'         => '/var/lib/cassandra/commitlog',
-            'commitlog_sync'              => 'periodic',
-            'commitlog_sync_period_in_ms' => 10000,
-            'data_file_directories'       => ['/var/lib/cassandra/data'],
-            'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
-            'listen_address'              => $::ipaddress,
-            'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
-            'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
-            'seed_provider'               => [
-              {
-                'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
-                'parameters' => [
-                  {
-                    'seeds' => $::ipaddress,
-                  },
-                ],
-              },
-            ],
-            'start_native_transport'      => true,
-          },
+          settings                    => $settings,
           require                     => Class['cassandra::datastax_repo'],
         }
 
@@ -436,6 +450,43 @@ describe 'cassandra class' do
     describe '########### Gather service information (when in debug mode).' do
       it 'Show the cassandra system log.' do
         shell("grep -v -e '^INFO' -e '^\s*INFO' /var/log/cassandra/system.log")
+      end
+    end
+
+    next unless version != cassandra_version.last
+
+    cassandra_uninstall_pp = <<-EOS
+      Exec {
+        path => [
+          '/usr/local/bin',
+          '/opt/local/bin',
+          '/usr/bin',
+          '/usr/sbin',
+          '/bin',
+          '/sbin'],
+        logoutput => true,
+      }
+
+      if $::osfamily == 'RedHat' {
+        $cassandra_optutils_package = 'cassandra22-tools'
+        $cassandra_package = 'cassandra22'
+      } else {
+        $cassandra_optutils_package = 'cassandra-tools'
+        $cassandra_package = 'cassandra'
+      }
+
+      package { $cassandra_optutils_package:
+        ensure => absent
+      } ->
+      package { $cassandra_package:
+        ensure => absent
+      } ->
+      exec { 'rm -rf /var/lib/cassandra/*/* /var/log/cassandra': }
+    EOS
+
+    describe '########### Uninstall Cassandra 2.2.' do
+      it 'should work with no errors' do
+        apply_manifest(cassandra_uninstall_pp, catch_failures: true)
       end
     end
   end
