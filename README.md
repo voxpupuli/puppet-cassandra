@@ -141,7 +141,6 @@ class { 'cassandra':
   endpoint_snitch => 'GossipingPropertyFileSnitch',
   listen_address  => $::ipaddress,
   seeds           => $::ipaddress,
-  service_systemd => true,
   require         => Class['cassandra::datastax_repo', 'cassandra::java'],
 }
 
@@ -440,7 +439,6 @@ class { 'cassandra':
   package_ensure  => '4.7.0-1',
   package_name    => 'dse-full',
   service_name    => 'dse',
-  service_systemd => true
 }
 ```
 
@@ -1750,21 +1748,10 @@ to be made but allow the user to control when the service is restarted.
 Default value true
 
 ##### `service_systemd`
-If set to true then a systemd service file called 
-${*systemd_path*}/${*service_name*}.service will be added to the node with
-basic settings to ensure that the Cassandra service interacts with systemd
-better where *systemd_path* will be:
-
-* `/usr/lib/systemd/system` on the Red Hat family.
-* `/lib/systemd/system` on Debian the familiy.
-
-Default value false
+DEPRECATION WARNING:  This option is deprecated.
 
 ##### `service_systemd_tmpl`
-The location for the template for the systemd service file.  This attribute
-only has any effect if `service_systemd` is set to true.
-
-Default value `cassandra/cassandra.service.erb`
+DEPRECATION WARNING:  This option is deprecated.
 
 ##### `snapshot_before_compaction`
 Whether or not to take a snapshot before each compaction.  Be
@@ -1953,21 +1940,10 @@ be used, otherwise the specified value will be used instead.
 Default value *undef*
 
 ##### `service_systemd`
-If set to true then a systemd service file called 
-${*systemd_path*}/${*service_name*}.service will be added to the node with
-basic settings to ensure that the Cassandra service interacts with systemd
-better where *systemd_path* will be:
-
-* `/usr/lib/systemd/system` on the Red Hat family.
-* `/lib/systemd/system` on Debian the familiy.
-
-Default value false
+DEPRECATION WARNING:  This option is deprecated.
 
 ##### `service_systemd_tmpl`
-The location for the template for the systemd service file.  This attribute
-only has any effect if `service_systemd` is set to true.
-
-Default value `cassandra/datastax-agent.service.erb`
+DEPRECATION WARNING:  This option is deprecated.
 
 ##### `stomp_interface`
 If the value is changed from the default of *undef* then this is what is
@@ -3007,21 +2983,10 @@ be used, otherwise the specified value will be used instead.
 Default value *undef*
 
 ##### `service_systemd`
-If set to true then a systemd service file called 
-${*systemd_path*}/${*service_name*}.service will be added to the node with
-basic settings to ensure that the Cassandra service interacts with systemd
-better where *systemd_path* will be:
-
-* `/usr/lib/systemd/system` on the Red Hat family.
-* `/lib/systemd/system` on Debian the familiy.
-
-Default value false
+DEPRECATION WARNING:  This option is deprecated.
 
 ##### `service_systemd_tmpl`
-The location for the template for the systemd service file.  This attribute
-only has any effect if `service_systemd` is set to true.
-
-Default value `cassandra/opscenterd.service.erb`
+DEPRECATION WARNING:  This option is deprecated.
 
 ##### `spark_base_master_proxy_port`
 This sets the base_master_proxy_port setting in the spark section of the

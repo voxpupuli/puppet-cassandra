@@ -270,22 +270,19 @@ class cassandra (
   package { 'cassandra':
     ensure => $package_ensure,
     name   => $package_name,
+    notify => Exec['cassandra_reload_systemctl'],
+  }
+
+  exec { 'cassandra_reload_systemctl':
+    command     => "${::cassandra::params::systemctl} daemon-reload",
+    onlyif      => "test -x ${::cassandra::params::systemctl}",
+    path        => ['/usr/bin', '/bin'],
+    refreshonly => true,
   }
 
   if $service_systemd {
-    exec { 'cassandra_reload_systemctl':
-      command     => "${::cassandra::params::systemctl} daemon-reload",
-      refreshonly => true,
-    }
-
-    file { "${::cassandra::params::systemd_path}/${service_name}.service":
-      ensure  => present,
-      owner   => 'root',
-      group   => 'root',
-      content => template($service_systemd_tmpl),
-      mode    => '0644',
-      before  => Package['cassandra'],
-      notify  => Exec[cassandra_reload_systemctl],
+    cassandra::private::deprecation_warning { 'cassandra::service_systemd':
+      item_number => 20,
     }
   }
 

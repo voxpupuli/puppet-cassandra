@@ -203,8 +203,6 @@ describe 'cassandra' do
       }
     end
 
-    it { should contain_file('/lib/systemd/system/cassandra.service') }
-
     it do
       should contain_exec('cassandra_reload_systemctl').with(
         command: '/bin/systemctl daemon-reload',

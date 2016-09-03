@@ -169,23 +169,17 @@ class cassandra::opscenter (
     before => Service['opscenterd'],
   }
 
+  exec { 'opscenter_reload_systemctl':
+    command     => "${::cassandra::params::systemctl} daemon-reload",
+    onlyif      => "test -x ${::cassandra::params::systemctl}",
+    refreshonly => true,
+    path        => ['/usr/bin', '/bin'],
+    notify      => Service['opscenterd'],
+  }
+
   if $service_systemd {
-    $systemd_path = $::cassandra::params::systemd_path
-
-    exec { 'opscenter_reload_systemctl':
-      command     => "${::cassandra::params::systemctl} daemon-reload",
-      refreshonly => true,
-      notify      => Service['opscenterd'],
-    }
-
-    file { "${systemd_path}/${service_name}.service":
-      ensure  => present,
-      owner   => 'root',
-      group   => 'root',
-      content => template($service_systemd_tmpl),
-      mode    => '0644',
-      before  => Package[$package_name],
-      notify  => Exec['opscenter_reload_systemctl'],
+    cassandra::private::deprecation_warning { 'opscenter::service_systemd':
+      item_number => 20,
     }
   }
 

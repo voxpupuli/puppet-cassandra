@@ -28,7 +28,15 @@ class cassandra::datastax_agent (
   package { $package_name:
     ensure  => $package_ensure,
     require => Class['cassandra'],
-    notify  => Service[$service_name],
+    notify  => Exec['datastax_agent_reload_systemctl'],
+  }
+
+  exec { 'datastax_agent_reload_systemctl':
+    command     => "${::cassandra::params::systemctl} daemon-reload",
+    onlyif      => "test -x ${::cassandra::params::systemctl}",
+    path        => ['/usr/bin', '/bin'],
+    refreshonly => true,
+    notify      => Service[$service_name],
   }
 
   if $stomp_interface != undef {
@@ -161,26 +169,8 @@ class cassandra::datastax_agent (
   }
 
   if $service_systemd {
-    file { '/var/run/datastax-agent':
-      ensure => directory,
-      owner  => 'cassandra',
-      group  => 'cassandra',
-      before => Package[$package_name],
-    }
-
-    exec { 'datastax_agent_reload_systemctl':
-      command     => "${::cassandra::params::systemctl} daemon-reload",
-      refreshonly => true,
-    }
-
-    file { "${::cassandra::params::systemd_path}/${service_name}.service":
-      ensure  => present,
-      owner   => 'root',
-      group   => 'root',
-      content => template($service_systemd_tmpl),
-      mode    => '0644',
-      before  => Package[$package_name],
-      notify  => Exec['datastax_agent_reload_systemctl'],
+    cassandra::private::deprecation_warning { 'datastax_agent::service_systemd':
+      item_number => 20,
     }
   }
 

@@ -208,7 +208,7 @@ describe 'cassandra' do
       should contain_service('cassandra').with(provider: 'base')
     end
 
-    it { should have_resource_count(9) }
+    it { should have_resource_count(10) }
   end
 
   context 'Deprecation warnings.' do

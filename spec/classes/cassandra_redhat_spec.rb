@@ -117,7 +117,7 @@ describe 'cassandra' do
     it do
       should contain_file('/etc/dse/cassandra/cassandra.yaml')
       should contain_file('/etc/dse/cassandra')
-      should contain_file('/usr/lib/systemd/system/dse.service')
+      should contain_cassandra__private__deprecation_warning('cassandra::service_systemd')
       should contain_file('/etc/dse/cassandra/cassandra-rackdc.properties')
       should contain_package('cassandra').with(
         ensure: '4.7.0-1',
@@ -156,13 +156,8 @@ describe 'cassandra' do
       }
     end
 
-    it { should contain_file('/usr/lib/systemd/system/cassandra.service') }
-
     it do
-      is_expected.to contain_exec('cassandra_reload_systemctl').with(
-        command: '/usr/bin/systemctl daemon-reload',
-        refreshonly: true
-      )
+      should contain_cassandra__private__deprecation_warning('cassandra::service_systemd')
     end
   end
 end
