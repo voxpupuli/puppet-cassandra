@@ -101,7 +101,7 @@ describe 'cassandra' do
       should contain_service('cassandra').with(provider: 'base')
     end
 
-    it { should have_resource_count(5) }
+    it { should have_resource_count(6) }
   end
 
   context 'Ensure cassandra service can be stopped and disabled.' do

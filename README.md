@@ -50,9 +50,6 @@ A Puppet module to install and manage Cassandra, DataStax Agent & OpsCenter
 * On CentOS 7 if the `init` service provider is used, then cassandra
   is added as a system service.
 * Optionally ensures that the Cassandra service is enabled and running.
-* Optionally creates a file /usr/lib/systemd/system/cassandra.service to
-  improve service interaction on the RedHat family or
-  /lib/systemd/system/cassandra.service on the Debian family.
 * On Debian systems:
   * Optionally replace ```/etc/init.d/cassandra``` with a workaround for
   [CASSANDRA-9822](https://issues.apache.org/jira/browse/CASSANDRA-9822).
@@ -62,9 +59,6 @@ A Puppet module to install and manage Cassandra, DataStax Agent & OpsCenter
 
 * Optionally installs the DataStax agent.
 * Optionally sets JAVA_HOME in **/etc/default/datastax-agent**.
-* Optionally creates a file /usr/lib/systemd/system/datastax-agent.service to
-  improve service interaction on the RedHat family or
-  /lib/systemd/system/datastax-agent.service on the Debian family.
 
 #### What the cassandra::datastax_repo class affects
 
@@ -100,6 +94,14 @@ include cassandra::java
 # Create a cluster called MyCassandraCluster which uses the
 # GossipingPropertyFileSnitch.  In this very basic example
 # the node itself becomes a seed for the cluster.
+class { 'cassandra':
+  authenticator   => 'PasswordAuthenticator',
+  cluster_name    => 'MyCassandraCluster',
+  endpoint_snitch => 'GossipingPropertyFileSnitch',
+  listen_address  => $::ipaddress,
+  seeds           => $::ipaddress,
+  require         => Class['cassandra::datastax_repo', 'cassandra::java'],
+}
 
 class { 'cassandra':
   settings => {
@@ -523,23 +525,6 @@ this flag to false will disable this behaviour, therefore allowing the changes
 to be made but allow the user to control when the service is restarted.
 Default value true
 
-##### `service_systemd`
-If set to true then a systemd service file called 
-${*systemd_path*}/${*service_name*}.service will be added to the node with
-basic settings to ensure that the Cassandra service interacts with systemd
-better where *systemd_path* will be:
-
-* `/usr/lib/systemd/system` on the Red Hat family.
-* `/lib/systemd/system` on Debian the familiy.
-
-Default value false
-
-##### `service_systemd_tmpl`
-The location for the template for the systemd service file.  This attribute
-only has any effect if `service_systemd` is set to true.
-
-Default value `cassandra/cassandra.service.erb`
-
 ##### `snitch_properties_file`
 The name of the snitch properties file.  The full path name would be
 *config_path*/*snitch_properties_file*.
@@ -607,23 +592,6 @@ Default value 'datastax-agent'
 The name of the provider that runs the service.  If left as *undef* then the OS family specific default will
 be used, otherwise the specified value will be used instead.
 Default value *undef*
-
-##### `service_systemd`
-If set to true then a systemd service file called 
-${*systemd_path*}/${*service_name*}.service will be added to the node with
-basic settings to ensure that the Cassandra service interacts with systemd
-better where *systemd_path* will be:
-
-* `/usr/lib/systemd/system` on the Red Hat family.
-* `/lib/systemd/system` on Debian the familiy.
-
-Default value is true on CentOS 7, false on everything else.
-
-##### `service_systemd_tmpl`
-The location for the template for the systemd service file.  This attribute
-only has any effect if `service_systemd` is set to true.
-
-Default value `cassandra/datastax-agent.service.erb`
 
 ##### `settings`
 A hash that is passed to
@@ -1106,6 +1074,7 @@ page for project specific requirements.
 
 **Release**  | **PR/Issue**                                        | **Contributer**
 -------------|-----------------------------------------------------|----------------------------------------------------
+1.25.2       | [#269](https://github.com/locp/cassandra/issues/269)| [@ahharu](https://github.com/ahharu)
 1.25.1       | [#264](https://github.com/locp/cassandra/issues/264)| [@pampelix](https://github.com/pampelix)
 1.25.0       | [#261](https://github.com/locp/cassandra/pull/261)  | [@tibers](https://github.com/tibers)
 1.24.0       | [#247](https://github.com/locp/cassandra/pull/247)  | [@ericy-jana](https://github.com/ericy-jana)

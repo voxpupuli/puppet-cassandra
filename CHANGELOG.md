@@ -1,5 +1,13 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-09-03 - Release 1.25.2 ([diff](https://github.com/locp/cassandra/compare/1.25.1...1.25.2))
+
+### Summary
+
+The `service_systemd` attribute is now deprecated for the `cassandra`,
+`cassandra::datastax_agent` and `cassandra::opscenter` classes.  See
+https://github.com/locp/cassandra/wiki/DEP-020 for more details.
+
 ##2016-08-14 - Release 1.25.1 ([diff](https://github.com/locp/cassandra/compare/1.25.0...1.25.1))
 
 ### Summary

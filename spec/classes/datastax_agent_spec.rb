@@ -20,8 +20,18 @@ describe 'cassandra::datastax_agent' do
   end
 
   context 'Test for cassandra::datastax_agent with defaults.' do
-    it { should have_resource_count(3) }
     it do
+      should have_resource_count(4)
+      should contain_package('datastax-agent')
+      should contain_service('datastax-agent')
+      should contain_exec('datastax_agent_reload_systemctl')
+      should contain_file('/var/lib/datastax-agent/conf/address.yaml')
+        .with(
+          owner: 'cassandra',
+          group: 'cassandra'
+        )
+      should contain_file('/var/lib/datastax-agent/conf/address.yaml')
+        .that_requires('Package[datastax-agent]')
       should contain_class('cassandra::datastax_agent').only_with(
         'defaults_file'        => '/etc/default/datastax-agent',
         'java_home'            => nil,
@@ -31,24 +41,9 @@ describe 'cassandra::datastax_agent' do
         'service_enable'       => true,
         'service_name'         => 'datastax-agent',
         # 'service_provider'     => nil,
-        'service_systemd'      => false,
-        'service_systemd_tmpl' => 'cassandra/datastax-agent.service.erb',
         'stomp_interface'      => nil,
         'local_interface'      => nil
       )
-    end
-
-    it do
-      should contain_package('datastax-agent')
-      should contain_service('datastax-agent')
-
-      should contain_file('/var/lib/datastax-agent/conf/address.yaml')
-        .with(
-          owner: 'cassandra',
-          group: 'cassandra'
-        )
-      should contain_file('/var/lib/datastax-agent/conf/address.yaml')
-        .that_requires('Package[datastax-agent]')
     end
   end
 
@@ -80,22 +75,6 @@ describe 'cassandra::datastax_agent' do
         service_systemd: true
       }
     end
-
-    it do
-      check_pid_file_name = /PIDFile=(.*)datastax-agent.pid/
-
-      should contain_file('/usr/lib/systemd/system/datastax-agent.service')
-        .with_content(check_pid_file_name)
-    end
-
-    it { should contain_file('/var/run/datastax-agent') }
-
-    it do
-      is_expected.to contain_exec('datastax_agent_reload_systemctl').with(
-        command: '/usr/bin/systemctl daemon-reload',
-        refreshonly: true
-      )
-    end
   end
 
   context 'Systemd file can be activated on Debian' do
@@ -109,16 +88,6 @@ describe 'cassandra::datastax_agent' do
       {
         service_systemd: true
       }
-    end
-
-    it { should contain_file('/lib/systemd/system/datastax-agent.service') }
-    it { should contain_file('/var/run/datastax-agent') }
-
-    it do
-      is_expected.to contain_exec('datastax_agent_reload_systemctl').with(
-        command: '/bin/systemctl daemon-reload',
-        refreshonly: true
-      )
     end
   end
 end
