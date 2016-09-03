@@ -54,9 +54,6 @@ A Puppet module to install and manage Cassandra, DataStax Agent & OpsCenter
 * On CentOS 7 if the `init` service provider is used, then cassandra
   is added as a system service.
 * Optionally ensures that the Cassandra service is enabled and running.
-* Optionally creates a file /usr/lib/systemd/system/cassandra.service to
-  improve service interaction on the RedHat family or
-  /lib/systemd/system/cassandra.service on the Debian family.
 * On Debian systems:
   * Optionally replace ```/etc/init.d/cassandra``` with a workaround for
   [CASSANDRA-9822](https://issues.apache.org/jira/browse/CASSANDRA-9822).
@@ -66,9 +63,6 @@ A Puppet module to install and manage Cassandra, DataStax Agent & OpsCenter
 
 * Optionally installs the DataStax agent.
 * Optionally sets JAVA_HOME in **/etc/default/datastax-agent**.
-* Optionally creates a file /usr/lib/systemd/system/datastax-agent.service to
-  improve service interaction on the RedHat family or
-  /lib/systemd/system/datastax-agent.service on the Debian family.
 
 #### What the cassandra::datastax_agent class affects
 
@@ -93,9 +87,6 @@ A Puppet module to install and manage Cassandra, DataStax Agent & OpsCenter
 * Manages the content of the configuration file
   (/etc/opscenter/opscenterd.conf).
 * Manages the opscenterd service.
-* Optionally creates a file /usr/lib/systemd/system/opscenterd.service to
-  improve service interaction on the RedHat family or
-  /lib/systemd/system/opscenterd.service on the Debian family.
 
 #### What the cassandra::opscenter::cluster_name type affects
 
