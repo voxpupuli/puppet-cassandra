@@ -139,25 +139,4 @@ describe 'cassandra' do
       should contain_file('/etc/init.d/cassandra').that_comes_before('Package[cassandra]')
     end
   end
-
-  context 'Systemd file can be activated on Debian' do
-    let :facts do
-      {
-        osfamily: 'Debian'
-      }
-    end
-
-    let :params do
-      {
-        service_systemd: true
-      }
-    end
-
-    it do
-      should contain_exec('cassandra_reload_systemctl').with(
-        command: '/bin/systemctl daemon-reload',
-        refreshonly: true
-      )
-    end
-  end
 end

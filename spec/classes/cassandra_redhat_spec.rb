@@ -40,7 +40,6 @@ describe 'cassandra' do
       }
     end
 
-    it { should contain_class('cassandra').with_service_systemd(false) }
     it { should contain_class('cassandra') }
     it { should contain_file('/etc/cassandra/default.conf') }
     it { should contain_file('/etc/cassandra/default.conf/cassandra.yaml') }
@@ -52,10 +51,6 @@ describe 'cassandra' do
     end
     it { should contain_package('cassandra').with(name: 'cassandra22') }
     it { is_expected.not_to contain_yumrepo('datastax') }
-    it do
-      is_expected
-        .not_to contain_file('/usr/lib/systemd/system/cassandra.service')
-    end
   end
 
   context 'Install DSE on a Red Hat family OS.' do
@@ -71,14 +66,12 @@ describe 'cassandra' do
         package_name: 'dse-full',
         config_path: '/etc/dse/cassandra',
         service_name: 'dse',
-        service_systemd: true
       }
     end
 
     it do
       should contain_file('/etc/dse/cassandra/cassandra.yaml')
       should contain_file('/etc/dse/cassandra')
-      should contain_cassandra__private__deprecation_warning('cassandra::service_systemd')
       should contain_file('/etc/dse/cassandra/cassandra-rackdc.properties')
       should contain_package('cassandra').with(
         ensure: '4.7.0-1',
@@ -102,23 +95,5 @@ describe 'cassandra' do
     end
 
     it { is_expected.not_to contain_file('/etc/init.d/cassandra') }
-  end
-
-  context 'Systemd file can be activated on Red Hat' do
-    let :facts do
-      {
-        osfamily: 'RedHat'
-      }
-    end
-
-    let :params do
-      {
-        service_systemd: true
-      }
-    end
-
-    it do
-      should contain_cassandra__private__deprecation_warning('cassandra::service_systemd')
-    end
   end
 end

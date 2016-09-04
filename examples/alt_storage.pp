@@ -34,19 +34,7 @@ file { [$commitlog_directory, $data_file_directory, $saved_caches_directory]:
 # GossipingPropertyFileSnitch.  In this very basic example
 # the node itself becomes a seed for the cluster.
 
-if $::osfamily == 'RedHat' {
-  if $::operatingsystemmajrelease >= 7 {
-    $service_systemd = true
-  } else {
-    $service_systemd = false
-  }
-} else {
-  $service_systemd = false
-}
-
-
 class { 'cassandra':
-  service_systemd => $service_systemd,
   settings        => {
     'authenticator'               => 'PasswordAuthenticator',
     'cluster_name'                => 'MyCassandraCluster',

@@ -51,6 +51,7 @@ describe 'cassandra' do
 
     it do
       should contain_file('/etc/cassandra/default.conf/cassandra.yaml')
+      should contain_exec('cassandra_reload_systemctl')
       should contain_class('cassandra').only_with(
         'cassandra_2356_sleep_seconds' => 5,
         'cassandra_9822' => false,
@@ -69,8 +70,6 @@ describe 'cassandra' do
         'service_name' => 'cassandra',
         'service_provider' => nil,
         'service_refresh' => true,
-        'service_systemd' => false,
-        'service_systemd_tmpl' => 'cassandra/cassandra.service.erb',
         'settings' => {}
       )
     end

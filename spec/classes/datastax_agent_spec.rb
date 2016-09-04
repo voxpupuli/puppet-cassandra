@@ -62,32 +62,4 @@ describe 'cassandra::datastax_agent' do
       )
     end
   end
-
-  context 'Systemd file can be activated on Red Hat' do
-    let :facts do
-      {
-        osfamily: 'RedHat'
-      }
-    end
-
-    let :params do
-      {
-        service_systemd: true
-      }
-    end
-  end
-
-  context 'Systemd file can be activated on Debian' do
-    let :facts do
-      {
-        osfamily: 'Debian'
-      }
-    end
-
-    let :params do
-      {
-        service_systemd: true
-      }
-    end
-  end
 end
