@@ -10,7 +10,7 @@ HOSTS:
     image: ubuntu:16.04
     hypervisor: docker
     docker_image_commands:
-      - 'apt-get install -y locales-all net-tools sudo ufw wget'
+      - 'apt-get install -y locales-all net-tools sudo ufw wget ntp python-pip python-minimal'
       - 'rm -f /usr/sbin/policy-rc.d'
     docker_cmd: '["/sbin/init"]'
 CONFIG:

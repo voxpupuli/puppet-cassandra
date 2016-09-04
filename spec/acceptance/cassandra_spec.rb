@@ -1,19 +1,90 @@
 require 'spec_helper_acceptance'
 
-describe 'cassandra class' do
-  cassandra_version = ['2.2.7', '3.0.3']
+describe 'cassandra::java' do
+  install_java_pp = <<-EOS
+    if $::osfamily == 'RedHat' {
+      include 'cassandra::java'
+    } else {
+      if $::lsbdistid == 'Ubuntu' {
+        class { 'cassandra::java':
+          aptkey       => {
+            'openjdk-r' => {
+              id     => 'DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
+              server => 'keyserver.ubuntu.com',
+            },
+          },
+          aptsource    => {
+            'openjdk-r' => {
+              location => 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu',
+              comment  => 'OpenJDK builds (all archs)',
+              release  => $::lsbdistcodename,
+              repos    => 'main',
+            },
+          },
+          package_name => 'openjdk-8-jdk',
+        }
+      } else {
+        class { 'cassandra::java':
+          aptkey       => {
+            'ZuluJDK' => {
+              id     => '27BC0C8CB3D81623F59BDADCB1998361219BD9C9',
+              server => 'keyserver.ubuntu.com',
+            },
+          },
+          aptsource    => {
+            'ZuluJDK' => {
+              location => 'http://repos.azulsystems.com/debian',
+              comment  => 'Zulu OpenJDK 8 for Debian',
+              release  => 'stable',
+              repos    => 'main',
+            },
+          },
+          package_name => 'zulu-8',
+        }
+      }
+    }
+  EOS
+
+  describe "########### Java installation." do
+    it 'should work with no errors' do
+      apply_manifest(install_java_pp, catch_failures: true)
+    end
+    it 'check code is idempotent' do
+      expect(apply_manifest(install_java_pp,
+                            catch_failures: true).exit_code).to be_zero
+    end
+  end
+end
+
+describe 'cassandra::datastax_repo' do
+  install_datastax_repo_pp = <<-EOS
+    class { 'cassandra::datastax_repo': }
+  EOS
+
+  describe "########### DataStax Repository installation." do
+    it 'should work with no errors' do
+      apply_manifest(install_datastax_repo_pp, catch_failures: true)
+    end
+    it 'check code is idempotent' do
+      expect(apply_manifest(install_datastax_repo_pp,
+                            catch_failures: true).exit_code).to be_zero
+    end
+  end
+end
+
+describe 'cassandra' do
+  nodeset = ENV['BEAKER_set']
+
+  # Ubuntu 16 only works with Cassandra 3.X
+  if nodeset == 'aws_ubuntu16'
+    cassandra_version = ['3.0.3']
+  else
+    cassandra_version = ['2.2.7', '3.0.3']
+  end
 
   cassandra_version.each do |version|
     cassandra_install_pp = <<-EOS
       if $::osfamily == 'RedHat' {
-        $skip = false
-
-        if $::operatingsystemmajrelease >= 7 {
-          $service_systemd = true
-        } else {
-          $service_systemd = false
-        }
-
         $version = '#{version}-1'
 
         if $version == '2.2.7-1' {
@@ -23,68 +94,37 @@ describe 'cassandra class' do
           $cassandra_optutils_package = 'cassandra30-tools'
           $cassandra_package = 'cassandra30'
         }
-
-        class { 'cassandra::java':
-          before => Class['cassandra']
-        }
       } else {
-        $service_systemd = false
         $cassandra_optutils_package = 'cassandra-tools'
         $cassandra_package = 'cassandra'
         $version = '#{version}'
 
         if $::lsbdistid == 'Ubuntu' {
+          # Workarounds for amonst other things CASSANDRA-11850
+          Exec {
+            environment => [ 'CQLSH_NO_BUNDLED=TRUE' ]
+          }
+
           if $::operatingsystemmajrelease >= 16 {
-            $skip = true
-          } else {
-            $skip = false
-          }
-
-          class { 'cassandra::java':
-            aptkey       => {
-              'openjdk-r' => {
-                id     => 'DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
-                server => 'keyserver.ubuntu.com',
-              },
-            },
-            aptsource    => {
-              'openjdk-r' => {
-                location => 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu',
-                comment  => 'OpenJDK builds (all archs)',
-                release  => $::lsbdistcodename,
-                repos    => 'main',
-              },
-            },
-            package_name => 'openjdk-8-jdk',
-          }
-        } else {
-          $skip = false
-
-          class { 'cassandra::java':
-            aptkey       => {
-              'ZuluJDK' => {
-                id     => '27BC0C8CB3D81623F59BDADCB1998361219BD9C9',
-                server => 'keyserver.ubuntu.com',
-              },
-            },
-            aptsource    => {
-              'ZuluJDK' => {
-                location => 'http://repos.azulsystems.com/debian',
-                comment  => 'Zulu OpenJDK 8 for Debian',
-                release  => 'stable',
-                repos    => 'main',
-              },
-            },
-            package_name => 'zulu-8',
+            exec { '/usr/bin/wget http://launchpadlibrarian.net/109052632/python-support_1.0.15_all.deb':
+              cwd     => '/var/tmp',
+              creates => '/var/tmp/python-support_1.0.15_all.deb',
+            } ~>
+            exec { '/usr/bin/dpkg -i /var/tmp/python-support_1.0.15_all.deb':
+              refreshonly => true,
+            } ->
+            package { 'cassandra-driver':
+              provider => 'pip',
+              before   => Class['cassandra']
+            }
           }
         }
+
         exec { '/bin/chown root:root /etc/apt/sources.list.d/datastax.list':
           unless  => '/usr/bin/test -O /etc/apt/sources.list.d/datastax.list',
           require => Class['cassandra::datastax_agent']
         }
       }
-
-      class { 'cassandra::datastax_repo': }
 
       $initial_settings = {
         'authenticator'               => 'PasswordAuthenticator',
@@ -116,27 +156,24 @@ describe 'cassandra class' do
         $settings = merge($initial_settings, { 'hints_directory' => '/var/lib/cassandra/hints' })
       }
 
-      if $skip == false {
-        class { 'cassandra':
-          cassandra_9822              => true,
-          dc                          => 'LON',
-          package_ensure              => $version,
-          package_name                => $cassandra_package,
-          rack                        => 'R101',
-          service_systemd             => $service_systemd,
-          settings                    => $settings,
-          require                     => Class['cassandra::datastax_repo'],
-        }
 
-        class { 'cassandra::optutils':
-          package_ensure => $version,
-          package_name   => $cassandra_optutils_package,
-          require        => Class['cassandra']
-        }
+      class { 'cassandra':
+        cassandra_9822 => true,
+        dc             => 'LON',
+        package_ensure => $version,
+        package_name   => $cassandra_package,
+        rack           => 'R101',
+        settings       => $settings,
+      }
 
-        class { 'cassandra::datastax_agent':
-          require => Class['cassandra'],
-        }
+      class { 'cassandra::optutils':
+        package_ensure => $version,
+        package_name   => $cassandra_optutils_package,
+        require        => Class['cassandra']
+      }
+
+      class { 'cassandra::datastax_agent':
+        require => Class['cassandra']
       }
 
       # This really sucks but Docker, CentOS 6 and iptables don't play nicely
@@ -146,7 +183,7 @@ describe 'cassandra class' do
       }
     EOS
 
-    describe "########### Cassandra #{version} installation." do
+    describe "########### Cassandra #{version} installation (#{nodeset})." do
       it 'should work with no errors' do
         apply_manifest(cassandra_install_pp, catch_failures: true)
       end
@@ -157,11 +194,6 @@ describe 'cassandra class' do
     end
 
     describe service('cassandra') do
-      it { is_expected.to be_running }
-      it { is_expected.to be_enabled }
-    end
-
-    describe service('datastax-agent') do
       it { is_expected.to be_running }
       it { is_expected.to be_enabled }
     end
@@ -206,18 +238,18 @@ describe 'cassandra class' do
           cqlsh_host     => $::ipaddress,
           cqlsh_password => 'cassandra',
           cqlsh_user     => 'cassandra',
-          indexes   => {
+          indexes        => {
             'users_lname_idx' => {
-               keyspace => 'mykeyspace',
-               table    => 'users',
-               keys     => 'lname',
+              keyspace => 'mykeyspace',
+              table    => 'users',
+              keys     => 'lname',
             },
           },
-          keyspaces => $keyspaces,
-          tables    => {
+          keyspaces      => $keyspaces,
+          tables         => {
             'users' => {
               'keyspace' => 'mykeyspace',
-              'columns'       => {
+              'columns'  => {
                 'userid'      => 'int',
                 'fname'       => 'text',
                 'lname'       => 'text',
@@ -225,7 +257,7 @@ describe 'cassandra class' do
               },
             },
           },
-          users     => {
+          users          => {
             'spillman' => {
               password => 'Niner27',
             },
