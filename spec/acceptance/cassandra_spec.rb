@@ -513,7 +513,7 @@ describe 'cassandra' do
       package { $cassandra_package:
         ensure => absent
       } ->
-      exec { 'rm -rf /var/lib/cassandra/*/* /var/log/cassandra': }
+      exec { 'rm -rf /var/lib/cassandra/*/* /var/log/cassandra/*': }
     EOS
 
     describe '########### Uninstall Cassandra 2.2.' do
