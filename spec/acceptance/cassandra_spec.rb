@@ -45,7 +45,7 @@ describe 'cassandra::java' do
     }
   EOS
 
-  describe "########### Java installation." do
+  describe '########### Java installation.' do
     it 'should work with no errors' do
       apply_manifest(install_java_pp, catch_failures: true)
     end
@@ -61,7 +61,7 @@ describe 'cassandra::datastax_repo' do
     class { 'cassandra::datastax_repo': }
   EOS
 
-  describe "########### DataStax Repository installation." do
+  describe '########### DataStax Repository installation.' do
     it 'should work with no errors' do
       apply_manifest(install_datastax_repo_pp, catch_failures: true)
     end
