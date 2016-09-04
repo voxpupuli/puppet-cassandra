@@ -35,7 +35,7 @@ file { [$commitlog_directory, $data_file_directory, $saved_caches_directory]:
 # the node itself becomes a seed for the cluster.
 
 class { 'cassandra':
-  settings        => {
+  settings => {
     'authenticator'               => 'PasswordAuthenticator',
     'cluster_name'                => 'MyCassandraCluster',
     'commitlog_directory'         => $commitlog_directory,
@@ -58,7 +58,7 @@ class { 'cassandra':
     ],
     'start_native_transport'      => true,
   },
-  require         => Class['cassandra::datastax_repo', 'cassandra::java'],
+  require  => Class['cassandra::datastax_repo', 'cassandra::java'],
 }
 
 class { 'cassandra::datastax_agent':

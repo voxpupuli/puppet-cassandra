@@ -65,7 +65,7 @@ describe 'cassandra' do
         package_ensure: '4.7.0-1',
         package_name: 'dse-full',
         config_path: '/etc/dse/cassandra',
-        service_name: 'dse',
+        service_name: 'dse'
       }
     end
 

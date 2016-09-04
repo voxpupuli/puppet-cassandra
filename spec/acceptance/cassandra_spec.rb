@@ -80,7 +80,7 @@ describe 'cassandra' do
                         ['3.0.3']
                       else
                         ['2.2.7', '3.0.3']
-  end
+                      end
 
   cassandra_version.each do |version|
     cassandra_install_pp = <<-EOS
