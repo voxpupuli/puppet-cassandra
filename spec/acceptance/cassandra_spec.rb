@@ -187,6 +187,23 @@ describe 'cassandra' do
       it 'should work with no errors' do
         apply_manifest(cassandra_install_pp, catch_failures: true)
       end
+
+      it 'Give Cassandra a minute to fully come alive.' do
+        sleep 60
+      end
+
+      datastax_agent_cludge_pp = <<-EOS
+        Exec {
+          path => [ '/usr/bin', '/bin'],
+        }
+
+        exec { 'chmod 0640 /var/lib/datastax-agent/conf/address.yaml': }
+      EOS
+
+      it '/var/lib/datastax-agent/conf/address.yaml changes mode' do
+        apply_manifest(datastax_agent_cludge_pp, catch_failures: true)
+      end
+
       it 'check code is idempotent' do
         expect(apply_manifest(cassandra_install_pp,
                               catch_failures: true).exit_code).to be_zero
@@ -194,6 +211,11 @@ describe 'cassandra' do
     end
 
     describe service('cassandra') do
+      it { is_expected.to be_running }
+      it { is_expected.to be_enabled }
+    end
+
+    describe service('datastax-agent') do
       it { is_expected.to be_running }
       it { is_expected.to be_enabled }
     end
@@ -507,6 +529,9 @@ describe 'cassandra' do
         $cassandra_package = 'cassandra'
       }
 
+      service { 'cassandra':
+        ensure => stopped,
+      } ->
       package { $cassandra_optutils_package:
         ensure => absent
       } ->
