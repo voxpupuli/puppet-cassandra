@@ -12,7 +12,6 @@ class cassandra::params {
       $jna_package_name = 'libjna-java'
       $optutils_package_name = 'cassandra-tools'
       $systemctl = '/bin/systemctl'
-      $systemd_path = '/lib/systemd/system'
     }
     'RedHat': {
       $cassandra_pkg = 'cassandra22'
@@ -21,11 +20,9 @@ class cassandra::params {
       $jna_package_name = 'jna'
       $optutils_package_name = 'cassandra22-tools'
       $systemctl = '/usr/bin/systemctl'
-      $systemd_path = '/usr/lib/systemd/system'
     }
     default: {
       $config_path_parents = []
-      $service_systemd = false
     }
   }
 }

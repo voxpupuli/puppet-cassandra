@@ -22,8 +22,6 @@ class cassandra (
   $service_name                                         = 'cassandra',
   $service_provider                                     = undef,
   $service_refresh                                      = true,
-  $service_systemd                                      = false,
-  $service_systemd_tmpl                                 = 'cassandra/cassandra.service.erb',
   $settings                                             = {},
   $snitch_properties_file                               = 'cassandra-rackdc.properties',
   ) inherits cassandra::params {
@@ -115,12 +113,6 @@ class cassandra (
     onlyif      => "test -x ${::cassandra::params::systemctl}",
     path        => ['/usr/bin', '/bin'],
     refreshonly => true,
-  }
-
-  if $service_systemd {
-    cassandra::private::deprecation_warning { 'cassandra::service_systemd':
-      item_number => 20,
-    }
   }
 
   file { $config_path:
