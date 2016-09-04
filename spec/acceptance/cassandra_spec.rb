@@ -76,10 +76,10 @@ describe 'cassandra' do
   nodeset = ENV['BEAKER_set']
 
   # Ubuntu 16 only works with Cassandra 3.X
-  if nodeset == 'aws_ubuntu16'
-    cassandra_version = ['3.0.3']
-  else
-    cassandra_version = ['2.2.7', '3.0.3']
+  cassandra_version = if nodeset == 'aws_ubuntu16'
+                        ['3.0.3']
+                      else
+                        ['2.2.7', '3.0.3']
   end
 
   cassandra_version.each do |version|
