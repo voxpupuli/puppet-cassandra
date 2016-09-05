@@ -52,16 +52,14 @@ describe 'cassandra' do
     it do
       should contain_package('cassandra').with(
         ensure: 'present',
-        name: 'cassandra22',
+        name: 'cassandra22'
       ).that_notifies('Exec[cassandra_reload_systemctl]')
 
       should contain_file('/etc/cassandra/default.conf')
-        .with(
-        )
+        .with
 
       should contain_file('/etc/cassandra/default.conf/cassandra.yaml')
-        .with(
-        )
+        .with
 
       should contain_exec('cassandra_reload_systemctl').only_with(
         command: '/usr/bin/systemctl daemon-reload',
@@ -110,7 +108,8 @@ describe 'cassandra' do
     it do
       should have_resource_count(7)
       should contain_exec('/sbin/chkconfig --add cassandra').with(
-        unless: '/sbin/chkconfig --list cassandra')
+        unless: '/sbin/chkconfig --list cassandra'
+      )
         .that_requires('Package[cassandra]')
         .that_comes_before('Service[cassandra]')
     end
@@ -128,7 +127,7 @@ describe 'cassandra' do
 
       should contain_package('cassandra').with(
         ensure: 'present',
-        name: 'cassandra',
+        name: 'cassandra'
       ).that_notifies('Exec[cassandra_reload_systemctl]')
 
       should contain_exec('cassandra_reload_systemctl').only_with(
@@ -278,7 +277,8 @@ describe 'cassandra' do
       should contain_service('cassandra').with(
         ensure: 'stopped',
         name: 'cassandra',
-        enable: 'false')
+        enable: 'false'
+      )
     end
   end
 end

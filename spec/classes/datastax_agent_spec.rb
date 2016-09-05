@@ -110,7 +110,7 @@ describe 'cassandra::datastax_agent' do
     let :params do
       {
         settings: {
-          'agent_alias'     => {
+          'agent_alias' => {
             'setting' => 'agent_alias',
             'value'   => 'foobar'
           },
