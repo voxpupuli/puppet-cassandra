@@ -30,25 +30,6 @@ describe 'cassandra::datastax_agent' do
     it do
       should have_resource_count(4)
 
-      should contain_package('datastax-agent').with(
-        ensure: 'present'
-      )
-
-      should contain_exec('datastax_agent_reload_systemctl').with(
-        command: '/usr/bin/systemctl daemon-reload',
-        onlyif: 'test -x /usr/bin/systemctl',
-        path: ['/usr/bin', '/bin'],
-        refreshonly: true
-      ).that_notifies('Service[datastax-agent]')
-
-      should contain_service('datastax-agent')
-
-      should contain_file('/var/lib/datastax-agent/conf/address.yaml')
-        .with(
-          owner: 'cassandra',
-          group: 'cassandra'
-        ).that_requires('Package[datastax-agent]')
-
       should contain_class('cassandra::datastax_agent').only_with(
         'defaults_file'        => '/etc/default/datastax-agent',
         'java_home'            => nil,
@@ -57,9 +38,34 @@ describe 'cassandra::datastax_agent' do
         'service_ensure'       => 'running',
         'service_enable'       => true,
         'service_name'         => 'datastax-agent',
-        # 'service_provider'     => nil,
         'stomp_interface'      => nil,
         'local_interface'      => nil
+      )
+
+      should contain_package('datastax-agent').with(
+        ensure: 'present',
+        notify: 'Exec[datastax_agent_reload_systemctl]'
+      ).that_notifies('Exec[datastax_agent_reload_systemctl]')
+
+      should contain_exec('datastax_agent_reload_systemctl').only_with(
+        command: '/usr/bin/systemctl daemon-reload',
+        onlyif: 'test -x /usr/bin/systemctl',
+        path: ['/usr/bin', '/bin'],
+        refreshonly: true,
+        notify: 'Service[datastax-agent]'
+      ).that_notifies('Service[datastax-agent]')
+
+      should contain_file('/var/lib/datastax-agent/conf/address.yaml')
+        .with(
+          owner: 'cassandra',
+          group: 'cassandra',
+          mode: '0640'
+        ).that_requires('Package[datastax-agent]')
+
+      should contain_service('datastax-agent').only_with(
+        ensure: 'running',
+        enable: true,
+        name: 'datastax-agent'
       )
     end
   end
@@ -90,10 +96,37 @@ describe 'cassandra::datastax_agent' do
 
     it do
       should contain_ini_setting('java_home').with(
-        'ensure' => 'present',
-        'path'   => '/etc/default/datastax-agent',
-        'value'  => '/usr/lib/jvm/java-8-oracle'
-      )
+        ensure: 'present',
+        path: '/etc/default/datastax-agent',
+        section: '',
+        key_val_separator: '=',
+        setting: 'JAVA_HOME',
+        value: '/usr/lib/jvm/java-8-oracle'
+      ).that_notifies('Service[datastax-agent]')
+    end
+  end
+
+  context 'Test settings.' do
+    let :params do
+      {
+        settings: {
+          'agent_alias'     => {
+            'setting' => 'agent_alias',
+            'value'   => 'foobar'
+          },
+          'stomp_interface' => {
+            'setting' => 'stomp_interface',
+            'value'   => 'localhost'
+          },
+          'async_pool_size' => {
+            'ensure' => 'absent'
+          }
+        }
+      }
+    end
+
+    it do
+      should have_resource_count(4)
     end
   end
 end

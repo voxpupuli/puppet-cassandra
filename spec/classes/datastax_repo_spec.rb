@@ -10,8 +10,10 @@ describe 'cassandra::datastax_repo' do
   end
 
   context 'Regardless of which OS' do
-    it { should compile }
     it do
+      should compile
+      should have_resource_count(0)
+
       should contain_class('cassandra::datastax_repo').only_with(
         'descr'   => 'DataStax Repo for Apache Cassandra',
         'key_id'  => '7E41C00F85BFC1706C4FFFB3350200F2B999A372',
@@ -30,15 +32,16 @@ describe 'cassandra::datastax_repo' do
     end
 
     it do
+      should have_resource_count(1)
+
       should contain_yumrepo('datastax').with(
-        'ensure'   => 'present',
-        'descr'    => 'DataStax Repo for Apache Cassandra',
-        'baseurl'  => 'http://rpm.datastax.com/community',
-        'enabled'  => 1,
-        'gpgcheck' => 0
+        ensure: 'present',
+        descr: 'DataStax Repo for Apache Cassandra',
+        baseurl: 'http://rpm.datastax.com/community',
+        enabled: 1,
+        gpgcheck: 0
       )
     end
-    it { should have_resource_count(1) }
   end
 
   context 'On a Debian OS with defaults for all parameters' do
@@ -50,25 +53,27 @@ describe 'cassandra::datastax_repo' do
       }
     end
 
-    it { should contain_class('apt') }
-    it { should contain_class('apt::update') }
-
     it do
+      should have_resource_count(3)
+      should contain_class('apt')
+      should contain_class('apt::update')
+
       should contain_apt__key('datastaxkey').with(
-        'id'     => '7E41C00F85BFC1706C4FFFB3350200F2B999A372',
-        'source' => 'http://debian.datastax.com/debian/repo_key'
+        id: '7E41C00F85BFC1706C4FFFB3350200F2B999A372',
+        source: 'http://debian.datastax.com/debian/repo_key'
       )
-    end
 
-    it do
       should contain_apt__source('datastax').with(
-        'location' => 'http://debian.datastax.com/community',
-        'comment'  => 'DataStax Repo for Apache Cassandra',
-        'release'  => 'stable'
+        location: 'http://debian.datastax.com/community',
+        comment: 'DataStax Repo for Apache Cassandra',
+        release: 'stable',
+        include: { 'src' => false }
+      ).that_notifies('Exec[update-cassandra-repos]')
+
+      should contain_exec('update-cassandra-repos').with(
+        refreshonly: true,
+        command: '/bin/true'
       )
     end
-
-    it { should contain_exec('update-cassandra-repos') }
-    it { should have_resource_count(3) }
   end
 end
