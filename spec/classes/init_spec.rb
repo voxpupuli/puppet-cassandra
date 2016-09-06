@@ -55,11 +55,21 @@ describe 'cassandra' do
         name: 'cassandra22'
       ).that_notifies('Exec[cassandra_reload_systemctl]')
 
-      should contain_file('/etc/cassandra/default.conf')
-        .with
+      should contain_file('/etc/cassandra/default.conf').with(
+        ensure: 'directory',
+        group: 'cassandra',
+        owner: 'cassandra',
+        mode: '0755'
+      ).that_requires('Package[cassandra]')
 
       should contain_file('/etc/cassandra/default.conf/cassandra.yaml')
-        .with
+        .with(
+          ensure: 'present',
+          owner: 'cassandra',
+          group: 'cassandra',
+          mode: '0644'
+        )
+        .that_requires('Package[cassandra]')
 
       should contain_exec('cassandra_reload_systemctl').only_with(
         command: '/usr/bin/systemctl daemon-reload',
@@ -141,6 +151,7 @@ describe 'cassandra' do
 
       should contain_service('cassandra').with(
         ensure: 'running',
+        name: 'cassandra',
         enable: 'true'
       )
 
@@ -164,13 +175,30 @@ describe 'cassandra' do
         )
         .that_requires('Group[cassandra]')
 
-      should contain_file('/etc/cassandra').with_ensure('directory')
+      should contain_file('/etc/cassandra').with(
+        ensure: 'directory',
+        group: 'cassandra',
+        owner: 'cassandra',
+        mode: '0755'
+      )
 
       should contain_file('/etc/cassandra/cassandra.yaml')
+        .with(
+          ensure: 'present',
+          owner: 'cassandra',
+          group: 'cassandra',
+          mode: '0644'
+        )
         .that_comes_before('Package[cassandra]')
         .that_requires(['User[cassandra]', 'File[/etc/cassandra]'])
 
       should contain_file('/etc/cassandra/cassandra-rackdc.properties')
+        .with(
+          ensure: 'file',
+          owner: 'cassandra',
+          group: 'cassandra',
+          mode: '0644'
+        )
         .that_requires(['File[/etc/cassandra]', 'User[cassandra]'])
         .that_comes_before('Package[cassandra]')
 
@@ -228,6 +256,12 @@ describe 'cassandra' do
       should contain_file('/etc/dse/cassandra/cassandra.yaml')
       should contain_file('/etc/dse/cassandra')
       should contain_file('/etc/dse/cassandra/cassandra-rackdc.properties')
+        .with(
+          ensure: 'file',
+          owner: 'cassandra',
+          group: 'cassandra',
+          mode: '0644'
+        )
       should contain_package('cassandra').with(
         ensure: '4.7.0-1',
         name: 'dse-full'
