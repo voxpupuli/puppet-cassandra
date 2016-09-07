@@ -79,9 +79,9 @@ describe 'cassandra::schema::keyspace' do
       }
     end
 
-    it { should compile }
-    it { should contain_class('cassandra::schema') }
     it do
+      should compile
+      should contain_class('cassandra::schema')
       should contain_exec('/usr/bin/cqlsh   -e "CREATE KEYSPACE IF NOT EXISTS foobar WITH REPLICATION = { \'class\' : \'SimpleStrategy\', \'replication_factor\' : 3 } AND DURABLE_WRITES = true" localhost 9042')
     end
   end
@@ -107,9 +107,8 @@ describe 'cassandra::schema::keyspace' do
       }
     end
 
-    it { should contain_cassandra__schema__keyspace('foobar') }
-
     it do
+      should contain_cassandra__schema__keyspace('foobar')
       should contain_exec('/usr/bin/cqlsh   -e "CREATE KEYSPACE IF NOT EXISTS foobar WITH REPLICATION = { \'class\' : \'NetworkTopologyStrategy\', \'dc1\': 3, \'dc2\': 2 } AND DURABLE_WRITES = true" localhost 9042')
     end
   end
@@ -142,6 +141,7 @@ describe 'cassandra::schema::keyspace' do
     end
 
     let(:title) { 'foobar' }
+
     let(:params) do
       {
         ensure: 'latest'
