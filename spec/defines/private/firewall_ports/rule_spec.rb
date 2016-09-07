@@ -25,7 +25,14 @@ describe 'cassandra::private::firewall_ports::rule' do
       }
     end
 
-    it { should contain_firewall('200 - Cassandra (Public) - 0.0.0.0/0') }
-    it { should have_resource_count(2) }
+    it do
+      should contain_firewall('200 - Cassandra (Public) - 0.0.0.0/0').with(
+        action: 'accept',
+        dport: [8888, 22],
+        proto: 'tcp',
+        source: '0.0.0.0/0'
+      )
+      should have_resource_count(2)
+    end
   end
 end

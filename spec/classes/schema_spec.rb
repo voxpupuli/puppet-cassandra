@@ -44,9 +44,7 @@ describe 'cassandra::schema' do
               cqlsh_port: 9042,
               cqlsh_user: 'cassandra',
               keyspaces: [])
-    end
 
-    it do
       read_command = '/usr/bin/cqlsh   -e \'DESC KEYSPACES\' localhost 9042'
 
       should contain_exec('::cassandra::schema connection test')
@@ -80,7 +78,7 @@ describe 'cassandra::schema' do
         mode: '0600',
         owner: 'root',
         content: /username = cassandra/
-      )
+      ).that_comes_before('Exec[::cassandra::schema connection test]')
 
       read_command = "/usr/bin/cqlsh --cqlshrc=/root/.puppetcqlshrc  -e 'DESC KEYSPACES' localhost 9042"
 
