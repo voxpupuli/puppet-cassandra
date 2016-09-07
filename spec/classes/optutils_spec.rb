@@ -7,13 +7,15 @@ describe 'cassandra::optutils' do
       }
     end
 
-    it { should have_resource_count(1) }
     it do
+      should have_resource_count(1)
+      should contain_package('cassandra22-tools').with(ensure: 'present')
+
       should contain_class('cassandra::optutils').with(
-        package_ensure: 'present'
+        package_ensure: 'present',
+        package_name: 'cassandra22-tools'
       )
     end
-    it { should contain_package('cassandra22-tools') }
   end
 
   context 'On a Debian OS with defaults for all parameters' do
@@ -23,8 +25,14 @@ describe 'cassandra::optutils' do
       }
     end
 
-    it { should contain_class('cassandra::optutils') }
-    it { should contain_package('cassandra-tools') }
+    it do
+      should contain_package('cassandra-tools').with(ensure: 'present')
+
+      should contain_class('cassandra::optutils').with(
+        package_ensure: 'present',
+        package_name: 'cassandra-tools'
+      )
+    end
   end
 
   context 'With package_name set to foobar' do
@@ -36,9 +44,7 @@ describe 'cassandra::optutils' do
     end
 
     it do
-      should contain_package('foobar-java').with(
-        ensure: 42
-      )
+      should contain_package('foobar-java').with(ensure: 42)
     end
   end
 
