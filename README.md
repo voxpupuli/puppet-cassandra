@@ -8,20 +8,20 @@
 #### Table of Contents
 
 1. [Overview](#overview)
-2. [Setup - The basics of getting started with Cassandra](#setup)
+1. [Setup - The basics of getting started with Cassandra](#setup)
     * [What Cassandra affects](#what-cassandra-affects)
     * [Beginning with Cassandra](#beginning-with-cassandra)
     * [Upgrading](#upgrading)
-3. [Usage - Configuration options and additional functionality](#usage)
+1. [Usage - Configuration options and additional functionality](#usage)
     * [Setup a keyspace and users](#setup-a-keyspace-and-users)
     * [Create a Cluster in a Single Data Center](#create-a-cluster-in-a-single-data-center)
     * [Create a Cluster in Multiple Data Centers](#create-a-cluster-in-multiple-data-centers)
     * [DataStax Enterprise](#datastax-enterprise)
-4. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
+1. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
     * [cassandra](#class-cassandra)
     * [cassandra::datastax_agent](#class-cassandradatastax_agent)
     * [cassandra::datastax_repo](#class-cassandradatastax_repo)
-    * [cassandra::file](#class-cassandrafile)
+    * [cassandra::file](#defined-type-cassandrafile)
     * [cassandra::firewall_ports](#class-cassandrafirewall_ports)
     * [cassandra::java](#class-cassandrajava)
     * [cassandra::optutils](#class-cassandraoptutils)
@@ -31,8 +31,8 @@
     * [cassandra::schema::keyspace](#defined-type-cassandraschemakeyspace)
     * [cassandra::schema::table](#defined-type-cassandraschematable)
     * [cassandra::schema::user](#defined-type-cassandraschemauser)
-5. [Limitations - OS compatibility, etc.](#limitations)
-6. [Contributers](#contributers)
+1. [Limitations - OS compatibility, etc.](#limitations)
+1. [Contributers](#contributers)
 
 ## Overview
 
@@ -400,11 +400,14 @@ true or not set the attribute at all after initializing the cluster.
 * [cassandra](#class-cassandra)
 * [cassandra::datastax_agent](#class-cassandradatastax_agent)
 * [cassandra::datastax_repo](#class-cassandradatastax_repo)
-* [cassandra::file](#class-cassandrafile)
 * [cassandra::firewall_ports](#class-cassandrafirewall_ports)
 * [cassandra::java](#class-cassandrajava)
 * [cassandra::optutils](#class-cassandraoptutils)
 * [cassandra::schema](#class-cassandraschema)
+
+### Public Defined Types
+
+* [cassandra::file](#defined-type-cassandrafile)
 
 ### Private Defined Types
 
@@ -646,14 +649,15 @@ On the Debian family, this is passed as the `release` attribute to an
 `apt::source` resource.  On the Red Hat family, it is ignored.
 Default value 'stable'
 
-### Class: cassandra::file
+### Defined Type: cassandra::file
 
-A class for altering files relative to the configuration directory.
+A definition for altering files relative to the configuration directory.
 
 #### Attributes
 
 ##### `file`
-The name of the file relative to the `config_path`.
+The name of the file relative to the `config_path`.  This defaults to the
+title of the definition.
 
 ##### `config_path`
 The path to the configuration directory.  On the RedHat family this will
