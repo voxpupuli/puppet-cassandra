@@ -9,4 +9,4 @@ Blacksmith::RakeTask.new do |t|
   t.tag_pattern = '%s'
 end
 
-RuboCop::RakeTask.new
+# RuboCop::RakeTask.new
