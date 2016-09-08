@@ -401,8 +401,8 @@ true or not set the attribute at all after initializing the cluster.
 
 ### Private Defined Types
 
-* cassandra::private::deprecation_warning
-* cassandra::private::firewall_ports::rule
+* cassandra::private::deprecation_warning(#defined-type-cassandraprivatedeprecation_warning)
+* cassandra::private::firewall_ports::rule(#defined-type-cassandraprivatefirewall_portsrule)
 
 ### Attributes
 
@@ -993,14 +993,17 @@ If the user is to be a super-user on the system.  Default value false.
 ##### `user_name`
 The name of the user.  Defaults to the name of the resource.
 
-#### Defined Type cassandra::private::data_directory
+#### Defined Type cassandra::private::deprecation_warning
 
-A defined type to handle the `::cassandra::data_file_directoryies` array.
+A defined type to handle deprecation messages to the user.
 This is not intended to be used by a user but is documented here for
 completeness.
 
 ##### `title`
-The name of an individual directory.
+The text of the message for the user.
+
+##### `item_number`
+A unique reference number for the specific deprecation.
 
 #### Defined Type cassandra::private::firewall_ports::rule
 
