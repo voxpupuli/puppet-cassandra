@@ -401,8 +401,8 @@ true or not set the attribute at all after initializing the cluster.
 
 ### Private Defined Types
 
-* cassandra::private::deprecation_warning(#defined-type-cassandraprivatedeprecation_warning)
-* cassandra::private::firewall_ports::rule(#defined-type-cassandraprivatefirewall_portsrule)
+* [cassandra::private::deprecation_warning](#defined-type-cassandraprivatedeprecation_warning)
+* [cassandra::private::firewall_ports::rule](#defined-type-cassandraprivatefirewall_portsrule)
 
 ### Attributes
 
