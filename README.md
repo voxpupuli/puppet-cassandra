@@ -1020,9 +1020,6 @@ The number(s) of the port(s) to be opened.
 
 ## Limitations
 
-Tested on the Red Hat family versions 6 and 7, Ubuntu 12.04 and 14.04,
-Debian 7 Puppet (CE) 3.7.5 and DSC 2.1, 2.2, 2.3 and 3.0.
-
 When creating key spaces, indexes, cql_types and users the settings will only
 be used to create a new resource if it does not currently exist.  If a change
 is made to the Puppet manifest but the resource already exits, this change
