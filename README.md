@@ -10,27 +10,14 @@
 1. [Overview](#overview)
 1. [Setup - The basics of getting started with Cassandra](#setup)
     * [What Cassandra affects](#what-cassandra-affects)
-    * [Beginning with Cassandra](#beginning-with-cassandra)
     * [Upgrading](#upgrading)
+    * [Beginning with Cassandra](#beginning-with-cassandra)
 1. [Usage - Configuration options and additional functionality](#usage)
     * [Setup a keyspace and users](#setup-a-keyspace-and-users)
     * [Create a Cluster in a Single Data Center](#create-a-cluster-in-a-single-data-center)
     * [Create a Cluster in Multiple Data Centers](#create-a-cluster-in-multiple-data-centers)
     * [DataStax Enterprise](#datastax-enterprise)
 1. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
-    * [cassandra](#class-cassandra)
-    * [cassandra::datastax_agent](#class-cassandradatastax_agent)
-    * [cassandra::datastax_repo](#class-cassandradatastax_repo)
-    * [cassandra::file](#defined-type-cassandrafile)
-    * [cassandra::firewall_ports](#class-cassandrafirewall_ports)
-    * [cassandra::java](#class-cassandrajava)
-    * [cassandra::optutils](#class-cassandraoptutils)
-    * [cassandra::schema](#class-cassandraschema)
-    * [cassandra::schema::cql_type](#defined-type-cassandraschemacql_type)
-    * [cassandra::schema::index](#defined-type-cassandraschemaindex)
-    * [cassandra::schema::keyspace](#defined-type-cassandraschemakeyspace)
-    * [cassandra::schema::table](#defined-type-cassandraschematable)
-    * [cassandra::schema::user](#defined-type-cassandraschemauser)
 1. [Limitations - OS compatibility, etc.](#limitations)
 1. [Contributers](#contributers)
 
@@ -53,7 +40,6 @@ A Puppet module to install and manage Cassandra, DataStax Agent & OpsCenter
 * On Debian systems:
   * Optionally replace ```/etc/init.d/cassandra``` with a workaround for
   [CASSANDRA-9822](https://issues.apache.org/jira/browse/CASSANDRA-9822).
-
 
 #### What the cassandra::datastax_agent class affects
 
@@ -81,57 +67,11 @@ A Puppet module to install and manage Cassandra, DataStax Agent & OpsCenter
 
 * Optionally installs the Cassandra support tools (e.g. cassandra22-tools).
 
-### Beginning with Cassandra
-
-This code will install Cassandra onto a system and create a basic
-keyspace, table and index.
-
-```puppet
-# Cassandra pre-requisites
-include cassandra::datastax_repo
-include cassandra::java
-
-# Create a cluster called MyCassandraCluster which uses the
-# GossipingPropertyFileSnitch.  In this very basic example
-# the node itself becomes a seed for the cluster.
-class { 'cassandra':
-  authenticator   => 'PasswordAuthenticator',
-  cluster_name    => 'MyCassandraCluster',
-  endpoint_snitch => 'GossipingPropertyFileSnitch',
-  listen_address  => $::ipaddress,
-  seeds           => $::ipaddress,
-  require         => Class['cassandra::datastax_repo', 'cassandra::java'],
-}
-
-class { 'cassandra':
-  settings => {
-    'authenticator'               => 'PasswordAuthenticator',
-    'cluster_name'                => 'MyCassandraCluster',
-    'commitlog_directory'         => '/var/lib/cassandra/commitlog',
-    'commitlog_sync'              => 'periodic',
-    'commitlog_sync_period_in_ms' => 10000,
-    'data_file_directories'       => ['/var/lib/cassandra/data'],
-    'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
-    'listen_address'              => $::ipaddress,
-    'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
-    'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
-    'seed_provider'               => [
-      {
-        'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
-        'parameters' => [
-          {
-            'seeds' => $::ipaddress,
-          },
-        ],
-      },
-    ],
-    'start_native_transport'      => true,
-  },
-  require  => Class['cassandra::datastax_repo', 'cassandra::java'],
-}
-```
-
 ### Upgrading
+
+We follow [SemVer Versioning](http://semver.org/) and an update of the major
+release (i.e. from 1.*Y*.*Z* to 2.*Y*.*Z*) will indicate a significant change
+to the API which will most probably require a change to your manifest.
 
 #### Changes in 1.19.0
 
@@ -219,6 +159,56 @@ Also there is now a class for installing the optional utilities:
 
 * The manage_service option has been replaced with service_enable and
   service_ensure.
+
+### Beginning with Cassandra
+
+This code will install Cassandra onto a system and create a basic
+keyspace, table and index.
+
+```puppet
+# Cassandra pre-requisites
+include cassandra::datastax_repo
+include cassandra::java
+
+# Create a cluster called MyCassandraCluster which uses the
+# GossipingPropertyFileSnitch.  In this very basic example
+# the node itself becomes a seed for the cluster.
+class { 'cassandra':
+  authenticator   => 'PasswordAuthenticator',
+  cluster_name    => 'MyCassandraCluster',
+  endpoint_snitch => 'GossipingPropertyFileSnitch',
+  listen_address  => $::ipaddress,
+  seeds           => $::ipaddress,
+  require         => Class['cassandra::datastax_repo', 'cassandra::java'],
+}
+
+class { 'cassandra':
+  settings => {
+    'authenticator'               => 'PasswordAuthenticator',
+    'cluster_name'                => 'MyCassandraCluster',
+    'commitlog_directory'         => '/var/lib/cassandra/commitlog',
+    'commitlog_sync'              => 'periodic',
+    'commitlog_sync_period_in_ms' => 10000,
+    'data_file_directories'       => ['/var/lib/cassandra/data'],
+    'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
+    'listen_address'              => $::ipaddress,
+    'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
+    'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
+    'seed_provider'               => [
+      {
+        'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
+        'parameters' => [
+          {
+            'seeds' => $::ipaddress,
+          },
+        ],
+      },
+    ],
+    'start_native_transport'      => true,
+  },
+  require  => Class['cassandra::datastax_repo', 'cassandra::java'],
+}
+```
 
 ## Usage
 
@@ -414,12 +404,12 @@ true or not set the attribute at all after initializing the cluster.
 * cassandra::private::deprecation_warning
 * cassandra::private::firewall_ports::rule
 
-### Class: cassandra
+### Attributes
 
 A class for installing the Cassandra package and manipulate settings in the
 configuration file.
 
-#### Attributes
+#### Class: cassandra
 
 ##### `cassandra_2356_sleep_seconds`
 This will provide a workaround for
@@ -533,7 +523,7 @@ The name of the snitch properties file.  The full path name would be
 *config_path*/*snitch_properties_file*.
 Default value 'cassandra-rackdc.properties'
 
-### Class: cassandra::datastax_agent
+#### Class: cassandra::datastax_agent
 
 A class for installing the DataStax Agent and to point it at an OpsCenter
 instance.
@@ -558,8 +548,6 @@ class { 'cassandra::datastax_agent':
   },
 }
 ```
-
-#### Attributes
 
 ##### `defaults_file`
 The full path name to the file where `java_home` is set.
@@ -612,14 +600,12 @@ with the following additional defaults:
 
 Default value {}
 
-### Class: cassandra::datastax_repo
+#### Class: cassandra::datastax_repo
 
 An optional class that will allow a suitable repository to be configured
 from which packages for DataStax Community can be downloaded.  Changing
 the defaults will allow any Debian Apt or Red Hat Yum repository to be
 configured.
-
-#### Attributes
 
 ##### `descr`
 On the Red Hat family, this is passed as the `descr` attribute to a
@@ -649,11 +635,9 @@ On the Debian family, this is passed as the `release` attribute to an
 `apt::source` resource.  On the Red Hat family, it is ignored.
 Default value 'stable'
 
-### Defined Type: cassandra::file
+#### Defined Type: cassandra::file
 
 A definition for altering files relative to the configuration directory.
-
-#### Attributes
 
 ##### `file`
 The name of the file relative to the `config_path`.  This defaults to the
@@ -676,7 +660,7 @@ If the Cassandra service is to be notified if the environment file is changed.
 Set to false if this is not wanted.
 Default value true.
 
-### Class: cassandra::firewall_ports
+#### Class: cassandra::firewall_ports
 
 An optional class to configure incoming network ports on the host that are
 relevant to the Cassandra installation.  If firewalls are being managed
@@ -685,8 +669,6 @@ already, simply do not include this module in your manifest.
 IMPORTANT: The full list of which ports should be configured is assessed at
 evaluation time of the configuration. Therefore if one is to use this class,
 it must be the final cassandra class included in the manifest.
-
-#### Attributes
 
 ##### `client_ports`
 Only has any effect if the `cassandra` class is defined on the node.
@@ -749,11 +731,9 @@ A list of subnets that are to be allowed connection to
 port 61621 for nodes built with cassandra::datastax_agent.
 Default value '['0.0.0.0/0']'
 
-### Class: cassandra::java
+#### Class: cassandra::java
 
 A class to install an appropriate Java package.
-
-#### Attributes
 
 ##### `aptkey`
 If supplied, this should be a hash of *apt::key* resources that will be passed
@@ -790,11 +770,9 @@ If supplied, this should be a hash of *yumrepo* resources that will be passed
 to the create_resources function.  This is ignored on non-Red Hat systems.
 Default value *undef*
 
-### Class: cassandra::optutils
+#### Class: cassandra::optutils
 
 A class to install the optional Cassandra tools package.
-
-#### Attributes
 
 ##### `package_ensure`
 The status of the package specified in **package_name**.  Can be
@@ -809,13 +787,11 @@ can specify a package that is available in a package repository to the
 node.
 Default value *undef*
 
-### Class: cassandra::schema
+#### Class: cassandra::schema
 
 A class to maintain the database schema.  Please note that cqlsh expects
 Python 2.7 to be installed.  This may be a problem of older distributions
 (CentOS 6 for example).
-
-#### Attributes
 
 ##### `connection_tries`
 How many times do try to connect to Cassandra.  See also `connection_try_sleep`.
@@ -891,12 +867,10 @@ be passed to the `create_resources` function. Default: {}.
 Creates new `cassandra::schema::table` resources. Valid options: a hash to
 be passed to the `create_resources` function. Default: {}.
 
-### Defined Type cassandra::schema::cql_type
+#### Defined Type cassandra::schema::cql_type
 
 Create or drop user defined data types within the schema.  Please see the
 [Begining with Cassandra](#beginning-with-cassandra) section of this document.
-
-#### Attributes
 
 ##### `keyspace`
 The name of the keyspace that the data type is to be associated with.
@@ -909,12 +883,10 @@ Valid values can be **present** to ensure a data type is created, or
 A hash of the fields that will be components for the data type.  See
 the example earlier in this document for the layout of the hash.
 
-### Defined Type cassandra::schema::index
+#### Defined Type cassandra::schema::index
 
 Create or drop indexes within the schema.  Please see the
 [Begining with Cassandra](#beginning-with-cassandra) section of this document.
-
-#### Attributes
 
 ##### `class_name`
 The name of the class to be associated with a class when creating
@@ -942,12 +914,10 @@ Any options to be added to the index.
 
 Default value *undef*
 
-### Defined Type cassandra::schema::keyspace
+#### Defined Type cassandra::schema::keyspace
 
 Create or drop keyspaces within the schema.  Please see the example code in the
 [Begining with Cassandra](#beginning-with-cassandra) section of this document.
-
-#### Attributes
 
 ##### `replication_map`
 Needed if the keyspace is to be present.  Optional if it is to be absent.
@@ -973,12 +943,10 @@ false on a keyspace using the SimpleStrategy. Default value true.
 ##### `keyspace_name`
 The name of the keyspace to be created. Defaults to the name of the resource.
 
-### Defined Type cassandra::schema::table
+#### Defined Type cassandra::schema::table
 
 Create or drop tables within the schema.  Please see the example code in the
 [Begining with Cassandra](#beginning-with-cassandra) section of this document.
-
-#### Attributes
 
 ##### `keyspace`
 The name of the keyspace.  This value is taken from the title given to the
@@ -1005,14 +973,12 @@ Default value []
 ##### `table`
 The name of the table.  Defaults to the name of the resource.
 
-### Defined Type cassandra::schema::user
+#### Defined Type cassandra::schema::user
 
 Create or drop users.  Please see the example code in the
 [Begining with Cassandra](#beginning-with-cassandra) section of this document.
 To use this class, a suitable `authenticator` (e.g. PasswordAuthenticator)
 must be set in the Cassandra class.
-
-#### Attributes
 
 ##### `ensure`
 Valid values can be **present** to ensure a user is created, or **absent** to
@@ -1027,25 +993,21 @@ If the user is to be a super-user on the system.  Default value false.
 ##### `user_name`
 The name of the user.  Defaults to the name of the resource.
 
-### Defined Type cassandra::private::data_directory
+#### Defined Type cassandra::private::data_directory
 
 A defined type to handle the `::cassandra::data_file_directoryies` array.
 This is not intended to be used by a user but is documented here for
 completeness.
 
-#### Attributes
-
 ##### `title`
 The name of an individual directory.
 
-### Defined Type cassandra::private::firewall_ports::rule
+#### Defined Type cassandra::private::firewall_ports::rule
 
 A defined type to be used as a macro for setting host based firewall
 rules.  This is not intended to be used by a user (who should use the
 API provided by cassandra::firewall_ports instead) but is documented
 here for completeness.
-
-#### Attributes
 
 ##### `title`
 A text field that contains the protocol name and CIDR address of a subnet.
