@@ -523,6 +523,42 @@ this flag to false will disable this behaviour, therefore allowing the changes
 to be made but allow the user to control when the service is restarted.
 Default value true
 
+##### `settings`
+
+A hash that is passed to `to_yaml` which dumps the results to the Cassandra
+configuring file.  The minimum required settings for Cassandra 2.X
+are as follows:
+
+```puppet
+{
+  'authenticator'               => 'PasswordAuthenticator',
+  'cluster_name'                => 'MyCassandraCluster',
+  'commitlog_directory'         => '/var/lib/cassandra/commitlog',
+  'commitlog_sync'              => 'periodic',
+  'commitlog_sync_period_in_ms' => 10000,
+  'data_file_directories'       => ['/var/lib/cassandra/data'],
+  'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
+  'listen_address'              => $::ipaddress,
+  'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
+  'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
+  'seed_provider'               => [
+    {
+      'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
+      'parameters' => [
+        {
+          'seeds' => $::ipaddress,
+        },
+      ],
+    },
+  ],
+  'start_native_transport'      => true,
+}
+```
+
+For Cassandra 3.X you will also need to specify the `hints_directory`
+attribute.
+Default value {}
+
 ##### `snitch_properties_file`
 The name of the snitch properties file.  The full path name would be
 *config_path*/*snitch_properties_file*.
@@ -700,6 +736,11 @@ Allow these TCP ports to be opened for traffic
 between the Cassandra nodes.
 Default value '[7000, 7001, 7199]'
 
+##### `inter_node_ports`
+Allow these TCP ports to be opened for traffic
+coming from OpsCenter subnets.
+Default value '[7000, 7001, 7199]'
+
 ##### `inter_node_subnets`
 Only has any effect if the `cassandra` class is defined on the node.
 
@@ -707,11 +748,6 @@ An array of the list of subnets that are to allowed connection to
 cassandra::storage_port, cassandra::ssl_storage_port and port 7199
 for cassandra JMX monitoring.
 Default value '['0.0.0.0/0']'
-
-##### `inter_node_ports`
-Allow these TCP ports to be opened for traffic
-coming from OpsCenter subnets.
-Default value '[7000, 7001, 7199]'
 
 ##### `public_ports`
 Allow these TCP ports to be opened for traffic
@@ -1007,9 +1043,6 @@ The name of the user.  Defaults to the name of the resource.
 A defined type to handle deprecation messages to the user.
 This is not intended to be used by a user but is documented here for
 completeness.
-
-##### `title`
-The text of the message for the user.
 
 ##### `item_number`
 A unique reference number for the specific deprecation.
