@@ -394,15 +394,15 @@ true or not set the attribute at all after initializing the cluster.
 * [cassandra::java](#class-cassandrajava)
 * [cassandra::optutils](#class-cassandraoptutils)
 * [cassandra::schema](#class-cassandraschema)
-* [cassandra::schema::cql_type](#class-cassandraschema)
-* [cassandra::schema::index](#class-cassandraschemaindex)
-* [cassandra::schema::keyspace](#class-cassandraschemakeyspace)
-* [cassandra::schema::table](#class-cassandraschematable)
-* [cassandra::schema::user](#class-cassandraschemauser)
 
 ### Public Defined Types
 
 * [cassandra::file](#defined-type-cassandrafile)
+* [cassandra::schema::cql_type](#defined-type-cassandraschema)
+* [cassandra::schema::index](#defined-type-cassandraschemaindex)
+* [cassandra::schema::keyspace](#defined-type-cassandraschemakeyspace)
+* [cassandra::schema::table](#defined-type-cassandraschematable)
+* [cassandra::schema::user](#defined-type-cassandraschemauser)
 
 ### Private Defined Types
 
