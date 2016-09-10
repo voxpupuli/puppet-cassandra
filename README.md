@@ -554,6 +554,10 @@ class { 'cassandra::datastax_agent':
 }
 ```
 
+##### `address_config_file`
+The full path to the address config file.
+Default value '/var/lib/datastax-agent/conf/address.yaml'
+
 ##### `defaults_file`
 The full path name to the file where `java_home` is set.
 Default value '/etc/default/datastax-agent'
