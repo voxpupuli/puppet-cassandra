@@ -398,7 +398,7 @@ true or not set the attribute at all after initializing the cluster.
 ### Public Defined Types
 
 * [cassandra::file](#defined-type-cassandrafile)
-* [cassandra::schema::cql_type](#defined-type-cassandraschema)
+* [cassandra::schema::cql_type](#defined-type-cassandraschemacql_type)
 * [cassandra::schema::index](#defined-type-cassandraschemaindex)
 * [cassandra::schema::keyspace](#defined-type-cassandraschemakeyspace)
 * [cassandra::schema::table](#defined-type-cassandraschematable)
