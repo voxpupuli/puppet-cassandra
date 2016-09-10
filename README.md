@@ -17,7 +17,7 @@
     * [Create a Cluster in a Single Data Center](#create-a-cluster-in-a-single-data-center)
     * [Create a Cluster in Multiple Data Centers](#create-a-cluster-in-multiple-data-centers)
     * [DataStax Enterprise](#datastax-enterprise)
-1. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
+1. [Reference](#reference)
 1. [Limitations - OS compatibility, etc.](#limitations)
 1. [Contributers](#contributers)
 
@@ -394,6 +394,11 @@ true or not set the attribute at all after initializing the cluster.
 * [cassandra::java](#class-cassandrajava)
 * [cassandra::optutils](#class-cassandraoptutils)
 * [cassandra::schema](#class-cassandraschema)
+* [cassandra::schema::cql_type](#class-cassandraschema)
+* [cassandra::schema::index](#class-cassandraschemaindex)
+* [cassandra::schema::keyspace](#class-cassandraschemakeyspace)
+* [cassandra::schema::table](#class-cassandraschematable)
+* [cassandra::schema::user](#class-cassandraschemauser)
 
 ### Public Defined Types
 
