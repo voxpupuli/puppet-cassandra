@@ -73,6 +73,13 @@ We follow [SemVer Versioning](http://semver.org/) and an update of the major
 release (i.e. from 1.*Y*.*Z* to 2.*Y*.*Z*) will indicate a significant change
 to the API which will most probably require a change to your manifest.
 
+#### Changes in 2.0.0
+
+This is a major change to the API and you will more than likely need to
+change your manifest to accomodate these changes.
+
+Please also see the notes for 2.0.0 in the [CHANGELOG](CHANGELOG.md).
+
 #### Changes in 1.19.0
 
 The hints_directory documentation will cause a change in the cassandra.yaml
