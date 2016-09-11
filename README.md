@@ -78,6 +78,10 @@ to the API which will most probably require a change to your manifest.
 This is a major change to the API and you will more than likely need to
 change your manifest to accomodate these changes.
 
+The `service_ensure` attribute of the cassandra class now defaults to
+*undef*, users who do want to manage service status in Puppet can still set
+it to true.
+
 All the functionality relating to OpsCenter has been divested to the
 [locp/opscenter](https://forge.puppet.com/locp/opscenter) module on
 Puppet Forge.

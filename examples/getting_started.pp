@@ -16,7 +16,7 @@ include cassandra::java
 # the node itself becomes a seed for the cluster.
 
 class { 'cassandra':
-  settings => {
+  settings       => {
     'authenticator'               => 'PasswordAuthenticator',
     'cluster_name'                => 'MyCassandraCluster',
     'commitlog_directory'         => '/var/lib/cassandra/commitlog',
@@ -39,7 +39,8 @@ class { 'cassandra':
     ],
     'start_native_transport'      => true,
   },
-  require  => Class['cassandra::datastax_repo', 'cassandra::java'],
+  service_ensure => running,
+  require        => Class['cassandra::datastax_repo', 'cassandra::java'],
 }
 
 class { 'cassandra::datastax_agent':
