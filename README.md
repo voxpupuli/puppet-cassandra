@@ -78,6 +78,22 @@ to the API which will most probably require a change to your manifest.
 This is a major change to the API and you will more than likely need to
 change your manifest to accomodate these changes.
 
+All the functionality relating to OpsCenter has been divested to the
+[locp/opscenter](https://forge.puppet.com/locp/opscenter) module on
+Puppet Forge.
+
+It should also be noted that the module no longer creates directories for
+the `data`, `commitlog`, `saved_caches` and for Cassandra 3 the `hints`
+directory.  These resources will now need to be defined in your
+manifest/profile.
+
+For a list of features that have been deprecated in this release, please see
+https://github.com/locp/cassandra/wiki/Deprecations
+
+For details on migrating from the version 1.X.X attributes to the `settings`
+hash, see
+https://github.com/locp/cassandra/wiki/Version-1.X.Y-Template-Defaults-Shown-As-2.X.Y-Hash
+
 Please also see the notes for 2.0.0 in the [CHANGELOG](CHANGELOG.md).
 
 #### Changes in 1.19.0
