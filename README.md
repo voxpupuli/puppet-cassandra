@@ -80,7 +80,10 @@ change your manifest to accomodate these changes.
 
 The `service_ensure` attribute of the cassandra class now defaults to
 *undef*, users who do want to manage service status in Puppet can still set
-it to true.
+it to true.  If leaving the value at the default and setting
+`service_refresh` and `service_enable` to false will mean that the
+user and not Puppet running will control the running state of
+Cassandra.
 
 All the functionality relating to OpsCenter has been divested to the
 [locp/opscenter](https://forge.puppet.com/locp/opscenter) module on
