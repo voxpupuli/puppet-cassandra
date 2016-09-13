@@ -83,7 +83,10 @@ The `service_ensure` attribute of the cassandra class now defaults to
 it to true.  If leaving the value at the default and setting
 `service_refresh` and `service_enable` to false will mean that the
 user and not Puppet running will control the running state of
-Cassandra.
+Cassandra.  This currently works OK on the Red Hat family, but
+has issues on Debian due to
+[CASSANDRA-2356](https://issues.apache.org/jira/browse/CASSANDRA-2356)
+during an initial install or package upgrade.
 
 All the functionality relating to OpsCenter has been divested to the
 [locp/opscenter](https://forge.puppet.com/locp/opscenter) module on
