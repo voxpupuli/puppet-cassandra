@@ -18,7 +18,7 @@ class cassandra (
   $rack                                                 = 'RAC1',
   $rackdc_tmpl                                          = 'cassandra/cassandra-rackdc.properties.erb',
   $service_enable                                       = true,
-  $service_ensure                                       = 'running',
+  $service_ensure                                       = undef,
   $service_name                                         = 'cassandra',
   $service_provider                                     = undef,
   $service_refresh                                      = true,

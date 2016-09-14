@@ -92,7 +92,7 @@ describe 'cassandra' do
         rack: 'RAC1',
         rackdc_tmpl: 'cassandra/cassandra-rackdc.properties.erb',
         service_enable: true,
-        service_ensure: 'running',
+        # service_ensure: nil,
         service_name: 'cassandra',
         service_provider: nil,
         service_refresh: true,
@@ -149,7 +149,7 @@ describe 'cassandra' do
       )
 
       should contain_service('cassandra').with(
-        ensure: 'running',
+        ensure: nil,
         name: 'cassandra',
         enable: 'true'
       )

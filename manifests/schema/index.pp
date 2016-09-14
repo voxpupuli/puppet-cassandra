@@ -2,8 +2,8 @@
 define cassandra::schema::index(
   $keyspace,
   $table,
-  $class_name = undef,
   $ensure     = present,
+  $class_name = undef,
   $index      = $title,
   $keys       = undef,
   $options    = undef,

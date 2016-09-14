@@ -163,6 +163,7 @@ describe 'cassandra' do
         package_ensure => $version,
         package_name   => $cassandra_package,
         rack           => 'R101',
+        service_ensure => running,
         settings       => $settings,
       }
 
@@ -211,13 +212,17 @@ describe 'cassandra' do
     end
 
     describe service('cassandra') do
-      it { is_expected.to be_running }
-      it { is_expected.to be_enabled }
+      it do
+        is_expected.to be_running
+        is_expected.to be_enabled
+      end
     end
 
     describe service('datastax-agent') do
-      it { is_expected.to be_running }
-      it { is_expected.to be_enabled }
+      it do
+        is_expected.to be_running
+        is_expected.to be_enabled
+      end
     end
 
     schema_testing_create_pp = <<-EOS
