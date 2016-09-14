@@ -1987,37 +1987,43 @@ On the Debian family, this is passed as the `release` attribute to an
 `apt::source` resource.  On the Red Hat family, it is ignored.
 Default value 'stable'
 
-### Class: cassandra::env
-
-A class for altering the environment file for Cassandra.
-
-This class is now deprecated and will be removed in a future release.  Please
-use the cassandra::file class instead.
-
-#### Attributes
-
-##### `environment_file`
-The full path name of the environment file.  On the RedHat family this will
-default to `/etc/cassandra/default.conf/cassandra-env.sh` on Debian, the
-default is `/etc/cassandra/cassandra-env.sh`.
-
-##### `file_lines`
-If set, then the [create_resources](https://docs.puppet.com/puppet/latest/reference/function.html#createresources)
-will be used to create an array of
-[file_line](https://forge.puppet.com/puppetlabs/stdlib#file_line) resources
-where the path attribute is set to `$cassandra::env::environment_file`
-Default *undef*
-
-##### `service_refresh`
-If the Cassandra service is to be notified if the environment file is changed.
-Set to false if this is not wanted.
-Default value true.
-
 ### Class: cassandra::file
 
-A class for altering file relative to the configuration directory.
+A definition for altering files relative to the configuration directory.  For
+example set the MAX_HEAP_SIZE and and HEAP_NEWSIZE for the JVM depending on
+the memory and number of processors on the node:
 
-#### Attributes
+```puppet
+if $::memorysize_mb < 24576.0 {
+  $max_heap_size_in_mb = floor($::memorysize_mb / 2)
+} elsif $::memorysize_mb < 8192.0 {
+  $max_heap_size_in_mb = floor($::memorysize_mb / 4)
+} else {
+  $max_heap_size_in_mb = 8192
+}
+
+$heap_new_size = $::processorcount * 100
+
+cassandra::file { "Set Java/Cassandra max heap size to ${max_heap_size_in_mb}.":
+  file       => 'cassandra-env.sh',
+  file_lines => {
+    'MAX_HEAP_SIZE' => {
+      line  => "MAX_HEAP_SIZE='${max_heap_size_in_mb}M'",
+      match => '^#?MAX_HEAP_SIZE=.*',
+    },
+  }
+}
+
+cassandra::file { "Set Java/Cassandra heap new size to ${heap_new_size}.":
+  file       => 'cassandra-env.sh',
+  file_lines => {
+    'HEAP_NEWSIZE'  => {
+      line  => "HEAP_NEWSIZE='${heap_new_size}M'",
+      match => '^#?HEAP_NEWSIZE=.*',
+    }
+  }
+}
+```
 
 ##### `file`
 The name of the file relative to the `config_path`.

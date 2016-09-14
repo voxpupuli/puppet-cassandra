@@ -1,7 +1,7 @@
 # cassandra::file
-class cassandra::file(
-  $file,
-  $config_path      = $::cassandra::params::config_path,
+define cassandra::file(
+  $file             = $title,
+  $config_path      = $::cassandra::config_path,
   $file_lines       = undef,
   $service_refresh  = true,
   ) inherits cassandra::params {
