@@ -112,17 +112,32 @@ class { 'cassandra::schema':
   },
 }
 
+if $::memorysize_mb < 24576.0 {
+  $max_heap_size_in_mb = floor($::memorysize_mb / 2)
+} elsif $::memorysize_mb < 8192.0 {
+  $max_heap_size_in_mb = floor($::memorysize_mb / 4)
+} else {
+  $max_heap_size_in_mb = 8192
+}
+
 $heap_new_size = $::processorcount * 100
 
-cassandra::file { 'cassandra-env.sh':
+cassandra::file { "Set Java/Cassandra max heap size to ${max_heap_size_in_mb}.":
+  file       => 'cassandra-env.sh',
   file_lines => {
     'MAX_HEAP_SIZE' => {
-      line  => 'MAX_HEAP_SIZE="1024M"',
-      match => '#MAX_HEAP_SIZE="4G"',
+      line  => "MAX_HEAP_SIZE='${max_heap_size_in_mb}M'",
+      match => '^#?MAX_HEAP_SIZE=.*',
     },
+  }
+}
+
+cassandra::file { "Set Java/Cassandra heap new size to ${heap_new_size}.":
+  file       => 'cassandra-env.sh',
+  file_lines => {
     'HEAP_NEWSIZE'  => {
       line  => "HEAP_NEWSIZE='${heap_new_size}M'",
-      match => '#HEAP_NEWSIZE="800M"',
+      match => '^#?HEAP_NEWSIZE=.*',
     }
   }
 }
