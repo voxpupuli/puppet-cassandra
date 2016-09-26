@@ -2156,6 +2156,18 @@ The name of the Java package to be installed.
 Default value java-1.8.0-openjdk-headless on Red Hat openjdk-7-jre-headless
 on Debian.
 
+##### `temp_directory`
+If supplied, this will be a path for the module to manage which is used as a
+temp directory. This is to workaround problems cassandra has with `noexec` 
+being set on hardened distributions. 
+
+Typically you need to set this if you see something similar in the logs:
+```ERROR 17:49:12 Error in ThreadPoolExecutor
+java.lang.NoClassDefFoundError: Could not initialize class com.sun.jna.Native
+    at org.apache.cassandra.utils.memory.MemoryUtil.allocate(MemoryUtil.java:97) ~[apache-cassandra-3.0.8.jar:3.0.8]
+    at org.apache.cassandra.io.util.Memory.<init>(Memory.java:74) ~[apache-cassandra-3.0.8.jar:3.0.8]
+    ...```
+
 ##### `yumrepo`
 If supplied, this should be a hash of *yumrepo* resources that will be passed
 to the create_resources function.  This is ignored on non-Red Hat systems.

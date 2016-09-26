@@ -7,6 +7,7 @@ class cassandra::java (
   $jna_package_name = $::cassandra::params::jna_package_name,
   $package_ensure   = 'present',
   $package_name     = $::cassandra::params::java_package,
+  $temp_directory   = undef,
   $yumrepo          = undef,
   ) inherits cassandra::params {
   # Some horrific jiggerypokery until we can deprecate the ensure parameter.
@@ -63,5 +64,19 @@ class cassandra::java (
 
   package { $jna_package_name:
     ensure => $jna_ensure,
+  }
+
+  if $temp_directory != undef {
+    file { $temp_directory:
+      ensure => 'directory',
+      owner  => 'cassandra',
+      group  => 'cassandra',
+      mode   => '0750',
+    }
+    file_line { "Setting java temp directory to ${temp_directory}":
+      path    => '/etc/cassandra/conf/jvm.options',
+      line    => "-Djava.io.tmpdir=${temp_directory}",
+      require => File[$temp_directory],
+    }
   }
 }
