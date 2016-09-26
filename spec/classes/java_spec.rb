@@ -148,7 +148,7 @@ describe 'cassandra::java' do
   end
 
   context 'Ensure that temp_directory can be specified.' do
-    let :paraams do
+    let :params do
       {
         temp_directory: '/tmp/java-tibers-temp',
       }
