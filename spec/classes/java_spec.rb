@@ -155,11 +155,8 @@ describe 'cassandra::java' do
     end
 
     it do
-      is_expected.to contain_file_line("Ensure jvm.options contains the correct line")
-          .with({
-            "path" => "/etc/cassandra/conf/jvm.options",
-            "line" => "-Djava.io.tmpdir=/tmp/java-tibers-temp",
-            })
+      is_expected.to contain_file_line('/etc/cassandra/conf/jvm.options')
+          .with_content('-Djava.io.tmpdir=/tmp/java-tibers-temp')
     end
   end
 
