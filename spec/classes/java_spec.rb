@@ -154,12 +154,13 @@ describe 'cassandra::java' do
       }
     end
 
-  it do
-    is_expected.to contain_file_line("Ensure jvm.options contains the correct line")
-        .with({
-          "path" => "/etc/cassandra/conf/jvm.options",
-          "line" => "-Djava.io.tmpdir=/tmp/java-tibers-temp",
-          })
+    it do
+      is_expected.to contain_file_line("Ensure jvm.options contains the correct line")
+          .with({
+            "path" => "/etc/cassandra/conf/jvm.options",
+            "line" => "-Djava.io.tmpdir=/tmp/java-tibers-temp",
+            })
+    end
   end
 
   context 'Ensure that Apt key and source can be specified.' do
