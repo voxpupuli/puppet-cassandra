@@ -147,16 +147,19 @@ describe 'cassandra::java' do
     end
   end
 
-  context 'Ensure that temp_directory can be specified.' do
+  context 'Ensure temp_directory can be set' do
     let :params do
       {
         temp_directory: '/tmp/java-tibers-temp',
       }
     end
 
-    it do
-      is_expected.to contain_file('/tmp/java-tibers-temp')
-    end
+  it do
+    is_expected.to contain_file_line("Ensure jvm.options contains the correct line")
+        .with({
+          "path" => "/etc/cassandra/conf/jvm.options",
+          "line" => "-Djava.io.tmpdir=/tmp/java-tibers-temp",
+          })
   end
 
   context 'Ensure that Apt key and source can be specified.' do
