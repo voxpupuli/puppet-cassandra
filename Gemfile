@@ -37,4 +37,5 @@ group :system_tests do
   gem 'tins',                   '<= 1.6.0'
   gem 'travis',                 require: false
   gem 'travis-lint',            require: false
+  gem 'term-ansicolor',         '<= 1.3.2'
 end
