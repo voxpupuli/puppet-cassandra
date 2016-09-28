@@ -1140,6 +1140,10 @@ The number(s) of the port(s) to be opened.
 
 ## Limitations
 
+When using a Ruby version before 1.9.0, the contents of the Cassandra
+configuration file may change order of elementsdue to a problem with
+to_yaml in earlier versions of Ruby.
+
 When creating key spaces, indexes, cql_types and users the settings will only
 be used to create a new resource if it does not currently exist.  If a change
 is made to the Puppet manifest but the resource already exits, this change
