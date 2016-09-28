@@ -85,6 +85,7 @@ describe 'cassandra' do
 
   ruby_lt_190 = case opsys
                 when 'centos6' then true
+                when 'ubuntu12' then true
                 else false
                 end
 
@@ -106,12 +107,12 @@ describe 'cassandra' do
         $version = '#{version}'
 
         if $::lsbdistid == 'Ubuntu' {
-          # Workarounds for amonst other things CASSANDRA-11850
-          Exec {
-            environment => [ 'CQLSH_NO_BUNDLED=TRUE' ]
-          }
-
           if $::operatingsystemmajrelease >= 16 {
+            # Workarounds for amonst other things CASSANDRA-11850
+            Exec {
+              environment => [ 'CQLSH_NO_BUNDLED=TRUE' ]
+            }
+
             exec { '/usr/bin/wget http://launchpadlibrarian.net/109052632/python-support_1.0.15_all.deb':
               cwd     => '/var/tmp',
               creates => '/var/tmp/python-support_1.0.15_all.deb',
