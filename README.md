@@ -947,7 +947,7 @@ Default value '/usr/bin/cqlsh'
 ##### `cqlsh_host`
 The host for the **cqlsh** command to connect to.  See also `cqlsh_port`.
 
-Default value `$::cassandra::listen_address`
+Default value 'localhost'
 
 ##### `cqlsh_password`
 If credentials are require for connecting, specify the password here.
@@ -959,7 +959,7 @@ Default value *undef*
 The host for the **cqlsh** command to connect to.  See also `cqlsh_host`.
 See also `cqlsh_host`.
 
-Default value `$::cassandra::native_transport_port`
+Default value 9042
 
 ##### `cqlsh_user`
 If credentials are require for connecting, specify the password here.
