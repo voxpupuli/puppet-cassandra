@@ -1,5 +1,17 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-09-29 - Release 2.0.0 ([diff](https://github.com/locp/cassandra/compare/1.25.2...2.0.0))
+
+### Summary
+
+This is a major release and will more than likely break your existing
+manifest until you alter your code.  Please see the
+[Upgrading](https://github.com/locp/cassandra/tree/release/274/v2.0.0#upgrading)
+section of the README for further details.
+
+* The method of passing parameters to Cassandra has been made more flexible.
+
+
 ##2016-09-03 - Release 1.25.2 ([diff](https://github.com/locp/cassandra/compare/1.25.1...1.25.2))
 
 ### Summary

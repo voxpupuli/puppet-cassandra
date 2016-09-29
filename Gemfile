@@ -19,6 +19,8 @@ group :system_tests do
   gem 'ethon'                   '0.9.0'
   gem 'excon'                   '0.52.0'
   gem 'fog',                    require: false
+  gem 'fog-aws',                '<= 0.11.0'
+  gem 'fog-core',               '<= 1.42.0'
   gem 'fog-google',             '<= 0.0.9'
   gem 'google-api-client',      '<= 0.9.4'
   gem 'hiera',                  require: false
@@ -39,4 +41,5 @@ group :system_tests do
   gem 'tins',                   '<= 1.6.0'
   gem 'travis',                 require: false
   gem 'travis-lint',            require: false
+  gem 'term-ansicolor',         '<= 1.3.2'
 end

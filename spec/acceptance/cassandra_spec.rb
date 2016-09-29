@@ -74,13 +74,20 @@ end
 
 describe 'cassandra' do
   nodeset = ENV['BEAKER_set']
+  opsys = nodeset.split('_')[1]
 
   # Ubuntu 16 only works with Cassandra 3.X
-  cassandra_version = if nodeset == 'aws_ubuntu16'
+  cassandra_version = if opsys == 'ubuntu16'
                         ['3.0.3']
                       else
                         ['2.2.7', '3.0.3']
                       end
+
+  ruby_lt_190 = case opsys
+                when 'centos6' then true
+                when 'ubuntu12' then true
+                else false
+                end
 
   cassandra_version.each do |version|
     cassandra_install_pp = <<-EOS
@@ -100,12 +107,12 @@ describe 'cassandra' do
         $version = '#{version}'
 
         if $::lsbdistid == 'Ubuntu' {
-          # Workarounds for amonst other things CASSANDRA-11850
-          Exec {
-            environment => [ 'CQLSH_NO_BUNDLED=TRUE' ]
-          }
-
           if $::operatingsystemmajrelease >= 16 {
+            # Workarounds for amonst other things CASSANDRA-11850
+            Exec {
+              environment => [ 'CQLSH_NO_BUNDLED=TRUE' ]
+            }
+
             exec { '/usr/bin/wget http://launchpadlibrarian.net/109052632/python-support_1.0.15_all.deb':
               cwd     => '/var/tmp',
               creates => '/var/tmp/python-support_1.0.15_all.deb',
@@ -157,14 +164,21 @@ describe 'cassandra' do
       }
 
 
+      if versioncmp($::rubyversion, '1.9.0') < 0 {
+        $service_refresh = false
+      } else {
+        $service_refresh = true
+      }
+
       class { 'cassandra':
-        cassandra_9822 => true,
-        dc             => 'LON',
-        package_ensure => $version,
-        package_name   => $cassandra_package,
-        rack           => 'R101',
-        service_ensure => running,
-        settings       => $settings,
+        cassandra_9822  => true,
+        dc              => 'LON',
+        package_ensure  => $version,
+        package_name    => $cassandra_package,
+        rack            => 'R101',
+        service_ensure  => running,
+        service_refresh => $service_refresh,
+        settings        => $settings,
       }
 
       class { 'cassandra::optutils':
@@ -184,7 +198,15 @@ describe 'cassandra' do
       }
     EOS
 
-    describe "########### Cassandra #{version} installation (#{nodeset})." do
+    datastax_agent_cludge_pp = <<-EOS
+      Exec {
+        path => [ '/usr/bin', '/bin'],
+      }
+
+      exec { 'chmod 0640 /var/lib/datastax-agent/conf/address.yaml': }
+    EOS
+
+    describe "########### Cassandra #{version} installation (#{opsys})." do
       it 'should work with no errors' do
         apply_manifest(cassandra_install_pp, catch_failures: true)
       end
@@ -193,21 +215,16 @@ describe 'cassandra' do
         sleep 60
       end
 
-      datastax_agent_cludge_pp = <<-EOS
-        Exec {
-          path => [ '/usr/bin', '/bin'],
-        }
-
-        exec { 'chmod 0640 /var/lib/datastax-agent/conf/address.yaml': }
-      EOS
-
-      it '/var/lib/datastax-agent/conf/address.yaml changes mode' do
-        apply_manifest(datastax_agent_cludge_pp, catch_failures: true)
-      end
-
-      it 'check code is idempotent' do
-        expect(apply_manifest(cassandra_install_pp,
-                              catch_failures: true).exit_code).to be_zero
+      if ruby_lt_190
+        it 'should work with no errors (subsequent run)' do
+          apply_manifest(cassandra_install_pp, catch_failures: true)
+        end
+      else
+        it 'check code is idempotent' do
+          apply_manifest(datastax_agent_cludge_pp, catch_failures: true)
+          expect(apply_manifest(cassandra_install_pp,
+                                catch_failures: true).exit_code).to be_zero
+        end
       end
     end
 
@@ -304,9 +321,15 @@ describe 'cassandra' do
       it 'should work with no errors' do
         apply_manifest(schema_testing_create_pp, catch_failures: true)
       end
-      it 'check code is idempotent' do
-        expect(apply_manifest(schema_testing_create_pp,
-                              catch_failures: true).exit_code).to be_zero
+
+      if ruby_lt_190
+        it 'should work with no errors (subsequent run)' do
+          apply_manifest(schema_testing_create_pp, catch_failures: true)
+        end
+      else
+        it 'check code is idempotent' do
+          expect(apply_manifest(schema_testing_create_pp, catch_failures: true).exit_code).to be_zero
+        end
       end
     end
 
@@ -342,12 +365,17 @@ describe 'cassandra' do
 
     describe '########### Schema drop type.' do
       it 'should work with no errors' do
-        apply_manifest(schema_testing_drop_type_pp,
-                       catch_failures: true)
+        apply_manifest(schema_testing_drop_type_pp, catch_failures: true)
       end
-      it 'check code is idempotent' do
-        expect(apply_manifest(schema_testing_drop_type_pp,
-                              catch_failures: true).exit_code).to be_zero
+
+      if ruby_lt_190
+        it 'should work with no errors (subsequent run)' do
+          apply_manifest(schema_testing_drop_type_pp, catch_failures: true)
+        end
+      else
+        it 'check code is idempotent' do
+          expect(apply_manifest(schema_testing_drop_type_pp, catch_failures: true).exit_code).to be_zero
+        end
       end
     end
 
@@ -383,9 +411,15 @@ describe 'cassandra' do
       it 'should work with no errors' do
         apply_manifest(schema_testing_drop_user_pp, catch_failures: true)
       end
-      it 'check code is idempotent' do
-        expect(apply_manifest(schema_testing_drop_user_pp,
-                              catch_failures: true).exit_code).to be_zero
+
+      if ruby_lt_190
+        it 'should work with no errors (subsequent run)' do
+          apply_manifest(schema_testing_drop_user_pp, catch_failures: true)
+        end
+      else
+        it 'check code is idempotent' do
+          expect(apply_manifest(schema_testing_drop_user_pp, catch_failures: true).exit_code).to be_zero
+        end
       end
     end
 
@@ -420,12 +454,17 @@ describe 'cassandra' do
 
     describe '########### Schema drop index.' do
       it 'should work with no errors' do
-        apply_manifest(schema_testing_drop_index_pp,
-                       catch_failures: true)
+        apply_manifest(schema_testing_drop_index_pp, catch_failures: true)
       end
-      it 'check code is idempotent' do
-        expect(apply_manifest(schema_testing_drop_index_pp,
-                              catch_failures: true).exit_code).to be_zero
+
+      if ruby_lt_190
+        it 'should run with no errors (subsequent run)' do
+          apply_manifest(schema_testing_drop_index_pp, catch_failures: true)
+        end
+      else
+        it 'check code is idempotent' do
+          expect(apply_manifest(schema_testing_drop_index_pp, catch_failures: true).exit_code).to be_zero
+        end
       end
     end
 
@@ -461,9 +500,15 @@ describe 'cassandra' do
       it 'should work with no errors' do
         apply_manifest(schema_testing_drop_pp, catch_failures: true)
       end
-      it 'check code is idempotent' do
-        expect(apply_manifest(schema_testing_drop_pp,
-                              catch_failures: true).exit_code).to be_zero
+
+      if ruby_lt_190
+        it 'should work with no errors (subsequent run)' do
+          apply_manifest(schema_testing_drop_pp, catch_failures: true)
+        end
+      else
+        it 'check code is idempotent' do
+          expect(apply_manifest(schema_testing_drop_pp, catch_failures: true).exit_code).to be_zero
+        end
       end
     end
 
@@ -500,9 +545,14 @@ describe 'cassandra' do
       it 'should work with no errors' do
         apply_manifest(schema_testing_drop_pp, catch_failures: true)
       end
-      it 'check code is idempotent' do
-        expect(apply_manifest(schema_testing_drop_pp,
-                              catch_failures: true).exit_code).to be_zero
+      if ruby_lt_190
+        it 'should work with no errors (subsequent run)' do
+          apply_manifest(schema_testing_drop_pp, catch_failures: true)
+        end
+      else
+        it 'check code is idempotent' do
+          expect(apply_manifest(schema_testing_drop_pp, catch_failures: true).exit_code).to be_zero
+        end
       end
     end
 

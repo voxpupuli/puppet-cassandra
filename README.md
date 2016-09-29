@@ -947,7 +947,7 @@ Default value '/usr/bin/cqlsh'
 ##### `cqlsh_host`
 The host for the **cqlsh** command to connect to.  See also `cqlsh_port`.
 
-Default value `$::cassandra::listen_address`
+Default value 'localhost'
 
 ##### `cqlsh_password`
 If credentials are require for connecting, specify the password here.
@@ -959,7 +959,7 @@ Default value *undef*
 The host for the **cqlsh** command to connect to.  See also `cqlsh_host`.
 See also `cqlsh_host`.
 
-Default value `$::cassandra::native_transport_port`
+Default value 9042
 
 ##### `cqlsh_user`
 If credentials are require for connecting, specify the password here.
@@ -1139,6 +1139,10 @@ A text field that contains the protocol name and CIDR address of a subnet.
 The number(s) of the port(s) to be opened.
 
 ## Limitations
+
+When using a Ruby version before 1.9.0, the contents of the Cassandra
+configuration file may change order of elementsdue to a problem with
+to_yaml in earlier versions of Ruby.
 
 When creating key spaces, indexes, cql_types and users the settings will only
 be used to create a new resource if it does not currently exist.  If a change
