@@ -16,6 +16,8 @@ group :system_tests do
   gem 'beaker-rspec',           require: false
   gem 'coveralls',              require: false
   gem 'docker-api',             require: false
+  gem 'ethon'                   '0.9.0'
+  gem 'excon'                   '0.52.0'
   gem 'fog',                    require: false
   gem 'fog-google',             '<= 0.0.9'
   gem 'google-api-client',      '<= 0.9.4'
