@@ -17,8 +17,9 @@ group :system_tests do
   gem 'coveralls',              require: false
   gem 'docker-api',             require: false
   gem 'fog',                    require: false
+  gem 'fog-aws',                '<= 0.11.0'
+  gem 'fog-core',               '<= 1.42.0'
   gem 'fog-google',             '<= 0.0.9'
-  gem 'fog-profitbricks'        '<= 0.0.5'
   gem 'google-api-client',      '<= 0.9.4'
   gem 'hiera',                  require: false
   gem 'json_pure',              '<= 2.0.1'
