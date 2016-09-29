@@ -10,6 +10,9 @@ manifest until you alter your code.  Please see the
 section of the README for further details.
 
 * The method of passing parameters to Cassandra has been made more flexible.
+* Support for Ubuntu 16.04.
+* Changes to how `service_ensure` is handled.
+* `cassandra::file` is now a define, not a class (as it should have been).
 
 
 ##2016-09-03 - Release 1.25.2 ([diff](https://github.com/locp/cassandra/compare/1.25.1...1.25.2))
