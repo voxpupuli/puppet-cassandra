@@ -22,7 +22,7 @@ group :system_tests do
   gem 'fog-aws',                '<= 0.11.0'
   gem 'fog-core',               '<= 1.42.0'
   gem 'fog-google',             '<= 0.0.9'
-  gem 'fog-profitbricks',       '2.0.1'
+  gem 'fog-profitbricks',       '0.0.5'
   gem 'google-api-client',      '<= 0.9.4'
   gem 'hiera',                  require: false
   gem 'json_pure',              '<= 2.0.1'
@@ -35,7 +35,7 @@ group :system_tests do
   gem 'puppet-lint',            require: false
   gem 'puppetlabs_spec_helper', require: false
   gem 'rake',                   '<= 10.5.0'
-  gem 'rbvmomi',                '1.9.3'
+  gem 'rbvmomi',                '1.9.2'
   gem 'rspec_junit_formatter',  '0.2.2'
   gem 'rspec-puppet',           '<= 2.3.2'
   gem 'rspec-puppet-utils',     require: false
