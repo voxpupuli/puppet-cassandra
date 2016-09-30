@@ -104,7 +104,8 @@ For details on migrating from the version 1.X.X attributes to the `settings`
 hash, see
 https://github.com/locp/cassandra/wiki/Version-1.X.Y-Template-Defaults-Shown-As-2.X.Y-Hash
 
-Please also see the notes for 2.0.0 in the [CHANGELOG](CHANGELOG.md).
+Please also see the notes for 2.0.0 in the
+[CHANGELOG](https://forge.puppet.com/locp/cassandra/changelog).
 
 #### Changes in 1.19.0
 
@@ -255,7 +256,7 @@ In this example, we create a keyspace (mykeyspace) with a table called
 'users' and an index called 'users_lname_idx'.
 
 We also add three users (to Cassandra, not the mykeyspace.users
-table) called spillman, akers and boone.  We also ensure that a user
+table) called spillman, akers and boone while ensuring that a user
 called lucan is absent.
 
 ```puppet
