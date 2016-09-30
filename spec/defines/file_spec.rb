@@ -54,6 +54,7 @@ describe '::cassandra::file' do
       should contain_class('cassandra')
       should contain_class('cassandra::params')
       should contain_class('stdlib')
+      should contain_cassandra__file('cassandra-env.sh')
 
       should contain_file_line('MAX_HEAP_SIZE 4GB').with(
         path: '/etc/cassandra/cassandra-env.sh',
