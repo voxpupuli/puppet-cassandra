@@ -36,7 +36,7 @@ describe '::cassandra::private::deprecation_warning' do
       }
     end
 
-    let(:title) { 'Debrecated feature' }
+    let(:title) { 'Deprecated feature' }
 
     let :params do
       {
