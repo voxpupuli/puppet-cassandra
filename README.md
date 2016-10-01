@@ -352,12 +352,32 @@ node /^node\d+$/ {
   }
 
   class { 'cassandra':
-    cluster_name     => 'MyCassandraCluster',
-    endpoint_snitch  => 'GossipingPropertyFileSnitch',
-    listen_interface => "eth1",
-    num_tokens       => 256,
-    seeds            => '110.82.155.0,110.82.156.3',
-    auto_bootstrap   => false
+    settings       => {
+      'authenticator'               => 'AllowAllAuthenticator',
+      'auto_bootstrap'              => false,
+      'cluster_name'                => 'MyCassandraCluster',
+      'commitlog_directory'         => '/var/lib/cassandra/commitlog',
+      'commitlog_sync'              => 'periodic',
+      'commitlog_sync_period_in_ms' => 10000,
+      'data_file_directories'       => ['/var/lib/cassandra/data'],
+      'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
+      'hints_directory'             => '/var/lib/cassandra/hints',
+      'listen_interface'            => 'eth1',
+      'num_tokens'                  => 256,
+      'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
+      'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
+      'seed_provider'               => [
+        {
+          'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
+          'parameters' => [
+            {
+              'seeds' => '110.82.155.0,110.82.156.3',
+            },
+          ],
+        },
+      ],
+      'start_native_transport'      => true,
+    },
   }
 }
 ```
@@ -387,25 +407,65 @@ For the sake of simplicity, we will confine this example to the nodes:
 ```puppet
 node /^node[012]$/ {
   class { 'cassandra':
-    cluster_name    => 'MyCassandraCluster',
-    endpoint_snitch => 'GossipingPropertyFileSnitch',
-    listen_address  => "${::ipaddress}",
-    num_tokens      => 256,
-    seeds           => '10.168.66.41,10.176.170.59',
-    dc              => 'DC1',
-    auto_bootstrap  => false
+    dc             => 'DC1',
+    settings       => {
+      'authenticator'               => 'AllowAllAuthenticator',
+      'auto_bootstrap'              => false,
+      'cluster_name'                => 'MyCassandraCluster',
+      'commitlog_directory'         => '/var/lib/cassandra/commitlog',
+      'commitlog_sync'              => 'periodic',
+      'commitlog_sync_period_in_ms' => 10000,
+      'data_file_directories'       => ['/var/lib/cassandra/data'],
+      'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
+      'hints_directory'             => '/var/lib/cassandra/hints',
+      'listen_interface'            => 'eth1',
+      'num_tokens'                  => 256,
+      'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
+      'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
+      'seed_provider'               => [
+        {
+          'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
+          'parameters' => [
+            {
+              'seeds' => '110.82.155.0,110.82.156.3',
+            },
+          ],
+        },
+      ],
+      'start_native_transport'      => true,
+    },
   }
 }
 
 node /^node[345]$/ {
   class { 'cassandra':
-    cluster_name    => 'MyCassandraCluster',
-    endpoint_snitch => 'GossipingPropertyFileSnitch',
-    listen_address  => "${::ipaddress}",
-    num_tokens      => 256,
-    seeds           => '10.168.66.41,10.176.170.59',
-    dc              => 'DC2',
-    auto_bootstrap  => false
+    dc             => 'DC2',
+    settings       => {
+      'authenticator'               => 'AllowAllAuthenticator',
+      'auto_bootstrap'              => false,
+      'cluster_name'                => 'MyCassandraCluster',
+      'commitlog_directory'         => '/var/lib/cassandra/commitlog',
+      'commitlog_sync'              => 'periodic',
+      'commitlog_sync_period_in_ms' => 10000,
+      'data_file_directories'       => ['/var/lib/cassandra/data'],
+      'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
+      'hints_directory'             => '/var/lib/cassandra/hints',
+      'listen_interface'            => 'eth1',
+      'num_tokens'                  => 256,
+      'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
+      'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
+      'seed_provider'               => [
+        {
+          'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
+          'parameters' => [
+            {
+              'seeds' => '110.82.155.0,110.82.156.3',
+            },
+          ],
+        },
+      ],
+      'start_native_transport'      => true,
+    },
   }
 }
 ```
