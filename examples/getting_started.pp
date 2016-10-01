@@ -16,6 +16,7 @@ include cassandra::java
 # the node itself becomes a seed for the cluster.
 
 class { 'cassandra':
+  package_name   => 'cassandra30',
   settings       => {
     'authenticator'               => 'PasswordAuthenticator',
     'cluster_name'                => 'MyCassandraCluster',
@@ -24,6 +25,7 @@ class { 'cassandra':
     'commitlog_sync_period_in_ms' => 10000,
     'data_file_directories'       => ['/var/lib/cassandra/data'],
     'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
+    'hints_directory'             => '/var/lib/cassandra/hints',
     'listen_address'              => $::ipaddress,
     'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
     'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
@@ -61,7 +63,8 @@ class { 'cassandra::datastax_agent':
 }
 
 class { 'cassandra::optutils':
-  require => Class['cassandra']
+  package_name => 'cassandra30-tools',
+  require      => Class['cassandra'],
 }
 
 class { 'cassandra::schema':
@@ -140,4 +143,22 @@ cassandra::file { "Set Java/Cassandra heap new size to ${heap_new_size}.":
       match => '^#?HEAP_NEWSIZE=.*',
     }
   }
+}
+
+$tmpdir = '/var/lib/cassandra/tmp'
+
+file { $tmpdir:
+  ensure => directory,
+  owner  => 'cassandra',
+  group  => 'cassandra',
+}
+
+cassandra::file { 'Set java.io.tmpdir':
+  file       => 'jvm.options',
+  file_lines => {
+    'java.io.tmpdir' => {
+      line => "-Djava.io.tmpdir=${tmpdir}",
+    },
+  },
+  require    => File[$tmpdir],
 }

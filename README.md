@@ -744,6 +744,24 @@ cassandra::file { "Set Java/Cassandra heap new size to ${heap_new_size}.":
     }
   }
 }
+
+$tmpdir = '/var/lib/cassandra/tmp'
+
+file { $tmpdir:
+  ensure => directory,
+  owner  => 'cassandra',
+  group  => 'cassandra',
+}
+
+cassandra::file { 'Set java.io.tmpdir':
+  file       => 'jvm.options',
+  file_lines => {
+    'java.io.tmpdir' => {
+      line => "-Djava.io.tmpdir=${tmpdir}",
+    },
+  },
+  require    => File[$tmpdir],
+}
 ```
 
 ##### `file`
