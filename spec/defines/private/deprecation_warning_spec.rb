@@ -36,7 +36,7 @@ describe '::cassandra::private::deprecation_warning' do
       }
     end
 
-    let(:title) { 'Debrecated feature' }
+    let(:title) { 'Deprecated feature' }
 
     let :params do
       {
@@ -46,6 +46,9 @@ describe '::cassandra::private::deprecation_warning' do
 
     it do
       should compile
+      should contain_cassandra__private__deprecation_warning('Deprecated feature').with(
+        item_number: 42
+      )
     end
   end
 end

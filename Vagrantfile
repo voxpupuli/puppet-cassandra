@@ -11,7 +11,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # please see the online documentation at vagrantup.com.
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.hostname = 'cassandra.locp.co.uk'
+  config.vm.hostname = 'node0'
   config.vm.box = 'puppetlabs/centos-7.0-64-nocm'
   # config.vm.box = 'puppetlabs/ubuntu-14.04-64-nocm'
   config.puppet_install.puppet_version = '3.8.2'

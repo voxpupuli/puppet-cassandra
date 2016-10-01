@@ -104,7 +104,8 @@ For details on migrating from the version 1.X.X attributes to the `settings`
 hash, see
 https://github.com/locp/cassandra/wiki/Version-1.X.Y-Template-Defaults-Shown-As-2.X.Y-Hash
 
-Please also see the notes for 2.0.0 in the [CHANGELOG](CHANGELOG.md).
+Please also see the notes for 2.0.0 in the
+[CHANGELOG](https://forge.puppet.com/locp/cassandra/changelog).
 
 #### Changes in 1.19.0
 
@@ -195,9 +196,6 @@ Also there is now a class for installing the optional utilities:
 
 ### Beginning with Cassandra
 
-This code will install Cassandra onto a system and create a basic
-keyspace, table and index.
-
 ```puppet
 # Cassandra pre-requisites
 include cassandra::datastax_repo
@@ -255,7 +253,7 @@ In this example, we create a keyspace (mykeyspace) with a table called
 'users' and an index called 'users_lname_idx'.
 
 We also add three users (to Cassandra, not the mykeyspace.users
-table) called spillman, akers and boone.  We also ensure that a user
+table) called spillman, akers and boone while ensuring that a user
 called lucan is absent.
 
 ```puppet
@@ -354,12 +352,32 @@ node /^node\d+$/ {
   }
 
   class { 'cassandra':
-    cluster_name     => 'MyCassandraCluster',
-    endpoint_snitch  => 'GossipingPropertyFileSnitch',
-    listen_interface => "eth1",
-    num_tokens       => 256,
-    seeds            => '110.82.155.0,110.82.156.3',
-    auto_bootstrap   => false
+    settings       => {
+      'authenticator'               => 'AllowAllAuthenticator',
+      'auto_bootstrap'              => false,
+      'cluster_name'                => 'MyCassandraCluster',
+      'commitlog_directory'         => '/var/lib/cassandra/commitlog',
+      'commitlog_sync'              => 'periodic',
+      'commitlog_sync_period_in_ms' => 10000,
+      'data_file_directories'       => ['/var/lib/cassandra/data'],
+      'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
+      'hints_directory'             => '/var/lib/cassandra/hints',
+      'listen_interface'            => 'eth1',
+      'num_tokens'                  => 256,
+      'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
+      'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
+      'seed_provider'               => [
+        {
+          'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
+          'parameters' => [
+            {
+              'seeds' => '110.82.155.0,110.82.156.3',
+            },
+          ],
+        },
+      ],
+      'start_native_transport'      => true,
+    },
   }
 }
 ```
@@ -389,25 +407,65 @@ For the sake of simplicity, we will confine this example to the nodes:
 ```puppet
 node /^node[012]$/ {
   class { 'cassandra':
-    cluster_name    => 'MyCassandraCluster',
-    endpoint_snitch => 'GossipingPropertyFileSnitch',
-    listen_address  => "${::ipaddress}",
-    num_tokens      => 256,
-    seeds           => '10.168.66.41,10.176.170.59',
-    dc              => 'DC1',
-    auto_bootstrap  => false
+    dc             => 'DC1',
+    settings       => {
+      'authenticator'               => 'AllowAllAuthenticator',
+      'auto_bootstrap'              => false,
+      'cluster_name'                => 'MyCassandraCluster',
+      'commitlog_directory'         => '/var/lib/cassandra/commitlog',
+      'commitlog_sync'              => 'periodic',
+      'commitlog_sync_period_in_ms' => 10000,
+      'data_file_directories'       => ['/var/lib/cassandra/data'],
+      'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
+      'hints_directory'             => '/var/lib/cassandra/hints',
+      'listen_interface'            => 'eth1',
+      'num_tokens'                  => 256,
+      'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
+      'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
+      'seed_provider'               => [
+        {
+          'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
+          'parameters' => [
+            {
+              'seeds' => '110.82.155.0,110.82.156.3',
+            },
+          ],
+        },
+      ],
+      'start_native_transport'      => true,
+    },
   }
 }
 
 node /^node[345]$/ {
   class { 'cassandra':
-    cluster_name    => 'MyCassandraCluster',
-    endpoint_snitch => 'GossipingPropertyFileSnitch',
-    listen_address  => "${::ipaddress}",
-    num_tokens      => 256,
-    seeds           => '10.168.66.41,10.176.170.59',
-    dc              => 'DC2',
-    auto_bootstrap  => false
+    dc             => 'DC2',
+    settings       => {
+      'authenticator'               => 'AllowAllAuthenticator',
+      'auto_bootstrap'              => false,
+      'cluster_name'                => 'MyCassandraCluster',
+      'commitlog_directory'         => '/var/lib/cassandra/commitlog',
+      'commitlog_sync'              => 'periodic',
+      'commitlog_sync_period_in_ms' => 10000,
+      'data_file_directories'       => ['/var/lib/cassandra/data'],
+      'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
+      'hints_directory'             => '/var/lib/cassandra/hints',
+      'listen_interface'            => 'eth1',
+      'num_tokens'                  => 256,
+      'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
+      'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
+      'seed_provider'               => [
+        {
+          'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
+          'parameters' => [
+            {
+              'seeds' => '110.82.155.0,110.82.156.3',
+            },
+          ],
+        },
+      ],
+      'start_native_transport'      => true,
+    },
   }
 }
 ```
@@ -469,10 +527,7 @@ Default value 'false'
 
 ##### `cassandra_yaml_tmpl`
 The path to the Puppet template for the Cassandra configuration file.  This
-allows the user to supply their own customized template.  A Cassandra 1.X
-compatible template called cassandra1.yaml.erb has been provided by @Spredzy.
-There is also cassandra20.yaml.erb that is more suitable for use with
-Cassandra 2.0.
+allows the user to supply their own customized template.
 Default value 'cassandra/cassandra.yaml.erb'
 
 ##### `config_file_mode`
@@ -538,7 +593,7 @@ Default value 'true'
 
 ##### `service_ensure`
 Ensure the Cassandra service is running.  Valid values are running or stopped.
-Default value 'running'
+Default value *undef*
 
 ##### `service_name`
 The name of the service that runs the Cassandra software.
@@ -749,6 +804,24 @@ cassandra::file { "Set Java/Cassandra heap new size to ${heap_new_size}.":
     }
   }
 }
+
+$tmpdir = '/var/lib/cassandra/tmp'
+
+file { $tmpdir:
+  ensure => directory,
+  owner  => 'cassandra',
+  group  => 'cassandra',
+}
+
+cassandra::file { 'Set java.io.tmpdir':
+  file       => 'jvm.options',
+  file_lines => {
+    'java.io.tmpdir' => {
+      line => "-Djava.io.tmpdir=${tmpdir}",
+    },
+  },
+  require    => File[$tmpdir],
+}
 ```
 
 ##### `file`
@@ -892,12 +965,9 @@ The status of the package specified in **package_name**.  Can be
 Default value 'present'
 
 ##### `package_name`
-If the default value of *undef* is left as it is, then a package called
-cassandra22-tools or cassandra-tools will be installed
-on a Red Hat family or Debian system respectively.  Alternatively, one
-can specify a package that is available in a package repository to the
-node.
-Default value *undef*
+The name of the optional utilities package to be installed.  This
+defaults to `cassandra22-tools` or `cassandra-tools`
+on a Red Hat family or Debian system respectively.
 
 #### Class: cassandra::schema
 
