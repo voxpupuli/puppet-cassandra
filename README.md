@@ -196,9 +196,6 @@ Also there is now a class for installing the optional utilities:
 
 ### Beginning with Cassandra
 
-This code will install Cassandra onto a system and create a basic
-keyspace, table and index.
-
 ```puppet
 # Cassandra pre-requisites
 include cassandra::datastax_repo
@@ -470,10 +467,7 @@ Default value 'false'
 
 ##### `cassandra_yaml_tmpl`
 The path to the Puppet template for the Cassandra configuration file.  This
-allows the user to supply their own customized template.  A Cassandra 1.X
-compatible template called cassandra1.yaml.erb has been provided by @Spredzy.
-There is also cassandra20.yaml.erb that is more suitable for use with
-Cassandra 2.0.
+allows the user to supply their own customized template.
 Default value 'cassandra/cassandra.yaml.erb'
 
 ##### `config_file_mode`
@@ -539,7 +533,7 @@ Default value 'true'
 
 ##### `service_ensure`
 Ensure the Cassandra service is running.  Valid values are running or stopped.
-Default value 'running'
+Default value *undef*
 
 ##### `service_name`
 The name of the service that runs the Cassandra software.
@@ -893,12 +887,9 @@ The status of the package specified in **package_name**.  Can be
 Default value 'present'
 
 ##### `package_name`
-If the default value of *undef* is left as it is, then a package called
-cassandra22-tools or cassandra-tools will be installed
-on a Red Hat family or Debian system respectively.  Alternatively, one
-can specify a package that is available in a package repository to the
-node.
-Default value *undef*
+The name of the optional utilities package to be installed.  This
+defaults to `cassandra22-tools` or `cassandra-tools`
+on a Red Hat family or Debian system respectively.
 
 #### Class: cassandra::schema
 
