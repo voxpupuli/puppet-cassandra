@@ -62,7 +62,7 @@ describe 'cassandra' do
         rpc_address: 'foo',
         rpc_port: 'foo',
         rpc_server_type: 'foo',
-        seeds: 'foo',
+        seeds: '192.168.0.1,192.168.0.2',
         server_encryption_internode: 'foo',
         server_encryption_keystore: 'foo',
         server_encryption_keystore_password: 'foo',
@@ -289,7 +289,7 @@ describe 'cassandra' do
 
     it do
       should contain_file('/etc/cassandra.yaml')
-        .with_content(/ - seeds: "foo"/)
+        .with_content(/ - seeds: "192.168.0.1,192.168.0.2"/)
     end
 
     it do
