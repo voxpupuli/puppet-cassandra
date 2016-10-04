@@ -913,4 +913,25 @@ describe 'cassandra' do
     it { should contain_cassandra__private__data_directory('datadir2') }
     it { should contain_file('saved_caches_directory') }
   end
+
+  context 'Test passing of seed nodes as an array.' do
+    let :facts do
+      {
+        osfamily: 'RedHat'
+      }
+    end
+
+    let :params do
+      {
+        cassandra_yaml_tmpl: 'cassandra/cassandra20.yaml.erb',
+        config_path: '/etc',
+        seeds: ['192.168.0.1', '192.168.0.2']
+      }
+    end
+
+    it do
+      should contain_file('/etc/cassandra.yaml')
+        .with_content(/ - seeds: "192.168.0.1,192.168.0.2"/)
+    end
+  end
 end
