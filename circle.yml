@@ -17,18 +17,22 @@ deployment:
     branch: /^bugfix.*/
     commands: 
       - "./scripts/circle.bash merge release/patch"
-  feature231:
-    branch: feature/231/client_security
-    commands:
-      - "./scripts/circle.bash merge release/minor"
-  feature237:
-    branch: feature/237/file
-    commands:
-      - "./scripts/circle.bash merge release/minor"
   improvement: 
     branch: /^improvement.*/
     commands: 
       - "./scripts/circle.bash merge release/patch"
+  legacy_bugfix:
+    branch: /^legacy/bugfix.*/
+    commands: 
+      - "./scripts/circle.bash merge legacy/patch"
+  legacy_improvement:
+    branch: /^legacy/improvement.*/
+    commands: 
+      - "./scripts/circle.bash merge legacy/patch"
+  legacy_patch_release:
+    branch: legacy/patch
+    commands: 
+      - "./scripts/circle.bash merge legacy/minor"
   master: 
     branch: master
     commands: 
