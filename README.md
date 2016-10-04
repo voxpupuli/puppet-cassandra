@@ -1538,6 +1538,9 @@ seeds is actually a comma-delimited list of addresses. Ex: "ip1,ip2,ip3"
 
 See also `seed_provider_class_name`.
 
+The value can be provided as a sting of comma-delimited string (e.g.
+"ip1,ip2,ip3") or as an array of entries (e.g. ["ip1", "ip2"]).
+
 Default value '127.0.0.1'
 
 ##### `seed_provider_class_name`
