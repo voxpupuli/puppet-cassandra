@@ -76,7 +76,7 @@ class cassandra::java (
     file_line { "Setting java temp directory to ${temp_directory}":
       path    => '/etc/cassandra/conf/jvm.options',
       line    => "-Djava.io.tmpdir=${temp_directory}",
-      require => File[$temp_directory], Package[$package_name]
+      require => Package[$package_name]
     }
   }
 }
