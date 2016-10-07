@@ -29,6 +29,7 @@ group :system_tests do
   gem 'jwt',                    '<= 1.5.4'
   gem 'metadata-json-lint',     require: false
   gem 'minitest',               '<= 5.9.0'
+  gem 'net-http-persistent',    '<= 2.9.4'
   gem 'parser',                 '<= 2.3.1.2'
   gem 'pry',                    require: false
   gem 'puppet-blacksmith',      require: false
