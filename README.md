@@ -3608,6 +3608,7 @@ page for project specific requirements.
 
 **Release**  | **PR/Issue**                                        | **Contributer**
 -------------|-----------------------------------------------------|----------------------------------------------------
+1.26.0       | [#282](https://github.com/locp/cassandra/pull/282)  | [@Mortinke](https://github.com/Mortinke)
 1.25.2       | [#269](https://github.com/locp/cassandra/issues/269)| [@ahharu](https://github.com/ahharu)
 1.25.1       | [#264](https://github.com/locp/cassandra/issues/264)| [@pampelix](https://github.com/pampelix)
 1.25.0       | [#261](https://github.com/locp/cassandra/pull/261)  | [@tibers](https://github.com/tibers)
