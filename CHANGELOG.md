@@ -12,7 +12,7 @@ A non-functional release containing some improvements and documentation correcti
 * Removed some deprecated files.
 * Regained 100% spec test coverage.
 
-##2016-09-29 - Release 2.0.0 ([diff](https://github.com/locp/cassandra/compare/1.25.2...2.0.0))
+##2016-09-29 - Release 2.0.0 ([diff](https://github.com/locp/cassandra/compare/1.26.0...2.0.0))
 
 ### Summary
 
@@ -26,6 +26,13 @@ section of the README for further details.
 * Changes to how `service_ensure` is handled.
 * `cassandra::file` is now a define, not a class (as it should have been).
 
+##2016-10-08 - Release 1.26.0 ([diff](https://github.com/locp/cassandra/compare/1.25.2...1.26.0))
+
+# Improvements
+* The `cassandra::seeds` paramater can now be provided as an array or as a string.
+
+# Bugfixes
+* Ensure legacy builds still work on TravisCI.
 
 ##2016-09-03 - Release 1.25.2 ([diff](https://github.com/locp/cassandra/compare/1.25.1...1.25.2))
 
