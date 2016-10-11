@@ -51,17 +51,26 @@ class cassandra::java (
   }
 
   # this is a custom fact to workaround /var/tmp not being executable
-  if $::isTmpExecutable == 'false' {
-    file { $temp_directory:
-      ensure => 'directory',
-      owner  => 'cassandra',
-      group  => 'cassandra',
-      mode   => '0750',
-    }
-    file_line { "Setting java temp directory to ${temp_directory}":
-      path    => '/etc/cassandra/conf/jvm.options',
-      line    => "-Djava.io.tmpdir=${temp_directory}",
-      require => File[$temp_directory],
+  # if cassandra is done being installed...
+  if $::isjvmoptionspresent == 'true' {
+    # ...but the temp directory has strange ACLs or permissions...
+    if $::isTmpExecutable == 'false' {
+      # ...and the user should set temp_directory...
+      if $temp_directory == undef {
+	notify {'$temp_directory is unset but /var/tmp is not executable, please see the README. Cassandra cannot run in this configuration.'}
+      } else {
+        file { $temp_directory:
+          ensure => 'directory',
+          owner  => 'cassandra',
+          group  => 'cassandra',
+          mode   => '0750',
+        }
+        file_line { "Setting java temp directory to ${temp_directory}":
+          path    => '/etc/cassandra/conf/jvm.options',
+          line    => "-Djava.io.tmpdir=${temp_directory}",
+          require => File[$temp_directory],
+        }
+      }
     }
   }
 }
