@@ -57,7 +57,7 @@ class cassandra::java (
     if $::isTmpExecutable == 'false' {
       # ...and the user should set temp_directory...
       if $temp_directory == undef {
-	notify {'$temp_directory is unset but /var/tmp is not executable, please see the README. Cassandra cannot run in this configuration.'}
+	notify { '$temp_directory is unset but /var/tmp is not executable, please see the README. Cassandra cannot run in this configuration.': }
       } else {
         file { $temp_directory:
           ensure => 'directory',
