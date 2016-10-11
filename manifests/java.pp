@@ -2,6 +2,7 @@
 class cassandra::java (
   $aptkey           = undef,
   $aptsource        = undef,
+  $config_path      = $::cassandra::params::config_path,
   $jna_ensure       = 'present',
   $jna_package_name = $::cassandra::params::jna_package_name,
   $package_ensure   = 'present',
@@ -66,7 +67,7 @@ class cassandra::java (
           mode   => '0750',
         }
         file_line { "Setting java temp directory to ${temp_directory}":
-          path    => '/etc/cassandra/conf/jvm.options',
+          path    => "${config_path}/jvm.options",
           line    => "-Djava.io.tmpdir=${temp_directory}",
           require => File[$temp_directory],
         }
