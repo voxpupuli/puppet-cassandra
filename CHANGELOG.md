@@ -1,5 +1,23 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-10-12 - Release 2.0.2 ([diff](https://github.com/locp/cassandra/compare/2.0.1...2.0.2))
+
+### Summary
+
+This is a non-functional patch release that fixes some issues in documentation, and fixes some
+bugs and makes some improvements in our testing framework.
+
+### Improvements
+
+* Ensure there is a framework for supporting the legacy 1.X.Y. module until the end of 2016.
+* A more obvious test rig for the beaker/acceptance tests on TravisCI.
+
+### Bugfixes
+
+* Corrected misleading documentation.
+* Ensure legacy test builds still work against Ruby 1.9.3.
+* Corrected deprecated tags in the module metadata.
+
 ##2016-10-01 - Release 2.0.1 ([diff](https://github.com/locp/cassandra/compare/2.0.0...2.0.1))
 
 ### Summary
