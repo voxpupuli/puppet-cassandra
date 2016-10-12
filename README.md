@@ -196,22 +196,16 @@ Also there is now a class for installing the optional utilities:
 
 ### Beginning with Cassandra
 
+Create a Cassandra 2.X cluster called MyCassandraCluster which uses the
+GossipingPropertyFileSnitch and password authentication.  In this very
+basic example the node itself becomes a seed for the cluster and the
+credentials will default to a user called cassandra with a password
+called of cassandra..
+
 ```puppet
 # Cassandra pre-requisites
 include cassandra::datastax_repo
 include cassandra::java
-
-# Create a cluster called MyCassandraCluster which uses the
-# GossipingPropertyFileSnitch.  In this very basic example
-# the node itself becomes a seed for the cluster.
-class { 'cassandra':
-  authenticator   => 'PasswordAuthenticator',
-  cluster_name    => 'MyCassandraCluster',
-  endpoint_snitch => 'GossipingPropertyFileSnitch',
-  listen_address  => $::ipaddress,
-  seeds           => $::ipaddress,
-  require         => Class['cassandra::datastax_repo', 'cassandra::java'],
-}
 
 class { 'cassandra':
   settings => {
@@ -236,6 +230,22 @@ class { 'cassandra':
       },
     ],
     'start_native_transport'      => true,
+  },
+  require  => Class['cassandra::datastax_repo', 'cassandra::java'],
+}
+```
+
+For this code to run with version 3.X of Cassandra, the `hints_directory` will
+also need to be specified:
+
+```puppet
+...
+
+class { 'cassandra':
+  settings => {
+    ...
+    'hints_directory'             => '/var/lib/cassandra/hints',
+    ...
   },
   require  => Class['cassandra::datastax_repo', 'cassandra::java'],
 }
