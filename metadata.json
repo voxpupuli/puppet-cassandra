@@ -13,8 +13,7 @@
     "database",
     "datastax",
     "datastax-agent",
-    "nosql",
-    "opscenter"
+    "nosql"
   ],
   "requirements": [
     {
