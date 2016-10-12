@@ -15,11 +15,11 @@ class cassandra::schema (
   $keyspaces                = {},
   $tables                   = {},
   $users                    = {},
-  ) inherits ::cassandra::params {
+  ) inherits cassandra::params {
   require '::cassandra'
 
   if $cqlsh_client_config != undef {
-    file { $cqlsh_client_config :
+    file { "${cqlsh_client_config}" :
       ensure  => file,
       group   => $::gid,
       mode    => '0600',

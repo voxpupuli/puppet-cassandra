@@ -22,7 +22,12 @@ file { '/appdata/cassandra':
   require => Package['cassandra'],
   before  => Service['cassandra'],
 } ->
-file { [$commitlog_directory, $data_file_directory, $saved_caches_directory]:
+file {
+  [
+    $commitlog_directory,
+    $data_file_directory,
+    $saved_caches_directory,
+  ]:
   ensure  => directory,
   owner   => 'cassandra',
   group   => 'cassandra',
@@ -73,13 +78,13 @@ class { 'cassandra::datastax_agent':
     },
     'async_pool_size' => {
       'ensure' => absent,
-    }
+    },
   },
   require  => Class['cassandra'],
 }
 
 class { 'cassandra::optutils':
-  require => Class['cassandra']
+  require => Class['cassandra'],
 }
 
 class { 'cassandra::schema':
@@ -100,7 +105,7 @@ class { 'cassandra::schema':
         keyspace_class     => 'SimpleStrategy',
         replication_factor => 1,
       },
-    }
+    },
   },
   tables         => {
     'users' => {
@@ -125,7 +130,7 @@ class { 'cassandra::schema':
       password => 'Niner75',
     },
     'lucan'    => {
-      'ensure' => absent
+      'ensure' => absent,
     },
   },
 }
@@ -142,6 +147,6 @@ class { 'cassandra::file':
     'HEAP_NEWSIZE'  => {
       line  => "HEAP_NEWSIZE='${heap_new_size}M'",
       match => '#HEAP_NEWSIZE="800M"',
-    }
-  }
+    },
+  },
 }
