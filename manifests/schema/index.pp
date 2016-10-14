@@ -39,14 +39,14 @@ define cassandra::schema::index(
 
     $create_command = "${::cassandra::schema::cqlsh_opts} -e \"${create_script}\" ${::cassandra::schema::cqlsh_conn}"
 
-    exec { $create_command:
+    exec { "${create_command}":
       unless  => $read_command,
       require => Exec['::cassandra::schema connection test'],
     }
   } elsif $ensure == absent {
     $delete_script = "DROP INDEX ${fqin}"
     $delete_command = "${::cassandra::schema::cqlsh_opts} -e \"${delete_script}\" ${::cassandra::schema::cqlsh_conn}"
-    exec { $delete_command:
+    exec { "${delete_command}":
       onlyif  => $read_command,
       require => Exec['::cassandra::schema connection test'],
     }

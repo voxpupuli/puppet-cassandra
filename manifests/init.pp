@@ -12,7 +12,7 @@ class cassandra (
   $dc                                                   = 'DC1',
   $dc_suffix                                            = undef,
   $fail_on_non_supported_os                             = true,
-  $package_ensure                                       = 'present',
+  $package_ensure                                       = present,
   $package_name                                         = $::cassandra::params::cassandra_pkg,
   $prefer_local                                         = undef,
   $rack                                                 = 'RAC1',
@@ -79,17 +79,17 @@ class cassandra (
       }
 
       group { 'cassandra':
-        ensure  => 'present',
+        ensure => present,
       }
 
       user { 'cassandra':
-        ensure     => 'present',
+        ensure     => present,
         comment    => 'Cassandra database,,,',
         gid        => 'cassandra',
         home       => '/var/lib/cassandra',
         shell      => '/bin/false',
         managehome => true,
-        require    => Group['cassandra']
+        require    => Group['cassandra'],
       }
       # End of CASSANDRA-2356 specific resources.
     }
@@ -115,15 +115,15 @@ class cassandra (
     refreshonly => true,
   }
 
-  file { $config_path:
-    ensure  => 'directory',
+  file { "${config_path}":
+    ensure  => directory,
     group   => 'cassandra',
     owner   => 'cassandra',
     mode    => '0755',
     require => $config_path_require,
   }
 
-  file { $config_file:
+  file { "${config_file}":
     ensure  => present,
     owner   => 'cassandra',
     group   => 'cassandra',
@@ -133,8 +133,8 @@ class cassandra (
     before  => $config_file_before,
   }
 
-  file { $dc_rack_properties_file:
-    ensure  => 'file',
+  file { "${dc_rack_properties_file}":
+    ensure  => file,
     content => template($rackdc_tmpl),
     owner   => 'cassandra',
     group   => 'cassandra',

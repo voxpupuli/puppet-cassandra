@@ -9,4 +9,10 @@ Blacksmith::RakeTask.new do |t|
   t.tag_pattern = '%s'
 end
 
+PuppetLint::RakeTask.new :lint do |config|
+  # Disable the following check as it clashes with the Sonarqube Puppet
+  # plugin.
+  config.disable_checks = ['only_variable_string']
+end
+
 # RuboCop::RakeTask.new

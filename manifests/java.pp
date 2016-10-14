@@ -41,11 +41,11 @@ class cassandra::java (
     }
   }
 
-  package { $package_name:
+  package { "${package_name}":
     ensure => $package_ensure,
   }
 
-  package { $jna_package_name:
+  package { "${jna_package_name}":
     ensure => $jna_ensure,
   }
 }
