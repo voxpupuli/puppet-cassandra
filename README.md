@@ -510,6 +510,13 @@ true or not set the attribute at all after initializing the cluster.
 * [cassandra::private::deprecation_warning](#defined-type-cassandraprivatedeprecation_warning)
 * [cassandra::private::firewall_ports::rule](#defined-type-cassandraprivatefirewall_portsrule)
 
+### Facts
+
+* cassandramajorversion
+* cassandraminorversion
+* cassandrapatchversion
+* cassandrarelease
+
 ### Attributes
 
 A class for installing the Cassandra package and manipulate settings in the
