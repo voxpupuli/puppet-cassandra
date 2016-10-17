@@ -2,20 +2,20 @@
 
 ## Table of Contents
 
-1. [Raising an Issue](#raisinganissue)
+1. [Raising an Issue](#raising-an-issue)
 1. [Contribtions](#contributions)
-  * [Unit Tests](#unittests)
-1. [Further Reading](#furtherreading)
+  * [Unit Tests](#unit-tests)
+1. [Further Reading](#further-reading)
 
 ## Raising an Issue
 
 When raising an issue, please provide the following information:
 
-# The version of the locp-cassandra module that you are using.
-# The version of Cassandra that you are installing.
-# The operating system and release (output from `facter os` would be
+* The version of the locp-cassandra module that you are using.
+* The version of Cassandra that you are installing.
+* The operating system and release (output from `facter os` would be
   appropriate).
-# A sample of your manifest/profile that is calling the `cassandra` module.
+* A sample of your manifest/profile that is calling the `cassandra` module.
   Feel free to obfuscate sections of the code that contain details that
   are confidential (e.g. passwords and other secrets).
 
@@ -31,11 +31,11 @@ However, we do ask that at the very least, all items marked as **MUST** or
 
 * Any new features (e.g. new resources or new attributes to existing resoures)
   **MUST** be fully documented .
-* Unit tests **MUST** be completing successfully.  See [Unit Tests](#unittests)
-  for more details.  If your initial unit tests fail after a pull request and
-  you need to fix them, simply change the code on your branch and push them
-  to *origin* again as this will re-run the tests.  It is not required to
-  submit a new pull request.
+* Unit tests **MUST** be completing successfully.  See
+  [Unit Tests](#unit-tests) for more details.  If your initial unit tests fail
+  after a pull request and you need to fix them, simply change the code on
+  your branch and push them to *origin* again as this will re-run the
+  tests.  It is not required to submit a new pull request.
 * Any new functionality or enhancements **SHOULD** be covered by unit/spec
   tests.  If you are not comfortable with this, submit the PR anyway and
   we will fill in these gaps.  You will most probably be asked to rebase
