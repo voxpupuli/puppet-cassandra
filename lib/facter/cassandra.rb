@@ -3,35 +3,29 @@
 #############################################################################
 
 Facter.add('cassandrarelease') do
-  cmd = '/bin/nodetool version'
-  cmdoutput = `#{cmd} 2> /dev/null`
-
   setcode do
-    if cmdoutput == ''
-      nil
-    else
-      cmdoutput.split(': ')[1]
-    end
+    version = Facter::Util::Resolution.exec('nodetool version')
+    version.match(/\d+\.\d+\.\d+/).to_s if version && version != ''
   end
 end
 
 Facter.add('cassandramajorversion') do
   setcode do
     release = Facter.value(:cassandrarelease)
-    release.split('.')[0]
+    release.split('.')[0].to_i if release
   end
 end
 
 Facter.add('cassandraminorversion') do
   setcode do
     release = Facter.value(:cassandrarelease)
-    release.split('.')[1]
+    release.split('.')[1].to_i if release
   end
 end
 
 Facter.add('cassandrapatchversion') do
   setcode do
     release = Facter.value(:cassandrarelease)
-    release.split('.')[2]
+    release.split('.')[2].to_i if release
   end
 end
