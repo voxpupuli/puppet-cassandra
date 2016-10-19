@@ -3,6 +3,7 @@
 .project
 .travis/secrets.tar
 .vagrant/
+.yardoc/
 *.iml
 *.swn
 *.swo
