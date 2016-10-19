@@ -1,7 +1,7 @@
-# == Class: cassandra::datastax_repo
-#
-# Please see the README for this module for full details of what this class
-# does as part of the module and how to use it.
+# An optional class that will allow a suitable repository to be configured
+# from which packages for DataStax Community can be downloaded.  Changing
+# the defaults will allow any Debian Apt or Red Hat Yum repository to be
+# configured.
 #
 class cassandra::datastax_repo (
   $descr   = 'DataStax Repo for Apache Cassandra',

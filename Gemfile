@@ -11,6 +11,8 @@ end
 gem 'facter', '>= 1.7.0'
 
 group :development do
+  gem 'puppet-strings',
+      git: 'https://github.com/puppetlabs/puppet-strings.git'
   gem 'yard', require: false
 end
 
