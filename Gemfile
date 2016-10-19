@@ -10,6 +10,10 @@ end
 
 gem 'facter', '>= 1.7.0'
 
+group :development do
+  gem 'yard', require: false
+end
+
 group :system_tests do
   gem 'backports',              '<= 3.6.8'
   gem 'beaker',                 '<= 2.33.0'
