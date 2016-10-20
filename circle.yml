@@ -72,3 +72,6 @@ test:
         parallel: true
     - ./scripts/circle.bash acceptance_tests:
         parallel: true
+    - bundle exec rake strings:generate:
+        parallel: true
+
