@@ -8,7 +8,6 @@ spec/fixtures/
 *.swn
 *.swo
 *.swp
-.travis/secrets.tar
 .vagrant/
 vendor/
 log/
