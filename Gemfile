@@ -34,6 +34,8 @@ group :system_tests do
   gem 'pry',                    require: false
   gem 'puppet-blacksmith',      require: false
   gem 'puppet-lint',            require: false
+  gem 'puppet-strings',
+      git: 'https://github.com/puppetlabs/puppet-strings.git'
   gem 'puppetlabs_spec_helper', require: false
   gem 'rake',                   '<= 10.5.0'
   gem 'rbvmomi',                '<= 1.9.2'
@@ -48,4 +50,5 @@ group :system_tests do
   gem 'travis',                 require: false
   gem 'travis-lint',            require: false
   gem 'term-ansicolor',         '<= 1.3.2'
+  gem 'yard',                   require: false
 end
