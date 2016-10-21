@@ -35,6 +35,7 @@ describe 'cassandra' do
   context 'On an unknown OS with defaults for all parameters' do
     let :facts do
       {
+        operatingsystemmajrelease: 10,
         osfamily: 'Darwin'
       }
     end
@@ -45,7 +46,8 @@ describe 'cassandra' do
   context 'Test the default parameters (RedHat)' do
     let :facts do
       {
-        osfamily: 'RedHat'
+        osfamily: 'RedHat',
+        operatingsystemmajrelease: 7
       }
     end
 
@@ -96,7 +98,8 @@ describe 'cassandra' do
         service_name: 'cassandra',
         service_provider: nil,
         service_refresh: true,
-        settings: {}
+        settings: {},
+        systemctl: '/usr/bin/systemctl'
       )
     end
   end
@@ -128,6 +131,7 @@ describe 'cassandra' do
   context 'On a Debian OS with defaults for all parameters' do
     let :facts do
       {
+        operatingsystemmajrelease: 8,
         osfamily: 'Debian'
       }
     end
@@ -215,6 +219,7 @@ describe 'cassandra' do
   context 'CASSANDRA-9822 activated on Debian' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'Debian',
         lsbdistid: 'Ubuntu',
         lsbdistrelease: '14.04'
@@ -238,6 +243,7 @@ describe 'cassandra' do
   context 'Install DSE on a Red Hat family OS.' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end
@@ -275,6 +281,7 @@ describe 'cassandra' do
   context 'On an unsupported OS pleading tolerance' do
     let :facts do
       {
+        operatingsystemmajrelease: 10,
         osfamily: 'Darwin'
       }
     end
@@ -284,7 +291,8 @@ describe 'cassandra' do
         config_path: '/etc/cassandra',
         fail_on_non_supported_os: false,
         package_name: 'cassandra',
-        service_provider: 'base'
+        service_provider: 'base',
+        systemctl: '/bin/true'
       }
     end
 
@@ -298,6 +306,7 @@ describe 'cassandra' do
   context 'Ensure cassandra service can be stopped and disabled.' do
     let :facts do
       {
+        operatingsystemmajrelease: 8,
         osfamily: 'Debian'
       }
     end
@@ -320,6 +329,7 @@ describe 'cassandra' do
   context 'Test the dc and rack properties with defaults (Debian).' do
     let :facts do
       {
+        operatingsystemmajrelease: 8,
         osfamily: 'Debian'
       }
     end
@@ -336,6 +346,7 @@ describe 'cassandra' do
   context 'Test the dc and rack properties with defaults (RedHat).' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end
@@ -352,6 +363,7 @@ describe 'cassandra' do
   context 'Test the dc and rack properties.' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end

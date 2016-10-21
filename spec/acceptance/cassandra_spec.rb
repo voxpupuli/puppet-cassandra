@@ -83,11 +83,11 @@ describe 'cassandra' do
                         ['2.2.7', '3.0.3']
                       end
 
-  ruby_lt_190 = case opsys
-                when 'centos6' then true
-                when 'ubuntu12' then true
-                else false
-                end
+  legacy_yml_dump = case opsys
+                    when 'centos6' then true
+                    when 'ubuntu12' then true
+                    else false
+                    end
 
   cassandra_version.each do |version|
     cassandra_install_pp = <<-EOS
@@ -215,7 +215,7 @@ describe 'cassandra' do
         sleep 60
       end
 
-      if ruby_lt_190
+      if legacy_yml_dump
         it 'should work with no errors (subsequent run)' do
           apply_manifest(cassandra_install_pp, catch_failures: true)
         end
@@ -322,7 +322,7 @@ describe 'cassandra' do
         apply_manifest(schema_testing_create_pp, catch_failures: true)
       end
 
-      if ruby_lt_190
+      if legacy_yml_dump
         it 'should work with no errors (subsequent run)' do
           apply_manifest(schema_testing_create_pp, catch_failures: true)
         end
@@ -368,7 +368,7 @@ describe 'cassandra' do
         apply_manifest(schema_testing_drop_type_pp, catch_failures: true)
       end
 
-      if ruby_lt_190
+      if legacy_yml_dump
         it 'should work with no errors (subsequent run)' do
           apply_manifest(schema_testing_drop_type_pp, catch_failures: true)
         end
@@ -412,7 +412,7 @@ describe 'cassandra' do
         apply_manifest(schema_testing_drop_user_pp, catch_failures: true)
       end
 
-      if ruby_lt_190
+      if legacy_yml_dump
         it 'should work with no errors (subsequent run)' do
           apply_manifest(schema_testing_drop_user_pp, catch_failures: true)
         end
@@ -457,7 +457,7 @@ describe 'cassandra' do
         apply_manifest(schema_testing_drop_index_pp, catch_failures: true)
       end
 
-      if ruby_lt_190
+      if legacy_yml_dump
         it 'should run with no errors (subsequent run)' do
           apply_manifest(schema_testing_drop_index_pp, catch_failures: true)
         end
@@ -501,7 +501,7 @@ describe 'cassandra' do
         apply_manifest(schema_testing_drop_pp, catch_failures: true)
       end
 
-      if ruby_lt_190
+      if legacy_yml_dump
         it 'should work with no errors (subsequent run)' do
           apply_manifest(schema_testing_drop_pp, catch_failures: true)
         end
@@ -545,7 +545,7 @@ describe 'cassandra' do
       it 'should work with no errors' do
         apply_manifest(schema_testing_drop_pp, catch_failures: true)
       end
-      if ruby_lt_190
+      if legacy_yml_dump
         it 'should work with no errors (subsequent run)' do
           apply_manifest(schema_testing_drop_pp, catch_failures: true)
         end

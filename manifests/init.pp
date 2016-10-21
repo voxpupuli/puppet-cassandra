@@ -4,26 +4,27 @@
 # does as part of the module and how to use it.
 #
 class cassandra (
-  $cassandra_2356_sleep_seconds                         = 5,
-  $cassandra_9822                                       = false,
-  $cassandra_yaml_tmpl                                  = 'cassandra/cassandra.yaml.erb',
-  $config_file_mode                                     = '0644',
-  $config_path                                          = $::cassandra::params::config_path,
-  $dc                                                   = 'DC1',
-  $dc_suffix                                            = undef,
-  $fail_on_non_supported_os                             = true,
-  $package_ensure                                       = 'present',
-  $package_name                                         = $::cassandra::params::cassandra_pkg,
-  $prefer_local                                         = undef,
-  $rack                                                 = 'RAC1',
-  $rackdc_tmpl                                          = 'cassandra/cassandra-rackdc.properties.erb',
-  $service_enable                                       = true,
-  $service_ensure                                       = undef,
-  $service_name                                         = 'cassandra',
-  $service_provider                                     = undef,
-  $service_refresh                                      = true,
-  $settings                                             = {},
-  $snitch_properties_file                               = 'cassandra-rackdc.properties',
+  $cassandra_2356_sleep_seconds = 5,
+  $cassandra_9822               = false,
+  $cassandra_yaml_tmpl          = 'cassandra/cassandra.yaml.erb',
+  $config_file_mode             = '0644',
+  $config_path                  = $::cassandra::params::config_path,
+  $dc                           = 'DC1',
+  $dc_suffix                    = undef,
+  $fail_on_non_supported_os     = true,
+  $package_ensure               = 'present',
+  $package_name                 = $::cassandra::params::cassandra_pkg,
+  $prefer_local                 = undef,
+  $rack                         = 'RAC1',
+  $rackdc_tmpl                  = 'cassandra/cassandra-rackdc.properties.erb',
+  $service_enable               = true,
+  $service_ensure               = undef,
+  $service_name                 = 'cassandra',
+  $service_provider             = undef,
+  $service_refresh              = true,
+  $settings                     = {},
+  $snitch_properties_file       = 'cassandra-rackdc.properties',
+  $systemctl                    = $::cassandra::params::systemctl,
   ) inherits cassandra::params {
   if $service_provider != undef {
     Service {
@@ -94,6 +95,12 @@ class cassandra (
       # End of CASSANDRA-2356 specific resources.
     }
     default: {
+      $config_file_before  = []
+      $config_file_require = [ User['cassandra'], File[$config_path] ]
+      $config_path_require = []
+      $dc_rack_properties_file_require = Package['cassandra']
+      $dc_rack_properties_file_before  = []
+
       if $fail_on_non_supported_os {
         fail("OS family ${::osfamily} not supported")
       } else {
@@ -109,8 +116,8 @@ class cassandra (
   }
 
   exec { 'cassandra_reload_systemctl':
-    command     => "${::cassandra::params::systemctl} daemon-reload",
-    onlyif      => "test -x ${::cassandra::params::systemctl}",
+    command     => "${systemctl} daemon-reload",
+    onlyif      => "test -x ${systemctl}",
     path        => ['/usr/bin', '/bin'],
     refreshonly => true,
   }

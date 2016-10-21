@@ -9,21 +9,6 @@ describe 'cassandra::datastax_repo' do
     ]
   end
 
-  context 'Regardless of which OS' do
-    it do
-      should compile
-      should have_resource_count(0)
-
-      should contain_class('cassandra::datastax_repo').only_with(
-        'descr'   => 'DataStax Repo for Apache Cassandra',
-        'key_id'  => '7E41C00F85BFC1706C4FFFB3350200F2B999A372',
-        'key_url' => 'http://debian.datastax.com/debian/repo_key',
-        'pkg_url' => nil,
-        'release' => 'stable'
-      )
-    end
-  end
-
   context 'On a RedHat OS with defaults for all parameters' do
     let :facts do
       {
@@ -33,6 +18,14 @@ describe 'cassandra::datastax_repo' do
 
     it do
       should have_resource_count(1)
+
+      should contain_class('cassandra::datastax_repo').only_with(
+        'descr'   => 'DataStax Repo for Apache Cassandra',
+        'key_id'  => '7E41C00F85BFC1706C4FFFB3350200F2B999A372',
+        'key_url' => 'http://debian.datastax.com/debian/repo_key',
+        'pkg_url' => nil,
+        'release' => 'stable'
+      )
 
       should contain_yumrepo('datastax').with(
         ensure: 'present',

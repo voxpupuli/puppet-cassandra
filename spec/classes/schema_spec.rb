@@ -29,6 +29,7 @@ describe 'cassandra::schema' do
   context 'Ensure that a connection test is made.' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end
@@ -61,6 +62,7 @@ describe 'cassandra::schema' do
       {
         id: 'root',
         gid: 'root',
+        operatingsystemmajrelease: 7,
         osfamily: 'Debian'
       }
     end
@@ -96,6 +98,7 @@ describe 'cassandra::schema' do
       {
         id: 'root',
         gid: 'root',
+        operatingsystemmajrelease: 7,
         osfamily: 'Debian'
       }
     end
@@ -130,6 +133,7 @@ describe 'cassandra::schema' do
   context 'Test that users can specify a password.' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'Redhat'
       }
     end
