@@ -88,6 +88,12 @@ describe 'cassandra::datastax_agent' do
   end
 
   context 'Test that the JAVA_HOME can be set.' do
+    let :facts do
+      {
+        osfamily: 'Debian'
+      }
+    end
+
     let :params do
       {
         java_home: '/usr/lib/jvm/java-8-oracle'
@@ -107,6 +113,12 @@ describe 'cassandra::datastax_agent' do
   end
 
   context 'Test settings.' do
+    let :facts do
+      {
+        osfamily: 'Debian'
+      }
+    end
+
     let :params do
       {
         settings: {

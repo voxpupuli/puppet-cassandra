@@ -68,6 +68,7 @@ describe 'cassandra::schema::table' do
   context 'Create Table' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end
@@ -105,6 +106,7 @@ describe 'cassandra::schema::table' do
   context 'Drop Table' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end
@@ -127,6 +129,7 @@ describe 'cassandra::schema::table' do
   context 'Set ensure to latest' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end

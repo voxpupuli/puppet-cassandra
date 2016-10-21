@@ -3,6 +3,7 @@ describe 'cassandra::optutils' do
   context 'On a RedHat OS with defaults for all parameters' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end
@@ -21,6 +22,7 @@ describe 'cassandra::optutils' do
   context 'On a Debian OS with defaults for all parameters' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'Debian'
       }
     end
@@ -36,6 +38,13 @@ describe 'cassandra::optutils' do
   end
 
   context 'With package_name set to foobar' do
+    let :facts do
+      {
+        operatingsystemmajrelease: 7,
+        osfamily: 'Debian'
+      }
+    end
+
     let :params do
       {
         package_name: 'foobar-java',
@@ -51,6 +60,7 @@ describe 'cassandra::optutils' do
   context 'On a Debian OS with package_ensure set' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'Debian'
       }
     end
