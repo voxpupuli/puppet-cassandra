@@ -10,7 +10,7 @@ Blacksmith::RakeTask.new do |t|
   t.tag_pattern = '%s'
 end
 
-desc 'Run metadata_lint, rubocop, lint, valuidate and spec.'
+desc 'Run metadata_lint, rubocop, lint, validate and spec.'
 task test: [
   :metadata_lint,
   :rubocop,
