@@ -8,13 +8,28 @@ else
   gem 'puppet', require: false
 end
 
-gem 'facter', '>= 1.7.0'
+net_ssh_version = ENV['NET_SSH_GEM_VERSION']
+
+if net_ssh_version
+  gem 'net-ssh',
+      net_ssh_version,
+      require: false
+end
+
+tinsversion = ENV['TINS_GEM_VERSION']
+
+if tinsversion
+  gem 'tins',
+      tinsversion,
+      require: false
+end
 
 group :system_tests do
   gem 'beaker',                 require: false
   gem 'beaker-rspec',           require: false
   gem 'coveralls',              require: false
   gem 'docker-api',             require: false
+  gem 'facter',                 '>= 1.7.0'
   gem 'fog',                    require: false
   gem 'hiera',                  require: false
   gem 'metadata-json-lint',     require: false

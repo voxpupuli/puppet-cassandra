@@ -1,4 +1,7 @@
-# cassandra::private::deprecation_warning
+# A defined type to handle deprecation messages to the user.
+# This is not intended to be used by a user but is documented here for
+# completeness.
+# @param item_number [integer] A unique reference for the message.
 define cassandra::private::deprecation_warning($item_number,) {
   $item_name = $title
   $warning_message_1 = sprintf('%s has been deprecated and will be removed',

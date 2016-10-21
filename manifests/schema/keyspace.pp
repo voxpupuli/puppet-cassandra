@@ -1,4 +1,26 @@
-# cassandra::schema::keyspace
+# Create or drop keyspaces within the schema.
+# @param ensure [present|absent] Create or drop the keyspace.
+# @param durable_writes [boolean] When set to false, data written to the
+#   keyspace bypasses the commit log. Be careful using this option
+#   because you risk losing data. Set this attribute to false on a keyspace
+#   using the SimpleStrategy.
+# @param keyspace_name [string] The name of the keyspace to be created.
+# @param replication_map [hash] Needed if the keyspace is to be present.
+#   Optional if it is to be absent.
+# @example
+#   $network_topology_strategy = {
+#     keyspace_class => 'NetworkTopologyStrategy',
+#       dc1            => 3,
+#       dc2            => 2
+#   }
+# @example
+#   cassandra::schema::keyspace { 'mykeyspace':
+#     replication_map => {
+#       keyspace_class     => 'SimpleStrategy',
+#       replication_factor => 1,
+#     },
+#     durable_writes  => false,
+#   }
 define cassandra::schema::keyspace(
   $ensure          = present,
   $durable_writes  = true,
