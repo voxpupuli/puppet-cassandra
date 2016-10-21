@@ -74,4 +74,3 @@ test:
         parallel: true
     - bundle exec rake strings:generate:
         parallel: true
-
