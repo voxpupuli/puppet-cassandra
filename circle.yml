@@ -74,7 +74,7 @@ test:
         parallel: true
     - git config --global user.email "info@locp.co.uk":
         parallel: true
-    - git config --global user.name "CircleCI"
+    - git config --global user.name "CircleCI":
         parallel: true
     - bundle exec rake strings:gh_pages:update:
         parallel: true
