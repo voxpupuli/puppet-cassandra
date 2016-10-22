@@ -5,7 +5,7 @@ matrix:
   fast_finish: true
   include: 
     - 
-      env: PUPPET_GEM_VERSION="3.8.4"
+      env: "PUPPET_GEM_VERSION=3.8.4 TINS_GEM_VERSION=0.8.4"
       rvm: "1.9.3"
     - 
       env: PUPPET_GEM_VERSION="3.8.4"
