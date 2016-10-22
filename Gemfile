@@ -24,6 +24,14 @@ if tinsversion
       require: false
 end
 
+net_http_persistent_version = ENV['NET_HTTP_PERSISTENT_GEM_VERSION']
+
+if net_http_persistent_version
+  gem 'net_http_persistent',
+    net_http_persistent_version,
+    require: false
+end
+
 group :system_tests do
   gem 'beaker',                 require: false
   gem 'beaker-rspec',           require: false

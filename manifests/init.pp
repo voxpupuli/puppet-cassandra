@@ -89,6 +89,9 @@
 #   attribute.
 # @param snitch_properties_file The name of the snitch properties file.  The
 #   full path name would be *config_path*/*snitch_properties_file*.
+# @param systemctl [string] The full path to the systemctl command.  Only
+#   needed when the package is installed.  Will silently continue if the
+#   executable does not exist.
 class cassandra (
   $cassandra_2356_sleep_seconds = 5,
   $cassandra_9822               = false,

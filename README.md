@@ -36,7 +36,7 @@ A Puppet module to install and manage Cassandra, DataStax Agent & OpsCenter
 
 * Installs the Cassandra package (default **cassandra22** on Red Hat and
   **cassandra** on Debian).
-* Configures settings in *${config_path}/cassandra.yaml*.
+* Configures settings in `${config_path}/cassandra.yaml`.
 * On CentOS 7 if the `init` service provider is used, then cassandra
   is added as a system service.
 * Optionally ensures that the Cassandra service is enabled and running.
