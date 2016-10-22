@@ -39,9 +39,11 @@ deployment:
   master: 
     branch: master
     commands: 
-      - "./scripts/circle.bash merge release/latest"
-      - "bundle exec rake strings:gh_pages:update"
-      - "./scripts/circle.bash deploy"
+      - ./scripts/circle.bash merge release/latest"
+      - git config --global user.email "info@locp.co.uk"
+      - git config --global user.name "CircleCI"
+      - bundle exec rake strings:gh_pages:update
+      - ./scripts/circle.bash deploy
   patch_release: 
     branch: release/patch
     commands: 
@@ -75,8 +77,4 @@ test:
     - bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/puppet.xml":
         parallel: true
     - ./scripts/circle.bash acceptance_tests:
-        parallel: true
-    - git config --global user.email "info@locp.co.uk":
-        parallel: true
-    - git config --global user.name "CircleCI":
         parallel: true
