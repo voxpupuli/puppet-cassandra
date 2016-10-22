@@ -1,5 +1,6 @@
 --- 
 bundler_args: "--without development"
+cache: bundler
 language: ruby
 matrix: 
   fast_finish: true
