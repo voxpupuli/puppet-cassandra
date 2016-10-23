@@ -11,41 +11,41 @@ end
 net_ssh_version = ENV['NET_SSH_GEM_VERSION']
 
 if net_ssh_version
-  gem 'net-ssh',
-      net_ssh_version,
-      require: false
+  gem 'net-ssh', net_ssh_version, require: false
+else
+  gem 'net-ssh', require: false
 end
 
 tinsversion = ENV['TINS_GEM_VERSION']
 
 if tinsversion
-  gem 'tins',
-      tinsversion,
-      require: false
+  gem 'tins', tinsversion, require: false
+else
+  gem 'tins', require: false
 end
 
 net_http_persistent_version = ENV['NET_HTTP_PERSISTENT_GEM_VERSION']
 
 if net_http_persistent_version
-  gem 'net-http-persistent',
-      net_http_persistent_version,
-      require: false
+  gem 'net-http-persistent', net_http_persistent_version, require: false
+else
+  gem 'net-http-persistent', require: false
 end
 
 json_pure_version = ENV['JSON_PURE_GEM_VERSION']
 
 if json_pure_version
-  gem 'json_pure',
-      json_pure_version,
-      require: false
+  gem 'json_pure', json_pure_version, require: false
+else
+  gem 'json_pure', require: false
 end
 
 rubocop_version = ENV['RUBOCOP_GEM_VERSION']
 
 if rubocop_version
-  gem 'rubocop',
-      rubocop_version,
-      require: false
+  gem 'rubocop', rubocop_version, require: false
+else
+  gem 'rubocop', require: false
 end
 
 group :system_tests do
