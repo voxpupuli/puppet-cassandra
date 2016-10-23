@@ -198,14 +198,6 @@ describe 'cassandra' do
       }
     EOS
 
-    datastax_agent_cludge_pp = <<-EOS
-      Exec {
-        path => [ '/usr/bin', '/bin'],
-      }
-
-      exec { 'chmod 0640 /var/lib/datastax-agent/conf/address.yaml': }
-    EOS
-
     describe "########### Cassandra #{version} installation (#{opsys})." do
       it 'should work with no errors' do
         apply_manifest(cassandra_install_pp, catch_failures: true)
@@ -221,7 +213,6 @@ describe 'cassandra' do
         end
       else
         it 'check code is idempotent' do
-          apply_manifest(datastax_agent_cludge_pp, catch_failures: true)
           expect(apply_manifest(cassandra_install_pp,
                                 catch_failures: true).exit_code).to be_zero
         end
