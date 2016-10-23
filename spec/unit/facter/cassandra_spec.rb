@@ -8,7 +8,8 @@ describe 'Facter::Util::Fact' do
 
   describe 'cassandrarelease DSE' do
     it do
-      allow(Facter::Util::Resolution).to receive(:exec).with('nodetool version')
+      allow(Facter::Util::Resolution)
+        .to receive(:exec).with('nodetool version')
         .and_return('2.1.11.969')
       expect(Facter.fact(:cassandrarelease).value).to eql('2.1.11')
     end
@@ -16,7 +17,8 @@ describe 'Facter::Util::Fact' do
 
   describe 'cassandrarelease DDC' do
     it do
-      allow(Facter::Util::Resolution).to receive(:exec).with('nodetool version')
+      allow(Facter::Util::Resolution)
+        .to receive(:exec).with('nodetool version')
         .and_return('2.1.11')
       expect(Facter.fact(:cassandrarelease).value).to eql('2.1.11')
     end
@@ -24,7 +26,8 @@ describe 'Facter::Util::Fact' do
 
   describe 'Cassandra not installed or not running' do
     it do
-      allow(Facter::Util::Resolution).to receive(:exec).with('nodetool version')
+      allow(Facter::Util::Resolution)
+        .to receive(:exec).with('nodetool version')
         .and_return('')
       expect(Facter.fact(:cassandrarelease).value).to eql(nil)
       expect(Facter.fact(:cassandramajorversion).value).to eql(nil)
@@ -35,21 +38,24 @@ describe 'Facter::Util::Fact' do
 
   describe 'cassandramajorversion' do
     it do
-      allow(Facter.fact(:cassandrarelease)).to receive(:value).and_return('3.0.1')
+      allow(Facter.fact(:cassandrarelease))
+        .to receive(:value).and_return('3.0.1')
       expect(Facter.fact(:cassandramajorversion).value).to eql(3)
     end
   end
 
   describe 'cassandraminorversion' do
     it do
-      allow(Facter.fact(:cassandrarelease)).to receive(:value).and_return('3.0.1')
+      allow(Facter.fact(:cassandrarelease))
+        .to receive(:value).and_return('3.0.1')
       expect(Facter.fact(:cassandraminorversion).value).to eql(0)
     end
   end
 
   describe 'cassandrapatchversion' do
     it do
-      allow(Facter.fact(:cassandrarelease)).to receive(:value).and_return('3.0.1')
+      allow(Facter.fact(:cassandrarelease))
+        .to receive(:value).and_return('3.0.1')
       expect(Facter.fact(:cassandrapatchversion).value).to eql(1)
     end
   end
