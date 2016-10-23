@@ -1,4 +1,21 @@
-# cassandra::schema::table
+# Create or drop tables within the schema.
+# @param keyspace [string] The name of the keyspace.
+# @param columns [hash] A hash of the columns to be placed in the table.
+#   Optional if the table is to be absent.
+# @param ensure [present|absent] Ensure a keyspace is created or dropped.
+# @param options [array] Options to be added to the table creation.
+# @param table [string] The name of the table.  Defaults to the name of the
+#   resource.
+# @example
+#   cassandra::schema::table { 'users':
+#     keyspace => 'mykeyspace',
+#     columns  => {
+#       'userid'      => 'int',
+#       'fname'       => 'text',
+#       'lname'       => 'text',
+#       'PRIMARY KEY' => '(userid)',
+#     },
+#   }
 define cassandra::schema::table (
   $keyspace,
   $ensure  = present,

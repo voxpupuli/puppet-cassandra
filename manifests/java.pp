@@ -1,10 +1,25 @@
-# Please see the README file for the module.
+# A class to install Java and JNA packages.
+# @param aptkey [hash] If supplied, this should be a hash of `apt::key`
+#   resources that will be passed to the create_resources function.
+#   This is ignored on non-Debian systems.
+# @param aptsource [hash] If supplied, this should be a hash of
+#   `apt::source` resources that will be passed to the create_resources
+#   function.  This is ignored on non-Red Hat`
+# @param jna_ensure [string] Is passed to the package reference for the JNA
+#   package.  Valid values are `present` or a version number.
+# @param jna_package_name [string] The name of the JNA package.
+# @param package_ensure [string] Is passed to the package reference for the JRE/JDK
+#   package.  Valid values are `present` or a version number.
+# @param package_name [string] The name of the Java package to be installed.
+# @param yumrepo [hash] If supplied, this should be a hash of *yumrepo*
+#   resources that will be passed to the create_resources function.
+#   This is ignored on non-Red Hat systems.
 class cassandra::java (
   $aptkey           = undef,
   $aptsource        = undef,
-  $jna_ensure       = 'present',
+  $jna_ensure       = present,
   $jna_package_name = $::cassandra::params::jna_package_name,
-  $package_ensure   = 'present',
+  $package_ensure   = present,
   $package_name     = $::cassandra::params::java_package,
   $yumrepo          = undef,
   ) inherits cassandra::params {

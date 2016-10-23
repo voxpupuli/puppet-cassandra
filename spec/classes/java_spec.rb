@@ -12,6 +12,7 @@ describe 'cassandra::java' do
   context 'On a RedHat OS with defaults for all parameters' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end
@@ -26,6 +27,7 @@ describe 'cassandra::java' do
   context 'On a Debian OS with defaults for all parameters' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'Debian'
       }
     end
@@ -41,6 +43,7 @@ describe 'cassandra::java' do
   context 'On a Debian OS with package_ensure set' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'Debian'
       }
     end
@@ -57,6 +60,13 @@ describe 'cassandra::java' do
   end
 
   context 'With package names set to foobar' do
+    let :facts do
+      {
+        operatingsystemmajrelease: 7,
+        osfamily: 'RedHat'
+      }
+    end
+
     let :params do
       {
         package_name: 'foobar-java',
@@ -75,6 +85,7 @@ describe 'cassandra::java' do
   context 'Ensure that a YUM repo can be specified.' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end
@@ -101,6 +112,7 @@ describe 'cassandra::java' do
   context 'Ensure that Apt key and source can be specified.' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'Debian'
       }
     end

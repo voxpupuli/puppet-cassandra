@@ -8,44 +8,67 @@ else
   gem 'puppet', require: false
 end
 
-gem 'facter', '>= 1.7.0'
+net_ssh_version = ENV['NET_SSH_GEM_VERSION']
+
+if net_ssh_version
+  gem 'net-ssh', net_ssh_version, require: false
+else
+  gem 'net-ssh', require: false
+end
+
+tinsversion = ENV['TINS_GEM_VERSION']
+
+if tinsversion
+  gem 'tins', tinsversion, require: false
+else
+  gem 'tins', require: false
+end
+
+net_http_persistent_version = ENV['NET_HTTP_PERSISTENT_GEM_VERSION']
+
+if net_http_persistent_version
+  gem 'net-http-persistent', net_http_persistent_version, require: false
+else
+  gem 'net-http-persistent', require: false
+end
+
+json_pure_version = ENV['JSON_PURE_GEM_VERSION']
+
+if json_pure_version
+  gem 'json_pure', json_pure_version, require: false
+else
+  gem 'json_pure', require: false
+end
+
+rubocop_version = ENV['RUBOCOP_GEM_VERSION']
+
+if rubocop_version
+  gem 'rubocop', rubocop_version, require: false
+else
+  gem 'rubocop', require: false
+end
 
 group :system_tests do
-  gem 'backports',              '<= 3.6.8'
-  gem 'beaker',                 '<= 2.33.0'
+  gem 'beaker',                 require: false
   gem 'beaker-rspec',           require: false
   gem 'coveralls',              require: false
   gem 'docker-api',             require: false
-  gem 'ethon',                  '<= 0.9.0'
-  gem 'excon',                  '<= 0.52.0'
+  gem 'facter',                 '>= 1.7.0'
   gem 'fog',                    require: false
-  gem 'fog-aws',                '<= 0.11.0'
-  gem 'fog-core',               '<= 1.42.0'
-  gem 'fog-google',             '<= 0.0.9'
-  gem 'fog-profitbricks',       '<= 0.0.5'
-  gem 'google-api-client',      '<= 0.9.4'
   gem 'hiera',                  require: false
-  gem 'json_pure',              '<= 2.0.1'
-  gem 'jwt',                    '<= 1.5.4'
   gem 'metadata-json-lint',     require: false
-  gem 'minitest',               '<= 5.9.0'
-  gem 'net-http-persistent',    '<= 2.9.4'
-  gem 'parser',                 '<= 2.3.1.2'
   gem 'pry',                    require: false
   gem 'puppet-blacksmith',      require: false
   gem 'puppet-lint',            require: false
+  gem 'puppet-strings',
+      git: 'https://github.com/puppetlabs/puppet-strings.git'
   gem 'puppetlabs_spec_helper', require: false
-  gem 'rake',                   '<= 10.5.0'
-  gem 'rbvmomi',                '<= 1.9.2'
-  gem 'rspec_junit_formatter',  '<= 0.2.2'
-  gem 'rspec-puppet',           '<= 2.3.2'
+  gem 'rake',                   require: false
+  gem 'rspec_junit_formatter',  require: false
+  gem 'rspec-puppet',           require: false
   gem 'rspec-puppet-utils',     require: false
-  gem 'rubocop',                '<= 0.41.2'
   gem 'serverspec',             require: false
-  gem 'specinfra',              '<= 2.59.0'
-  gem 'spdx-licenses',          '<= 1.0.0'
-  gem 'tins',                   '<= 1.6.0'
   gem 'travis',                 require: false
   gem 'travis-lint',            require: false
-  gem 'term-ansicolor',         '<= 1.3.2'
+  gem 'yard',                   require: false
 end
