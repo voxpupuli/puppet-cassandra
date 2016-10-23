@@ -32,6 +32,22 @@ if net_http_persistent_version
       require: false
 end
 
+json_pure_version = ENV['JSON_PURE_GEM_VERSION']
+
+if json_pure_version
+  gem 'json_pure',
+      json_pure_version,
+      require: false
+end
+
+rubocop_version = ENV['RUBOCOP_GEM_VERSION']
+
+if rubocop_version
+  gem 'rubocop',
+      rubocop_version,
+      require: false
+end
+
 group :system_tests do
   gem 'beaker',                 require: false
   gem 'beaker-rspec',           require: false
@@ -51,7 +67,6 @@ group :system_tests do
   gem 'rspec_junit_formatter',  require: false
   gem 'rspec-puppet',           require: false
   gem 'rspec-puppet-utils',     require: false
-  gem 'rubocop',                require: false
   gem 'serverspec',             require: false
   gem 'travis',                 require: false
   gem 'travis-lint',            require: false
