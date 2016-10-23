@@ -20,6 +20,10 @@ deployment:
     branch: /^bugfix.*/
     commands: 
       - "./scripts/circle.bash merge release/patch"
+  enhancement_v210:
+    branch: enhancement/v2.1.0
+    commands:
+      - "./scripts/circle.bash merge release/minor"
   improvement: 
     branch: /^improvement.*/
     commands: 
