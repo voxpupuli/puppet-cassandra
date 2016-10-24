@@ -51,6 +51,7 @@ end
 group :system_tests do
   gem 'beaker',                 require: false
   gem 'beaker-rspec',           require: false
+  gem 'beaker-puppet_install_helper'
   gem 'coveralls',              require: false
   gem 'docker-api',             require: false
   gem 'facter',                 '>= 1.7.0'
@@ -67,7 +68,6 @@ group :system_tests do
   gem 'rspec_junit_formatter',  require: false
   gem 'rspec-puppet',           require: false
   gem 'rspec-puppet-utils',     require: false
-  gem 'serverspec',             require: false
   gem 'travis',                 require: false
   gem 'travis-lint',            require: false
   gem 'yard',                   require: false
