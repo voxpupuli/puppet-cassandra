@@ -80,7 +80,7 @@ class cassandra::datastax_agent (
   file { $address_config_file:
     owner   => 'cassandra',
     group   => 'cassandra',
-    mode    => '0640',
+    mode    => '0644',
     require => Package[$package_name],
   }
 
