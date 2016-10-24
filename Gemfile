@@ -57,7 +57,7 @@ else
 end
 
 group :system_tests do
-  gem 'beaker-rspec',           require: false
+  gem 'beaker-rspec', require: false
   gem 'beaker-puppet_install_helper'
   gem 'coveralls',              require: false
   gem 'docker-api',             require: false
