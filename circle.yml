@@ -17,6 +17,10 @@ deployment:
     branch: /^bugfix.*/
     commands: 
       - "./scripts/circle.bash merge release/patch"
+  feature_data_directories:
+    branch: feature/300/data_directories
+    commands:
+      - "./scripts/circle.bash merge release/major"
   improvement: 
     branch: /^improvement.*/
     commands: 
@@ -42,10 +46,6 @@ deployment:
     branch: release/patch
     commands: 
       - "./scripts/circle.bash merge release/minor"
-  remove_config_path_parents:
-    branch: spike/remove_config_path_parents
-    commands:
-      - "./scripts/circle.bash merge release/major"
 machine: 
   environment:
     PUPPET_GEM_VERSION: '~> 4.0'
