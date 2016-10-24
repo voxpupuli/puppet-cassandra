@@ -48,8 +48,15 @@ else
   gem 'rubocop', require: false
 end
 
+beaker_version = ENV['BEAKER_GEM_VERSION']
+
+if beaker_version
+  gem 'beaker', beaker_version, require: false
+else
+  gem 'beaker', require: false
+end
+
 group :system_tests do
-  gem 'beaker',                 '<= 2.33.0'
   gem 'beaker-rspec',           require: false
   gem 'beaker-puppet_install_helper'
   gem 'coveralls',              require: false

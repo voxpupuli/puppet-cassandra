@@ -58,6 +58,7 @@ deployment:
       - "./scripts/circle.bash merge release/major"
 machine: 
   environment:
+    BEAKER_GEM_VERSION: '<= 2.33.0'
     PUPPET_GEM_VERSION: '~> 4.0'
     STRICT_VARIABLES: yes
   ruby:
