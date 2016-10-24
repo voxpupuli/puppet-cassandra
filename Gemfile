@@ -49,7 +49,7 @@ else
 end
 
 group :system_tests do
-  gem 'beaker',                 require: false
+  gem 'beaker',                 '<= 2.33.0'
   gem 'beaker-rspec',           require: false
   gem 'beaker-puppet_install_helper'
   gem 'coveralls',              require: false
