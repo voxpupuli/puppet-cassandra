@@ -26,6 +26,7 @@ describe 'cassandra::schema::user' do
   context 'Create a user' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end
@@ -50,6 +51,7 @@ describe 'cassandra::schema::user' do
   context 'Drop a user' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end
@@ -73,6 +75,7 @@ describe 'cassandra::schema::user' do
   context 'Set ensure to latest' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end

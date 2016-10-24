@@ -26,6 +26,7 @@ describe 'cassandra::schema::index' do
   context 'Create a basic index' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end
@@ -50,6 +51,7 @@ describe 'cassandra::schema::index' do
   context 'Create a custom index.' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end
@@ -73,6 +75,7 @@ describe 'cassandra::schema::index' do
   context 'Create a custom index with options.' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end
@@ -98,6 +101,7 @@ describe 'cassandra::schema::index' do
   context 'Drop Index' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end
@@ -122,6 +126,7 @@ describe 'cassandra::schema::index' do
   context 'Set ensure to latest' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end

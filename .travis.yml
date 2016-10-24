@@ -1,17 +1,19 @@
 --- 
-before_install: 
-  - "openssl aes-256-cbc -K $encrypted_aa8913b81047_key -iv $encrypted_aa8913b81047_iv -in .travis/secrets.tar.enc -out secrets.tar -d"
 bundler_args: "--without development"
-env: 
-  - PUPPET_GEM_VERSION="3.8.4"
-  - "PUPPET_GEM_VERSION=\"~> 4.0\" STRICT_VARIABLES=\"yes\""
+cache: bundler
 language: ruby
 matrix: 
-  exclude: 
+  fast_finish: true
+  include: 
+    - 
+      env: "NET_SSH_GEM_VERSION=2.9.4 PUPPET_GEM_VERSION=3.8.4 TINS_GEM_VERSION=0.8.4 NET_HTTP_PERSISTENT_GEM_VERSION=2.9.4 JSON_PURE_GEM_VERSION=2.0.1 RUBOCOP_GEM_VERSION=0.41.2"
+      rvm: "1.9.3"
+    - 
+      env: PUPPET_GEM_VERSION="3.8.4"
+      rvm: "2.1.5"
     - 
       env: "PUPPET_GEM_VERSION=\"~> 4.0\" STRICT_VARIABLES=\"yes\""
-      rvm: "1.9.3"
-  fast_finish: true
+      rvm: "2.3.1"
 notifications: 
   email: false
   webhooks: 
@@ -19,13 +21,8 @@ notifications:
     on_success: change
     urls: 
       - "https://webhooks.gitter.im/e/3477acef6dd93b015c9b"
-rvm: 
-  - "1.9.3"
-  - "2.1.5"
-  - "2.1.6"
 script: 
   - "bundle exec rake lint"
   - "bundle exec rake validate"
   - "bundle exec rake spec SPEC_OPTS='--format documentation'"
-  - "sh scripts/travis_acceptance.sh"
 sudo: false
