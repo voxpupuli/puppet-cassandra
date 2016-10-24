@@ -59,7 +59,7 @@ describe 'cassandra::datastax_agent' do
         .with(
           owner: 'cassandra',
           group: 'cassandra',
-          mode: '0640'
+          mode: '0644'
         ).that_requires('Package[datastax-agent]')
 
       should contain_service('datastax-agent').only_with(
