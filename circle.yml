@@ -23,7 +23,7 @@ deployment:
   feature_data_directories:
     branch: feature/300/data_directories
     commands:
-      - "./scripts/circle.bash merge release/major"
+      - "./scripts/circle.bash merge release/minor"
   enhancement_v210:
     branch: enhancement/v2.1.0
     commands:
