@@ -13,8 +13,6 @@ def gem_env_ver(gemname)
   end
 end
 
-gem_env_ver('beaker')
-gem_env_ver('beaker-rspec')
 gem_env_ver('json_pure')
 gem_env_ver('net-http-persistent')
 gem_env_ver('net-ssh')
@@ -23,8 +21,7 @@ gem_env_ver('rspec-puppet')
 gem_env_ver('rubocop')
 gem_env_ver('tins')
 
-group :system_tests do
-  gem 'beaker-puppet_install_helper'
+group :test do
   gem 'coveralls',              require: false
   gem 'docker-api',             require: false
   gem 'facter',                 '>= 1.7.0'
@@ -43,4 +40,9 @@ group :system_tests do
   gem 'travis',                 require: false
   gem 'travis-lint',            require: false
   gem 'yard',                   require: false
+end
+
+group :acceptance do
+  gem 'beaker-rspec'
+  gem 'beaker-puppet_install_helper'
 end
