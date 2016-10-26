@@ -13,26 +13,16 @@ def gem_env_ver(gemname)
   end
 end
 
-gem_env_ver('json_pure')
-gem_env_ver('net-http-persistent')
-gem_env_ver('net-ssh')
 gem_env_ver('puppet')
-gem_env_ver('rspec-puppet')
-gem_env_ver('rubocop')
-gem_env_ver('tins')
 
 group :test do
   gem 'coveralls',              require: false
-  gem 'docker-api',             require: false
   gem 'facter',                 '>= 1.7.0'
-  gem 'fog',                    require: false
   gem 'hiera',                  require: false
   gem 'metadata-json-lint',     require: false
-  gem 'pry',                    require: false
   gem 'puppet-blacksmith',      require: false
   gem 'puppet-lint',            require: false
-  gem 'puppet-strings',
-      git: 'https://github.com/puppetlabs/puppet-strings.git'
+  gem 'puppet-strings',         require: false
   gem 'puppetlabs_spec_helper', require: false
   gem 'rake',                   require: false
   gem 'rspec_junit_formatter',  require: false
