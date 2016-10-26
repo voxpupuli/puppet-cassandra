@@ -1,6 +1,5 @@
 ---
 language: ruby
-bundler_args: --without development acceptance
 cache: bundler
 before_install: rm Gemfile.lock || true
 sudo: false
