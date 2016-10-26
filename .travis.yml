@@ -4,7 +4,10 @@ cache: bundler
 before_install: rm Gemfile.lock || true
 bundler_args: --without development system_tests
 sudo: false
-script: bundle exec rake test
+script: 
+  - "bundle exec rake lint"
+  - "bundle exec rake validate"
+  - "bundle exec rake spec SPEC_OPTS='--format documentation'"
 matrix:
   fast_finish: true
   include:
