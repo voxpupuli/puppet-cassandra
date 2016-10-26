@@ -14,21 +14,6 @@ describe '::cassandra::private::deprecation_warning' do
     ]
   end
 
-  let!(:stdlib_stubs) do
-    MockFunction.new('concat') do |f|
-      f.stubbed.with([], '/etc/cassandra')
-       .returns(['/etc/cassandra'])
-      f.stubbed.with([], '/etc/cassandra/default.conf')
-       .returns(['/etc/cassandra/default.conf'])
-      f.stubbed.with(['/etc/cassandra'], '/etc/cassandra/default.conf')
-       .returns(['/etc/cassandra', '/etc/cassandra/default.conf'])
-    end
-    MockFunction.new('strftime') do |f|
-      f.stubbed.with('/var/lib/cassandra-%F')
-       .returns('/var/lib/cassandra-YYYY-MM-DD')
-    end
-  end
-
   context 'Test ::cassandra::private::deprecation_warning' do
     let :facts do
       {

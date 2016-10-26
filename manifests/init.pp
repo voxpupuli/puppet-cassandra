@@ -96,16 +96,24 @@ class cassandra (
   $cassandra_2356_sleep_seconds = 5,
   $cassandra_9822               = false,
   $cassandra_yaml_tmpl          = 'cassandra/cassandra.yaml.erb',
+  $commitlog_directory          = undef,
+  $commitlog_directory_mode     = '0750',
   $config_file_mode             = '0644',
   $config_path                  = $::cassandra::params::config_path,
+  $data_file_directories        = undef,
+  $data_file_directories_mode   = '0750',
   $dc                           = 'DC1',
   $dc_suffix                    = undef,
   $fail_on_non_supported_os     = true,
+  $hints_directory              = undef,
+  $hints_directory_mode         = '0750',
   $package_ensure               = 'present',
   $package_name                 = $::cassandra::params::cassandra_pkg,
   $prefer_local                 = undef,
   $rack                         = 'RAC1',
   $rackdc_tmpl                  = 'cassandra/cassandra-rackdc.properties.erb',
+  $saved_caches_directory       = undef,
+  $saved_caches_directory_mode  = '0750',
   $service_enable               = true,
   $service_ensure               = undef,
   $service_name                 = 'cassandra',
@@ -218,6 +226,77 @@ class cassandra (
     mode    => '0755',
     require => $config_path_require,
   }
+
+  if $commitlog_directory {
+    file { $commitlog_directory:
+      ensure  => directory,
+      owner   => 'cassandra',
+      group   => 'cassandra',
+      mode    => $commitlog_directory_mode,
+      require => $data_dir_require,
+      before  => $data_dir_before,
+    }
+
+    $commitlog_directory_settings = merge($settings,
+      { 'commitlog_directory' => $commitlog_directory })
+  } else {
+    $commitlog_directory_settings = $settings
+  }
+
+  if is_array($data_file_directories) {
+    file { $data_file_directories:
+      ensure  => directory,
+      owner   => 'cassandra',
+      group   => 'cassandra',
+      mode    => $data_file_directories_mode,
+      require => $data_dir_require,
+      before  => $data_dir_before,
+    }
+
+    $data_file_directories_settings = merge($settings, {
+      'data_file_directories' => $data_file_directories,
+    })
+  } else {
+    $data_file_directories_settings = $settings
+  }
+
+  if $hints_directory {
+    file { $hints_directory:
+      ensure  => directory,
+      owner   => 'cassandra',
+      group   => 'cassandra',
+      mode    => $hints_directory_mode,
+      require => $data_dir_require,
+      before  => $data_dir_before,
+    }
+
+    $hints_directory_settings = merge($settings,
+      { 'hints_directory' => $hints_directory })
+  } else {
+    $hints_directory_settings = $settings
+  }
+
+  if $saved_caches_directory {
+    file { $saved_caches_directory:
+      ensure  => directory,
+      owner   => 'cassandra',
+      group   => 'cassandra',
+      mode    => $saved_caches_directory_mode,
+      require => $data_dir_require,
+      before  => $data_dir_before,
+    }
+
+    $saved_caches_directory_settings = merge($settings,
+      { 'saved_caches_directory' => $saved_caches_directory})
+  } else {
+    $saved_caches_directory_settings = $settings
+  }
+
+  $merged_settings = merge($settings,
+    $commitlog_directory_settings,
+    $data_file_directories_settings,
+    $hints_directory_settings,
+    $saved_caches_directory_settings)
 
   file { $config_file:
     ensure  => present,

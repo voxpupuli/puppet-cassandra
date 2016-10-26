@@ -68,8 +68,7 @@ group :system_tests do
   gem 'pry',                    require: false
   gem 'puppet-blacksmith',      require: false
   gem 'puppet-lint',            require: false
-  gem 'puppet-strings',
-      git: 'https://github.com/puppetlabs/puppet-strings.git'
+  gem 'puppet-strings',         require: false
   gem 'puppetlabs_spec_helper', require: false
   gem 'rake',                   require: false
   gem 'rspec_junit_formatter',  require: false
