@@ -59,7 +59,7 @@ describe 'cassandra::datastax_agent' do
         .with(
           owner: 'cassandra',
           group: 'cassandra',
-          mode: '0640'
+          mode: '0644'
         ).that_requires('Package[datastax-agent]')
 
       should contain_service('datastax-agent').only_with(
@@ -88,6 +88,12 @@ describe 'cassandra::datastax_agent' do
   end
 
   context 'Test that the JAVA_HOME can be set.' do
+    let :facts do
+      {
+        osfamily: 'Debian'
+      }
+    end
+
     let :params do
       {
         java_home: '/usr/lib/jvm/java-8-oracle'
@@ -107,6 +113,12 @@ describe 'cassandra::datastax_agent' do
   end
 
   context 'Test settings.' do
+    let :facts do
+      {
+        osfamily: 'Debian'
+      }
+    end
+
     let :params do
       {
         settings: {

@@ -34,6 +34,7 @@ describe 'cassandra::schema::cql_type' do
   context 'CQL TYPE (fullname)' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end
@@ -62,6 +63,7 @@ describe 'cassandra::schema::cql_type' do
   context 'Set ensure to absent' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end
@@ -84,6 +86,7 @@ describe 'cassandra::schema::cql_type' do
   context 'Set ensure to latest' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end

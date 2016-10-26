@@ -1,4 +1,7 @@
 --- 
+branches:
+  ignore:
+    - gh-pages # list of branches to ignore
 dependencies: 
   bundler:
     without: [development]
@@ -17,6 +20,10 @@ deployment:
     branch: /^bugfix.*/
     commands: 
       - "./scripts/circle.bash merge release/patch"
+  enhancement_v210:
+    branch: enhancement/v2.1.0
+    commands:
+      - "./scripts/circle.bash merge release/minor"
   improvement: 
     branch: /^improvement.*/
     commands: 
@@ -36,8 +43,11 @@ deployment:
   master: 
     branch: master
     commands: 
-      - "./scripts/circle.bash merge release/latest"
-      - "./scripts/circle.bash deploy"
+      - ./scripts/circle.bash merge release/latest"
+      - git config --global user.email "info@locp.co.uk"
+      - git config --global user.name "CircleCI"
+      - bundle exec rake strings:gh_pages:update
+      - ./scripts/circle.bash deploy
   patch_release: 
     branch: release/patch
     commands: 
@@ -48,10 +58,11 @@ deployment:
       - "./scripts/circle.bash merge release/major"
 machine: 
   environment:
+    BEAKER_GEM_VERSION: '<= 2.33.0'
     PUPPET_GEM_VERSION: '~> 4.0'
     STRICT_VARIABLES: yes
   ruby:
-    version: 2.1.6
+    version: 2.3.1
   services: 
     - docker
 notify: 

@@ -62,6 +62,7 @@ describe 'cassandra::schema::keyspace' do
   context 'Set ensure to present (SimpleStrategy)' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end
@@ -89,6 +90,7 @@ describe 'cassandra::schema::keyspace' do
   context 'Set ensure to present (NetworkTopologyStrategy)' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end
@@ -116,6 +118,7 @@ describe 'cassandra::schema::keyspace' do
   context 'Set ensure to absent' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end
@@ -136,6 +139,7 @@ describe 'cassandra::schema::keyspace' do
   context 'Set ensure to latest' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end
