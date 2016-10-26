@@ -19,6 +19,7 @@ gem_env_ver('json_pure')
 gem_env_ver('net-http-persistent')
 gem_env_ver('net-ssh')
 gem_env_ver('puppet')
+gem_env_ver('rspec-puppet')
 gem_env_ver('rubocop')
 gem_env_ver('tins')
 
@@ -38,7 +39,6 @@ group :system_tests do
   gem 'puppetlabs_spec_helper', require: false
   gem 'rake',                   require: false
   gem 'rspec_junit_formatter',  require: false
-  gem 'rspec-puppet',           require: false
   gem 'rspec-puppet-utils',     require: false
   gem 'travis',                 require: false
   gem 'travis-lint',            require: false
