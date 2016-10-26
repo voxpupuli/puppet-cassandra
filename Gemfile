@@ -14,6 +14,7 @@ def gem_env_ver(gemname)
 end
 
 gem_env_ver('puppet')
+gem_env_ver('tins')
 
 group :test do
   gem 'coveralls',              require: false
