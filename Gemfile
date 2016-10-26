@@ -42,7 +42,7 @@ group :test do
   gem 'yard',                   require: false
 end
 
-group :acceptance do
+group :system_tests do
   gem 'beaker-rspec'
   gem 'beaker-puppet_install_helper'
 end
