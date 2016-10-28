@@ -34,7 +34,7 @@ RSpec.configure do |config|
       ).returns(2)
     end
 
-    MockFunction.new('create_ini_settings') do |f|
+    MockFunction.new('create_ini_settings', type: :statement) do |f|
     end
 
     MockFunction.new('delete') do |f|
@@ -132,7 +132,7 @@ RSpec.configure do |config|
        .returns('/var/lib/cassandra-YYYY-MM-DD')
     end
 
-    MockFunction.new('validate_hash') do |f|
+    MockFunction.new('validate_hash', type: :statement) do |f|
     end
   end
 end
