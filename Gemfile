@@ -1,81 +1,46 @@
 source ENV['GEM_SOURCE'] || 'https://rubygems.org'
 
-puppetversion = ENV['PUPPET_GEM_VERSION']
+def gem_env_ver(gemname)
+  environment_var = gemname.upcase + '_GEM_VERSION'
+  environment_var = environment_var.tr('-', '_')
 
-if puppetversion
-  gem 'puppet', puppetversion, require: false
-else
-  gem 'puppet', require: false
+  gemversion = ENV[environment_var]
+
+  if gemversion
+    gem gemname, gemversion, require: false
+  else
+    gem gemname, require: false
+  end
 end
 
-net_ssh_version = ENV['NET_SSH_GEM_VERSION']
+gem_env_ver('json_pure')
+gem_env_ver('net-http-persistent')
+gem_env_ver('net-ssh')
+gem_env_ver('puppet')
+gem_env_ver('tins')
 
-if net_ssh_version
-  gem 'net-ssh', net_ssh_version, require: false
-else
-  gem 'net-ssh', require: false
-end
-
-tinsversion = ENV['TINS_GEM_VERSION']
-
-if tinsversion
-  gem 'tins', tinsversion, require: false
-else
-  gem 'tins', require: false
-end
-
-net_http_persistent_version = ENV['NET_HTTP_PERSISTENT_GEM_VERSION']
-
-if net_http_persistent_version
-  gem 'net-http-persistent', net_http_persistent_version, require: false
-else
-  gem 'net-http-persistent', require: false
-end
-
-json_pure_version = ENV['JSON_PURE_GEM_VERSION']
-
-if json_pure_version
-  gem 'json_pure', json_pure_version, require: false
-else
-  gem 'json_pure', require: false
-end
-
-rubocop_version = ENV['RUBOCOP_GEM_VERSION']
-
-if rubocop_version
-  gem 'rubocop', rubocop_version, require: false
-else
-  gem 'rubocop', require: false
-end
-
-beaker_version = ENV['BEAKER_GEM_VERSION']
-
-if beaker_version
-  gem 'beaker', beaker_version, require: false
-else
-  gem 'beaker', require: false
-end
-
-group :system_tests do
-  gem 'beaker-rspec', require: false
-  gem 'beaker-puppet_install_helper'
+group :test do
   gem 'coveralls',              require: false
-  gem 'docker-api',             require: false
   gem 'facter',                 '>= 1.7.0'
-  gem 'fog',                    require: false
   gem 'hiera',                  require: false
   gem 'metadata-json-lint',     require: false
-  gem 'pry',                    require: false
   gem 'puppet-blacksmith',      require: false
   gem 'puppet-lint',            require: false
-  gem 'puppet-strings',
-      git: 'https://github.com/puppetlabs/puppet-strings.git'
+  gem 'puppet-strings',         require: false
   gem 'puppetlabs_spec_helper', require: false
   gem 'rake',                   require: false
   gem 'rspec_junit_formatter',  require: false
-  gem 'rspec-puppet',           require: false
+  gem 'rspec-puppet',           '>= 2.3.2'
   gem 'rspec-puppet-utils',     require: false
+  gem 'rubocop', '0.41.2' if RUBY_VERSION < '2.0.0'
+  gem 'rubocop' if RUBY_VERSION >= '2.0.0'
+  gem 'rubocop-rspec', '~> 1.6' if RUBY_VERSION >= '2.3.0'
   gem 'travis',                 require: false
   gem 'travis-lint',            require: false
   gem 'yard',                   require: false
+end
+
+group :system_tests do
+  gem 'beaker-rspec'
+  gem 'beaker-puppet_install_helper'
 end
