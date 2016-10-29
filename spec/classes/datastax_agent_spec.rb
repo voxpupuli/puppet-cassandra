@@ -13,13 +13,6 @@ describe 'cassandra::datastax_agent' do
     ]
   end
 
-  let!(:stdlib_stubs) do
-    MockFunction.new('validate_hash', type: :statement) do |_f|
-    end
-    MockFunction.new('create_ini_settings', type: :statement) do |_f|
-    end
-  end
-
   context 'Test for cassandra::datastax_agent with defaults (RedHat).' do
     let :facts do
       {

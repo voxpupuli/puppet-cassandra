@@ -12,25 +12,6 @@ describe 'cassandra::schema::cql_type' do
     ]
   end
 
-  let!(:stdlib_stubs) do
-    MockFunction.new('concat') do |f|
-      f.stubbed.with([], '/etc/cassandra')
-       .returns(['/etc/cassandra'])
-      f.stubbed.with([], '/etc/cassandra/default.conf')
-       .returns(['/etc/cassandra/default.conf'])
-      f.stubbed.with(['/etc/cassandra'], '/etc/cassandra/default.conf')
-       .returns(['/etc/cassandra', '/etc/cassandra/default.conf'])
-    end
-    MockFunction.new('join') do |f|
-      f.stubbed.with(['firstname text', 'lastname text'], ', ')
-       .returns('firstname text, lastname text')
-    end
-    MockFunction.new('join_keys_to_values') do |f|
-      f.stubbed.with({ 'firstname' => 'text', 'lastname' => 'text' }, ' ')
-       .returns(['firstname text', 'lastname text'])
-    end
-  end
-
   context 'CQL TYPE (fullname)' do
     let :facts do
       {
