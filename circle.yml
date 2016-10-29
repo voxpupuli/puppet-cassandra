@@ -1,4 +1,7 @@
 --- 
+branches:
+  ignore:
+    - gh-pages # list of branches to ignore
 dependencies: 
   bundler:
     without: [development]
@@ -13,45 +16,21 @@ dependencies:
   post:
     - rvm cleanup all
 deployment: 
-  bugfix: 
-    branch: /^bugfix.*/
-    commands: 
-      - "./scripts/circle.bash merge release/patch"
-  improvement: 
-    branch: /^improvement.*/
-    commands: 
-      - "./scripts/circle.bash merge release/patch"
-  legacy_bugfix:
-    branch: /^legacy/bugfix.*/
-    commands: 
-      - "./scripts/circle.bash merge legacy/patch"
-  legacy_improvement:
-    branch: /^legacy/improvement.*/
-    commands: 
-      - "./scripts/circle.bash merge legacy/patch"
-  legacy_patch_release:
-    branch: legacy/patch
-    commands: 
-      - "./scripts/circle.bash merge legacy/minor"
   master: 
     branch: master
     commands: 
-      - "./scripts/circle.bash merge release/latest"
-      - "./scripts/circle.bash deploy"
-  patch_release: 
-    branch: release/patch
-    commands: 
-      - "./scripts/circle.bash merge release/minor"
-  remove_config_path_parents:
-    branch: spike/remove_config_path_parents
-    commands:
-      - "./scripts/circle.bash merge release/major"
+      - ./scripts/circle.bash merge release/latest"
+      - git config --global user.email "info@locp.co.uk"
+      - git config --global user.name "CircleCI"
+      - bundle exec rake strings:gh_pages:update
+      - ./scripts/circle.bash deploy
 machine: 
   environment:
+    BEAKER_GEM_VERSION: '<= 2.33.0'
     PUPPET_GEM_VERSION: '~> 4.0'
     STRICT_VARIABLES: yes
   ruby:
-    version: 2.1.6
+    version: 2.3.1
   services: 
     - docker
 notify: 
