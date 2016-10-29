@@ -55,7 +55,7 @@ class cassandra::datastax_agent (
   $service_enable       = true,
   $service_name         = 'datastax-agent',
   $service_provider     = undef,
-  $settings             = {}
+  $settings             = {},
   ) inherits cassandra::params {
   if $service_provider != undef {
     System {
@@ -99,7 +99,7 @@ class cassandra::datastax_agent (
   service { 'datastax-agent':
     ensure => $service_ensure,
     enable => $service_enable,
-    name   => $service_name
+    name   => $service_name,
   }
 
   if $settings {
@@ -111,7 +111,7 @@ class cassandra::datastax_agent (
     }
 
     $full_settings = {
-      '' => $settings
+      '' => $settings,
     }
 
     validate_hash($full_settings)

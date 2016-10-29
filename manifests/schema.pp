@@ -46,7 +46,7 @@ class cassandra::schema (
   $keyspaces                = {},
   $tables                   = {},
   $users                    = {},
-  ) inherits ::cassandra::params {
+  ) inherits cassandra::params {
   require '::cassandra'
 
   if $cqlsh_client_config != undef {

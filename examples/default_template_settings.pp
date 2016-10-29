@@ -15,7 +15,7 @@ class { 'cassandra':
     'client_encryption_options'                => {
       'enabled'           => false,
       'keystore'          => 'conf/.keystore',
-      'keystore_password' => 'cassandra'
+      'keystore_password' => 'cassandra',
     },
     'cluster_name'                             => 'Test Cluster',
     'column_index_size_in_kb'                  => 64,
@@ -71,9 +71,9 @@ class { 'cassandra':
         'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
         'parameters' => [
           {
-            'seeds' => '127.0.0.1'
+            'seeds' => '127.0.0.1',
           }
-        ]
+        ],
       }
     ],
     'server_encryption_options'                => {
@@ -81,7 +81,7 @@ class { 'cassandra':
       'keystore'             => 'conf/.keystore',
       'keystore_password'    => 'cassandra',
       'truststore'           => 'conf/.truststore',
-      'truststore_password'  => 'cassandra'
+      'truststore_password'  => 'cassandra',
     },
     'snapshot_before_compaction'               => false,
     'ssl_storage_port'                         => 7001,
@@ -95,7 +95,7 @@ class { 'cassandra':
     'trickle_fsync'                            => false,
     'trickle_fsync_interval_in_kb'             => 10240,
     'truncate_request_timeout_in_ms'           => 60000,
-    'write_request_timeout_in_ms'              => 2000
+    'write_request_timeout_in_ms'              => 2000,
   },
   require  => Class['cassandra::datastax_repo', 'cassandra::java'],
 }

@@ -206,17 +206,19 @@ class cassandra (
       }
 
       group { 'cassandra':
-        ensure  => 'present',
+        ensure => present,
       }
 
-      user { 'cassandra':
-        ensure     => 'present',
+      $user = 'cassandra'
+
+      user { $user:
+        ensure     => present,
         comment    => 'Cassandra database,,,',
         gid        => 'cassandra',
         home       => '/var/lib/cassandra',
         shell      => '/bin/false',
         managehome => true,
-        require    => Group['cassandra']
+        require    => Group['cassandra'],
       }
       # End of CASSANDRA-2356 specific resources.
     }
@@ -249,7 +251,7 @@ class cassandra (
   }
 
   file { $config_path:
-    ensure  => 'directory',
+    ensure  => directory,
     group   => 'cassandra',
     owner   => 'cassandra',
     mode    => '0755',
@@ -267,7 +269,7 @@ class cassandra (
     }
 
     $commitlog_directory_settings = merge($settings,
-      { 'commitlog_directory' => $commitlog_directory })
+      { 'commitlog_directory' => $commitlog_directory, })
   } else {
     $commitlog_directory_settings = $settings
   }
@@ -300,7 +302,7 @@ class cassandra (
     }
 
     $hints_directory_settings = merge($settings,
-      { 'hints_directory' => $hints_directory })
+      { 'hints_directory' => $hints_directory, })
   } else {
     $hints_directory_settings = $settings
   }
@@ -316,7 +318,7 @@ class cassandra (
     }
 
     $saved_caches_directory_settings = merge($settings,
-      { 'saved_caches_directory' => $saved_caches_directory})
+      { 'saved_caches_directory' => $saved_caches_directory, })
   } else {
     $saved_caches_directory_settings = $settings
   }
@@ -338,7 +340,7 @@ class cassandra (
   }
 
   file { $dc_rack_properties_file:
-    ensure  => 'file',
+    ensure  => file,
     content => template($rackdc_tmpl),
     owner   => 'cassandra',
     group   => 'cassandra',
