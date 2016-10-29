@@ -12,53 +12,6 @@ describe 'cassandra::schema::keyspace' do
     ]
   end
 
-  let!(:stdlib_stubs) do
-    MockFunction.new('concat') do |f|
-      f.stubbed.with([], '/etc/cassandra')
-       .returns(['/etc/cassandra'])
-      f.stubbed.with([], '/etc/cassandra/default.conf')
-       .returns(['/etc/cassandra/default.conf'])
-      f.stubbed.with(['/etc/cassandra'], '/etc/cassandra/default.conf')
-       .returns(['/etc/cassandra', '/etc/cassandra/default.conf'])
-    end
-    MockFunction.new('delete') do |f|
-      f.stubbed.with(
-        {
-          'keyspace_class' => 'NetworkTopologyStrategy',
-          'dc1' => '3',
-          'dc2' => '2'
-        },
-        'keyspace_class'
-      ).returns('dc1' => '3', 'dc2' => '2')
-    end
-    MockFunction.new('join') do |f|
-      f.stubbed.with(
-        {
-          '\'dc1\': ' => '3',
-          '\'dc2\': ' => '2'
-        },
-        ', '
-      ).returns('\'dc1\': 3, \'dc2\': 2')
-    end
-    MockFunction.new('join_keys_to_values') do |f|
-      f.stubbed.with(
-        {
-          '\'dc1' => '3',
-          '\'dc2' => '2'
-        },
-        '\': '
-      ).returns('\'dc1\': ' => '3', '\'dc2\': ' => '2')
-    end
-    MockFunction.new('prefix') do |f|
-      f.stubbed.with(
-        {
-          'dc1' => '3',
-          'dc2' => '2'
-        }, '\''
-      ).returns('\'dc1' => '3', '\'dc2' => '2')
-    end
-  end
-
   context 'Set ensure to present (SimpleStrategy)' do
     let :facts do
       {

@@ -1,4 +1,5 @@
 require 'spec_helper'
+
 describe 'cassandra' do
   let(:pre_condition) do
     [
@@ -13,23 +14,6 @@ describe 'cassandra' do
          $setting,
          $value                   = nil) {}'
     ]
-  end
-
-  let!(:stdlib_stubs) do
-    MockFunction.new('concat') do |f|
-      f.stubbed.with([], '')
-       .returns([''])
-      f.stubbed.with([], '/etc/cassandra')
-       .returns(['/etc/cassandra'])
-      f.stubbed.with([], '/etc/cassandra/default.conf')
-       .returns(['/etc/cassandra/default.conf'])
-      f.stubbed.with(['/etc/cassandra'], '/etc/cassandra/default.conf')
-       .returns(['/etc/cassandra', '/etc/cassandra/default.conf'])
-    end
-    MockFunction.new('strftime') do |f|
-      f.stubbed.with('/var/lib/cassandra-%F')
-       .returns('/var/lib/cassandra-YYYY-MM-DD')
-    end
   end
 
   context 'On an unknown OS with defaults for all parameters' do
@@ -84,15 +68,19 @@ describe 'cassandra' do
         cassandra_2356_sleep_seconds: 5,
         cassandra_9822: false,
         cassandra_yaml_tmpl: 'cassandra/cassandra.yaml.erb',
+        commitlog_directory_mode: '0750',
         config_file_mode: '0644',
         config_path: '/etc/cassandra/default.conf',
+        data_file_directories_mode: '0750',
         dc: 'DC1',
         dc_suffix: nil,
         fail_on_non_supported_os: true,
+        hints_directory_mode: '0750',
         package_ensure: 'present',
         package_name: 'cassandra22',
         rack: 'RAC1',
         rackdc_tmpl: 'cassandra/cassandra-rackdc.properties.erb',
+        saved_caches_directory_mode: '0750',
         service_enable: true,
         # service_ensure: nil,
         service_name: 'cassandra',
@@ -101,6 +89,33 @@ describe 'cassandra' do
         settings: {},
         systemctl: '/usr/bin/systemctl'
       )
+    end
+  end
+
+  context 'On RedHat 7 with data directories specified.' do
+    let :facts do
+      {
+        osfamily: 'RedHat',
+        operatingsystemmajrelease: 7
+      }
+    end
+
+    let :params do
+      {
+        commitlog_directory: '/var/lib/cassandra/commitlog',
+        data_file_directories: ['/var/lib/cassandra/data'],
+        hints_directory: '/var/lib/cassandra/hints',
+        saved_caches_directory: '/var/lib/cassandra/saved_caches',
+        settings: { 'cluster_name' => 'MyCassandraCluster' }
+      }
+    end
+
+    it do
+      should have_resource_count(10)
+      should contain_file('/var/lib/cassandra/commitlog')
+      should contain_file('/var/lib/cassandra/data')
+      should contain_file('/var/lib/cassandra/hints')
+      should contain_file('/var/lib/cassandra/saved_caches')
     end
   end
 
