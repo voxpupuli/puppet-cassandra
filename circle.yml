@@ -19,7 +19,6 @@ deployment:
   master: 
     branch: master
     commands: 
-      - ./scripts/circle.bash merge release/latest"
       - git config --global user.email "info@locp.co.uk"
       - git config --global user.name "CircleCI"
       - bundle exec rake strings:gh_pages:update
