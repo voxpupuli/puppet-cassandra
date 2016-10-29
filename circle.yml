@@ -16,30 +16,6 @@ dependencies:
   post:
     - rvm cleanup all
 deployment: 
-  bugfix: 
-    branch: /^bugfix.*/
-    commands: 
-      - "./scripts/circle.bash merge release/patch"
-  enhancement_v210:
-    branch: enhancement/v2.1.0
-    commands:
-      - "./scripts/circle.bash merge release/minor"
-  improvement: 
-    branch: /^improvement.*/
-    commands: 
-      - "./scripts/circle.bash merge release/patch"
-  legacy_bugfix:
-    branch: /^legacy/bugfix.*/
-    commands: 
-      - "./scripts/circle.bash merge legacy/patch"
-  legacy_improvement:
-    branch: /^legacy/improvement.*/
-    commands: 
-      - "./scripts/circle.bash merge legacy/patch"
-  legacy_patch_release:
-    branch: legacy/patch
-    commands: 
-      - "./scripts/circle.bash merge legacy/minor"
   master: 
     branch: master
     commands: 
@@ -48,14 +24,6 @@ deployment:
       - git config --global user.name "CircleCI"
       - bundle exec rake strings:gh_pages:update
       - ./scripts/circle.bash deploy
-  patch_release: 
-    branch: release/patch
-    commands: 
-      - "./scripts/circle.bash merge release/minor"
-  remove_config_path_parents:
-    branch: spike/remove_config_path_parents
-    commands:
-      - "./scripts/circle.bash merge release/major"
 machine: 
   environment:
     BEAKER_GEM_VERSION: '<= 2.33.0'
