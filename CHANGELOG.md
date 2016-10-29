@@ -5,7 +5,8 @@
 ### Summary
 
 A mixture of new features, a new style of documentation and other
-improvements.
+improvements.  Also ran the [Sonar-Puppet](https://github.com/iwarapter/sonar-puppet)
+plugin against the code to improve the code quality.
 
 ### Features
 
@@ -27,7 +28,9 @@ improvements.
 
 ### Bugfixes
 
-* N/A
+* Resolved all issues identified by Sonar-Puppet from 38 (2 major,
+  36 minor).  In doing so, this reduced the technical debt ration
+  from 0.9% to 0.0%.
 
 ### Improvements
 

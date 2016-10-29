@@ -15,9 +15,9 @@
 #   } else {
 #     $max_heap_size_in_mb = 8192
 #   }
-#   
+#
 #   $heap_new_size = $::processorcount * 100
-#   
+#
 #   cassandra::file { "Set Java/Cassandra max heap size to ${max_heap_size_in_mb}.":
 #     file       => 'cassandra-env.sh',
 #     file_lines => {
@@ -27,7 +27,7 @@
 #       },
 #     }
 #   }
-#   
+#
 #   cassandra::file { "Set Java/Cassandra heap new size to ${heap_new_size}.":
 #     file       => 'cassandra-env.sh',
 #     file_lines => {
@@ -38,13 +38,13 @@
 #     }
 #   }
 #   $tmpdir = '/var/lib/cassandra/tmp'
-#   
+#
 #   file { $tmpdir:
 #     ensure => directory,
 #     owner  => 'cassandra',
 #     group  => 'cassandra',
 #   }
-#   
+#
 #   cassandra::file { 'Set java.io.tmpdir':
 #     file       => 'jvm.options',
 #     file_lines => {
