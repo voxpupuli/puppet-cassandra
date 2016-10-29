@@ -16,19 +16,19 @@ include cassandra::java
 # the node itself becomes a seed for the cluster.
 
 class { 'cassandra':
-  package_name   => 'cassandra30',
-  settings       => {
+  commitlog_directory    => '/var/lib/cassandra/commitlog',
+  data_file_directories  => ['/var/lib/cassandra/data'],
+  hints_directory        => '/var/lib/cassandra/hints',
+  package_name           => 'cassandra30',
+  saved_caches_directory => '/var/lib/cassandra/saved_caches',
+  settings               => {
     'authenticator'               => 'PasswordAuthenticator',
     'cluster_name'                => 'MyCassandraCluster',
-    'commitlog_directory'         => '/var/lib/cassandra/commitlog',
     'commitlog_sync'              => 'periodic',
     'commitlog_sync_period_in_ms' => 10000,
-    'data_file_directories'       => ['/var/lib/cassandra/data'],
     'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
-    'hints_directory'             => '/var/lib/cassandra/hints',
     'listen_address'              => $::ipaddress,
     'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
-    'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
     'seed_provider'               => [
       {
         'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
@@ -41,8 +41,8 @@ class { 'cassandra':
     ],
     'start_native_transport'      => true,
   },
-  service_ensure => running,
-  require        => Class['cassandra::datastax_repo', 'cassandra::java'],
+  service_ensure         => running,
+  require                => Class['cassandra::datastax_repo', 'cassandra::java'],
 }
 
 class { 'cassandra::datastax_agent':
@@ -57,7 +57,7 @@ class { 'cassandra::datastax_agent':
     },
     'async_pool_size' => {
       'ensure' => absent,
-    }
+    },
   },
   require  => Class['cassandra'],
 }
@@ -85,7 +85,7 @@ class { 'cassandra::schema':
         keyspace_class     => 'SimpleStrategy',
         replication_factor => 1,
       },
-    }
+    },
   },
   tables         => {
     'users' => {
@@ -110,7 +110,7 @@ class { 'cassandra::schema':
       password => 'Niner75',
     },
     'lucan'    => {
-      'ensure' => absent
+      'ensure' => absent,
     },
   },
 }
@@ -132,25 +132,26 @@ cassandra::file { "Set Java/Cassandra max heap size to ${max_heap_size_in_mb}.":
       line  => "MAX_HEAP_SIZE='${max_heap_size_in_mb}M'",
       match => '^#?MAX_HEAP_SIZE=.*',
     },
-  }
+  },
 }
 
 cassandra::file { "Set Java/Cassandra heap new size to ${heap_new_size}.":
   file       => 'cassandra-env.sh',
   file_lines => {
-    'HEAP_NEWSIZE'  => {
+    'HEAP_NEWSIZE' => {
       line  => "HEAP_NEWSIZE='${heap_new_size}M'",
       match => '^#?HEAP_NEWSIZE=.*',
-    }
-  }
+    },
+  },
 }
 
 $tmpdir = '/var/lib/cassandra/tmp'
 
 file { $tmpdir:
-  ensure => directory,
-  owner  => 'cassandra',
-  group  => 'cassandra',
+  ensure  => directory,
+  owner   => 'cassandra',
+  group   => 'cassandra',
+  require => Package['cassandra'],
 }
 
 cassandra::file { 'Set java.io.tmpdir':

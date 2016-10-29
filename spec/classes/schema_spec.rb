@@ -11,24 +11,10 @@ describe 'cassandra::schema' do
     ]
   end
 
-  let!(:stdlib_stubs) do
-    MockFunction.new('concat') do |f|
-      f.stubbed.with([], '/etc/cassandra')
-       .returns(['/etc/cassandra'])
-      f.stubbed.with([], '/etc/cassandra/default.conf')
-       .returns(['/etc/cassandra/default.conf'])
-      f.stubbed.with(['/etc/cassandra'], '/etc/cassandra/default.conf')
-       .returns(['/etc/cassandra', '/etc/cassandra/default.conf'])
-    end
-    MockFunction.new('strftime') do |f|
-      f.stubbed.with('/var/lib/cassandra-%F')
-       .returns('/var/lib/cassandra-YYYY-MM-DD')
-    end
-  end
-
   context 'Ensure that a connection test is made.' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end
@@ -61,6 +47,7 @@ describe 'cassandra::schema' do
       {
         id: 'root',
         gid: 'root',
+        operatingsystemmajrelease: 7,
         osfamily: 'Debian'
       }
     end
@@ -96,6 +83,7 @@ describe 'cassandra::schema' do
       {
         id: 'root',
         gid: 'root',
+        operatingsystemmajrelease: 7,
         osfamily: 'Debian'
       }
     end
@@ -130,6 +118,7 @@ describe 'cassandra::schema' do
   context 'Test that users can specify a password.' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'Redhat'
       }
     end

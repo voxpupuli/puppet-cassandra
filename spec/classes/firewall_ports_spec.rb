@@ -7,23 +7,6 @@ describe 'cassandra::firewall_ports' do
     ]
   end
 
-  let!(:stdlib_stubs) do
-    MockFunction.new('prefix') do |f|
-      f.stubbed.with(['0.0.0.0/0'],
-                     '200_Public_').returns('200_Public_0.0.0.0/0')
-      f.stubbed.with(['0.0.0.0/0'],
-                     '210_InterNode_').returns('210_InterNode__0.0.0.0/0')
-      f.stubbed.with(['0.0.0.0/0'],
-                     '220_Client_').returns('220_Client__0.0.0.0/0')
-    end
-    MockFunction.new('concat') do |f|
-      f.stubbed.returns([8888, 22])
-    end
-    MockFunction.new('size') do |f|
-      f.stubbed.returns(42)
-    end
-  end
-
   context 'Run with defaults.' do
     it do
       should have_resource_count(2)
