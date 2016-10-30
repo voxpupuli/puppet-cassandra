@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Puppet Class: cassandra::params
+  
+    &mdash; Documentation by YARD 0.9.5
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "puppet_classes::cassandra::params";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../puppet_class_list.html"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (c)</a> &raquo;
+    <span class='title'><span class='object_link'>Puppet Classes</span></span>
+     &raquo; 
+    <span class="title">cassandra::params</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="puppet_class_list_link"
+        href="../puppet_class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <iframe id="search_frame" src="../puppet_class_list.html"></iframe>
+
+      <div id="content"><h1>Puppet Class: cassandra::params</h1>
+<div class="box_info">
+  
+  
+  <dl>
+    <dt>Inherited by:</dt>
+    <dd>
+      
+      <span class='object_link'><a href="cassandra.html" title="puppet_classes::cassandra (puppet_class)">cassandra</a></span><br/>
+      
+      <span class='object_link'><a href="cassandra_3A_3Ajava.html" title="puppet_classes::cassandra::java (puppet_class)">cassandra::java</a></span><br/>
+      
+      <span class='object_link'><a href="cassandra_3A_3Aschema.html" title="puppet_classes::cassandra::schema (puppet_class)">cassandra::schema</a></span><br/>
+      
+      <span class='object_link'><a href="cassandra_3A_3Aoptutils.html" title="puppet_classes::cassandra::optutils (puppet_class)">cassandra::optutils</a></span><br/>
+      
+      <span class='object_link'><a href="cassandra_3A_3Adatastax_agent.html" title="puppet_classes::cassandra::datastax_agent (puppet_class)">cassandra::datastax_agent</a></span><br/>
+      
+    </dd>
+  </dl>
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>
+      manifests/params.pp
+    </dd>
+  </dl>
+</div>
+<h2>Overview</h2>
+<div class="docstring">
+  <div class="discussion">
+    
+<p>This class is meant to be called from cassandra. It sets variables
+according to platform</p>
+
+<h2 id="label-Variables">Variables</h2>
+<ul><li>
+<p><code>$::cassandra::params::cassandra_pkg</code> defaults to
+&#39;cassandra&#39; on Debian and &#39;cassandra22&#39; on Red Hat.</p>
+</li><li>
+<p><code>$::cassandra::params::config_path</code> defaults to
+&#39;/etc/cassandra&#39; on Debian and
+&#39;/etc/cassandra/default.conf&#39; on Red Hat.</p>
+</li><li>
+<p><code>$::cassandra::params::java_package</code> defaults to
+&#39;openjdk-7-jre-headless&#39; on Debian and
+&#39;java-1.8.0-openjdk-headless&#39; on Red Hat.</p>
+</li><li>
+<p><code>$::cassandra::params::jna_package_name</code> defaults to
+&#39;libjna-java&#39; on Debian and &#39;jna&#39; on Red Hat.</p>
+</li><li>
+<p><code>$::cassandra::params::optutils_package_name</code> defaults to
+&#39;cassandra-tools&#39; on Debian and &#39;cassandra22-tools&#39; on Red
+Hat.</p>
+</li><li>
+<p><code>$::cassandra::params::systemctl</code> defaults to
+&#39;/bin/systemctl&#39; on Debian and &#39;/usr/bin/systemctl&#39; on Red
+Hat.</p>
+</li></ul>
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><div class="method_details_list">
+  <table class="source_code">
+    <tr>
+      <td>
+        <pre class="lines">
+
+
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40</pre>
+      </td>
+      <td>
+        <pre class="code"><span class="info file"># File 'manifests/params.pp', line 18</span>
+
+class cassandra::params {
+  case $::osfamily {
+    &#39;Debian&#39;: {
+      $cassandra_pkg = &#39;cassandra&#39;
+      $config_path = &#39;/etc/cassandra&#39;
+      $java_package = &#39;openjdk-7-jre-headless&#39;
+      $jna_package_name = &#39;libjna-java&#39;
+      $optutils_package_name = &#39;cassandra-tools&#39;
+      $systemctl = &#39;/bin/systemctl&#39;
+    }
+    &#39;RedHat&#39;: {
+      $cassandra_pkg = &#39;cassandra22&#39;
+      $config_path = &#39;/etc/cassandra/default.conf&#39;
+      $java_package = &#39;java-1.8.0-openjdk-headless&#39;
+      $jna_package_name = &#39;jna&#39;
+      $optutils_package_name = &#39;cassandra22-tools&#39;
+      $systemctl = &#39;/usr/bin/systemctl&#39;
+    }
+    default: {
+      $config_path_parents = []
+    }
+  }
+}</pre>
+      </td>
+    </tr>
+  </table>
+</div>
+</div>
+
+      <div id="footer">
+  Generated on Sun Oct 30 10:48:39 2016 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.5 (ruby-2.3.1).
+</div>
+
+    </div>
+  </body>
+</html>

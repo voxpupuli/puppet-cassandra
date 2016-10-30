@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  File: README
+  
+    &mdash; Documentation by YARD 0.9.5
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="file_list.html"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: README</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="puppet_class_list_link"
+        href="puppet_class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <iframe id="search_frame" src="file_list.html"></iframe>
+
+      <div id="content"><div id='filecontents'>
+<h1 id="label-Cassandra">Cassandra</h1>
+
+<p><a href="https://forge.puppetlabs.com/locp/cassandra"><img
+src="http://img.shields.io/puppetforge/v/locp/cassandra.svg"></a> <a
+href="https://github.com/locp/cassandra"><img
+src="https://img.shields.io/github/tag/locp/cassandra.svg"></a> <a
+href="https://travis-ci.org/locp/cassandra"><img
+src="https://travis-ci.org/locp/cassandra.png?branch=master"></a> <a
+href="https://coveralls.io/github/locp/cassandra?branch=master"><img
+src="https://coveralls.io/repos/locp/cassandra/badge.svg?branch=master&service=github"></a>
+<a
+href="https://gitter.im/locp/cassandra?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"><img
+src="https://badges.gitter.im/Join%20Chat.svg"></a> <a
+href="https://circleci.com/gh/locp/cassandra"><img
+src="https://circleci.com/gh/locp/cassandra.svg?style=svg"></a> <a
+href="https://forge.puppetlabs.com/locp/cassandra"><img
+src="http://img.shields.io/puppetforge/dt/locp/cassandra.svg"></a> <a
+href="https://forge.puppetlabs.com/locp/cassandra"><img
+src="https://img.shields.io/puppetforge/e/locp/cassandra.svg"></a></p>
+
+<h4 id="label-Table+of+Contents">Table of Contents</h4>
+<ol><li>
+<p><a href="#overview">Overview</a></p>
+</li><li>
+<p><a href="#setup">Setup - The basics of getting started with Cassandra</a></p>
+<ul><li>
+<p><a href="#what-cassandra-affects">What Cassandra affects</a></p>
+</li><li>
+<p><a href="#upgrading">Upgrading</a></p>
+</li><li>
+<p><a href="#beginning-with-cassandra">Beginning with Cassandra</a></p>
+</li></ul>
+</li><li>
+<p><a href="#usage">Usage - Configuration options and additional
+functionality</a></p>
+<ul><li>
+<p><a href="#setup-a-keyspace-and-users">Setup a keyspace and users</a></p>
+</li><li>
+<p><a href="#create-a-cluster-in-a-single-data-center">Create a Cluster in a
+Single Data Center</a></p>
+</li><li>
+<p><a href="#create-a-cluster-in-multiple-data-centers">Create a Cluster in
+Multiple Data Centers</a></p>
+</li><li>
+<p><a href="#datastax-enterprise">DataStax Enterprise</a></p>
+</li></ul>
+</li><li>
+<p><a href="#reference">Reference</a></p>
+</li><li>
+<p><a href="#limitations">Limitations - OS compatibility, etc.</a></p>
+</li><li>
+<p><a href="#contributers">Contributers</a></p>
+</li></ol>
+
+<h2 id="label-Overview">Overview</h2>
+
+<p>A Puppet module to install and manage Cassandra, DataStax Agent &amp;
+OpsCenter</p>
+
+<h2 id="label-Setup">Setup</h2>
+
+<h3 id="label-What+Cassandra+affects">What Cassandra affects</h3>
+
+<h4 id="label-What+the+Cassandra+class+affects">What the Cassandra class affects</h4>
+<ul><li>
+<p>Installs the Cassandra package (default <strong>cassandra22</strong> on Red
+Hat and  <strong>cassandra</strong> on Debian).</p>
+</li><li>
+<p>Configures settings in <code>${config_path}/cassandra.yaml</code>.</p>
+</li><li>
+<p>On CentOS 7 if the <code>init</code> service provider is used, then
+cassandra  is added as a system service.</p>
+</li><li>
+<p>Optionally ensures that the Cassandra service is enabled and running.</p>
+</li><li>
+<p>On Debian systems:</p>
+</li><li>
+<p>Optionally replace <code>/etc/init.d/cassandra</code> with a workaround for
+<a
+href="https://issues.apache.org/jira/browse/CASSANDRA-9822">CASSANDRA-9822</a>.</p>
+</li></ul>
+
+<h4 id="label-What+the+cassandra-3A-3Adatastax_agent+class+affects">What the cassandra::datastax_agent class affects</h4>
+<ul><li>
+<p>Optionally installs the DataStax agent.</p>
+</li><li>
+<p>Optionally sets JAVA_HOME in <strong>/etc/default/datastax-agent</strong>.</p>
+</li></ul>
+
+<h4 id="label-What+the+cassandra-3A-3Adatastax_repo+class+affects">What the cassandra::datastax_repo class affects</h4>
+<ul><li>
+<p>Optionally configures a Yum repository to install the Cassandra packages 
+from (on Red Hat).</p>
+</li><li>
+<p>Optionally configures an Apt repository to install the Cassandra packages 
+from (on Debian).</p>
+</li></ul>
+
+<h4 id="label-What+the+cassandra-3A-3Afirewall_ports+class+affects">What the cassandra::firewall_ports class affects</h4>
+<ul><li>
+<p>Optionally configures the firewall for the Cassandra related network 
+ports.</p>
+</li></ul>
+
+<h4 id="label-What+the+cassandra-3A-3Ajava+class+affects">What the cassandra::java class affects</h4>
+<ul><li>
+<p>Optionally installs a JRE/JDK package (e.g. java-1.7.0-openjdk) and the 
+Java Native Access (JNA).</p>
+</li></ul>
+
+<h4 id="label-What+the+cassandra-3A-3Aoptutils+class+affects">What the cassandra::optutils class affects</h4>
+<ul><li>
+<p>Optionally installs the Cassandra support tools (e.g. cassandra22-tools).</p>
+</li></ul>
+
+<h3 id="label-Upgrading">Upgrading</h3>
+
+<p>We follow <a href="http://semver.org/">SemVer Versioning</a> and an update
+of the major release (i.e. from 1.<em>Y</em>.<em>Z</em> to
+2.<em>Y</em>.<em>Z</em>) will indicate a significant change to the API
+which will most probably require a change to your manifest.</p>
+
+<h4 id="label-Changes+in+2.0.0">Changes in 2.0.0</h4>
+
+<p>This is a major change to the API and you will more than likely need to
+change your manifest to accomodate these changes.</p>
+
+<p>The <code>service_ensure</code> attribute of the cassandra class now
+defaults to <em>undef</em>, users who do want to manage service status in
+Puppet can still set it to true. If leaving the value at the default and
+setting <code>service_refresh</code> and <code>service_enable</code> to
+false will mean that the user and not Puppet running will control the
+running state of Cassandra. This currently works OK on the Red Hat family,
+but has issues on Debian due to <a
+href="https://issues.apache.org/jira/browse/CASSANDRA-2356">CASSANDRA-2356</a>
+during an initial install or package upgrade.</p>
+
+<p>All the functionality relating to OpsCenter has been divested to the <a
+href="https://forge.puppet.com/locp/opscenter">locp/opscenter</a> module on
+Puppet Forge.</p>
+
+<p>It should also be noted that the module no longer creates directories for
+the <code>data</code>, <code>commitlog</code>, <code>saved_caches</code>
+and for Cassandra 3 the <code>hints</code> directory. These resources will
+now need to be defined in your manifest/profile.</p>
+
+<p>For a list of features that have been deprecated in this release, please
+see <a
+href="https://github.com/locp/cassandra/wiki/Deprecations">github.com/locp/cassandra/wiki/Deprecations</a></p>
+
+<p>For details on migrating from the version 1.X.X attributes to the
+<code>settings</code> hash, see <a
+href="https://github.com/locp/cassandra/wiki/Version-1.X.Y-Template-Defaults-Shown-As-2.X.Y-Hash">github.com/locp/cassandra/wiki/Version-1.X.Y-Template-Defaults-Shown-As-2.X.Y-Hash</a></p>
+
+<p>Please also see the notes for 2.0.0 in the <a
+href="https://forge.puppet.com/locp/cassandra/changelog">CHANGELOG</a>.</p>
+
+<h4 id="label-Changes+in+1.19.0">Changes in 1.19.0</h4>
+
+<p>The hints_directory documentation will cause a change in the cassandra.yaml
+file regardless of the value you set it to. If you do not wish this to
+result in a refesh of the Cassandra service, please set service_refresh to
+false.</p>
+
+<h4 id="label-Changes+in+1.9.2">Changes in 1.9.2</h4>
+
+<p>Now that Cassandra 3 is available from the DataStax repositories, there is
+a problem (especially on Debian) with the operating system package manager
+attempting to install Cassandra 3. This can be mitigated against using
+something similar to the code in this modules acceptance test. Please note
+that the default Cassandra package name has now been changed from
+&#39;dsc&#39;. See the documentation for cassandra::package_name below for
+details.</p>
+
+<pre class="code ruby"><code class="ruby">if $::osfamily == &#39;RedHat&#39; {
+   $version = &#39;2.2.4-1&#39;
+ } else {
+   $version = &#39;2.2.4&#39;
+ }
+
+ class { &#39;cassandra&#39;:
+   package_ensure =&gt; $version,
+ }</code></pre>
+
+<h4 id="label-Changes+in+1.8.0">Changes in 1.8.0</h4>
+
+<p>A somewhat embarrassing correction to the spelling of the
+cassandra::fail_on_non_suppoted_os to cassandra::fail_on_non_supported_os.</p>
+
+<h4 id="label-Issues+when+Upgrading+to+1.4.0">Issues when Upgrading to 1.4.0</h4>
+
+<p>Unfortunately both releases 1.3.7 and 1.4.0 have subsequently been found to
+call a refresh service even when no changes had been made to the underlying
+configuration. In release 1.8.0 (somewhat belatedly) the service_refresh
+flag has been introduced to mitigate against similar problems.</p>
+
+<h4 id="label-Issues+When+Upgrading+to+1.3.7">Issues When Upgrading to 1.3.7</h4>
+<ul><li>
+<p>Please see the notes for 1.4.0.</p>
+</li></ul>
+
+<h4 id="label-Changes+in+1.0.0">Changes in 1.0.0</h4>
+<ul><li>
+<p>cassandra::cassandra_package_ensure has been renamed to 
+cassandra::package_ensure.</p>
+</li><li>
+<p>cassandra::cassandra_package_name has been renamed to 
+cassandra::package_name.</p>
+</li></ul>
+
+<h4 id="label-Changes+in+0.4.0">Changes in 0.4.0</h4>
+
+<p>There is now a cassandra::datastax_agent class, therefore:</p>
+<ul><li>
+<p>cassandra::datastax_agent_package_ensure has now been replaced with 
+cassandra::datastax_agent::package_ensure.</p>
+</li><li>
+<p>cassandra::datastax_agent_service_enable has now been replaced with 
+cassandra::datastax_agent::service_enable.</p>
+</li><li>
+<p>cassandra::datastax_agent_service_ensure has now been replaced with 
+cassandra::datastax_agent::service_ensure.</p>
+</li><li>
+<p>cassandra::datastax_agent_package_name has now been replaced with 
+cassandra::datastax_agent::package_name.</p>
+</li><li>
+<p>cassandra::datastax_agent_service_name has now been replaced with 
+cassandra::datastax_agent::service_name.</p>
+</li></ul>
+
+<p>Likewise now there is a new class for handling the installation of Java:</p>
+<ul><li>
+<p>cassandra::java_package_ensure has now been replaced with 
+cassandra::java::ensure.</p>
+</li><li>
+<p>cassandra::java_package_name has now been replaced with 
+cassandra::java::package_name.</p>
+</li></ul>
+
+<p>Also there is now a class for installing the optional utilities:</p>
+<ul><li>
+<p>cassandra::cassandra_opt_package_ensure has now been replaced with 
+cassandra::optutils:ensure.</p>
+</li><li>
+<p>cassandra::cassandra_opt_package_name has now been replaced with 
+cassandra::optutils:package_name.</p>
+</li></ul>
+
+<h4 id="label-Changes+in+0.3.0">Changes in 0.3.0</h4>
+<ul><li>
+<p>cassandra_opt_package_ensure changed from &#39;present&#39; to undef.</p>
+</li><li>
+<p>The manage_service option has been replaced with service_enable and 
+service_ensure.</p>
+</li></ul>
+
+<h3 id="label-Beginning+with+Cassandra">Beginning with Cassandra</h3>
+
+<p>Create a Cassandra 2.X cluster called MyCassandraCluster which uses the
+GossipingPropertyFileSnitch and password authentication. In this very basic
+example the node itself becomes a seed for the cluster and the credentials
+will default to a user called cassandra with a password called of
+cassandra..</p>
+
+<pre class="code ruby"><code class="ruby"># Cassandra pre-requisites
+include cassandra::datastax_repo
+include cassandra::java
+
+class { &#39;cassandra&#39;:
+  settings =&gt; {
+    &#39;authenticator&#39;               =&gt; &#39;PasswordAuthenticator&#39;,
+    &#39;cluster_name&#39;                =&gt; &#39;MyCassandraCluster&#39;,
+    &#39;commitlog_directory&#39;         =&gt; &#39;/var/lib/cassandra/commitlog&#39;,
+    &#39;commitlog_sync&#39;              =&gt; &#39;periodic&#39;,
+    &#39;commitlog_sync_period_in_ms&#39; =&gt; 10000,
+    &#39;data_file_directories&#39;       =&gt; [&#39;/var/lib/cassandra/data&#39;],
+    &#39;endpoint_snitch&#39;             =&gt; &#39;GossipingPropertyFileSnitch&#39;,
+    &#39;listen_address&#39;              =&gt; $::ipaddress,
+    &#39;partitioner&#39;                 =&gt; &#39;org.apache.cassandra.dht.Murmur3Partitioner&#39;,
+    &#39;saved_caches_directory&#39;      =&gt; &#39;/var/lib/cassandra/saved_caches&#39;,
+    &#39;seed_provider&#39;               =&gt; [
+      {
+        &#39;class_name&#39; =&gt; &#39;org.apache.cassandra.locator.SimpleSeedProvider&#39;,
+        &#39;parameters&#39; =&gt; [
+          {
+            &#39;seeds&#39; =&gt; $::ipaddress,
+          },
+        ],
+      },
+    ],
+    &#39;start_native_transport&#39;      =&gt; true,
+  },
+  require  =&gt; Class[&#39;cassandra::datastax_repo&#39;, &#39;cassandra::java&#39;],
+}</code></pre>
+
+<p>For this code to run with version 3.X of Cassandra, the
+<code>hints_directory</code> will also need to be specified:</p>
+
+<pre class="code ruby"><code class="ruby">...
+
+class { &#39;cassandra&#39;:
+  settings =&gt; {
+    ...
+    &#39;hints_directory&#39;             =&gt; &#39;/var/lib/cassandra/hints&#39;,
+    ...
+  },
+  require  =&gt; Class[&#39;cassandra::datastax_repo&#39;, &#39;cassandra::java&#39;],
+}</code></pre>
+
+<h2 id="label-Usage">Usage</h2>
+
+<h3 id="label-Setup+a+keyspace+and+users">Setup a keyspace and users</h3>
+
+<p>We assume that authentication has been enabled for the cassandra cluster
+and we are connecting with the default user name and password
+(&#39;cassandra/cassandra&#39;).</p>
+
+<p>In this example, we create a keyspace (mykeyspace) with a table called
+&#39;users&#39; and an index called &#39;users_lname_idx&#39;.</p>
+
+<p>We also add three users (to Cassandra, not the mykeyspace.users table)
+called spillman, akers and boone while ensuring that a user called lucan is
+absent.</p>
+
+<pre class="code ruby"><code class="ruby">class { &#39;cassandra&#39;:
+  ...
+}
+
+class { &#39;cassandra::schema&#39;:
+  cqlsh_password =&gt; &#39;cassandra&#39;,
+  cqlsh_user     =&gt; &#39;cassandra&#39;,
+  cqlsh_host     =&gt; $::ipaddress,
+  indexes        =&gt; {
+    &#39;users_lname_idx&#39; =&gt; {
+      table    =&gt; &#39;users&#39;,
+      keys     =&gt; &#39;lname&#39;,
+      keyspace =&gt; &#39;mykeyspace&#39;,
+    },
+  },
+  keyspaces      =&gt; {
+    &#39;mykeyspace&#39; =&gt; {
+      durable_writes  =&gt; false,
+      replication_map =&gt; {
+        keyspace_class     =&gt; &#39;SimpleStrategy&#39;,
+        replication_factor =&gt; 1,
+      },
+    }
+  },
+  tables         =&gt; {
+    &#39;users&#39; =&gt; {
+      columns  =&gt; {
+        user_id       =&gt; &#39;int&#39;,
+        fname         =&gt; &#39;text&#39;,
+        lname         =&gt; &#39;text&#39;,
+        &#39;PRIMARY KEY&#39; =&gt; &#39;(user_id)&#39;,
+      },
+      keyspace =&gt; &#39;mykeyspace&#39;,
+    },
+  },
+  users          =&gt; {
+    &#39;spillman&#39; =&gt; {
+      password =&gt; &#39;Niner27&#39;,
+    },
+    &#39;akers&#39;    =&gt; {
+      password  =&gt; &#39;Niner2&#39;,
+      superuser =&gt; true,
+    },
+    &#39;boone&#39;    =&gt; {
+      password =&gt; &#39;Niner75&#39;,
+    },
+    &#39;lucan&#39;    =&gt; {
+      &#39;ensure&#39; =&gt; absent
+    },
+  },
+}</code></pre>
+
+<h3 id="label-Create+a+Cluster+in+a+Single+Data+Center">Create a Cluster in a Single Data Center</h3>
+
+<p>In the DataStax documentation <em>Initializing a multiple node cluster
+(single data center)</em> <a
+href="http://docs.datastax.com/en/cassandra/2.2/cassandra/initialize/initSingleDS.html">docs.datastax.com/en/cassandra/2.2/cassandra/initialize/initSingleDS.html</a>
+there is a basic example of a six node cluster with two seeds to be created
+in a single data center spanning two racks. The nodes in the cluster are:</p>
+
+<p><strong>Node Name</strong> | <strong>IP Address</strong> | —————|—————-|
+node0 (seed 1) | 110.82.155.0 | node1 | 110.82.155.1 | node2 | 110.82.155.2
+| node3 (seed 2) | 110.82.156.3 | node4 | 110.82.156.4 | node5 |
+110.82.156.5 |</p>
+
+<p>Each node is configured to use the GossipingPropertyFileSnitch and 256
+virtual nodes (vnodes). The name of the cluster is
+<em>MyCassandraCluster</em>. Also, while building the initial cluster, we
+are setting the auto_bootstrap to false.</p>
+
+<p>In this initial example, we are going to expand the example by:</p>
+<ul><li>
+<p>Ensuring that the software is installed via the DataStax Community 
+repository by including <code>cassandra::datastax_repo</code>. This needs
+to be  executed before the Cassandra package is installed.</p>
+</li><li>
+<p>That a suitable Java Runtime environment (JRE) is installed with Java
+Native  Access (JNA) by including <code>cassandra::java</code>. This need
+to be executed  before the Cassandra service is started.</p>
+</li></ul>
+
+<pre class="code ruby"><code class="ruby">node /^node\d+$/ {
+  class { &#39;cassandra::datastax_repo&#39;:
+    before =&gt; Class[&#39;cassandra&#39;]
+  }
+
+  class { &#39;cassandra::java&#39;:
+    before =&gt; Class[&#39;cassandra&#39;]
+  }
+
+  class { &#39;cassandra&#39;:
+    settings       =&gt; {
+      &#39;authenticator&#39;               =&gt; &#39;AllowAllAuthenticator&#39;,
+      &#39;auto_bootstrap&#39;              =&gt; false,
+      &#39;cluster_name&#39;                =&gt; &#39;MyCassandraCluster&#39;,
+      &#39;commitlog_directory&#39;         =&gt; &#39;/var/lib/cassandra/commitlog&#39;,
+      &#39;commitlog_sync&#39;              =&gt; &#39;periodic&#39;,
+      &#39;commitlog_sync_period_in_ms&#39; =&gt; 10000,
+      &#39;data_file_directories&#39;       =&gt; [&#39;/var/lib/cassandra/data&#39;],
+      &#39;endpoint_snitch&#39;             =&gt; &#39;GossipingPropertyFileSnitch&#39;,
+      &#39;hints_directory&#39;             =&gt; &#39;/var/lib/cassandra/hints&#39;,
+      &#39;listen_interface&#39;            =&gt; &#39;eth1&#39;,
+      &#39;num_tokens&#39;                  =&gt; 256,
+      &#39;partitioner&#39;                 =&gt; &#39;org.apache.cassandra.dht.Murmur3Partitioner&#39;,
+      &#39;saved_caches_directory&#39;      =&gt; &#39;/var/lib/cassandra/saved_caches&#39;,
+      &#39;seed_provider&#39;               =&gt; [
+        {
+          &#39;class_name&#39; =&gt; &#39;org.apache.cassandra.locator.SimpleSeedProvider&#39;,
+          &#39;parameters&#39; =&gt; [
+            {
+              &#39;seeds&#39; =&gt; &#39;110.82.155.0,110.82.156.3&#39;,
+            },
+          ],
+        },
+      ],
+      &#39;start_native_transport&#39;      =&gt; true,
+    },
+  }
+}</code></pre>
+
+<p>The default value for the num_tokens is already 256, but it is included in
+the example for clarity. Do not forget to either set auto_bootstrap to true
+or not set the attribute at all after initializing the cluster.</p>
+
+<h3 id="label-Create+a+Cluster+in+Multiple+Data+Centers">Create a Cluster in Multiple Data Centers</h3>
+
+<p>To continue with the examples provided by DataStax, we look at the example
+for a cluster across multiple data centers <a
+href="http://docs.datastax.com/en/cassandra/2.2/cassandra/initialize/initMultipleDS.html">docs.datastax.com/en/cassandra/2.2/cassandra/initialize/initMultipleDS.html</a>.</p>
+
+<p><strong>Node Name</strong> | <strong>IP Address</strong> | <strong>Data
+Center</strong> | <strong>Rack</strong> | —————|—————-|—————–|———-| node0
+(seed 1) | 10.168.66.41 | DC1 | RAC1 | node1 | 10.176.43.66 | DC1 | RAC1 |
+node2 | 10.168.247.41 | DC1 | RAC1 | node3 (seed 2) | 10.176.170.59 | DC2 |
+RAC1 | node4 | 10.169.61.170 | DC2 | RAC1 | node5 | 10.169.30.138 | DC2 |
+RAC1 |</p>
+
+<p>For the sake of simplicity, we will confine this example to the nodes:</p>
+
+<pre class="code ruby"><code class="ruby">node /^node[012]$/ {
+  class { &#39;cassandra&#39;:
+    dc             =&gt; &#39;DC1&#39;,
+    settings       =&gt; {
+      &#39;authenticator&#39;               =&gt; &#39;AllowAllAuthenticator&#39;,
+      &#39;auto_bootstrap&#39;              =&gt; false,
+      &#39;cluster_name&#39;                =&gt; &#39;MyCassandraCluster&#39;,
+      &#39;commitlog_directory&#39;         =&gt; &#39;/var/lib/cassandra/commitlog&#39;,
+      &#39;commitlog_sync&#39;              =&gt; &#39;periodic&#39;,
+      &#39;commitlog_sync_period_in_ms&#39; =&gt; 10000,
+      &#39;data_file_directories&#39;       =&gt; [&#39;/var/lib/cassandra/data&#39;],
+      &#39;endpoint_snitch&#39;             =&gt; &#39;GossipingPropertyFileSnitch&#39;,
+      &#39;hints_directory&#39;             =&gt; &#39;/var/lib/cassandra/hints&#39;,
+      &#39;listen_interface&#39;            =&gt; &#39;eth1&#39;,
+      &#39;num_tokens&#39;                  =&gt; 256,
+      &#39;partitioner&#39;                 =&gt; &#39;org.apache.cassandra.dht.Murmur3Partitioner&#39;,
+      &#39;saved_caches_directory&#39;      =&gt; &#39;/var/lib/cassandra/saved_caches&#39;,
+      &#39;seed_provider&#39;               =&gt; [
+        {
+          &#39;class_name&#39; =&gt; &#39;org.apache.cassandra.locator.SimpleSeedProvider&#39;,
+          &#39;parameters&#39; =&gt; [
+            {
+              &#39;seeds&#39; =&gt; &#39;110.82.155.0,110.82.156.3&#39;,
+            },
+          ],
+        },
+      ],
+      &#39;start_native_transport&#39;      =&gt; true,
+    },
+  }
+}
+
+node /^node[345]$/ {
+  class { &#39;cassandra&#39;:
+    dc             =&gt; &#39;DC2&#39;,
+    settings       =&gt; {
+      &#39;authenticator&#39;               =&gt; &#39;AllowAllAuthenticator&#39;,
+      &#39;auto_bootstrap&#39;              =&gt; false,
+      &#39;cluster_name&#39;                =&gt; &#39;MyCassandraCluster&#39;,
+      &#39;commitlog_directory&#39;         =&gt; &#39;/var/lib/cassandra/commitlog&#39;,
+      &#39;commitlog_sync&#39;              =&gt; &#39;periodic&#39;,
+      &#39;commitlog_sync_period_in_ms&#39; =&gt; 10000,
+      &#39;data_file_directories&#39;       =&gt; [&#39;/var/lib/cassandra/data&#39;],
+      &#39;endpoint_snitch&#39;             =&gt; &#39;GossipingPropertyFileSnitch&#39;,
+      &#39;hints_directory&#39;             =&gt; &#39;/var/lib/cassandra/hints&#39;,
+      &#39;listen_interface&#39;            =&gt; &#39;eth1&#39;,
+      &#39;num_tokens&#39;                  =&gt; 256,
+      &#39;partitioner&#39;                 =&gt; &#39;org.apache.cassandra.dht.Murmur3Partitioner&#39;,
+      &#39;saved_caches_directory&#39;      =&gt; &#39;/var/lib/cassandra/saved_caches&#39;,
+      &#39;seed_provider&#39;               =&gt; [
+        {
+          &#39;class_name&#39; =&gt; &#39;org.apache.cassandra.locator.SimpleSeedProvider&#39;,
+          &#39;parameters&#39; =&gt; [
+            {
+              &#39;seeds&#39; =&gt; &#39;110.82.155.0,110.82.156.3&#39;,
+            },
+          ],
+        },
+      ],
+      &#39;start_native_transport&#39;      =&gt; true,
+    },
+  }
+}</code></pre>
+
+<p>We don&#39;t need to specify the rack name (with the rack attribute) as
+RAC1 is the default value. Again, do not forget to either set
+auto_bootstrap to true or not set the attribute at all after initializing
+the cluster.</p>
+
+<h2 id="label-Reference">Reference</h2>
+
+<h3 id="label-Public+Classes">Public Classes</h3>
+<ul><li>
+<p><a
+href="http://locp.github.io/cassandra/puppet_classes/cassandra.html">cassandra</a></p>
+</li><li>
+<p><a
+href="http://locp.github.io/cassandra/puppet_classes/cassandra_3A_3Adatastax_agent.html">cassandra::datastax_agent</a></p>
+</li><li>
+<p><a
+href="http://locp.github.io/cassandra/puppet_classes/cassandra_3A_3Adatastax_repo.html">cassandra::datastax_repo</a></p>
+</li><li>
+<p><a
+href="http://locp.github.io/cassandra/puppet_classes/cassandra_3A_3Afirewall_ports.html">cassandra::firewall_ports</a></p>
+</li><li>
+<p><a
+href="http://locp.github.io/cassandra/puppet_classes/cassandra_3A_3Ajava.html">cassandra::java</a></p>
+</li><li>
+<p><a
+href="http://locp.github.io/cassandra/puppet_classes/cassandra_3A_3Aoptutils.html">cassandra::optutils</a></p>
+</li><li>
+<p><a
+href="http://locp.github.io/cassandra/puppet_classes/cassandra_3A_3Aschema.html">cassandra::schema</a></p>
+</li></ul>
+
+<h3 id="label-Public+Defined+Types">Public Defined Types</h3>
+<ul><li>
+<p><a
+href="http://locp.github.io/cassandra/puppet_defined_types/cassandra_3A_3Afile.html">cassandra::file</a></p>
+</li><li>
+<p><a
+href="http://locp.github.io/cassandra/puppet_defined_types/cassandra_3A_3Aschema_3A_3Acql_type.html">cassandra::schema::cql_type</a></p>
+</li><li>
+<p><a
+href="http://locp.github.io/cassandra/puppet_defined_types/cassandra_3A_3Aschema_3A_3Aindex.html">cassandra::schema::index</a></p>
+</li><li>
+<p><a
+href="http://locp.github.io/cassandra/puppet_defined_types/cassandra_3A_3Aschema_3A_3Akeyspace.html">cassandra::schema::keyspace</a></p>
+</li><li>
+<p><a
+href="http://locp.github.io/cassandra/puppet_defined_types/cassandra_3A_3Aschema_3A_3Atable.html">cassandra::schema::table</a></p>
+</li><li>
+<p><a
+href="http://locp.github.io/cassandra/puppet_defined_types/cassandra_3A_3Aschema_3A_3Auser.html">cassandra::schema::user</a></p>
+</li></ul>
+
+<h3 id="label-Private+Defined+Types">Private Defined Types</h3>
+<ul><li>
+<p><a
+href="http://locp.github.io/cassandra/puppet_defined_types/cassandra_3A_3Aprivate_3A_3Adeprecation_warning.html">cassandra::private::deprecation_warning</a></p>
+</li><li>
+<p><a
+href="http://locp.github.io/cassandra/puppet_defined_types/cassandra_3A_3Aprivate_3A_3Afirewall_ports_3A_3Arule.html">cassandra::private::firewall_ports::rule</a></p>
+</li></ul>
+
+<h3 id="label-Facts">Facts</h3>
+<ul><li>
+<p><a
+href="http://locp.github.io/cassandra/top-level-namespace.html#cassandramajorversion-instance_method">cassandramajorversion</a></p>
+</li><li>
+<p><a
+href="http://locp.github.io/cassandra/top-level-namespace.html#cassandraminorversion-instance_method">cassandraminorversion</a></p>
+</li><li>
+<p><a
+href="http://locp.github.io/cassandra/top-level-namespace.html#cassandrapatchversion-instance_method">cassandrapatchversion</a></p>
+</li><li>
+<p><a
+href="http://locp.github.io/cassandra/top-level-namespace.html#cassandrarelease-instance_method">cassandrarelease</a></p>
+</li></ul>
+
+<h2 id="label-Limitations">Limitations</h2>
+
+<p>When using a Ruby version before 1.9.0, the contents of the Cassandra
+configuration file may change order of elementsdue to a problem with
+to_yaml in earlier versions of Ruby.</p>
+
+<p>When creating key spaces, indexes, cql_types and users the settings will
+only be used to create a new resource if it does not currently exist. If a
+change is made to the Puppet manifest but the resource already exits, this
+change will not be reflected.</p>
+
+<h2 id="label-Contributers">Contributers</h2>
+
+<p>Contributions will be gratefully accepted. Please go to the project page,
+fork the project, make your changes locally and then raise a pull request.
+Details on how to do this are available at <a
+href="https://guides.github.com/activities/contributing-to-open-source">guides.github.com/activities/contributing-to-open-source</a>.</p>
+
+<p>Please also see the <a
+href="https://github.com/locp/cassandra/blob/master/CONTRIBUTING.md">CONTRIBUTING.md</a>
+page for project specific requirements.</p>
+
+<h3 id="label-Additional+Contributers">Additional Contributers</h3>
+
+<p><strong>Release</strong> | <strong>PR/Issue</strong> |
+<strong>Contributer</strong> ————-|—————————————————–|—————————————————-
+2.0.2 | <a href="https://github.com/locp/cassandra/issues/291">#291</a>| <a
+href="https://github.com/ericy-jana">@ericy-jana</a> 2.0.0 | <a
+href="https://github.com/locp/cassandra/issues/266">#266</a>| <a
+href="https://github.com/stanleyz">@stanleyz</a> 1.25.2 | <a
+href="https://github.com/locp/cassandra/issues/269">#269</a>| <a
+href="https://github.com/ahharu">@ahharu</a> 1.25.1 | <a
+href="https://github.com/locp/cassandra/issues/264">#264</a>| <a
+href="https://github.com/pampelix">@pampelix</a> 1.25.0 | <a
+href="https://github.com/locp/cassandra/pull/261">#261</a> | <a
+href="https://github.com/tibers">@tibers</a> 1.24.0 | <a
+href="https://github.com/locp/cassandra/pull/247">#247</a> | <a
+href="https://github.com/ericy-jana">@ericy-jana</a> 1.24.0 | <a
+href="https://github.com/locp/cassandra/pull/246">#246</a> | <a
+href="https://github.com/ericy-jana">@ericy-jana</a> 1.24.0 | <a
+href="https://github.com/locp/cassandra/issues/245">#245</a>| <a
+href="https://github.com/ericy-jana">@ericy-jana</a> 1.23.0 | <a
+href="https://github.com/locp/cassandra/pull/235">#235</a> | <a
+href="https://github.com/tibers">@tibers</a> 1.22.1 | <a
+href="https://github.com/locp/cassandra/pull/233">#233</a> | <a
+href="https://github.com/tibers">@tibers</a> 1.22.1 | <a
+href="https://github.com/locp/cassandra/issues/232">#232</a>| <a
+href="https://github.com/tibers">@tibers</a> 1.21.0 | <a
+href="https://github.com/locp/cassandra/pull/226">#226</a> | <a
+href="https://github.com/tibers">@tibers</a> 1.20.0 | <a
+href="https://github.com/locp/cassandra/issues/217">#217</a>| <a
+href="https://github.com/samyray">@samyray</a> 1.19.0 | <a
+href="https://github.com/locp/cassandra/pull/215">#215</a> | <a
+href="https://github.com/tibers">@tibers</a> 1.18.0 | <a
+href="https://github.com/locp/cassandra/pull/203">#203</a> | <a
+href="https://github.com/Mike-Petersen">@Mike-Petersen</a> 1.15.0 | <a
+href="https://github.com/locp/cassandra/pull/189">#189</a> | <a
+href="https://github.com/tibers">@tibers</a> 1.14.0 | <a
+href="https://github.com/locp/cassandra/pull/171">#171</a> | <a
+href="https://github.com/jonen10">@jonen10</a> 1.13.0 | <a
+href="https://github.com/locp/cassandra/pull/166">#166</a> | <a
+href="https://github.com/Mike-Petersen">@Mike-Petersen</a> 1.13.0 | <a
+href="https://github.com/locp/cassandra/pull/163">#163</a> | <a
+href="https://github.com/VeriskPuppet">@VeriskPuppet</a> 1.12.2 | <a
+href="https://github.com/locp/cassandra/pull/165">#165</a> | <a
+href="https://github.com/palmertime">@palmertime</a> 1.12.0 | <a
+href="https://github.com/locp/cassandra/pull/156">#156</a> | <a
+href="https://github.com/stuartbfox">@stuartbfox</a> 1.12.0 | <a
+href="https://github.com/locp/cassandra/pull/153">#153</a> | <a
+href="https://github.com/Mike-Petersen">@Mike-Petersen</a> 1.10.0 | <a
+href="https://github.com/locp/cassandra/pull/144">#144</a> | <a
+href="https://github.com/Mike-Petersen">@Mike-Petersen</a> 1.9.2 | <a
+href="https://github.com/locp/cassandra/issues/136">#136</a>| <a
+href="https://github.com/mantunovic">@mantunovic</a> 1.9.2 | <a
+href="https://github.com/locp/cassandra/issues/136">#136</a>| <a
+href="https://github.com/al4">@al4</a> 1.4.2 | <a
+href="https://github.com/locp/cassandra/pull/110">#110</a> | <a
+href="https://github.com/markasammut">@markasammut</a> 1.4.0 | <a
+href="https://github.com/locp/cassandra/pull/100">#100</a> | <a
+href="https://github.com/markasammut">@markasammut</a> 1.3.5 | <a
+href="https://github.com/locp/cassandra/issues/93">#93</a> | <a
+href="https://github.com/sampowers">@sampowers</a> 1.3.3 | <a
+href="https://github.com/locp/cassandra/pull/87">#87</a> | <a
+href="https://github.com/DylanGriffith">@DylanGriffith</a> 0.4.2 | <a
+href="https://github.com/locp/cassandra/pull/34">#34</a> | <a
+href="https://github.com/amosshapira">@amosshapira</a> 0.3.0 | <a
+href="https://github.com/locp/cassandra/pull/11">#11</a> | <a
+href="https://github.com/Spredzy">@spredzy</a></p>
+</div></div>
+
+      <div id="footer">
+  Generated on Sun Oct 30 10:48:38 2016 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.5 (ruby-2.3.1).
+</div>
+
+    </div>
+  </body>
+</html>
