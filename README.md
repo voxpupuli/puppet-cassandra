@@ -522,8 +522,6 @@ true or not set the attribute at all after initializing the cluster.
 
 ### Private Defined Types
 
-* [cassandra::private::deprecation_warning]
-  (http://locp.github.io/cassandra/puppet_defined_types/cassandra_3A_3Aprivate_3A_3Adeprecation_warning.html)
 * [cassandra::private::firewall_ports::rule]
   (http://locp.github.io/cassandra/puppet_defined_types/cassandra_3A_3Aprivate_3A_3Afirewall_ports_3A_3Arule.html)
 
