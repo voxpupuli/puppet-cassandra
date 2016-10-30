@@ -3,7 +3,7 @@ dependencies:
   bundler:
     without: [development]
   cache_directories:
-    - "~/.rvm/gems"
+    - "/opt/circleci/.rvm/gems"
   override:
     - bundle install --without development:
         timeout: 240
