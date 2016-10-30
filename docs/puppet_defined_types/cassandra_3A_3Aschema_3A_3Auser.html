@@ -4,7 +4,7 @@
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>
-  Defined Type: cassandra::schema::table
+  Defined Type: cassandra::schema::user
   
     &mdash; Documentation by YARD 0.9.5
   
@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
 
 <script type="text/javascript" charset="utf-8">
-  pathId = "puppet_defined_types::cassandra::schema::table";
+  pathId = "puppet_defined_types::cassandra::schema::user";
   relpath = '../';
 </script>
 
@@ -39,7 +39,7 @@
     <a href="../_index.html">Index (c)</a> &raquo;
     <span class='title'><span class='object_link'>Defined Types</span></span>
      &raquo; 
-    <span class="title">cassandra::schema::table</span>
+    <span class="title">cassandra::schema::user</span>
   
 </div>
 
@@ -61,12 +61,12 @@
 
       <iframe id="search_frame" src="../puppet_defined_type_list.html"></iframe>
 
-      <div id="content"><h1>Defined Type: cassandra::schema::table</h1>
+      <div id="content"><h1>Defined Type: cassandra::schema::user</h1>
 <div class="box_info">
   <dl>
     <dt>Defined in:</dt>
     <dd>
-      manifests/schema/table.pp
+      manifests/schema/user.pp
     </dd>
   </dl>
 </div>
@@ -74,7 +74,9 @@
 <div class="docstring">
   <div class="discussion">
     
-<p>Create or drop tables within the schema.</p>
+<p>Create or drop users. To use this class, a suitable
+<code>authenticator</code> (e.g. PasswordAuthenticator) must be set in the
+Cassandra class.</p>
 
   </div>
 </div>
@@ -84,14 +86,13 @@
     <p class="tag_title">Examples:</p>
     
       
-      <pre class="example code"><code>cassandra::schema::table { &#39;users&#39;:
-  keyspace =&gt; &#39;mykeyspace&#39;,
-  columns  =&gt; {
-    &#39;userid&#39;      =&gt; &#39;int&#39;,
-    &#39;fname&#39;       =&gt; &#39;text&#39;,
-    &#39;lname&#39;       =&gt; &#39;text&#39;,
-    &#39;PRIMARY KEY&#39; =&gt; &#39;(userid)&#39;,
-  },
+      <pre class="example code"><code>cassandra::schema::user { &#39;akers&#39;:
+  password  =&gt; &#39;Niner2&#39;,
+  superuser =&gt; true,
+}
+
+cassandra::schema::user { &#39;lucan&#39;:
+  ensure =&gt; absent,
 }</code></pre>
     
   </div>
@@ -100,45 +101,10 @@
   
     <li>
       
-        <span class='name'>keyspace</span>
-      
-      
-        <span class='type'>(<tt>string</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>The name of the keyspace.</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>columns</span>
-      
-      
-        <span class='type'>(<tt>hash</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>{}</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>A hash of the columns to be placed in the table. Optional if the table is
-to be absent.</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
         <span class='name'>ensure</span>
       
       
-        <span class='type'>(<tt>present|absent</tt>)</span>
+        <span class='type'>(<tt>present | absent</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>present</tt>)</em>
@@ -146,32 +112,51 @@ to be absent.</p>
       
         &mdash;
         <div class='inline'>
-<p>Ensure a keyspace is created or dropped.</p>
+<p>Valid values can be <strong>present</strong> to ensure a user is created,
+or <strong>absent</strong> to remove the user if it exists.</p>
 </div>
       
     </li>
   
     <li>
       
-        <span class='name'>options</span>
+        <span class='name'>password</span>
       
       
-        <span class='type'>(<tt>array</tt>)</span>
+        <span class='type'>(<tt>string</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>[]</tt>)</em>
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
       
       
         &mdash;
         <div class='inline'>
-<p>Options to be added to the table creation.</p>
+<p>A password for the user.</p>
 </div>
       
     </li>
   
     <li>
       
-        <span class='name'>table</span>
+        <span class='name'>superuser</span>
+      
+      
+        <span class='type'>(<tt>boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>If the user is to be a super-user on the system.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>user_name</span>
       
       
         <span class='type'>(<tt>string</tt>)</span>
@@ -182,7 +167,7 @@ to be absent.</p>
       
         &mdash;
         <div class='inline'>
-<p>The name of the table. Defaults to the name of the resource.</p>
+<p>The name of the user.</p>
 </div>
       
     </li>
@@ -197,6 +182,7 @@ to be absent.</p>
         <pre class="lines">
 
 
+18
 19
 20
 21
@@ -235,43 +221,54 @@ to be absent.</p>
 54
 55
 56
-57</pre>
+57
+58
+59
+60
+61
+62</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/schema/table.pp', line 19</span>
+        <pre class="code"><span class="info file"># File 'manifests/schema/user.pp', line 18</span>
 
-define cassandra::schema::table (
-  $keyspace,
-  $ensure  = present,
-  $columns = {},
-  $options = [],
-  $table   = $title,
+define cassandra::schema::user (
+  $ensure    = present,
+  $password  = undef,
+  $superuser = false,
+  $user_name = $title,
   ){
   include &#39;cassandra::schema&#39;
-  $read_script = &quot;DESC TABLE ${keyspace}.${table}&quot;
-  $read_command = &quot;${::cassandra::schema::cqlsh_opts} -e \&quot;${read_script}\&quot; ${::cassandra::schema::cqlsh_conn}&quot;
+  $read_script = &#39;LIST USERS&#39;
+  $read_command = &quot;${::cassandra::schema::cqlsh_opts} -e \&quot;${read_script}\&quot; ${::cassandra::schema::cqlsh_conn} | grep &#39;\s*${user_name} |&#39;&quot;
 
   if $ensure == present {
-    $create_script1 = &quot;CREATE TABLE IF NOT EXISTS ${keyspace}.${table}&quot;
-    $cols_def = join(join_keys_to_values($columns, &#39; &#39;), &#39;, &#39;)
-    $cols_def_rm_collection_type = delete($cols_def, &#39;COLLECTION-TYPE &#39;)
+    $create_script1 = &quot;CREATE USER IF NOT EXISTS ${user_name}&quot;
 
-    if count($options) &gt; 0 {
-      $options_def = join($options, &#39; AND &#39;)
-      $create_script = &quot;${create_script1} (${cols_def_rm_collection_type}) WITH ${options_def}&quot;
+    if $password != undef {
+      $create_script2 = &quot;${create_script1} WITH PASSWORD &#39;${password}&#39;&quot;
     } else {
-      $create_script = &quot;${create_script1} (${cols_def_rm_collection_type})&quot;
+      $create_script2 = $create_script1
+    }
+
+    if $superuser {
+      $create_script = &quot;${create_script2} SUPERUSER&quot;
+    } else {
+      $create_script = &quot;${create_script2} NOSUPERUSER&quot;
     }
 
     $create_command = &quot;${::cassandra::schema::cqlsh_opts} -e \&quot;${create_script}\&quot; ${::cassandra::schema::cqlsh_conn}&quot;
-    exec { $create_command:
+
+    exec { &quot;Create user (${user_name})&quot;:
+      command =&gt; $create_command,
       unless  =&gt; $read_command,
       require =&gt; Exec[&#39;::cassandra::schema connection test&#39;],
     }
   } elsif $ensure == absent {
-    $delete_script = &quot;DROP TABLE IF EXISTS ${keyspace}.${table}&quot;
+    $delete_script = &quot;DROP USER ${user_name}&quot;
     $delete_command = &quot;${::cassandra::schema::cqlsh_opts} -e \&quot;${delete_script}\&quot; ${::cassandra::schema::cqlsh_conn}&quot;
-    exec { $delete_command:
+
+    exec { &quot;Delete user (${user_name})&quot;:
+      command =&gt; $delete_command,
       onlyif  =&gt; $read_command,
       require =&gt; Exec[&#39;::cassandra::schema connection test&#39;],
     }
@@ -286,7 +283,7 @@ define cassandra::schema::table (
 </div>
 
       <div id="footer">
-  Generated on Sun Oct 30 10:48:39 2016 by
+  Generated on Sun Oct 30 12:12:49 2016 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.5 (ruby-2.3.1).
 </div>
