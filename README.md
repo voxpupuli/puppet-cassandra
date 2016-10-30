@@ -8,7 +8,7 @@
 [![Puppet Forge Downloads](http://img.shields.io/puppetforge/dt/locp/cassandra.svg)](https://forge.puppetlabs.com/locp/cassandra)
 [![Puppet Forge Endorsement](https://img.shields.io/puppetforge/e/locp/cassandra.svg)](https://forge.puppetlabs.com/locp/cassandra)
 
-#### Table of Contents
+## Table of Contents
 
 1. [Overview](#overview)
 1. [Setup - The basics of getting started with Cassandra](#setup)
