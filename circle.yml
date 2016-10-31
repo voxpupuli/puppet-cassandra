@@ -34,6 +34,7 @@ deployment:
 machine: 
   environment:
     BEAKER_GEM_VERSION: '<= 2.33.0'
+    BEAKER_destroy: no
     PUPPET_GEM_VERSION: '~> 4.0'
     STRICT_VARIABLES: yes
   ruby:
