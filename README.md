@@ -8,7 +8,7 @@
 [![Puppet Forge Downloads](http://img.shields.io/puppetforge/dt/locp/cassandra.svg)](https://forge.puppetlabs.com/locp/cassandra)
 [![Puppet Forge Endorsement](https://img.shields.io/puppetforge/e/locp/cassandra.svg)](https://forge.puppetlabs.com/locp/cassandra)
 
-#### Table of Contents
+## Table of Contents
 
 1. [Overview](#overview)
 1. [Setup - The basics of getting started with Cassandra](#setup)
@@ -522,8 +522,6 @@ true or not set the attribute at all after initializing the cluster.
 
 ### Private Defined Types
 
-* [cassandra::private::deprecation_warning]
-  (http://locp.github.io/cassandra/puppet_defined_types/cassandra_3A_3Aprivate_3A_3Adeprecation_warning.html)
 * [cassandra::private::firewall_ports::rule]
   (http://locp.github.io/cassandra/puppet_defined_types/cassandra_3A_3Aprivate_3A_3Afirewall_ports_3A_3Arule.html)
 
