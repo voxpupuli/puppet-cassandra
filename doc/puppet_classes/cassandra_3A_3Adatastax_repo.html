@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Puppet Class: cassandra::datastax_repo
+  
+    &mdash; Documentation by YARD 0.9.5
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "puppet_classes::cassandra::datastax_repo";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../puppet_class_list.html"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (c)</a> &raquo;
+    <span class='title'><span class='object_link'>Puppet Classes</span></span>
+     &raquo; 
+    <span class="title">cassandra::datastax_repo</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="puppet_class_list_link"
+        href="../puppet_class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <iframe id="search_frame" src="../puppet_class_list.html"></iframe>
+
+      <div id="content"><h1>Puppet Class: cassandra::datastax_repo</h1>
+<div class="box_info">
+  
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>
+      manifests/datastax_repo.pp
+    </dd>
+  </dl>
+</div>
+<h2>Overview</h2>
+<div class="docstring">
+  <div class="discussion">
+    
+<p>An optional class that will allow a suitable repository to be configured
+from which packages for DataStax Community can be downloaded. Changing the
+defaults will allow any Debian Apt or Red Hat Yum repository to be
+configured.</p>
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>descr</span>
+      
+      
+        <span class='type'>(<tt>string</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;DataStax Repo for Apache Cassandra&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>On the Red Hat family, this is passed as the <code>descr</code> attribute
+to a <code>yumrepo</code> resource. On the Debian family, it is passed as
+the <code>comment</code> attribute to an <code>apt::source</code> resource.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>key_id</span>
+      
+      
+        <span class='type'>(<tt>string</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;7E41C00F85BFC1706C4FFFB3350200F2B999A372&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>On the Debian family, this is passed as the <code>id</code> attribute to an
+<code>apt::key</code> resource. On the Red Hat family, it is ignored.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>key_url</span>
+      
+      
+        <span class='type'>(<tt>string</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;http://debian.datastax.com/debian/repo_key&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>On the Debian family, this is passed as the <code>source</code> attribute
+to an <code>apt::key</code> resource. On the Red Hat family, it is ignored.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>pkg_url</span>
+      
+      
+        <span class='type'>(<tt>string</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>If left as the default, this will set the <code>baseurl</code> to &#39;<a
+href="http://rpm.datastax.com/community">rpm.datastax.com/community</a>&#39;
+on a <code>yumrepo</code> resource on the Red Hat family. On the Debian
+family, leaving this as the default will set the <code>location</code>
+attribute on an <code>apt::source</code> to &#39;<a
+href="http://debian.datastax.com/community">debian.datastax.com/community</a>&#39;.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>release</span>
+      
+      
+        <span class='type'>(<tt>string</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;stable&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>On the Debian family, this is passed as the <code>release</code> attribute
+to an <code>apt::source</code> resource. On the Red Hat family, it is
+ignored.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><div class="method_details_list">
+  <table class="source_code">
+    <tr>
+      <td>
+        <pre class="lines">
+
+
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82</pre>
+      </td>
+      <td>
+        <pre class="code"><span class="info file"># File 'manifests/datastax_repo.pp', line 22</span>
+
+class cassandra::datastax_repo (
+  $descr   = &#39;DataStax Repo for Apache Cassandra&#39;,
+  $key_id  = &#39;7E41C00F85BFC1706C4FFFB3350200F2B999A372&#39;,
+  $key_url = &#39;http://debian.datastax.com/debian/repo_key&#39;,
+  $pkg_url = undef,
+  $release = &#39;stable&#39;,
+  ) {
+  case $::osfamily {
+    &#39;RedHat&#39;: {
+      if $pkg_url != undef {
+        $baseurl = $pkg_url
+      } else {
+        $baseurl = &#39;http://rpm.datastax.com/community&#39;
+      }
+
+      yumrepo { &#39;datastax&#39;:
+        ensure   =&gt; present,
+        descr    =&gt; $descr,
+        baseurl  =&gt; $baseurl,
+        enabled  =&gt; 1,
+        gpgcheck =&gt; 0,
+      }
+    }
+    &#39;Debian&#39;: {
+      include apt
+      include apt::update
+
+      apt::key {&#39;datastaxkey&#39;:
+        id     =&gt; $key_id,
+        source =&gt; $key_url,
+        before =&gt; Apt::Source[&#39;datastax&#39;],
+      }
+
+      if $pkg_url != undef {
+        $location = $pkg_url
+      } else {
+        $location = &#39;http://debian.datastax.com/community&#39;
+      }
+
+      apt::source {&#39;datastax&#39;:
+        location =&gt; $location,
+        comment  =&gt; $descr,
+        release  =&gt; $release,
+        include  =&gt; {
+          &#39;src&#39; =&gt; false,
+        },
+        notify   =&gt; Exec[&#39;update-cassandra-repos&#39;],
+      }
+
+      # Required to wrap apt_update
+      exec {&#39;update-cassandra-repos&#39;:
+        refreshonly =&gt; true,
+        command     =&gt; &#39;/bin/true&#39;,
+        require     =&gt; Exec[&#39;apt_update&#39;],
+      }
+    }
+    default: {
+      warning(&quot;OS family ${::osfamily} not supported&quot;)
+    }
+  }
+}</pre>
+      </td>
+    </tr>
+  </table>
+</div>
+</div>
+
+      <div id="footer">
+  Generated on Sun Oct 30 10:48:39 2016 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.5 (ruby-2.3.1).
+</div>
+
+    </div>
+  </body>
+</html>

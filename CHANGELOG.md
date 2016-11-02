@@ -1,5 +1,17 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-10-29 - Release 2.1.0 ([diff](https://github.com/locp/cassandra/compare/2.1.0...2.1.1))
+
+### Summary
+
+A hotfix for a bug in `cassandra::schema` that has been around since version 1.18.0 of this
+module.
+
+### Bugfixes
+
+* Fixed a bug where cql_types would not be created unless keyspaces were also provided.
+* Fixed a minor typo in the README.
+
 ##2016-10-29 - Release 2.1.0 ([diff](https://github.com/locp/cassandra/compare/2.0.2...2.1.0))
 
 ### Summary

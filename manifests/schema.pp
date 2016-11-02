@@ -89,7 +89,7 @@ class cassandra::schema (
   }
 
   # manage cql_types if present
-  if $keyspaces {
+  if $cql_types {
     create_resources('cassandra::schema::cql_type', $cql_types)
   }
 
