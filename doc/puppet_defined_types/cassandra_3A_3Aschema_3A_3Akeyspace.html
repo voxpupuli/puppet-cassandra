@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Defined Type: cassandra::schema::keyspace
+  
+    &mdash; Documentation by YARD 0.9.5
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "puppet_defined_types::cassandra::schema::keyspace";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../puppet_defined_type_list.html"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (c)</a> &raquo;
+    <span class='title'><span class='object_link'>Defined Types</span></span>
+     &raquo; 
+    <span class="title">cassandra::schema::keyspace</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="puppet_class_list_link"
+        href="../puppet_class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <iframe id="search_frame" src="../puppet_defined_type_list.html"></iframe>
+
+      <div id="content"><h1>Defined Type: cassandra::schema::keyspace</h1>
+<div class="box_info">
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>
+      manifests/schema/keyspace.pp
+    </dd>
+  </dl>
+</div>
+<h2>Overview</h2>
+<div class="docstring">
+  <div class="discussion">
+    
+<p>Create or drop keyspaces within the schema.</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+      <pre class="example code"><code><span class='gvar'>$network_topology_strategy</span> <span class='op'>=</span> <span class='lbrace'>{</span>
+  <span class='id identifier rubyid_keyspace_class'>keyspace_class</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>NetworkTopologyStrategy</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+    <span class='id identifier rubyid_dc1'>dc1</span>            <span class='op'>=&gt;</span> <span class='int'>3</span><span class='comma'>,</span>
+    <span class='id identifier rubyid_dc2'>dc2</span>            <span class='op'>=&gt;</span> <span class='int'>2</span>
+<span class='rbrace'>}</span></code></pre>
+    
+      
+      <pre class="example code"><code>cassandra::schema::keyspace { &#39;mykeyspace&#39;:
+  replication_map =&gt; {
+    keyspace_class     =&gt; &#39;SimpleStrategy&#39;,
+    replication_factor =&gt; 1,
+  },
+  durable_writes  =&gt; false,
+}</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>ensure</span>
+      
+      
+        <span class='type'>(<tt>present|absent</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>present</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Create or drop the keyspace.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>durable_writes</span>
+      
+      
+        <span class='type'>(<tt>boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>true</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>When set to false, data written to the keyspace bypasses the commit log. Be
+careful using this option because you risk losing data. Set this attribute
+to false on a keyspace using the SimpleStrategy.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>keyspace_name</span>
+      
+      
+        <span class='type'>(<tt>string</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$title</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The name of the keyspace to be created.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>replication_map</span>
+      
+      
+        <span class='type'>(<tt>hash</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>{}</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Needed if the keyspace is to be present. Optional if it is to be absent.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><div class="method_details_list">
+  <table class="source_code">
+    <tr>
+      <td>
+        <pre class="lines">
+
+
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76</pre>
+      </td>
+      <td>
+        <pre class="code"><span class="info file"># File 'manifests/schema/keyspace.pp', line 24</span>
+
+define cassandra::schema::keyspace(
+  $ensure          = present,
+  $durable_writes  = true,
+  $keyspace_name   = $title,
+  $replication_map = {},
+  ) {
+  include &#39;cassandra::schema&#39;
+
+  $read_script = &quot;DESC KEYSPACE ${keyspace_name}&quot;
+  $read_command = &quot;${::cassandra::schema::cqlsh_opts} -e \&quot;${read_script}\&quot; ${::cassandra::schema::cqlsh_conn}&quot;
+
+  if $ensure == present {
+    $keyspace_class = $replication_map[keyspace_class]
+
+    case $keyspace_class {
+      &#39;SimpleStrategy&#39;: {
+        $replication_factor = $replication_map[replication_factor]
+        $map_str = &quot;{ &#39;class&#39; : &#39;SimpleStrategy&#39;, &#39;replication_factor&#39; : ${replication_factor} }&quot;
+      }
+      &#39;NetworkTopologyStrategy&#39;: {
+        $map_str1 = &quot;{ &#39;class&#39; : &#39;NetworkTopologyStrategy&#39;&quot;
+        $new_map = prefix(delete($replication_map, &#39;keyspace_class&#39;), &quot;&#39;&quot;)
+        $map_str2 = join(join_keys_to_values($new_map, &quot;&#39;: &quot;), &#39;, &#39;)
+        $map_str = &quot;${map_str1}, ${map_str2} }&quot;
+      }
+      default: {
+        $msg_part1 = &quot;Invalid or no class (${keyspace_class}) specified for&quot;
+        $msg_part2 = &quot;keyspace ${keyspace_name}.&quot;
+        fail(&quot;${msg_part1} ${msg_part2}&quot;)
+      }
+    }
+
+    $create_script1 = &quot;CREATE KEYSPACE IF NOT EXISTS ${keyspace_name}&quot;
+    $create_script2 = &quot;WITH REPLICATION = ${map_str}&quot;
+    $create_script3 = &quot;AND DURABLE_WRITES = ${durable_writes}&quot;
+    $create_script = &quot;${create_script1} ${create_script2} ${create_script3}&quot;
+    $create_command = &quot;${::cassandra::schema::cqlsh_opts} -e \&quot;${create_script}\&quot; ${::cassandra::schema::cqlsh_conn}&quot;
+
+    exec { $create_command:
+      unless  =&gt; $read_command,
+      require =&gt; Exec[&#39;::cassandra::schema connection test&#39;],
+    }
+  } elsif $ensure == absent {
+    $delete_script = &quot;DROP KEYSPACE ${keyspace_name}&quot;
+    $delete_command = &quot;${::cassandra::schema::cqlsh_opts} -e \&quot;${delete_script}\&quot; ${::cassandra::schema::cqlsh_conn}&quot;
+    exec { $delete_command:
+      onlyif  =&gt; $read_command,
+      require =&gt; Exec[&#39;::cassandra::schema connection test&#39;],
+    }
+  } else {
+    fail(&quot;Unknown action (${ensure}) for ensure attribute.&quot;)
+  }
+}</pre>
+      </td>
+    </tr>
+  </table>
+</div>
+</div>
+
+      <div id="footer">
+  Generated on Sun Oct 30 10:48:39 2016 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.5 (ruby-2.3.1).
+</div>
+
+    </div>
+  </body>
+</html>
