@@ -541,7 +541,7 @@ true or not set the attribute at all after initializing the cluster.
 ## Limitations
 
 When using a Ruby version before 1.9.0, the contents of the Cassandra
-configuration file may change order of elementsdue to a problem with
+configuration file may change order of elements due to a problem with
 to_yaml in earlier versions of Ruby.
 
 When creating key spaces, indexes, cql_types and users the settings will only
