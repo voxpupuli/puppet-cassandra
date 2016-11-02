@@ -6,7 +6,7 @@ dependencies:
   bundler:
     without: [development]
   cache_directories:
-    - "~/.rvm/gems"
+    - "/opt/circleci/.rvm/gems"
   override:
     - bundle install --without development:
         timeout: 240
@@ -22,6 +22,15 @@ deployment:
       - git config --global user.email "info@locp.co.uk"
       - git config --global user.name "CircleCI"
       - ./scripts/circle.bash deploy
+  release:
+    branch: /release-.*/
+    commands:
+      - bundle exec rake strings:generate\['**/*{.pp\,.rb}, true, false']
+      - git config --global user.email "info@locp.co.uk"
+      - git config --global user.name "CircleCI"
+      - git add docs
+      - git commit -m "Updated documentation [ci skip]."
+      - git push --set-upstream origin $CIRCLE_BRANCH
 machine: 
   environment:
     BEAKER_GEM_VERSION: '<= 2.33.0'
