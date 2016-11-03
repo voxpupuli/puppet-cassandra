@@ -260,12 +260,8 @@ class cassandra (
   }
   
   if $cluster_name {
-    $cluster_name_settings = merge($settings,
-      { 'cluster_name' => $cluster_name, })
-  } else {
-    $cluster_name_settings = $settings
-  }
-
+    $cluster_name_settings = { 'cluster_name' => $cluster_name, }
+  } 
 
   if $commitlog_directory {
     file { $commitlog_directory:
