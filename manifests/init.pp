@@ -259,7 +259,7 @@ class cassandra (
     require => $config_path_require,
   }
   
-  if $cluster_name {
+  if $cluster_name != undef {
     $cluster_name_settings = { 'cluster_name' => $cluster_name, }
   } 
 
