@@ -148,7 +148,7 @@ class cassandra (
   $service_name                 = 'cassandra',
   $service_provider             = undef,
   $service_refresh              = true,
-  $settings                     = hiera_hash(settings,{}),
+  $settings                     = hiera_hash('settings', {}),
   $snitch_properties_file       = 'cassandra-rackdc.properties',
   $systemctl                    = $::cassandra::params::systemctl,
   ) inherits cassandra::params {
