@@ -148,7 +148,7 @@ class cassandra (
   $service_name                 = 'cassandra',
   $service_provider             = undef,
   $service_refresh              = true,
-  $settings                     = hiera_hash('::cassandra::settings'),
+  $settings                     = hiera_hash('::cassandra::settings', {}),
   $snitch_properties_file       = 'cassandra-rackdc.properties',
   $systemctl                    = $::cassandra::params::systemctl,
   ) inherits cassandra::params {
@@ -268,7 +268,7 @@ class cassandra (
       before  => $data_dir_before,
     }
 
-    $commitlog_directory_settings = merge($settings,
+    $commitlog_directory_settings = deep_merge($settings,
       { 'commitlog_directory' => $commitlog_directory, })
   } else {
     $commitlog_directory_settings = $settings
@@ -284,7 +284,7 @@ class cassandra (
       before  => $data_dir_before,
     }
 
-    $data_file_directories_settings = merge($settings, {
+    $data_file_directories_settings = deep_merge($settings, {
       'data_file_directories' => $data_file_directories,
     })
   } else {
@@ -301,7 +301,7 @@ class cassandra (
       before  => $data_dir_before,
     }
 
-    $hints_directory_settings = merge($settings,
+    $hints_directory_settings = deep_merge($settings,
       { 'hints_directory' => $hints_directory, })
   } else {
     $hints_directory_settings = $settings
@@ -317,13 +317,13 @@ class cassandra (
       before  => $data_dir_before,
     }
 
-    $saved_caches_directory_settings = merge($settings,
+    $saved_caches_directory_settings = deep_merge($settings,
       { 'saved_caches_directory' => $saved_caches_directory, })
   } else {
     $saved_caches_directory_settings = $settings
   }
 
-  $merged_settings = merge($settings,
+  $merged_settings = deep_merge($settings,
     $commitlog_directory_settings,
     $data_file_directories_settings,
     $hints_directory_settings,
