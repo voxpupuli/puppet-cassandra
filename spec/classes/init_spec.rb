@@ -68,7 +68,6 @@ describe 'cassandra' do
         cassandra_2356_sleep_seconds: 5,
         cassandra_9822: false,
         cassandra_yaml_tmpl: 'cassandra/cassandra.yaml.erb',
-        cluster_name_settings: nil,
         commitlog_directory_mode: '0750',
         config_file_mode: '0644',
         config_path: '/etc/cassandra/default.conf',
