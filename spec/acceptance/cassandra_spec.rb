@@ -1,80 +1,5 @@
 require 'spec_helper_acceptance'
 
-describe 'cassandra::java' do
-  install_java_pp = <<-EOS
-    notify { "FACT:lsbdistid: ${::lsbdistid}": } ->
-    notify { "FACT:lsbmajdistrelease: ${::lsbmajdistrelease}": }
-
-    if $::osfamily == 'RedHat' {
-      include 'cassandra::java'
-    } else {
-      if $::lsbdistid == 'Ubuntu' {
-        class { 'cassandra::java':
-          aptkey       => {
-            'openjdk-r' => {
-              id     => 'DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
-              server => 'keyserver.ubuntu.com',
-            },
-          },
-          aptsource    => {
-            'openjdk-r' => {
-              location => 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu',
-              comment  => 'OpenJDK builds (all archs)',
-              release  => $::lsbdistcodename,
-              repos    => 'main',
-            },
-          },
-          package_name => 'openjdk-8-jdk',
-        }
-      } else {
-        class { 'cassandra::java':
-          aptkey       => {
-            'ZuluJDK' => {
-              id     => '27BC0C8CB3D81623F59BDADCB1998361219BD9C9',
-              server => 'keyserver.ubuntu.com',
-            },
-          },
-          aptsource    => {
-            'ZuluJDK' => {
-              location => 'http://repos.azulsystems.com/debian',
-              comment  => 'Zulu OpenJDK 8 for Debian',
-              release  => 'stable',
-              repos    => 'main',
-            },
-          },
-          package_name => 'zulu-8',
-        }
-      }
-    }
-  EOS
-
-  describe '########### Java installation.' do
-    it 'should work with no errors' do
-      apply_manifest(install_java_pp, catch_failures: true)
-    end
-    it 'check code is idempotent' do
-      expect(apply_manifest(install_java_pp,
-                            catch_failures: true).exit_code).to be_zero
-    end
-  end
-end
-
-describe 'cassandra::datastax_repo' do
-  install_datastax_repo_pp = <<-EOS
-    class { 'cassandra::datastax_repo': }
-  EOS
-
-  describe '########### DataStax Repository installation.' do
-    it 'should work with no errors' do
-      apply_manifest(install_datastax_repo_pp, catch_failures: true)
-    end
-    it 'check code is idempotent' do
-      expect(apply_manifest(install_datastax_repo_pp,
-                            catch_failures: true).exit_code).to be_zero
-    end
-  end
-end
-
 describe 'cassandra' do
   nodeset = ENV['BEAKER_set']
   opsys = nodeset.split('_')[1]
@@ -94,6 +19,9 @@ describe 'cassandra' do
 
   cassandra_version.each do |version|
     cassandra_install_pp = <<-EOS
+      include cassandra::datastax_repo
+      include cassandra::java
+
       if $::osfamily == 'RedHat' {
         $version = '#{version}-1'
 
@@ -174,14 +102,11 @@ describe 'cassandra' do
       }
 
       class { 'cassandra':
-        cassandra_9822  => true,
-        dc              => 'LON',
         package_ensure  => $version,
         package_name    => $cassandra_package,
-        rack            => 'R101',
-        service_ensure  => running,
         service_refresh => $service_refresh,
         settings        => $settings,
+        require         => Class['cassandra::datastax_repo', 'cassandra::java']
       }
 
       class { 'cassandra::optutils':
