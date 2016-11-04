@@ -23,11 +23,12 @@ describe 'cassandra' do
       include cassandra::java
 
       $run_schema_tests = hiera('cassandra::run_schema_tests', true)
+      $version = '#{version}'
 
       if $::osfamily == 'RedHat' {
-        $version = '#{version}-1'
+        $package_ensure = "${version}-1"
 
-        if $version == '2.2.7-1' {
+        if $version == '2.2.7' {
           $cassandra_optutils_package = 'cassandra22-tools'
           $cassandra_package = 'cassandra22'
         } else {
@@ -37,7 +38,7 @@ describe 'cassandra' do
       } else {
         $cassandra_optutils_package = 'cassandra-tools'
         $cassandra_package = 'cassandra'
-        $version = '#{version}'
+        $package_ensure = $version
 
         if $::lsbdistid == 'Ubuntu' {
           if $::operatingsystemmajrelease >= 16 {
@@ -104,7 +105,7 @@ describe 'cassandra' do
       }
 
       class { 'cassandra':
-        package_ensure  => $version,
+        package_ensure  => $package_ensure,
         package_name    => $cassandra_package,
         service_refresh => $service_refresh,
         settings        => $settings,
@@ -112,7 +113,7 @@ describe 'cassandra' do
       }
 
       class { 'cassandra::optutils':
-        package_ensure => $version,
+        package_ensure => $package_ensure,
         package_name   => $cassandra_optutils_package,
         require        => Class['cassandra']
       }
@@ -160,6 +161,26 @@ describe 'cassandra' do
       it do
         is_expected.to be_running
         is_expected.to be_enabled
+      end
+    end
+
+    facts_testing_pp = <<-EOS
+      #{cassandra_install_pp}
+
+      if $::cassandrarelease != $version {
+        fail("Test1: ${version} != ${::cassandrarelease}")
+      }
+
+      $assembled_version = "${::cassandramajorversion}.${::cassandraminorversion}.${::cassandrapatchversion}"
+
+      if $version != $assembled_version {
+        fail("Test2: ${version} != ${::assembled_version}")
+      }
+    EOS
+
+    describe '########### Facts Tests.' do
+      it 'should work with no errors' do
+        apply_manifest(facts_testing_pp, catch_failures: true)
       end
     end
 
