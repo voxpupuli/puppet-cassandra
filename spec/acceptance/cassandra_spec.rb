@@ -2,6 +2,9 @@ require 'spec_helper_acceptance'
 
 describe 'cassandra::java' do
   install_java_pp = <<-EOS
+    notify { "FACT:lsbdistid: ${::lsbdistid}": } ->
+    notify { "FACT:lsbmajdistrelease: ${::lsbmajdistrelease}": }
+
     if $::osfamily == 'RedHat' {
       include 'cassandra::java'
     } else {
