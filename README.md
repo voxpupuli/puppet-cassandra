@@ -254,6 +254,29 @@ class { 'cassandra':
 }
 ```
 
+### Quickstart with Hiera
+If you're using Hiera, there's a powerful pattern for standing up boxes and clusters quickly and easily when using this module. In your top level node classification (usually common.yaml), add the settings hash and all the tweaks you want all the clusters to use:
+```
+cassandra::settings:
+  authenticator: AllowAllAuthenticator
+  authorizer: AllowAllAuthorizer
+  auto_bootstrap: true
+  auto_snapshot: true
+  ...
+```
+Then, in the individual node classification (something like myhost.yaml for myhost01, myhost02, myhost03...), add the parts which define the cluster:
+```
+cassandra::cluster_name: developer playground cassandra cluster
+cassandra::dc: Onsite1
+cassandra::rack: RAC1
+cassandra::package_ensure: 3.0.5-1
+cassandra::package_name: cassandra30
+cassandra::datastax_agent::package_name: dsc30
+cassandra::datastax_agent::package_ensure:  3.0.5-1
+```
+
+**Gotcha:** The *most specific instance* of the settings hash is the one hiera will use, deeper merge will not combine the hashes. Omitting `cassandra::cluster_name` will default to use the one in the settings hash. 
+
 ## Usage
 
 ### Setup a keyspace and users
