@@ -22,6 +22,8 @@ describe 'cassandra' do
       include cassandra::datastax_repo
       include cassandra::java
 
+      $run_schema_tests = hiera('cassandra::run_schema_tests', true)
+
       if $::osfamily == 'RedHat' {
         $version = '#{version}-1'
 
@@ -164,38 +166,28 @@ describe 'cassandra' do
     schema_testing_create_pp = <<-EOS
       #{cassandra_install_pp}
 
-      $cql_types = {
-        'fullname' => {
-          'keyspace' => 'mykeyspace',
-          'fields'   => {
-            'fname' => 'text',
-            'lname' => 'text',
+      if $run_schema_tests {
+        $cql_types = {
+          'fullname' => {
+            'keyspace' => 'mykeyspace',
+            'fields'   => {
+              'fname' => 'text',
+              'lname' => 'text',
+            },
           },
-        },
-      }
-
-      $keyspaces = {
-        'mykeyspace' => {
-          ensure          => present,
-          replication_map => {
-            keyspace_class     => 'SimpleStrategy',
-            replication_factor => 1,
-          },
-          durable_writes  => false,
-        },
-      }
-
-      if $::operatingsystem != CentOS {
-        $os_ok = true
-      } else {
-        if $::operatingsystemmajrelease != 6 {
-          $os_ok = true
-        } else {
-          $os_ok = false
         }
-      }
 
-      if $os_ok {
+        $keyspaces = {
+          'mykeyspace' => {
+            ensure          => present,
+            replication_map => {
+              keyspace_class     => 'SimpleStrategy',
+              replication_factor => 1,
+            },
+            durable_writes  => false,
+          },
+        }
+
         class { 'cassandra::schema':
           cql_types      => $cql_types,
           cqlsh_host     => $::ipaddress,
@@ -262,17 +254,7 @@ describe 'cassandra' do
        }
      }
 
-     if $::operatingsystem != CentOS {
-       $os_ok = true
-     } else {
-       if $::operatingsystemmajrelease != 6 {
-         $os_ok = true
-       } else {
-         $os_ok = false
-       }
-     }
-
-     if $os_ok {
+     if $run_schema_tests {
        class { 'cassandra::schema':
          cql_types      => $cql_types,
          cqlsh_host     => $::ipaddress,
@@ -301,17 +283,7 @@ describe 'cassandra' do
     schema_testing_drop_user_pp = <<-EOS
       #{cassandra_install_pp}
 
-      if $::operatingsystem != CentOS {
-        $os_ok = true
-      } else {
-        if $::operatingsystemmajrelease != 6 {
-          $os_ok = true
-        } else {
-          $os_ok = false
-        }
-      }
-
-      if $os_ok {
+      if $run_schema_tests {
         class { 'cassandra::schema':
           cqlsh_password      => 'Niner2',
           cqlsh_host          => $::ipaddress,
@@ -345,17 +317,7 @@ describe 'cassandra' do
     schema_testing_drop_index_pp = <<-EOS
       #{cassandra_install_pp}
 
-      if $::operatingsystem != CentOS {
-        $os_ok = true
-      } else {
-        if $::operatingsystemmajrelease != 6 {
-          $os_ok = true
-        } else {
-          $os_ok = false
-        }
-      }
-
-      if $os_ok {
+      if $run_schema_tests {
         class { 'cassandra::schema':
         cqlsh_host     => $::ipaddress,
         cqlsh_user     => 'akers',
@@ -390,17 +352,7 @@ describe 'cassandra' do
     schema_testing_drop_pp = <<-EOS
       #{cassandra_install_pp}
 
-      if $::operatingsystem != CentOS {
-        $os_ok = true
-      } else {
-        if $::operatingsystemmajrelease != 6 {
-          $os_ok = true
-        } else {
-          $os_ok = false
-        }
-      }
-
-      if $os_ok {
+      if $run_schema_tests {
         class { 'cassandra::schema':
           cqlsh_host     => $ipaddress,
           cqlsh_password => 'Niner2',
@@ -440,17 +392,7 @@ describe 'cassandra' do
         }
       }
 
-      if $::operatingsystem != CentOS {
-        $os_ok = true
-      } else {
-        if $::operatingsystemmajrelease != 6 {
-          $os_ok = true
-        } else {
-          $os_ok = false
-        }
-      }
-
-      if $os_ok {
+      if $run_schema_tests {
         class { 'cassandra::schema':
           cqlsh_host     => $::ipaddress,
           cqlsh_password => 'Niner2',
