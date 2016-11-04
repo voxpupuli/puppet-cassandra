@@ -258,10 +258,10 @@ class cassandra (
     mode    => '0755',
     require => $config_path_require,
   }
-  
+
   if $cluster_name != undef {
     $cluster_name_settings = { 'cluster_name' => $cluster_name, }
-  } 
+  }
 
   if $commitlog_directory {
     file { $commitlog_directory:
