@@ -264,6 +264,8 @@ class cassandra (
 
   if $cluster_name != undef {
     $cluster_name_settings = { 'cluster_name' => $cluster_name, }
+  } else {
+    $cluster_name_settings = $settings
   }
 
   if $commitlog_directory {
