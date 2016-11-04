@@ -14,6 +14,9 @@
 # @param cassandra_yaml_tmpl [string] The path to the Puppet template for the
 #   Cassandra configuration file.  This allows the user to supply their own
 #   customized template.`
+# @param cluster_name [string] The name of the cluster that the node is to
+#   join.  Do not set this variable and also set `cluster_name` in the
+#   `settings` hash.
 # @param commitlog_directory [string] The path to the commitlog directory.
 #   If set, the directory will be managed as a Puppet resource.  Do not
 #   specify a value here and in the `settings` hash as they are mutually
