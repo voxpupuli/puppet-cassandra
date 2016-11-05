@@ -51,4 +51,3 @@ test:
     - bundle exec rake lint
     - bundle exec rake validate
     - bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/puppet.xml"
-    - BEAKER_destroy=no bundle exec rake beaker:circle_debian7
