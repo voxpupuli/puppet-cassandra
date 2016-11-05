@@ -44,5 +44,6 @@ end
 group :acceptance do
   gem 'beaker-rspec'
   gem 'beaker-puppet_install_helper'
+  gem 'httparty'
   gem 'pry'
 end
