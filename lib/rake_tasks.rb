@@ -11,11 +11,9 @@ task :acceptance do
   # Ensure we're on CircleCI and using the master branch.
   branch_name = ENV['CIRCLE_BRANCH']
 
-  if !branch_name
-    abort('CIRCLE_BRANCH not set.')
-  end
+  abort('CIRCLE_BRANCH not set.') unless branch_name
 
-  if !branch_name.start_with?('release-')
+  unless branch_name.start_with?('release-')
     puts "#{branch_name} is not a release branch."
     exit(0)
   end
