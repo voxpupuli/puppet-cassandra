@@ -1,77 +1,5 @@
 require 'spec_helper_acceptance'
 
-describe 'cassandra::java' do
-  install_java_pp = <<-EOS
-    if $::osfamily == 'RedHat' {
-      include 'cassandra::java'
-    } else {
-      if $::lsbdistid == 'Ubuntu' {
-        class { 'cassandra::java':
-          aptkey       => {
-            'openjdk-r' => {
-              id     => 'DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
-              server => 'keyserver.ubuntu.com',
-            },
-          },
-          aptsource    => {
-            'openjdk-r' => {
-              location => 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu',
-              comment  => 'OpenJDK builds (all archs)',
-              release  => $::lsbdistcodename,
-              repos    => 'main',
-            },
-          },
-          package_name => 'openjdk-8-jdk',
-        }
-      } else {
-        class { 'cassandra::java':
-          aptkey       => {
-            'ZuluJDK' => {
-              id     => '27BC0C8CB3D81623F59BDADCB1998361219BD9C9',
-              server => 'keyserver.ubuntu.com',
-            },
-          },
-          aptsource    => {
-            'ZuluJDK' => {
-              location => 'http://repos.azulsystems.com/debian',
-              comment  => 'Zulu OpenJDK 8 for Debian',
-              release  => 'stable',
-              repos    => 'main',
-            },
-          },
-          package_name => 'zulu-8',
-        }
-      }
-    }
-  EOS
-
-  describe '########### Java installation.' do
-    it 'should work with no errors' do
-      apply_manifest(install_java_pp, catch_failures: true)
-    end
-    it 'check code is idempotent' do
-      expect(apply_manifest(install_java_pp,
-                            catch_failures: true).exit_code).to be_zero
-    end
-  end
-end
-
-describe 'cassandra::datastax_repo' do
-  install_datastax_repo_pp = <<-EOS
-    class { 'cassandra::datastax_repo': }
-  EOS
-
-  describe '########### DataStax Repository installation.' do
-    it 'should work with no errors' do
-      apply_manifest(install_datastax_repo_pp, catch_failures: true)
-    end
-    it 'check code is idempotent' do
-      expect(apply_manifest(install_datastax_repo_pp,
-                            catch_failures: true).exit_code).to be_zero
-    end
-  end
-end
-
 describe 'cassandra' do
   nodeset = ENV['BEAKER_set']
   opsys = nodeset.split('_')[1]
@@ -91,10 +19,16 @@ describe 'cassandra' do
 
   cassandra_version.each do |version|
     cassandra_install_pp = <<-EOS
-      if $::osfamily == 'RedHat' {
-        $version = '#{version}-1'
+      include cassandra::datastax_repo
+      include cassandra::java
 
-        if $version == '2.2.7-1' {
+      $run_schema_tests = hiera('cassandra::run_schema_tests', true)
+      $version = '#{version}'
+
+      if $::osfamily == 'RedHat' {
+        $package_ensure = "${version}-1"
+
+        if $version == '2.2.7' {
           $cassandra_optutils_package = 'cassandra22-tools'
           $cassandra_package = 'cassandra22'
         } else {
@@ -104,7 +38,7 @@ describe 'cassandra' do
       } else {
         $cassandra_optutils_package = 'cassandra-tools'
         $cassandra_package = 'cassandra'
-        $version = '#{version}'
+        $package_ensure = $version
 
         if $::lsbdistid == 'Ubuntu' {
           if $::operatingsystemmajrelease >= 16 {
@@ -171,18 +105,15 @@ describe 'cassandra' do
       }
 
       class { 'cassandra':
-        cassandra_9822  => true,
-        dc              => 'LON',
-        package_ensure  => $version,
+        package_ensure  => $package_ensure,
         package_name    => $cassandra_package,
-        rack            => 'R101',
-        service_ensure  => running,
         service_refresh => $service_refresh,
         settings        => $settings,
+        require         => Class['cassandra::datastax_repo', 'cassandra::java']
       }
 
       class { 'cassandra::optutils':
-        package_ensure => $version,
+        package_ensure => $package_ensure,
         package_name   => $cassandra_optutils_package,
         require        => Class['cassandra']
       }
@@ -233,41 +164,51 @@ describe 'cassandra' do
       end
     end
 
+    facts_testing_pp = <<-EOS
+      #{cassandra_install_pp}
+
+      if $::cassandrarelease != $version {
+        fail("Test1: ${version} != ${::cassandrarelease}")
+      }
+
+      $assembled_version = "${::cassandramajorversion}.${::cassandraminorversion}.${::cassandrapatchversion}"
+
+      if $version != $assembled_version {
+        fail("Test2: ${version} != ${::assembled_version}")
+      }
+    EOS
+
+    describe "########### Facts Tests #{version} (#{opsys})." do
+      it 'should work with no errors' do
+        apply_manifest(facts_testing_pp, catch_failures: true)
+      end
+    end
+
     schema_testing_create_pp = <<-EOS
       #{cassandra_install_pp}
 
-      $cql_types = {
-        'fullname' => {
-          'keyspace' => 'mykeyspace',
-          'fields'   => {
-            'fname' => 'text',
-            'lname' => 'text',
+      if $run_schema_tests {
+        $cql_types = {
+          'fullname' => {
+            'keyspace' => 'mykeyspace',
+            'fields'   => {
+              'fname' => 'text',
+              'lname' => 'text',
+            },
           },
-        },
-      }
-
-      $keyspaces = {
-        'mykeyspace' => {
-          ensure          => present,
-          replication_map => {
-            keyspace_class     => 'SimpleStrategy',
-            replication_factor => 1,
-          },
-          durable_writes  => false,
-        },
-      }
-
-      if $::operatingsystem != CentOS {
-        $os_ok = true
-      } else {
-        if $::operatingsystemmajrelease != 6 {
-          $os_ok = true
-        } else {
-          $os_ok = false
         }
-      }
 
-      if $os_ok {
+        $keyspaces = {
+          'mykeyspace' => {
+            ensure          => present,
+            replication_map => {
+              keyspace_class     => 'SimpleStrategy',
+              replication_factor => 1,
+            },
+            durable_writes  => false,
+          },
+        }
+
         class { 'cassandra::schema':
           cql_types      => $cql_types,
           cqlsh_host     => $::ipaddress,
@@ -308,7 +249,7 @@ describe 'cassandra' do
       }
     EOS
 
-    describe '########### Schema create.' do
+    describe "########### Schema create #{version} (#{opsys})." do
       it 'should work with no errors' do
         apply_manifest(schema_testing_create_pp, catch_failures: true)
       end
@@ -334,17 +275,7 @@ describe 'cassandra' do
        }
      }
 
-     if $::operatingsystem != CentOS {
-       $os_ok = true
-     } else {
-       if $::operatingsystemmajrelease != 6 {
-         $os_ok = true
-       } else {
-         $os_ok = false
-       }
-     }
-
-     if $os_ok {
+     if $run_schema_tests {
        class { 'cassandra::schema':
          cql_types      => $cql_types,
          cqlsh_host     => $::ipaddress,
@@ -354,7 +285,7 @@ describe 'cassandra' do
      }
     EOS
 
-    describe '########### Schema drop type.' do
+    describe "########### Schema drop type #{version} (#{opsys})." do
       it 'should work with no errors' do
         apply_manifest(schema_testing_drop_type_pp, catch_failures: true)
       end
@@ -373,17 +304,7 @@ describe 'cassandra' do
     schema_testing_drop_user_pp = <<-EOS
       #{cassandra_install_pp}
 
-      if $::operatingsystem != CentOS {
-        $os_ok = true
-      } else {
-        if $::operatingsystemmajrelease != 6 {
-          $os_ok = true
-        } else {
-          $os_ok = false
-        }
-      }
-
-      if $os_ok {
+      if $run_schema_tests {
         class { 'cassandra::schema':
           cqlsh_password      => 'Niner2',
           cqlsh_host          => $::ipaddress,
@@ -398,7 +319,7 @@ describe 'cassandra' do
      }
     EOS
 
-    describe '########### Drop the boone user.' do
+    describe "########### Drop the boone user #{version} (#{opsys})." do
       it 'should work with no errors' do
         apply_manifest(schema_testing_drop_user_pp, catch_failures: true)
       end
@@ -417,17 +338,7 @@ describe 'cassandra' do
     schema_testing_drop_index_pp = <<-EOS
       #{cassandra_install_pp}
 
-      if $::operatingsystem != CentOS {
-        $os_ok = true
-      } else {
-        if $::operatingsystemmajrelease != 6 {
-          $os_ok = true
-        } else {
-          $os_ok = false
-        }
-      }
-
-      if $os_ok {
+      if $run_schema_tests {
         class { 'cassandra::schema':
         cqlsh_host     => $::ipaddress,
         cqlsh_user     => 'akers',
@@ -443,7 +354,7 @@ describe 'cassandra' do
       }
     EOS
 
-    describe '########### Schema drop index.' do
+    describe "########### Schema drop index #{version} (#{opsys})." do
       it 'should work with no errors' do
         apply_manifest(schema_testing_drop_index_pp, catch_failures: true)
       end
@@ -462,17 +373,7 @@ describe 'cassandra' do
     schema_testing_drop_pp = <<-EOS
       #{cassandra_install_pp}
 
-      if $::operatingsystem != CentOS {
-        $os_ok = true
-      } else {
-        if $::operatingsystemmajrelease != 6 {
-          $os_ok = true
-        } else {
-          $os_ok = false
-        }
-      }
-
-      if $os_ok {
+      if $run_schema_tests {
         class { 'cassandra::schema':
           cqlsh_host     => $ipaddress,
           cqlsh_password => 'Niner2',
@@ -487,7 +388,7 @@ describe 'cassandra' do
       }
     EOS
 
-    describe '########### Schema drop (table).' do
+    describe "########### Schema drop (table) #{version} (#{opsys})." do
       it 'should work with no errors' do
         apply_manifest(schema_testing_drop_pp, catch_failures: true)
       end
@@ -512,17 +413,7 @@ describe 'cassandra' do
         }
       }
 
-      if $::operatingsystem != CentOS {
-        $os_ok = true
-      } else {
-        if $::operatingsystemmajrelease != 6 {
-          $os_ok = true
-        } else {
-          $os_ok = false
-        }
-      }
-
-      if $os_ok {
+      if $run_schema_tests {
         class { 'cassandra::schema':
           cqlsh_host     => $::ipaddress,
           cqlsh_password => 'Niner2',
@@ -532,7 +423,7 @@ describe 'cassandra' do
       }
     EOS
 
-    describe '########### Schema drop (Keyspaces).' do
+    describe "########### Schema drop (Keyspaces) #{version} (#{opsys})." do
       it 'should work with no errors' do
         apply_manifest(schema_testing_drop_pp, catch_failures: true)
       end

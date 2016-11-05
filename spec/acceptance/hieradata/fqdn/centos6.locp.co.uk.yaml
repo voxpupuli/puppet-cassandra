@@ -1,0 +1,2 @@
+---
+cassandra::run_schema_tests: false

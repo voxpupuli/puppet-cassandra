@@ -2,7 +2,7 @@
 language: ruby
 cache: bundler
 before_install: rm Gemfile.lock || true
-bundler_args: --without development system_tests
+bundler_args: --without development acceptance
 sudo: false
 script: 
   - "bundle exec rake lint"
@@ -12,7 +12,7 @@ matrix:
   fast_finish: true
   include:
   - 
-    env: "NET_SSH_GEM_VERSION=2.9.4 PUPPET_GEM_VERSION=3.8.4 TINS_GEM_VERSION=0.8.4 JSON_PURE_GEM_VERSION=2.0.1 NET_HTTP_PERSISTENT_GEM_VERSION=2.9.4"
+    env: "ADDRESSABLE_GEM_VERSION=2.4.0 NET_SSH_GEM_VERSION=2.9.4 PUPPET_GEM_VERSION=3.8.4 TINS_GEM_VERSION=0.8.4 JSON_PURE_GEM_VERSION=2.0.1 NET_HTTP_PERSISTENT_GEM_VERSION=2.9.4"
     rvm: 1.9.3
   - rvm: 2.3.1
     env: PUPPET_GEM_VERSION="~> 4.0"
