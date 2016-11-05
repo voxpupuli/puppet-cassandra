@@ -178,7 +178,7 @@ describe 'cassandra' do
       }
     EOS
 
-    describe '########### Facts Tests #{version} (#{opsys}).' do
+    describe "########### Facts Tests #{version} (#{opsys})." do
       it 'should work with no errors' do
         apply_manifest(facts_testing_pp, catch_failures: true)
       end
@@ -249,7 +249,7 @@ describe 'cassandra' do
       }
     EOS
 
-    describe '########### Schema create #{version} (#{opsys}).' do
+    describe "########### Schema create #{version} (#{opsys})." do
       it 'should work with no errors' do
         apply_manifest(schema_testing_create_pp, catch_failures: true)
       end
@@ -285,7 +285,7 @@ describe 'cassandra' do
      }
     EOS
 
-    describe '########### Schema drop type #{version} (#{opsys}).' do
+    describe "########### Schema drop type #{version} (#{opsys})." do
       it 'should work with no errors' do
         apply_manifest(schema_testing_drop_type_pp, catch_failures: true)
       end
@@ -319,7 +319,7 @@ describe 'cassandra' do
      }
     EOS
 
-    describe '########### Drop the boone user #{version} (#{opsys}).' do
+    describe "########### Drop the boone user #{version} (#{opsys})." do
       it 'should work with no errors' do
         apply_manifest(schema_testing_drop_user_pp, catch_failures: true)
       end
@@ -354,7 +354,7 @@ describe 'cassandra' do
       }
     EOS
 
-    describe '########### Schema drop index #{version} (#{opsys}).' do
+    describe "########### Schema drop index #{version} (#{opsys})." do
       it 'should work with no errors' do
         apply_manifest(schema_testing_drop_index_pp, catch_failures: true)
       end
@@ -388,7 +388,7 @@ describe 'cassandra' do
       }
     EOS
 
-    describe '########### Schema drop (table) #{version} (#{opsys}).' do
+    describe "########### Schema drop (table) #{version} (#{opsys})." do
       it 'should work with no errors' do
         apply_manifest(schema_testing_drop_pp, catch_failures: true)
       end
@@ -423,7 +423,7 @@ describe 'cassandra' do
       }
     EOS
 
-    describe '########### Schema drop (Keyspaces) #{version} (#{opsys}).' do
+    describe "########### Schema drop (Keyspaces) #{version} (#{opsys})." do
       it 'should work with no errors' do
         apply_manifest(schema_testing_drop_pp, catch_failures: true)
       end
@@ -438,7 +438,7 @@ describe 'cassandra' do
       end
     end
 
-    describe '########### Gather service information (when in debug mode).' do
+    describe "########### Gather service information (when in debug mode)." do
       it 'Show the cassandra system log.' do
         shell("grep -v -e '^INFO' -e '^\s*INFO' /var/log/cassandra/system.log")
       end
