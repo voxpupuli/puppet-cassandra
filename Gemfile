@@ -13,6 +13,7 @@ def gem_env_ver(gemname)
   end
 end
 
+gem_env_ver('addressable')
 gem_env_ver('json_pure')
 gem_env_ver('net-http-persistent')
 gem_env_ver('net-ssh')
