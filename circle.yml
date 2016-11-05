@@ -50,6 +50,6 @@ test:
     - bundle exec rake rubocop
     - bundle exec rake lint
     - bundle exec rake validate
-    - bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/puppet.xml"
+    - bundle exec rake spec SPEC_OPTS="--format documentation --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/puppet.xml"
     - bundle exec rake acceptance:
         parallel: true
