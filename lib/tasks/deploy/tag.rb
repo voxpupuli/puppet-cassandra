@@ -13,7 +13,7 @@ namespace :deploy do
       git.tag(tagname)
     rescue Git::GitTagNameDoesNotExist
       puts "Creating tag: #{tagname}"
-      git.add_tag(tagname, 'master', message: "tagged by RubyAutoDeployTest", f: true)
+      git.add_tag(tagname, 'master', message: 'tagged by RubyAutoDeployTest', f: true)
       git.push('origin', "refs/tags/#{tagname}", f: true)
     else
       puts "Tag: #{tagname} already exists."
