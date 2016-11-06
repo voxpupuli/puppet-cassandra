@@ -21,7 +21,7 @@ deployment:
     commands: 
       - git config --global user.email "info@locp.co.uk"
       - git config --global user.name "CircleCI"
-      - ./scripts/circle.bash deploy
+      - bundle exec rake deploy
   release:
     branch: /release-.*/
     commands:

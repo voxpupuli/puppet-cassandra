@@ -44,6 +44,11 @@ end
 group :circleci do
   gem 'beaker-rspec'
   gem 'beaker-puppet_install_helper'
+  gem 'git', '1.3.0'
   gem 'httparty'
   gem 'pry'
+end
+
+group :development do
+  gem 'notes', '~> 0.1.2'
 end
