@@ -2,7 +2,7 @@
 language: ruby
 cache: bundler
 before_install: rm Gemfile.lock || true
-bundler_args: --without development acceptance
+bundler_args: --without development circleci
 sudo: false
 script: 
   - "bundle exec rake lint"

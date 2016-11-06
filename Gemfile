@@ -41,7 +41,7 @@ group :test do
   gem 'yard',                   require: false
 end
 
-group :acceptance do
+group :circleci do
   gem 'beaker-rspec'
   gem 'beaker-puppet_install_helper'
   gem 'httparty'
