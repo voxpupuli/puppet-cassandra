@@ -18,7 +18,21 @@ end
 # Check to see if acceptance is enabled.
 def acceptance_enabled
   acceptance = ENV['ACCEPTANCE']
-  return false unless acceptance
+  return false unless acceptance == 'true'
+  true
+end
+
+# Check to see if AWS acceptance is enabled.
+def aws_acceptance_enabled
+  aws_acceptance = ENV['AWS_ACCEPTANCE']
+  return false unless aws_acceptance == 'true'
+  true
+end
+
+def test_nodes(nodes)
+  nodes.each do |node|
+    puts "Testing #{node}"
+  end
 end
 
 desc '[CI Only] Run acceptance tests.'
@@ -48,6 +62,8 @@ task :acceptance do
     puts 'No nodes configured for this node.'
     exit(0)
   end
+
+  test_nodes(nodes)
 end
 
 desc '[CI Only] Tag, build and push the module to PuppetForge.'
