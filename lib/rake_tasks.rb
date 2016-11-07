@@ -1,36 +1,58 @@
 #############################################################################
 # Some module specific rake tasks.
 #############################################################################
-require 'httparty'
-require 'json'
-
 require_relative 'tasks/deploy'
 
 task default: ['test']
 
+# Validate that we are running on a valide CircleCI branch.  Exit false
+# if we do not seem to be on a CircleCI build at all or if the branch
+# name does not match a provided pattern.
+def validate_branch(valid_branch_pattern)
+  branch_name = ENV['CIRCLE_BRANCH']
+  return false unless branch_name
+  return false unless branch_name =~ valid_branch_pattern
+  true
+end
+
+# Check to see if acceptance is enabled.
+def acceptance_enabled
+  acceptance = ENV['ACCEPTANCE']
+  return false unless acceptance
+end
+
 desc '[CI Only] Run acceptance tests.'
 task :acceptance do
-  # Ensure we're on CircleCI and using the master branch.
-  branch_name = ENV['CIRCLE_BRANCH']
+  unless acceptance_enabled
+    puts 'Acceptance is not enabled.'
+    exit(0)
+  end
 
-  abort('CIRCLE_BRANCH not set.') unless branch_name
+  unless validate_branch(/^release-/) || validate_branch(/^hotfix-/)
+    puts 'Not a release or hotfix branch.'
+    exit(0)
+  end
 
-  unless branch_name.start_with?('release-')
-    puts "#{branch_name} is not a release branch."
+  stdout = `bundle exec rake beaker:sets | xargs`
+  sets = stdout.split(' ')
+  node_total = ENV['CIRCLE_NODE_TOTAL'].to_i
+  node_index = ENV['CIRCLE_NODE_INDEX'].to_i
+  nodes = []
+  l = sets.length - 1
+
+  (0..l).each do |i|
+    nodes << sets[i] if (i % node_total) == node_index
+  end
+
+  unless nodes.length
+    puts 'No nodes configured for this node.'
     exit(0)
   end
 end
 
 desc '[CI Only] Tag, build and push the module to PuppetForge.'
 task :deploy do
-  # Ensure we're on CircleCI and using the master branch.
-  branch_name = ENV['CIRCLE_BRANCH']
-
-  if !branch_name
-    abort('CIRCLE_BRANCH not set.')
-  elsif branch_name != 'master'
-    abort("Only deploy from master. Branch name: #{branch_name}")
-  end
+  abort('Only deploy from master.') unless validate_branch(/^master-/)
 
   # Find out what the local version of the module is.
   file = File.read('metadata.json')
