@@ -22,7 +22,7 @@ def circle_igw(ensure_action, region)
   <<-EOS
     ec2_vpc_internet_gateway { 'circleci-igw':
       ensure => #{ensure_action}',
-      region => #{region},
+      region => '#{region}',
       vpc    => 'circleci-vpc',
     }
   EOS
@@ -32,7 +32,7 @@ def circleci_routes(ensure_action, region)
   <<-EOS
     ec2_vpc_routetable { 'circleci-routes':
       ensure => #{ensure_action}',
-      region => #{region},
+      region => '#{region}',
       vpc    => 'circleci-vpc',
       routes => [ { destination_cidr_block => '10.0.0.0/16', gateway => 'local' },
         { destination_cidr_block => '0.0.0.0/0', gateway => 'circleci-igw' }, ],
@@ -44,7 +44,7 @@ def circleci_sg(ensure_action, region)
   <<-EOS
     ec2_securitygroup { 'circleci-sg':
       ensure      => #{ensure_action}',
-      region      => #{region},
+      region      => '#{region}',
       vpc         => 'circleci-vpc',
       description => 'Security group for VPC',
       ingress     => [{
@@ -62,7 +62,7 @@ def circleci_subnet(ensure_action, region)
   <<-EOS
     ec2_vpc_subnet { 'circleci-subnet':
       ensure            => #{ensure_action}',
-      region            => #{region},
+      region            => '#{region}',
       vpc               => 'circleci-vpc',
       cidr_block        => '10.0.0.0/24',
       availability_zone => $region,
@@ -75,7 +75,7 @@ def circleci_vpc(ensure_action, region)
   <<-EOS
     ec2_vpc { 'circleci-vpc':
       ensure       => #{ensure_action}',
-      region       => #{region},
+      region       => '#{region}',
       cidr_block   => '10.0.0.0/16',
     }
   EOS
