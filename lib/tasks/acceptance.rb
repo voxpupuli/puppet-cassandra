@@ -95,7 +95,7 @@ def puppet_apply(manifest)
   t = Tempfile.new('apply_pp.')
   t << manifest
   t.close
-  puts `puppet apply #{t.path} --info`
+  puts `puppet apply #{t.path} --test`
 end
 
 def test_nodes(nodes)
