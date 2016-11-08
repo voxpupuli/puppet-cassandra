@@ -1,6 +1,7 @@
 #############################################################################
 # Some module specific rake tasks.
 #############################################################################
+require_relative 'tasks/acceptance'
 require_relative 'tasks/deploy'
 
 task default: ['test']
@@ -13,57 +14,6 @@ def validate_branch(valid_branch_pattern)
   return false unless branch_name
   return false unless branch_name =~ valid_branch_pattern
   true
-end
-
-# Check to see if acceptance is enabled.
-def acceptance_enabled
-  acceptance = ENV['ACCEPTANCE']
-  return false unless acceptance == 'true'
-  true
-end
-
-# Check to see if AWS acceptance is enabled.
-def aws_acceptance_enabled
-  aws_acceptance = ENV['AWS_ACCEPTANCE']
-  return false unless aws_acceptance == 'true'
-  true
-end
-
-def test_nodes(nodes)
-  nodes.each do |node|
-    puts "Testing #{node}"
-  end
-end
-
-desc '[CI Only] Run acceptance tests.'
-task :acceptance do
-  unless acceptance_enabled
-    puts 'Acceptance is not enabled.'
-    exit(0)
-  end
-
-  unless validate_branch(/^release-/) || validate_branch(/^hotfix-/)
-    puts 'Not a release or hotfix branch.'
-    exit(0)
-  end
-
-  stdout = `bundle exec rake beaker:sets | xargs`
-  sets = stdout.split(' ')
-  node_total = ENV['CIRCLE_NODE_TOTAL'].to_i
-  node_index = ENV['CIRCLE_NODE_INDEX'].to_i
-  nodes = []
-  l = sets.length - 1
-
-  (0..l).each do |i|
-    nodes << sets[i] if (i % node_total) == node_index
-  end
-
-  unless nodes.length
-    puts 'No nodes configured for this node.'
-    exit(0)
-  end
-
-  test_nodes(nodes)
 end
 
 desc '[CI Only] Tag, build and push the module to PuppetForge.'
