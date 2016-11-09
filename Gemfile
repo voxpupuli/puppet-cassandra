@@ -42,11 +42,13 @@ group :test do
 end
 
 group :circleci do
+  gem 'aws-sdk-core'
   gem 'beaker-rspec'
   gem 'beaker-puppet_install_helper'
   gem 'git', '1.3.0'
   gem 'httparty'
   gem 'pry'
+  gem 'retries'
 end
 
 group :development do

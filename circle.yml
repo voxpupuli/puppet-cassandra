@@ -51,6 +51,8 @@ test:
     - bundle exec rake lint
     - bundle exec rake validate
     - bundle exec rake spec SPEC_OPTS="--format documentation --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/puppet.xml"
+    - bundle exec puppet module install puppetlabs-aws:
+        parallel: true
     - bundle exec rake acceptance:aws_deploy:
         parallel: true
     - bundle exec rake acceptance:tests:
