@@ -6,7 +6,9 @@ namespace :acceptance do
       exit(0)
     end
 
-    unless ENV['CIRCLE_NODE_INDEX']
+    node_index = ENV['CIRCLE_NODE_INDEX']
+
+    unless node_index == '0'
       puts 'Not on the primary CIRCLE_NODE'
       exit(0)
     end
