@@ -95,9 +95,8 @@ def puppet_apply(manifest)
   t = Tempfile.new('apply_pp.')
   t << manifest
   t.close
-  out, err, st = Open3.capture3("puppet apply #{t.path} --test")
-  puts out
-  abort(err) unless st.zero? || (st == 2)
+  ret = system "puppet apply #{t.path} --test"
+  exit(1) unless ret < 1 || ret == 2
 end
 
 def test_nodes(nodes)
