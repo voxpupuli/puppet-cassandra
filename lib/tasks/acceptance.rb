@@ -95,7 +95,7 @@ def puppet_apply(manifest)
   tempfile = Tempfile.new('apply_pp.')
   tempfile << manifest
   tempfile.close
-  return_status = system "puppet apply #{t.path} --test"
+  return_status = system "puppet apply #{tempfile.path} --test"
   exit(return_status) unless return_status.zero? || return_status == 2
 end
 
