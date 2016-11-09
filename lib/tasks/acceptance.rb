@@ -65,7 +65,7 @@ def circleci_subnet(ensure_action, region)
       region            => '#{region}',
       vpc               => 'circleci-vpc',
       cidr_block        => '10.0.0.0/24',
-      availability_zone => $region,
+      availability_zone => '#{region}a',
       route_table       => 'circleci-routes',
     }
   EOS
@@ -96,7 +96,7 @@ def puppet_apply(manifest)
   tempfile << manifest
   tempfile.close
   system "puppet apply #{tempfile.path} --test"
-  return_status = $?.exitstatus
+  return_status = $CHILD_STATUS.exitstatus
   exit(return_status) unless return_status.zero? || return_status == 2
 end
 
