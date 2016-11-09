@@ -92,11 +92,11 @@ def generate_manifest(ensure_action)
 end
 
 def puppet_apply(manifest)
-  t = Tempfile.new('apply_pp.')
-  t << manifest
-  t.close
-  ret = system "puppet apply #{t.path} --test"
-  exit(1) unless ret < 1 || ret == 2
+  tempfile = Tempfile.new('apply_pp.')
+  tempfile << manifest
+  tempfile.close
+  return_status = system "puppet apply #{t.path} --test"
+  exit(return_status) unless return_status.zero? || return_status == 2
 end
 
 def test_nodes(nodes)
