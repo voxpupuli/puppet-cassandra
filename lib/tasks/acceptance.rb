@@ -84,10 +84,10 @@ end
 def generate_manifest(ensure_action)
   region = 'eu-west-1'
   manifest_pp = circleci_vpc(ensure_action, region)
-  manifest_pp << circleci_sg(ensure_action, region)
-  manifest_pp << circleci_subnet(ensure_action, region)
   manifest_pp << circle_igw(ensure_action, region)
   manifest_pp << circleci_routes(ensure_action, region)
+  manifest_pp << circleci_subnet(ensure_action, region)
+  manifest_pp << circleci_sg(ensure_action, region)
   manifest_pp
 end
 
@@ -95,7 +95,9 @@ def puppet_apply(manifest)
   t = Tempfile.new('apply_pp.')
   t << manifest
   t.close
-  puts `puppet apply #{t.path} --test`
+  out, err, st = Open3.capture3("puppet apply #{t.path} --test")
+  puts out
+  abort(err) unless st.zero? || (st == 2)
 end
 
 def test_nodes(nodes)
