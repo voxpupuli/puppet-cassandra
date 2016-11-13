@@ -1,7 +1,7 @@
 require 'beaker-rspec'
 require 'pry'
 
-CASSANDRA2_UNSUPPORTED_PLATFORMS = ['16.04']
+CASSANDRA2_UNSUPPORTED_PLATFORMS = ['16.04'].freeze
 
 hosts.each do |host|
   case host.name

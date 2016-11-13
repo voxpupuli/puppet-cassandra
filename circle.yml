@@ -57,5 +57,3 @@ test:
         parallel: true
     - bundle exec rake acceptance:tests:
         parallel: true
-    - bundle exec rake acceptance:aws_destroy:
-        parallel: true
