@@ -38,6 +38,13 @@ describe 'cassandra3' do
             environment => [ 'CQLSH_NO_BUNDLED=TRUE' ]
           }
 
+          package { ['locales-all', 'net-tools', 'sudo', 'ufw', 'wget', 'ntp',
+                     'python-pip', 'python-minimal']:
+            ensure => present,
+          } ~>
+          exec { '/bin/rm -f /usr/sbin/policy-rc.d':
+            refreshonly => true,
+          } ->
           exec { '/usr/bin/wget http://launchpadlibrarian.net/109052632/python-support_1.0.15_all.deb':
             cwd     => '/var/tmp',
             creates => '/var/tmp/python-support_1.0.15_all.deb',
@@ -58,7 +65,7 @@ describe 'cassandra3' do
       }
     }
 
-    $initial_settings = {
+    $settings = {
       'authenticator'               => 'PasswordAuthenticator',
       'cluster_name'                => 'MyCassandraCluster',
       'commitlog_directory'         => '/var/lib/cassandra/commitlog',
@@ -66,6 +73,7 @@ describe 'cassandra3' do
       'commitlog_sync_period_in_ms' => 10000,
       'data_file_directories'       => ['/var/lib/cassandra/data'],
       'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
+      'hints_directory'             => '/var/lib/cassandra/hints',
       'listen_address'              => $::ipaddress,
       'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
       'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
@@ -81,13 +89,6 @@ describe 'cassandra3' do
       ],
       'start_native_transport'      => true,
     }
-
-    if $version =~ /^2/ {
-      $settings = $initial_settings
-    } else {
-      $settings = merge($initial_settings, { 'hints_directory' => '/var/lib/cassandra/hints' })
-    }
-
 
     if versioncmp($::rubyversion, '1.9.0') < 0 {
       $service_refresh = false
@@ -125,10 +126,6 @@ describe 'cassandra3' do
       apply_manifest(cassandra_install_pp, catch_failures: true)
     end
 
-    it 'Give Cassandra a minute to fully come alive.' do
-      sleep 60
-    end
-
     if legacy_yml_dump
       it 'should work with no errors (subsequent run)' do
         apply_manifest(cassandra_install_pp, catch_failures: true)
@@ -138,40 +135,6 @@ describe 'cassandra3' do
         expect(apply_manifest(cassandra_install_pp,
                               catch_failures: true).exit_code).to be_zero
       end
-    end
-  end
-
-  describe service('cassandra') do
-    it do
-      is_expected.to be_running
-      is_expected.to be_enabled
-    end
-  end
-
-  describe service('datastax-agent') do
-    it do
-      is_expected.to be_running
-      is_expected.to be_enabled
-    end
-  end
-
-  facts_testing_pp = <<-EOS
-    #{cassandra_install_pp}
-
-    if $::cassandrarelease != $version {
-      fail("Test1: ${version} != ${::cassandrarelease}")
-    }
-
-    $assembled_version = "${::cassandramajorversion}.${::cassandraminorversion}.${::cassandrapatchversion}"
-
-    if $version != $assembled_version {
-      fail("Test2: ${version} != ${::assembled_version}")
-    }
-  EOS
-
-  describe "########### Facts Tests #{version}." do
-    it 'should work with no errors' do
-      apply_manifest(facts_testing_pp, catch_failures: true)
     end
   end
 
@@ -426,6 +389,40 @@ describe 'cassandra3' do
       it 'check code is idempotent' do
         expect(apply_manifest(schema_testing_drop_pp, catch_failures: true).exit_code).to be_zero
       end
+    end
+  end
+
+  describe service('cassandra') do
+    it do
+      is_expected.to be_running
+      is_expected.to be_enabled
+    end
+  end
+
+  describe service('datastax-agent') do
+    it do
+      is_expected.to be_running
+      is_expected.to be_enabled
+    end
+  end
+
+  facts_testing_pp = <<-EOS
+    #{cassandra_install_pp}
+
+    if $::cassandrarelease != $version {
+      fail("Test1: ${version} != ${::cassandrarelease}")
+    }
+
+    $assembled_version = "${::cassandramajorversion}.${::cassandraminorversion}.${::cassandrapatchversion}"
+
+    if $version != $assembled_version {
+      fail("Test2: ${version} != ${::assembled_version}")
+    }
+  EOS
+
+  describe "########### Facts Tests #{version}." do
+    it 'should work with no errors' do
+      apply_manifest(facts_testing_pp, catch_failures: true)
     end
   end
 

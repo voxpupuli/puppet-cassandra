@@ -37,7 +37,7 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
       }
     }
 
-    $initial_settings = {
+    $settings = {
       'authenticator'               => 'PasswordAuthenticator',
       'cluster_name'                => 'MyCassandraCluster',
       'commitlog_directory'         => '/var/lib/cassandra/commitlog',
@@ -60,13 +60,6 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
       ],
       'start_native_transport'      => true,
     }
-
-    if $version =~ /^2/ {
-      $settings = $initial_settings
-    } else {
-      $settings = merge($initial_settings, { 'hints_directory' => '/var/lib/cassandra/hints' })
-    }
-
 
     if versioncmp($::rubyversion, '1.9.0') < 0 {
       $service_refresh = false
@@ -104,10 +97,6 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
       apply_manifest(cassandra_install_pp, catch_failures: true)
     end
 
-    it 'Give Cassandra a minute to fully come alive.' do
-      sleep 60
-    end
-
     if legacy_yml_dump
       it 'should work with no errors (subsequent run)' do
         apply_manifest(cassandra_install_pp, catch_failures: true)
@@ -117,40 +106,6 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
         expect(apply_manifest(cassandra_install_pp,
                               catch_failures: true).exit_code).to be_zero
       end
-    end
-  end
-
-  describe service('cassandra') do
-    it do
-      is_expected.to be_running
-      is_expected.to be_enabled
-    end
-  end
-
-  describe service('datastax-agent') do
-    it do
-      is_expected.to be_running
-      is_expected.to be_enabled
-    end
-  end
-
-  facts_testing_pp = <<-EOS
-    #{cassandra_install_pp}
-
-    if $::cassandrarelease != $version {
-      fail("Test1: ${version} != ${::cassandrarelease}")
-    }
-
-    $assembled_version = "${::cassandramajorversion}.${::cassandraminorversion}.${::cassandrapatchversion}"
-
-    if $version != $assembled_version {
-      fail("Test2: ${version} != ${::assembled_version}")
-    }
-  EOS
-
-  describe "########### Facts Tests #{version}." do
-    it 'should work with no errors' do
-      apply_manifest(facts_testing_pp, catch_failures: true)
     end
   end
 
@@ -411,6 +366,40 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
   describe '########### Gather service information (when in debug mode).' do
     it 'Show the cassandra system log.' do
       shell("grep -v -e '^INFO' -e '^\s*INFO' /var/log/cassandra/system.log")
+    end
+  end
+
+  describe service('cassandra') do
+    it do
+      is_expected.to be_running
+      is_expected.to be_enabled
+    end
+  end
+
+  describe service('datastax-agent') do
+    it do
+      is_expected.to be_running
+      is_expected.to be_enabled
+    end
+  end
+
+  facts_testing_pp = <<-EOS
+    #{cassandra_install_pp}
+
+    if $::cassandrarelease != $version {
+      fail("Test1: ${version} != ${::cassandrarelease}")
+    }
+
+    $assembled_version = "${::cassandramajorversion}.${::cassandraminorversion}.${::cassandrapatchversion}"
+
+    if $version != $assembled_version {
+      fail("Test2: ${version} != ${::assembled_version}")
+    }
+  EOS
+
+  describe "########### Facts Tests #{version}." do
+    it 'should work with no errors' do
+      apply_manifest(facts_testing_pp, catch_failures: true)
     end
   end
 
