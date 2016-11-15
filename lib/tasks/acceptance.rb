@@ -27,7 +27,7 @@ def ec2_acceptance_enabled
   true
 end
 
-def puppet_apply(_manifest)
+def puppet_apply
   system 'puppet apply lib/puppet/init.pp --test'
   return_status = $CHILD_STATUS.exitstatus
   exit(return_status) unless return_status.zero? || return_status == 2

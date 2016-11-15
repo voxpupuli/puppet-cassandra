@@ -9,7 +9,6 @@ namespace :acceptance do
       exit(0)
     end
 
-    init_pp = generate_manifest('present')
-    puppet_apply(init_pp)
+    puppet_apply
   end
 end
