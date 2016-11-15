@@ -880,15 +880,33 @@ match a provided pattern.</p>
 14
 15
 16
-17</pre>
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/rake_tasks.rb', line 12</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_validate_branch'>validate_branch</span><span class='lparen'>(</span><span class='id identifier rubyid_valid_branch_pattern'>valid_branch_pattern</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_branch_name'>branch_name</span> <span class='op'>=</span> <span class='const'>ENV</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>CIRCLE_BRANCH</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
-  <span class='kw'>return</span> <span class='kw'>false</span> <span class='kw'>unless</span> <span class='id identifier rubyid_branch_name'>branch_name</span>
-  <span class='kw'>return</span> <span class='kw'>false</span> <span class='kw'>unless</span> <span class='id identifier rubyid_branch_name'>branch_name</span> <span class='op'>=~</span> <span class='id identifier rubyid_valid_branch_pattern'>valid_branch_pattern</span>
+
+  <span class='kw'>unless</span> <span class='id identifier rubyid_branch_name'>branch_name</span>
+    <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>CIRCLE_BRANCH is not set.</span><span class='tstring_end'>&#39;</span></span>
+    <span class='kw'>return</span> <span class='kw'>false</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>unless</span> <span class='id identifier rubyid_branch_name'>branch_name</span> <span class='op'>=~</span> <span class='id identifier rubyid_valid_branch_pattern'>valid_branch_pattern</span>
+    <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Branch </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_branch_name'>branch_name</span><span class='embexpr_end'>}</span><span class='tstring_content'> is not suitable for this operation.</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>return</span> <span class='kw'>false</span>
+  <span class='kw'>end</span>
+
   <span class='kw'>true</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -901,7 +919,7 @@ match a provided pattern.</p>
 </div>
 
       <div id="footer">
-  Generated on Tue Nov 15 08:00:12 2016 by
+  Generated on Tue Nov 15 08:14:31 2016 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.5 (ruby-2.3.1).
 </div>
