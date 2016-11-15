@@ -1,16 +1,8 @@
 namespace :acceptance do
   desc 'Run acceptance tests.'
   task :tests do
-    unless acceptance_enabled
-      puts 'Acceptance is not enabled.'
-      exit(0)
-    end
-
-    unless validate_branch(/^release-/) || validate_branch(/^hotfix-/)
-      puts 'Not a release or hotfix branch.'
-      exit(0)
-    end
-
+    exit(0) unless acceptance_enabled
+    exit(0) unless validate_branch(/^release-/) || validate_branch(/^hotfix-/)
     stdout = `bundle exec rake beaker:sets | xargs`
     sets = stdout.split(' ')
     node_total = ENV['CIRCLE_NODE_TOTAL'].to_i

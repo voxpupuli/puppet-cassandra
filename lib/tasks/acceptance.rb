@@ -6,14 +6,24 @@ require_relative 'acceptance/tests'
 # Check to see if acceptance is enabled.
 def acceptance_enabled
   acceptance = ENV['ACCEPTANCE']
-  return false unless acceptance == 'true'
+
+  unless acceptance == 'true'
+    echo 'Either ACCEPTANCE is not set or is "false".'
+    return false
+  end
+
   true
 end
 
 # Check to see if AWS acceptance is enabled.
-def aws_acceptance_enabled
-  aws_acceptance = ENV['AWS_ACCEPTANCE']
-  return false unless aws_acceptance == 'true'
+def ec2_acceptance_enabled
+  ec2_acceptance = ENV['EC2_ACCEPTANCE']
+
+  unless ec2_acceptance == 'true'
+    echo 'Either EC2_ACCEPTANCE is not set or is "false".'
+    return false
+  end
+
   true
 end
 
@@ -25,6 +35,16 @@ end
 
 def test_nodes(nodes)
   nodes.each do |node|
-    puts "Testing #{node}"
+    a = node.split('_')
+    hypervisor = a[0]
+
+    if hypervisor == 'docker'
+      cmd = "BEAKER_destroy=no BEAKER_set=#{node} bundle exec rake beaker"
+    else
+      return 0 unless ec2_acceptance_enabled
+      cmd = "BEAKER_set=#{node} bundle exec rake beaker"
+    end
+
+    puts cmd
   end
 end
