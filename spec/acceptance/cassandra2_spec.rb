@@ -2,8 +2,11 @@ require 'spec_helper_acceptance'
 
 describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('lsbdistrelease')) do
   version = '2.2.7'
+  lsbdistid = fact('lsbdistid')
+  lsbmajdistrelease = fact('lsbmajdistrelease')
+  osdisplay = "#{lsbdistid}#{lsbmajdistrelease}"
 
-  legacy_yml_dump = if RUBY_VERSION < '2.0.0'
+  legacy_yml_dump = if (osdisplay == 'CentOS6') || (osdisplay == 'Ubuntu1204')
                       true
                     else
                       false
@@ -18,14 +21,8 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
 
     if $::osfamily == 'RedHat' {
       $package_ensure = "${version}-1"
-
-      if $version == '2.2.7' {
-        $cassandra_optutils_package = 'cassandra22-tools'
-        $cassandra_package = 'cassandra22'
-      } else {
-        $cassandra_optutils_package = 'cassandra30-tools'
-        $cassandra_package = 'cassandra30'
-      }
+      $cassandra_optutils_package = 'cassandra22-tools'
+      $cassandra_package = 'cassandra22'
     } else {
       $cassandra_optutils_package = 'cassandra-tools'
       $cassandra_package = 'cassandra'
@@ -92,7 +89,7 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
     }
   EOS
 
-  describe "########### Cassandra #{version} installation" do
+  describe "########### Cassandra #{version} installation on #{osdisplay}." do
     it 'should work with no errors' do
       apply_manifest(cassandra_install_pp, catch_failures: true)
     end
@@ -174,7 +171,7 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
     }
   EOS
 
-  describe "########### Schema create #{version}." do
+  describe "########### Schema create #{version} on #{osdisplay}." do
     it 'should work with no errors' do
       apply_manifest(schema_testing_create_pp, catch_failures: true)
     end
@@ -210,7 +207,7 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
    }
   EOS
 
-  describe "########### Schema drop type #{version}." do
+  describe "########### Schema drop type #{version} on #{osdisplay}." do
     it 'should work with no errors' do
       apply_manifest(schema_testing_drop_type_pp, catch_failures: true)
     end
@@ -244,7 +241,7 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
    }
   EOS
 
-  describe "########### Drop the boone user #{version}." do
+  describe "########### Drop the boone user #{version} on #{osdisplay}." do
     it 'should work with no errors' do
       apply_manifest(schema_testing_drop_user_pp, catch_failures: true)
     end
@@ -279,7 +276,7 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
     }
   EOS
 
-  describe "########### Schema drop index #{version}." do
+  describe "########### Schema drop index #{version} on #{osdisplay}." do
     it 'should work with no errors' do
       apply_manifest(schema_testing_drop_index_pp, catch_failures: true)
     end
@@ -313,7 +310,7 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
     }
   EOS
 
-  describe "########### Schema drop (table) #{version}." do
+  describe "########### Schema drop (table) #{version} on #{osdisplay}." do
     it 'should work with no errors' do
       apply_manifest(schema_testing_drop_pp, catch_failures: true)
     end
@@ -348,7 +345,7 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
     }
   EOS
 
-  describe "########### Schema drop (Keyspaces) #{version}." do
+  describe "########### Schema drop (Keyspaces) #{version} on #{osdisplay}." do
     it 'should work with no errors' do
       apply_manifest(schema_testing_drop_pp, catch_failures: true)
     end
@@ -397,7 +394,7 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
     }
   EOS
 
-  describe "########### Facts Tests #{version}." do
+  describe "########### Facts Tests #{version} on #{osdisplay}." do
     it 'should work with no errors' do
       apply_manifest(facts_testing_pp, catch_failures: true)
     end
@@ -435,7 +432,7 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
     exec { 'rm -rf /var/lib/cassandra/*/* /var/log/cassandra/*': }
   EOS
 
-  describe '########### Uninstall Cassandra 2.2.' do
+  describe "########### Uninstall Cassandra 2.2 on #{osdisplay}." do
     it 'should work with no errors' do
       apply_manifest(cassandra_uninstall_pp, catch_failures: true)
     end
