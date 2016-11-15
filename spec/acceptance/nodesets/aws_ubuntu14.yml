@@ -1,14 +1,16 @@
-HOSTS:
-  ubuntu1404:
-    roles:
-      - master
-      - nodes
-      - ubuntu14
-    platform: ubuntu-14.04-x64
-    image: ubuntu:14.04
-    hypervisor: docker
-    docker_image_commands:
-      - 'apt-get install -y iptables sudo'
-CONFIG:
+--- 
+CONFIG: 
+  log_level: debug
   type: foss
-  log_level: notice
+HOSTS: 
+  ubuntu1404: 
+    amisize: m3.large
+    hypervisor: ec2
+    platform: ubuntu-1404-amd64
+    roles: 
+      - master
+    snapshot: foss
+    subnet_id: subnet-ee97d498
+    user: ubuntu
+    vmname: ubuntu1404-amd-euwest1
+    vpc_id: vpc-b6097ad2

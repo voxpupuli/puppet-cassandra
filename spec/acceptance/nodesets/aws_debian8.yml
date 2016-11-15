@@ -1,19 +1,16 @@
----
-HOSTS:
-  debian8:
-    roles:
-      - master
-      - debian8
-    default_apply_opts:
-      order: random
-      strict_variables:
-    platform: debian-8-amd64
-    image: debian:8
-    hypervisor: docker
-    docker_image_commands:
-      - 'apt-get install -y locales-all net-tools sudo ufw wget'
-      - 'rm -f /usr/sbin/policy-rc.d'
-    docker_cmd: '["/sbin/init"]'
+--- 
 CONFIG: 
+  log_level: debug
   type: foss
-  log_level: notice
+HOSTS: 
+  debian8: 
+    amisize: m3.large
+    hypervisor: ec2
+    platform: debian-8-amd64
+    roles: 
+      - master
+    snapshot: foss
+    subnet_id: subnet-ee97d498
+    user: admin
+    vmname: debian8-amd-euwest1
+    vpc_id: vpc-b6097ad2

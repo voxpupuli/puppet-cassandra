@@ -1,18 +1,16 @@
-HOSTS:
-  ubuntu1604:
-    roles:
-      - master
-      - ubuntu16
-    default_apply_opts:
-      order: random
-      strict_variables:
-    platform: ubuntu-16.04-x64
-    image: ubuntu:16.04
-    hypervisor: docker
-    docker_image_commands:
-      - 'apt-get install -y locales-all net-tools sudo ufw wget ntp python-pip python-minimal'
-      - 'rm -f /usr/sbin/policy-rc.d'
-    docker_cmd: '["/sbin/init"]'
-CONFIG:
-  type: foss
+--- 
+CONFIG: 
   log_level: debug
+  type: foss
+HOSTS: 
+  ubuntu1604: 
+    amisize: m3.large
+    hypervisor: ec2
+    platform: ubuntu-1604-amd64
+    roles: 
+      - master
+    snapshot: foss
+    subnet_id: subnet-ee97d498
+    user: ubuntu
+    vmname: ubuntu1604-amd-euwest1
+    vpc_id: vpc-b6097ad2

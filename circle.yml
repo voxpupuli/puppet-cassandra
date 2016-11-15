@@ -21,7 +21,7 @@ deployment:
     commands: 
       - git config --global user.email "info@locp.co.uk"
       - git config --global user.name "CircleCI"
-      - ./scripts/circle.bash deploy
+      - bundle exec rake deploy
   release:
     branch: /release-.*/
     commands:
@@ -50,5 +50,10 @@ test:
     - bundle exec rake rubocop
     - bundle exec rake lint
     - bundle exec rake validate
-    - bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/puppet.xml"
-    - BEAKER_destroy=no bundle exec rake beaker:circle_debian7
+    - bundle exec rake spec SPEC_OPTS="--format documentation --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/puppet.xml"
+    - bundle exec puppet module install puppetlabs-aws:
+        parallel: true
+    - bundle exec rake acceptance:aws_deploy:
+        parallel: true
+    - bundle exec rake acceptance:tests:
+        parallel: true

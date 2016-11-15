@@ -1,14 +1,16 @@
-HOSTS:
-  ubuntu1204:
-    roles:
-      - nodes
-      - ubuntu12
-    platform: ubuntu-1204-amd64
-    image: ubuntu:12.04
-    hypervisor: docker
-    docker_cmd: '["/sbin/init"]'
-    docker_image_commands:
-      - 'apt-get install -y iptables sudo'
-CONFIG:
+--- 
+CONFIG: 
+  log_level: debug
   type: foss
-  log_level: notice
+HOSTS: 
+  ubuntu1204: 
+    amisize: m3.large
+    hypervisor: ec2
+    platform: ubuntu-1204-amd64
+    roles: 
+      - master
+    snapshot: foss
+    subnet_id: subnet-ee97d498
+    user: ubuntu
+    vmname: ubuntu1204-amd-euwest1
+    vpc_id: vpc-b6097ad2

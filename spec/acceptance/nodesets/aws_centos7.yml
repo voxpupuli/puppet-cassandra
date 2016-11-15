@@ -1,15 +1,16 @@
-HOSTS:
-  centos7:
-    roles:
-      - master
-      - centos7
-      - nodes
-    platform: el-7-x86_64
-    image: centos:7
-    hypervisor: docker
-    docker_cmd: '["/sbin/init"]'
-    docker_image_commands:
-      - 'yum -y install gcc tar systemd-container initscripts'
-CONFIG:
+--- 
+CONFIG: 
+  log_level: debug
   type: foss
-  log_level: notice
+HOSTS: 
+  centos7: 
+    amisize: m3.large
+    hypervisor: ec2
+    platform: el-7-x86_64
+    roles: 
+      - master
+    snapshot: foss
+    subnet_id: subnet-ee97d498
+    user: centos
+    vmname: centos7-x86-64-euwest1
+    vpc_id: vpc-b6097ad2
