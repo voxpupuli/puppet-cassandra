@@ -33,18 +33,20 @@ def puppet_apply(_manifest)
   exit(return_status) unless return_status.zero? || return_status == 2
 end
 
+def test_node(hypervisor, node)
+  if hypervisor == 'docker'
+    cmd = "BEAKER_destroy=no BEAKER_set=#{node} bundle exec rake beaker"
+  else
+    return 0 unless ec2_acceptance_enabled
+    cmd = "BEAKER_set=#{node} bundle exec rake beaker"
+  end
+
+  puts cmd
+end
+
 def test_nodes(nodes)
   nodes.each do |node|
     a = node.split('_')
-    hypervisor = a[0]
-
-    if hypervisor == 'docker'
-      cmd = "BEAKER_destroy=no BEAKER_set=#{node} bundle exec rake beaker"
-    else
-      return 0 unless ec2_acceptance_enabled
-      cmd = "BEAKER_set=#{node} bundle exec rake beaker"
-    end
-
-    puts cmd
+    test_node(a[0], node)
   end
 end
