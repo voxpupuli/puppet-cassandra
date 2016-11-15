@@ -8,7 +8,7 @@ def acceptance_enabled
   acceptance = ENV['ACCEPTANCE']
 
   unless acceptance == 'true'
-    echo 'Either ACCEPTANCE is not set or is "false".'
+    puts 'Either ACCEPTANCE is not set or is "false".'
     return false
   end
 
@@ -20,7 +20,7 @@ def ec2_acceptance_enabled
   ec2_acceptance = ENV['EC2_ACCEPTANCE']
 
   unless ec2_acceptance == 'true'
-    echo 'Either EC2_ACCEPTANCE is not set or is "false".'
+    puts 'Either EC2_ACCEPTANCE is not set or is "false".'
     return false
   end
 
