@@ -41,7 +41,7 @@ group :test do
   gem 'yard',                   require: false
 end
 
-group :circleci do
+group :acceptance do
   gem 'aws-sdk-core'
   gem 'beaker-rspec'
   gem 'beaker-puppet_install_helper'
