@@ -886,13 +886,13 @@
 
 <span class='kw'>def</span> <span class='id identifier rubyid_test_node'>test_node</span><span class='lparen'>(</span><span class='id identifier rubyid_hypervisor'>hypervisor</span><span class='comma'>,</span> <span class='id identifier rubyid_node'>node</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_hypervisor'>hypervisor</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>docker</span><span class='tstring_end'>&#39;</span></span>
-    <span class='id identifier rubyid_cmd'>cmd</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>BEAKER_destroy=no BEAKER_set=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_node'>node</span><span class='embexpr_end'>}</span><span class='tstring_content'> bundle exec rake beaker</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_system'>system</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>BEAKER_destroy=no BEAKER_set=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_node'>node</span><span class='embexpr_end'>}</span><span class='tstring_content'> bundle exec rake beaker</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
   <span class='kw'>else</span>
     <span class='kw'>return</span> <span class='int'>0</span> <span class='kw'>unless</span> <span class='id identifier rubyid_ec2_acceptance_enabled'>ec2_acceptance_enabled</span>
-    <span class='id identifier rubyid_cmd'>cmd</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>BEAKER_set=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_node'>node</span><span class='embexpr_end'>}</span><span class='tstring_content'> bundle exec rake beaker</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_system'>system</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>BEAKER_set=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_node'>node</span><span class='embexpr_end'>}</span><span class='tstring_content'> bundle exec rake beaker</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
   <span class='kw'>end</span>
 
-  <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_cmd'>cmd</span>
+  <span class='gvar'>$CHILD_STATUS</span><span class='period'>.</span><span class='id identifier rubyid_exitstatus'>exitstatus</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -919,16 +919,24 @@
 49
 50
 51
-52</pre>
+52
+53
+54
+55
+56</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/tasks/acceptance.rb', line 47</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_test_nodes'>test_nodes</span><span class='lparen'>(</span><span class='id identifier rubyid_nodes'>nodes</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_return_code'>return_code</span> <span class='op'>=</span> <span class='int'>0</span>
+
   <span class='id identifier rubyid_nodes'>nodes</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_node'>node</span><span class='op'>|</span>
     <span class='id identifier rubyid_a'>a</span> <span class='op'>=</span> <span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>_</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_test_node'>test_node</span><span class='lparen'>(</span><span class='id identifier rubyid_a'>a</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_node'>node</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_return_code'>return_code</span> <span class='op'>+=</span> <span class='id identifier rubyid_test_node'>test_node</span><span class='lparen'>(</span><span class='id identifier rubyid_a'>a</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_node'>node</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_return_code'>return_code</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1007,7 +1015,7 @@ match a provided pattern.</p>
 </div>
 
       <div id="footer">
-  Generated on Tue Nov 15 08:47:23 2016 by
+  Generated on Tue Nov 15 09:03:34 2016 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.5 (ruby-2.3.1).
 </div>
