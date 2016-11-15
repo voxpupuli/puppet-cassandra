@@ -81,6 +81,16 @@
 </div>
 
 
+  <h2>Constant Summary</h2>
+  <dl class="constants">
+    
+      <dt id="CASSANDRA2_UNSUPPORTED_PLATFORMS-constant" class="">CASSANDRA2_UNSUPPORTED_PLATFORMS =
+        
+      </dt>
+      <dd><pre class="code"><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>16.04</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+    
+  </dl>
+
 
 
 
@@ -94,6 +104,54 @@
     </h2>
 
     <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="top-level-namespace.html#acceptance_enabled-instance_method" title="#acceptance_enabled (instance method)">#<strong>acceptance_enabled</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Check to see if acceptance is enabled.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="top-level-namespace.html#aws_acceptance_enabled-instance_method" title="#aws_acceptance_enabled (instance method)">#<strong>aws_acceptance_enabled</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Check to see if AWS acceptance is enabled.</p>
+</div></span>
+  
+</li>
+
       
         <li class="public ">
   <span class="summary_signature">
@@ -191,6 +249,74 @@
 </li>
 
       
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="top-level-namespace.html#puppet_apply-instance_method" title="#puppet_apply (instance method)">#<strong>puppet_apply</strong>(_manifest)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="top-level-namespace.html#test_nodes-instance_method" title="#test_nodes (instance method)">#<strong>test_nodes</strong>(nodes)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="top-level-namespace.html#validate_branch-instance_method" title="#validate_branch (instance method)">#<strong>validate_branch</strong>(valid_branch_pattern)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Validate that we are running on a valide CircleCI branch.</p>
+</div></span>
+  
+</li>
+
+      
     </ul>
   
 
@@ -201,7 +327,97 @@
 
     
       <div class="method_details first">
-  <h3 class="signature first" id="cassandramajorversion-instance_method">
+  <h3 class="signature first" id="acceptance_enabled-instance_method">
+  
+    #<strong>acceptance_enabled</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Check to see if acceptance is enabled.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+7
+8
+9
+10
+11</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/tasks/acceptance.rb', line 7</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_acceptance_enabled'>acceptance_enabled</span>
+  <span class='id identifier rubyid_acceptance'>acceptance</span> <span class='op'>=</span> <span class='const'>ENV</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>ACCEPTANCE</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+  <span class='kw'>return</span> <span class='kw'>false</span> <span class='kw'>unless</span> <span class='id identifier rubyid_acceptance'>acceptance</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>true</span><span class='tstring_end'>&#39;</span></span>
+  <span class='kw'>true</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="aws_acceptance_enabled-instance_method">
+  
+    #<strong>aws_acceptance_enabled</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Check to see if AWS acceptance is enabled.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+14
+15
+16
+17
+18</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/tasks/acceptance.rb', line 14</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_aws_acceptance_enabled'>aws_acceptance_enabled</span>
+  <span class='id identifier rubyid_aws_acceptance'>aws_acceptance</span> <span class='op'>=</span> <span class='const'>ENV</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>AWS_ACCEPTANCE</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+  <span class='kw'>return</span> <span class='kw'>false</span> <span class='kw'>unless</span> <span class='id identifier rubyid_aws_acceptance'>aws_acceptance</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>true</span><span class='tstring_end'>&#39;</span></span>
+  <span class='kw'>true</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="cassandramajorversion-instance_method">
   
     #<strong>cassandramajorversion</strong>  &#x21d2; <tt>integer</tt> 
   
@@ -563,12 +779,129 @@
 </table>
 </div>
     
+      <div class="method_details ">
+  <h3 class="signature " id="puppet_apply-instance_method">
+  
+    #<strong>puppet_apply</strong>(_manifest)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+20
+21
+22
+23
+24</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/tasks/acceptance.rb', line 20</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_puppet_apply'>puppet_apply</span><span class='lparen'>(</span><span class='id identifier rubyid__manifest'>_manifest</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_system'>system</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>puppet apply lib/puppet/init.pp --test</span><span class='tstring_end'>&#39;</span></span>
+  <span class='id identifier rubyid_return_status'>return_status</span> <span class='op'>=</span> <span class='gvar'>$CHILD_STATUS</span><span class='period'>.</span><span class='id identifier rubyid_exitstatus'>exitstatus</span>
+  <span class='id identifier rubyid_exit'>exit</span><span class='lparen'>(</span><span class='id identifier rubyid_return_status'>return_status</span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id identifier rubyid_return_status'>return_status</span><span class='period'>.</span><span class='id identifier rubyid_zero?'>zero?</span> <span class='op'>||</span> <span class='id identifier rubyid_return_status'>return_status</span> <span class='op'>==</span> <span class='int'>2</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="test_nodes-instance_method">
+  
+    #<strong>test_nodes</strong>(nodes)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+26
+27
+28
+29
+30</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/tasks/acceptance.rb', line 26</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_test_nodes'>test_nodes</span><span class='lparen'>(</span><span class='id identifier rubyid_nodes'>nodes</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_nodes'>nodes</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_node'>node</span><span class='op'>|</span>
+    <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Testing </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_node'>node</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_branch-instance_method">
+  
+    #<strong>validate_branch</strong>(valid_branch_pattern)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Validate that we are running on a valide CircleCI branch. Exit false if we
+do not seem to be on a CircleCI build at all or if the branch name does not
+match a provided pattern.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+12
+13
+14
+15
+16
+17</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/rake_tasks.rb', line 12</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_branch'>validate_branch</span><span class='lparen'>(</span><span class='id identifier rubyid_valid_branch_pattern'>valid_branch_pattern</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_branch_name'>branch_name</span> <span class='op'>=</span> <span class='const'>ENV</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>CIRCLE_BRANCH</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+  <span class='kw'>return</span> <span class='kw'>false</span> <span class='kw'>unless</span> <span class='id identifier rubyid_branch_name'>branch_name</span>
+  <span class='kw'>return</span> <span class='kw'>false</span> <span class='kw'>unless</span> <span class='id identifier rubyid_branch_name'>branch_name</span> <span class='op'>=~</span> <span class='id identifier rubyid_valid_branch_pattern'>valid_branch_pattern</span>
+  <span class='kw'>true</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
   </div>
 
 </div>
 
       <div id="footer">
-  Generated on Sun Oct 30 14:19:03 2016 by
+  Generated on Tue Nov 15 08:00:12 2016 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.5 (ruby-2.3.1).
 </div>

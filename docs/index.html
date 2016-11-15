@@ -111,7 +111,7 @@ Multiple Data Centers</a></p>
 </li><li>
 <p><a href="#limitations">Limitations - OS compatibility, etc.</a></p>
 </li><li>
-<p><a href="#contributers">Contributers</a></p>
+<p><a href="#development">Development</a></p>
 </li></ol>
 
 <h2 id="label-Overview">Overview</h2>
@@ -642,9 +642,6 @@ href="http://locp.github.io/cassandra/puppet_defined_types/cassandra_3A_3Aschema
 <h3 id="label-Private+Defined+Types">Private Defined Types</h3>
 <ul><li>
 <p><a
-href="http://locp.github.io/cassandra/puppet_defined_types/cassandra_3A_3Aprivate_3A_3Adeprecation_warning.html">cassandra::private::deprecation_warning</a></p>
-</li><li>
-<p><a
 href="http://locp.github.io/cassandra/puppet_defined_types/cassandra_3A_3Aprivate_3A_3Afirewall_ports_3A_3Arule.html">cassandra::private::firewall_ports::rule</a></p>
 </li></ul>
 
@@ -666,7 +663,7 @@ href="http://locp.github.io/cassandra/top-level-namespace.html#cassandrarelease-
 <h2 id="label-Limitations">Limitations</h2>
 
 <p>When using a Ruby version before 1.9.0, the contents of the Cassandra
-configuration file may change order of elementsdue to a problem with
+configuration file may change order of elements due to a problem with
 to_yaml in earlier versions of Ruby.</p>
 
 <p>When creating key spaces, indexes, cql_types and users the settings will
@@ -674,7 +671,7 @@ only be used to create a new resource if it does not currently exist. If a
 change is made to the Puppet manifest but the resource already exits, this
 change will not be reflected.</p>
 
-<h2 id="label-Contributers">Contributers</h2>
+<h2 id="label-Development">Development</h2>
 
 <p>Contributions will be gratefully accepted. Please go to the project page,
 fork the project, make your changes locally and then raise a pull request.
@@ -687,74 +684,14 @@ page for project specific requirements.</p>
 
 <h3 id="label-Additional+Contributers">Additional Contributers</h3>
 
-<p><strong>Release</strong> | <strong>PR/Issue</strong> |
-<strong>Contributer</strong> ————-|—————————————————–|—————————————————-
-2.0.2 | <a href="https://github.com/locp/cassandra/issues/291">#291</a>| <a
-href="https://github.com/ericy-jana">@ericy-jana</a> 2.0.0 | <a
-href="https://github.com/locp/cassandra/issues/266">#266</a>| <a
-href="https://github.com/stanleyz">@stanleyz</a> 1.25.2 | <a
-href="https://github.com/locp/cassandra/issues/269">#269</a>| <a
-href="https://github.com/ahharu">@ahharu</a> 1.25.1 | <a
-href="https://github.com/locp/cassandra/issues/264">#264</a>| <a
-href="https://github.com/pampelix">@pampelix</a> 1.25.0 | <a
-href="https://github.com/locp/cassandra/pull/261">#261</a> | <a
-href="https://github.com/tibers">@tibers</a> 1.24.0 | <a
-href="https://github.com/locp/cassandra/pull/247">#247</a> | <a
-href="https://github.com/ericy-jana">@ericy-jana</a> 1.24.0 | <a
-href="https://github.com/locp/cassandra/pull/246">#246</a> | <a
-href="https://github.com/ericy-jana">@ericy-jana</a> 1.24.0 | <a
-href="https://github.com/locp/cassandra/issues/245">#245</a>| <a
-href="https://github.com/ericy-jana">@ericy-jana</a> 1.23.0 | <a
-href="https://github.com/locp/cassandra/pull/235">#235</a> | <a
-href="https://github.com/tibers">@tibers</a> 1.22.1 | <a
-href="https://github.com/locp/cassandra/pull/233">#233</a> | <a
-href="https://github.com/tibers">@tibers</a> 1.22.1 | <a
-href="https://github.com/locp/cassandra/issues/232">#232</a>| <a
-href="https://github.com/tibers">@tibers</a> 1.21.0 | <a
-href="https://github.com/locp/cassandra/pull/226">#226</a> | <a
-href="https://github.com/tibers">@tibers</a> 1.20.0 | <a
-href="https://github.com/locp/cassandra/issues/217">#217</a>| <a
-href="https://github.com/samyray">@samyray</a> 1.19.0 | <a
-href="https://github.com/locp/cassandra/pull/215">#215</a> | <a
-href="https://github.com/tibers">@tibers</a> 1.18.0 | <a
-href="https://github.com/locp/cassandra/pull/203">#203</a> | <a
-href="https://github.com/Mike-Petersen">@Mike-Petersen</a> 1.15.0 | <a
-href="https://github.com/locp/cassandra/pull/189">#189</a> | <a
-href="https://github.com/tibers">@tibers</a> 1.14.0 | <a
-href="https://github.com/locp/cassandra/pull/171">#171</a> | <a
-href="https://github.com/jonen10">@jonen10</a> 1.13.0 | <a
-href="https://github.com/locp/cassandra/pull/166">#166</a> | <a
-href="https://github.com/Mike-Petersen">@Mike-Petersen</a> 1.13.0 | <a
-href="https://github.com/locp/cassandra/pull/163">#163</a> | <a
-href="https://github.com/VeriskPuppet">@VeriskPuppet</a> 1.12.2 | <a
-href="https://github.com/locp/cassandra/pull/165">#165</a> | <a
-href="https://github.com/palmertime">@palmertime</a> 1.12.0 | <a
-href="https://github.com/locp/cassandra/pull/156">#156</a> | <a
-href="https://github.com/stuartbfox">@stuartbfox</a> 1.12.0 | <a
-href="https://github.com/locp/cassandra/pull/153">#153</a> | <a
-href="https://github.com/Mike-Petersen">@Mike-Petersen</a> 1.10.0 | <a
-href="https://github.com/locp/cassandra/pull/144">#144</a> | <a
-href="https://github.com/Mike-Petersen">@Mike-Petersen</a> 1.9.2 | <a
-href="https://github.com/locp/cassandra/issues/136">#136</a>| <a
-href="https://github.com/mantunovic">@mantunovic</a> 1.9.2 | <a
-href="https://github.com/locp/cassandra/issues/136">#136</a>| <a
-href="https://github.com/al4">@al4</a> 1.4.2 | <a
-href="https://github.com/locp/cassandra/pull/110">#110</a> | <a
-href="https://github.com/markasammut">@markasammut</a> 1.4.0 | <a
-href="https://github.com/locp/cassandra/pull/100">#100</a> | <a
-href="https://github.com/markasammut">@markasammut</a> 1.3.5 | <a
-href="https://github.com/locp/cassandra/issues/93">#93</a> | <a
-href="https://github.com/sampowers">@sampowers</a> 1.3.3 | <a
-href="https://github.com/locp/cassandra/pull/87">#87</a> | <a
-href="https://github.com/DylanGriffith">@DylanGriffith</a> 0.4.2 | <a
-href="https://github.com/locp/cassandra/pull/34">#34</a> | <a
-href="https://github.com/amosshapira">@amosshapira</a> 0.3.0 | <a
-href="https://github.com/locp/cassandra/pull/11">#11</a> | <a
-href="https://github.com/Spredzy">@spredzy</a></p>
+<p>For a list of contributers see <a
+href="https://github.com/locp/cassandra/blob/master/CONTRIBUTING.md">CONTRIBUTING.md</a>
+and <a
+href="https://github.com/locp/cassandra/graphs/contributors">github.com/locp/cassandra/graphs/contributors</a></p>
 </div></div>
 
       <div id="footer">
-  Generated on Sun Oct 30 14:19:02 2016 by
+  Generated on Tue Nov 15 08:00:11 2016 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.5 (ruby-2.3.1).
 </div>
