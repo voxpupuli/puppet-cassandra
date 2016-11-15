@@ -27,6 +27,14 @@ RSpec.configure do |c|
                       'puppetlabs-inifile'), acceptable_exit_codes: [0, 1]
       on host, puppet('module', 'install',
                       'puppetlabs-stdlib'), acceptable_exit_codes: [0, 1]
+      write_hiera_config_on(host,
+                            [
+                              'fqdn/%{fqdn}',
+                              'osfamily/%{osfamily}',
+                              'lsbdistid/%{lsbdistid}',
+                              'common'
+                            ])
+      copy_hiera_data_to(host, './spec/acceptance/hieradata/')
     end
   end
 end

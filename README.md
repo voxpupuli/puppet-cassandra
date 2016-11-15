@@ -8,7 +8,7 @@
 [![Puppet Forge Downloads](http://img.shields.io/puppetforge/dt/locp/cassandra.svg)](https://forge.puppetlabs.com/locp/cassandra)
 [![Puppet Forge Endorsement](https://img.shields.io/puppetforge/e/locp/cassandra.svg)](https://forge.puppetlabs.com/locp/cassandra)
 
-#### Table of Contents
+## Table of Contents
 
 1. [Overview](#overview)
 1. [Setup - The basics of getting started with Cassandra](#setup)
@@ -22,7 +22,7 @@
     * [DataStax Enterprise](#datastax-enterprise)
 1. [Reference](#reference)
 1. [Limitations - OS compatibility, etc.](#limitations)
-1. [Contributers](#contributers)
+1. [Development](#development)
 
 ## Overview
 
@@ -522,8 +522,6 @@ true or not set the attribute at all after initializing the cluster.
 
 ### Private Defined Types
 
-* [cassandra::private::deprecation_warning]
-  (http://locp.github.io/cassandra/puppet_defined_types/cassandra_3A_3Aprivate_3A_3Adeprecation_warning.html)
 * [cassandra::private::firewall_ports::rule]
   (http://locp.github.io/cassandra/puppet_defined_types/cassandra_3A_3Aprivate_3A_3Afirewall_ports_3A_3Arule.html)
 
@@ -549,7 +547,7 @@ be used to create a new resource if it does not currently exist.  If a change
 is made to the Puppet manifest but the resource already exits, this change
 will not be reflected.
 
-## Contributers
+## Development
 
 Contributions will be gratefully accepted.  Please go to the project page,
 fork the project, make your changes locally and then raise a pull request.
@@ -562,37 +560,6 @@ page for project specific requirements.
 
 ### Additional Contributers
 
-**Release**  | **PR/Issue**                                        | **Contributer**
--------------|-----------------------------------------------------|----------------------------------------------------
-2.1.1        | [#325](https://github.com/locp/cassandra/pull/325)  | [@aaron-miller](https://github.com/aaron-miller)
-2.0.2        | [#291](https://github.com/locp/cassandra/issues/291)| [@ericy-jana](https://github.com/ericy-jana)
-2.0.0        | [#266](https://github.com/locp/cassandra/issues/266)| [@stanleyz](https://github.com/stanleyz)
-1.25.2       | [#269](https://github.com/locp/cassandra/issues/269)| [@ahharu](https://github.com/ahharu)
-1.25.1       | [#264](https://github.com/locp/cassandra/issues/264)| [@pampelix](https://github.com/pampelix)
-1.25.0       | [#261](https://github.com/locp/cassandra/pull/261)  | [@tibers](https://github.com/tibers)
-1.24.0       | [#247](https://github.com/locp/cassandra/pull/247)  | [@ericy-jana](https://github.com/ericy-jana)
-1.24.0       | [#246](https://github.com/locp/cassandra/pull/246)  | [@ericy-jana](https://github.com/ericy-jana)
-1.24.0       | [#245](https://github.com/locp/cassandra/issues/245)| [@ericy-jana](https://github.com/ericy-jana)
-1.23.0       | [#235](https://github.com/locp/cassandra/pull/235)  | [@tibers](https://github.com/tibers)
-1.22.1       | [#233](https://github.com/locp/cassandra/pull/233)  | [@tibers](https://github.com/tibers)
-1.22.1       | [#232](https://github.com/locp/cassandra/issues/232)| [@tibers](https://github.com/tibers)
-1.21.0       | [#226](https://github.com/locp/cassandra/pull/226)  | [@tibers](https://github.com/tibers)
-1.20.0       | [#217](https://github.com/locp/cassandra/issues/217)| [@samyray](https://github.com/samyray)
-1.19.0       | [#215](https://github.com/locp/cassandra/pull/215)  | [@tibers](https://github.com/tibers)
-1.18.0       | [#203](https://github.com/locp/cassandra/pull/203)  | [@Mike-Petersen](https://github.com/Mike-Petersen)
-1.15.0       | [#189](https://github.com/locp/cassandra/pull/189)  | [@tibers](https://github.com/tibers)
-1.14.0       | [#171](https://github.com/locp/cassandra/pull/171)  | [@jonen10](https://github.com/jonen10)
-1.13.0       | [#166](https://github.com/locp/cassandra/pull/166)  | [@Mike-Petersen](https://github.com/Mike-Petersen)
-1.13.0       | [#163](https://github.com/locp/cassandra/pull/163)  | [@VeriskPuppet](https://github.com/VeriskPuppet)
-1.12.2       | [#165](https://github.com/locp/cassandra/pull/165)  | [@palmertime](https://github.com/palmertime)
-1.12.0       | [#156](https://github.com/locp/cassandra/pull/156)  | [@stuartbfox](https://github.com/stuartbfox)
-1.12.0       | [#153](https://github.com/locp/cassandra/pull/153)  | [@Mike-Petersen](https://github.com/Mike-Petersen)
-1.10.0       | [#144](https://github.com/locp/cassandra/pull/144)  | [@Mike-Petersen](https://github.com/Mike-Petersen)
-1.9.2        | [#136](https://github.com/locp/cassandra/issues/136)| [@mantunovic](https://github.com/mantunovic)
-1.9.2        | [#136](https://github.com/locp/cassandra/issues/136)| [@al4](https://github.com/al4)
-1.4.2        | [#110](https://github.com/locp/cassandra/pull/110)  | [@markasammut](https://github.com/markasammut)
-1.4.0        | [#100](https://github.com/locp/cassandra/pull/100)  | [@markasammut](https://github.com/markasammut)
-1.3.5        | [#93](https://github.com/locp/cassandra/issues/93)  | [@sampowers](https://github.com/sampowers)
-1.3.3        | [#87](https://github.com/locp/cassandra/pull/87)    | [@DylanGriffith](https://github.com/DylanGriffith)
-0.4.2        | [#34](https://github.com/locp/cassandra/pull/34)    | [@amosshapira](https://github.com/amosshapira)
-0.3.0        | [#11](https://github.com/locp/cassandra/pull/11)    | [@spredzy](https://github.com/Spredzy)
+For a list of contributers see
+[CONTRIBUTING.md](https://github.com/locp/cassandra/blob/master/CONTRIBUTING.md)
+and https://github.com/locp/cassandra/graphs/contributors
