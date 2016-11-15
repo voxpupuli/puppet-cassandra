@@ -35,18 +35,22 @@ end
 
 def test_node(hypervisor, node)
   if hypervisor == 'docker'
-    cmd = "BEAKER_destroy=no BEAKER_set=#{node} bundle exec rake beaker"
+    system("BEAKER_destroy=no BEAKER_set=#{node} bundle exec rake beaker")
   else
     return 0 unless ec2_acceptance_enabled
-    cmd = "BEAKER_set=#{node} bundle exec rake beaker"
+    system("BEAKER_set=#{node} bundle exec rake beaker")
   end
 
-  puts cmd
+  $CHILD_STATUS.exitstatus
 end
 
 def test_nodes(nodes)
+  return_code = 0
+
   nodes.each do |node|
     a = node.split('_')
-    test_node(a[0], node)
+    return_code += test_node(a[0], node)
   end
+
+  return_code
 end
