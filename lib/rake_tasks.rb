@@ -11,8 +11,17 @@ task default: ['test']
 # name does not match a provided pattern.
 def validate_branch(valid_branch_pattern)
   branch_name = ENV['CIRCLE_BRANCH']
-  return false unless branch_name
-  return false unless branch_name =~ valid_branch_pattern
+
+  unless branch_name
+    puts 'CIRCLE_BRANCH is not set.'
+    return false
+  end
+
+  unless branch_name =~ valid_branch_pattern
+    puts "Branch #{branch_name} is not suitable for this operation."
+    return false
+  end
+
   true
 end
 
