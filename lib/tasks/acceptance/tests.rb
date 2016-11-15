@@ -19,6 +19,6 @@ namespace :acceptance do
       exit(0)
     end
 
-    test_nodes(nodes)
+    exit(test_nodes(nodes))
   end
 end
