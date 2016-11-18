@@ -32,8 +32,8 @@ RSpec.configure do |c|
       # Install hiera
       write_hiera_config_on(host,
                             [
-                              'lsbdistid/%{lsbdistid}-%{lsbmajdistrelease}',
-                              'lsbdistid/%{lsbdistid}',
+                              'operatingsystem/%{operatingsystem}-%{operatingsystemmajrelease}',
+                              'operatingsystem/%{operatingsystem}',
                               'common'
                             ])
       copy_hiera_data_to(host, './spec/acceptance/hieradata/')

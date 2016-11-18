@@ -34,25 +34,6 @@ describe 'cassandra3' do
           Exec {
             environment => [ 'CQLSH_NO_BUNDLED=TRUE' ]
           }
-
-          package { ['locales-all', 'net-tools', 'sudo', 'ufw', 'wget', 'ntp',
-                     'python-pip', 'python-minimal']:
-            ensure => present,
-          } ~>
-          exec { '/bin/rm -f /usr/sbin/policy-rc.d':
-            refreshonly => true,
-          } ->
-          exec { '/usr/bin/wget http://launchpadlibrarian.net/109052632/python-support_1.0.15_all.deb':
-            cwd     => '/var/tmp',
-            creates => '/var/tmp/python-support_1.0.15_all.deb',
-          } ~>
-          exec { '/usr/bin/dpkg -i /var/tmp/python-support_1.0.15_all.deb':
-            refreshonly => true,
-          } ->
-          package { 'cassandra-driver':
-            provider => 'pip',
-            before   => Class['cassandra']
-          }
         }
       }
 

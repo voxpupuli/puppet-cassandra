@@ -1,32 +1,21 @@
 require 'spec_helper_acceptance'
 
 describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('lsbdistrelease')) do
-  version = '2.2.7'
-  lsbdistid = fact('lsbdistid')
-  lsbmajdistrelease = fact('lsbmajdistrelease')
-  osdisplay = "#{lsbdistid}#{lsbmajdistrelease}"
-
-  legacy_yml_dump = if (osdisplay == 'CentOS6') || (osdisplay == 'Ubuntu1204')
-                      true
-                    else
-                      false
-                    end
-
   cassandra_install_pp = <<-EOS
     include cassandra::datastax_repo
     include cassandra::java
 
     $run_schema_tests = hiera('cassandra::run_schema_tests', true)
-    $version = '#{version}'
+    $version = '2.2.7'
 
     if $::osfamily == 'RedHat' {
       $package_ensure = "${version}-1"
       $cassandra_optutils_package = 'cassandra22-tools'
       $cassandra_package = 'cassandra22'
     } else {
+      $package_ensure = $version
       $cassandra_optutils_package = 'cassandra-tools'
       $cassandra_package = 'cassandra'
-      $package_ensure = $version
 
       exec { '/bin/chown root:root /etc/apt/sources.list.d/datastax.list':
         unless  => '/usr/bin/test -O /etc/apt/sources.list.d/datastax.list',
@@ -89,20 +78,14 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
     }
   EOS
 
-  describe "########### Cassandra #{version} installation on #{osdisplay}." do
+  describe '########### Cassandra installation.' do
     it 'should work with no errors' do
       apply_manifest(cassandra_install_pp, catch_failures: true)
     end
 
-    if legacy_yml_dump
-      it 'should work with no errors (subsequent run)' do
-        apply_manifest(cassandra_install_pp, catch_failures: true)
-      end
-    else
-      it 'check code is idempotent' do
-        expect(apply_manifest(cassandra_install_pp,
-                              catch_failures: true).exit_code).to be_zero
-      end
+    it 'check code is idempotent' do
+      expect(apply_manifest(cassandra_install_pp,
+                            catch_failures: true).exit_code).to be_zero
     end
   end
 
@@ -171,19 +154,13 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
     }
   EOS
 
-  describe "########### Schema create #{version} on #{osdisplay}." do
+  describe '########### Schema create.' do
     it 'should work with no errors' do
       apply_manifest(schema_testing_create_pp, catch_failures: true)
     end
 
-    if legacy_yml_dump
-      it 'should work with no errors (subsequent run)' do
-        apply_manifest(schema_testing_create_pp, catch_failures: true)
-      end
-    else
-      it 'check code is idempotent' do
-        expect(apply_manifest(schema_testing_create_pp, catch_failures: true).exit_code).to be_zero
-      end
+    it 'check code is idempotent' do
+      expect(apply_manifest(schema_testing_create_pp, catch_failures: true).exit_code).to be_zero
     end
   end
 
@@ -207,19 +184,13 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
    }
   EOS
 
-  describe "########### Schema drop type #{version} on #{osdisplay}." do
+  describe '########### Schema drop type.' do
     it 'should work with no errors' do
       apply_manifest(schema_testing_drop_type_pp, catch_failures: true)
     end
 
-    if legacy_yml_dump
-      it 'should work with no errors (subsequent run)' do
-        apply_manifest(schema_testing_drop_type_pp, catch_failures: true)
-      end
-    else
-      it 'check code is idempotent' do
-        expect(apply_manifest(schema_testing_drop_type_pp, catch_failures: true).exit_code).to be_zero
-      end
+    it 'check code is idempotent' do
+      expect(apply_manifest(schema_testing_drop_type_pp, catch_failures: true).exit_code).to be_zero
     end
   end
 
@@ -241,19 +212,13 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
    }
   EOS
 
-  describe "########### Drop the boone user #{version} on #{osdisplay}." do
+  describe '########### Drop the boone user.' do
     it 'should work with no errors' do
       apply_manifest(schema_testing_drop_user_pp, catch_failures: true)
     end
 
-    if legacy_yml_dump
-      it 'should work with no errors (subsequent run)' do
-        apply_manifest(schema_testing_drop_user_pp, catch_failures: true)
-      end
-    else
-      it 'check code is idempotent' do
-        expect(apply_manifest(schema_testing_drop_user_pp, catch_failures: true).exit_code).to be_zero
-      end
+    it 'check code is idempotent' do
+      expect(apply_manifest(schema_testing_drop_user_pp, catch_failures: true).exit_code).to be_zero
     end
   end
 
@@ -276,19 +241,13 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
     }
   EOS
 
-  describe "########### Schema drop index #{version} on #{osdisplay}." do
+  describe '########### Schema drop index.' do
     it 'should work with no errors' do
       apply_manifest(schema_testing_drop_index_pp, catch_failures: true)
     end
 
-    if legacy_yml_dump
-      it 'should run with no errors (subsequent run)' do
-        apply_manifest(schema_testing_drop_index_pp, catch_failures: true)
-      end
-    else
-      it 'check code is idempotent' do
-        expect(apply_manifest(schema_testing_drop_index_pp, catch_failures: true).exit_code).to be_zero
-      end
+    it 'check code is idempotent' do
+      expect(apply_manifest(schema_testing_drop_index_pp, catch_failures: true).exit_code).to be_zero
     end
   end
 
@@ -310,19 +269,13 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
     }
   EOS
 
-  describe "########### Schema drop (table) #{version} on #{osdisplay}." do
+  describe '########### Schema drop (table).' do
     it 'should work with no errors' do
       apply_manifest(schema_testing_drop_pp, catch_failures: true)
     end
 
-    if legacy_yml_dump
-      it 'should work with no errors (subsequent run)' do
-        apply_manifest(schema_testing_drop_pp, catch_failures: true)
-      end
-    else
-      it 'check code is idempotent' do
-        expect(apply_manifest(schema_testing_drop_pp, catch_failures: true).exit_code).to be_zero
-      end
+    it 'check code is idempotent' do
+      expect(apply_manifest(schema_testing_drop_pp, catch_failures: true).exit_code).to be_zero
     end
   end
 
@@ -345,24 +298,12 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
     }
   EOS
 
-  describe "########### Schema drop (Keyspaces) #{version} on #{osdisplay}." do
+  describe '########### Schema drop (Keyspaces).' do
     it 'should work with no errors' do
       apply_manifest(schema_testing_drop_pp, catch_failures: true)
     end
-    if legacy_yml_dump
-      it 'should work with no errors (subsequent run)' do
-        apply_manifest(schema_testing_drop_pp, catch_failures: true)
-      end
-    else
-      it 'check code is idempotent' do
-        expect(apply_manifest(schema_testing_drop_pp, catch_failures: true).exit_code).to be_zero
-      end
-    end
-  end
-
-  describe '########### Gather service information (when in debug mode).' do
-    it 'Show the cassandra system log.' do
-      shell("grep -v -e '^INFO' -e '^\s*INFO' /var/log/cassandra/system.log")
+    it 'check code is idempotent' do
+      expect(apply_manifest(schema_testing_drop_pp, catch_failures: true).exit_code).to be_zero
     end
   end
 
@@ -394,9 +335,15 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
     }
   EOS
 
-  describe "########### Facts Tests #{version} on #{osdisplay}." do
+  describe '########### Facts Tests.' do
     it 'should work with no errors' do
       apply_manifest(facts_testing_pp, catch_failures: true)
+    end
+  end
+
+  describe '########### Gather service information (when in debug mode).' do
+    it 'Show the cassandra system log.' do
+      shell("grep -v -e '^INFO' -e '^\s*INFO' /var/log/cassandra/system.log")
     end
   end
 
@@ -432,7 +379,7 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
     exec { 'rm -rf /var/lib/cassandra/*/* /var/log/cassandra/*': }
   EOS
 
-  describe "########### Uninstall Cassandra 2.2 on #{osdisplay}." do
+  describe '########### Uninstall Cassandra 2.' do
     it 'should work with no errors' do
       apply_manifest(cassandra_uninstall_pp, catch_failures: true)
     end
