@@ -26,6 +26,18 @@ section of the README for further details.
 * Changes to how `service_ensure` is handled.
 * `cassandra::file` is now a define, not a class (as it should have been).
 
+##2016-11-15 - Release 1.26.1 ([diff](https://github.com/locp/cassandra/compare/1.26.0...1.26.1))
+
+# Summary
+
+* Retro-fitted a bug that was fixed in 2.1.1 into the 1.X.Y version of the module.
+
+# Bugfixes
+
+* A hotfix for a bug in `cassandra::schema` that has been around since version 1.18.0 of this
+  module.
+
+
 ##2016-10-08 - Release 1.26.0 ([diff](https://github.com/locp/cassandra/compare/1.25.2...1.26.0))
 
 # Improvements
