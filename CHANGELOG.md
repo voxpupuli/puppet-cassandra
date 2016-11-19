@@ -2,18 +2,18 @@
 
 ##2016-11-19 - Release 1.26.1 ([diff](https://github.com/locp/cassandra/compare/1.26.0...1.26.1))
 
-# Summary
+### Summary
 
-* Retro-fitted a bug that was fixed in 2.1.1 into the 1.X.Y version of the module.
+Retro-fitted a bug that was fixed in 2.1.1 into the 1.X.Y version of the module.
 
-# Bugfixes
+### Bugfixes
 
 * A hotfix for a bug in `cassandra::schema` that has been around since version 1.18.0 of this
   module.
 
 ##2016-10-08 - Release 1.26.0 ([diff](https://github.com/locp/cassandra/compare/1.25.2...1.26.0))
 
-# Improvements
+### Improvements
 * The `cassandra::seeds` paramater can now be provided as an array or as a string.
 
 # Bugfixes
