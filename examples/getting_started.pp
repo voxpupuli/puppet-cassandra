@@ -14,23 +14,63 @@ include cassandra::java
 # Create a cluster called MyCassandraCluster which uses the
 # GossipingPropertyFileSnitch.  In this very basic example
 # the node itself becomes a seed for the cluster.
+
 class { 'cassandra':
-  authenticator   => 'PasswordAuthenticator',
-  cluster_name    => 'MyCassandraCluster',
-  endpoint_snitch => 'GossipingPropertyFileSnitch',
-  listen_address  => $::ipaddress,
-  seeds           => $::ipaddress,
-  service_systemd => true,
-  require         => Class['cassandra::datastax_repo', 'cassandra::java'],
+  commitlog_directory    => '/var/lib/cassandra/commitlog',
+  data_file_directories  => ['/var/lib/cassandra/data'],
+  hints_directory        => '/var/lib/cassandra/hints',
+  package_name           => 'cassandra30',
+  saved_caches_directory => '/var/lib/cassandra/saved_caches',
+  settings               => {
+    'authenticator'               => 'PasswordAuthenticator',
+    'cluster_name'                => 'MyCassandraCluster',
+    'commitlog_sync'              => 'periodic',
+    'commitlog_sync_period_in_ms' => 10000,
+    'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
+    'listen_address'              => $::ipaddress,
+    'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
+    'seed_provider'               => [
+      {
+        'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
+        'parameters' => [
+          {
+            'seeds' => $::ipaddress,
+          },
+        ],
+      },
+    ],
+    'start_native_transport'      => true,
+  },
+  service_ensure         => running,
+  require                => Class['cassandra::datastax_repo', 'cassandra::java'],
+}
+
+class { 'cassandra::datastax_agent':
+  settings => {
+    'agent_alias'     => {
+      'setting' => 'agent_alias',
+      'value'   => 'foobar',
+    },
+    'stomp_interface' => {
+      'setting' => 'stomp_interface',
+      'value'   => 'localhost',
+    },
+    'async_pool_size' => {
+      'ensure' => absent,
+    },
+  },
+  require  => Class['cassandra'],
 }
 
 class { 'cassandra::optutils':
-  require => Class['cassandra']
+  package_name => 'cassandra30-tools',
+  require      => Class['cassandra'],
 }
 
 class { 'cassandra::schema':
   cqlsh_password => 'cassandra',
   cqlsh_user     => 'cassandra',
+  cqlsh_host     => $::ipaddress,
   indexes        => {
     'users_lname_idx' => {
       table    => 'users',
@@ -45,7 +85,7 @@ class { 'cassandra::schema':
         keyspace_class     => 'SimpleStrategy',
         replication_factor => 1,
       },
-    }
+    },
   },
   tables         => {
     'users' => {
@@ -70,22 +110,56 @@ class { 'cassandra::schema':
       password => 'Niner75',
     },
     'lucan'    => {
-      'ensure' => absent
+      'ensure' => absent,
     },
   },
 }
 
+if $::memorysize_mb < 24576.0 {
+  $max_heap_size_in_mb = floor($::memorysize_mb / 2)
+} elsif $::memorysize_mb < 8192.0 {
+  $max_heap_size_in_mb = floor($::memorysize_mb / 4)
+} else {
+  $max_heap_size_in_mb = 8192
+}
+
 $heap_new_size = $::processorcount * 100
 
-class { 'cassandra::env':
+cassandra::file { "Set Java/Cassandra max heap size to ${max_heap_size_in_mb}.":
+  file       => 'cassandra-env.sh',
   file_lines => {
     'MAX_HEAP_SIZE' => {
-      line  => 'MAX_HEAP_SIZE="1024M"',
-      match => '#MAX_HEAP_SIZE="4G"',
+      line  => "MAX_HEAP_SIZE='${max_heap_size_in_mb}M'",
+      match => '^#?MAX_HEAP_SIZE=.*',
     },
-    'HEAP_NEWSIZE'  => {
+  },
+}
+
+cassandra::file { "Set Java/Cassandra heap new size to ${heap_new_size}.":
+  file       => 'cassandra-env.sh',
+  file_lines => {
+    'HEAP_NEWSIZE' => {
       line  => "HEAP_NEWSIZE='${heap_new_size}M'",
-      match => '#HEAP_NEWSIZE="800M"',
-    }
-  }
+      match => '^#?HEAP_NEWSIZE=.*',
+    },
+  },
+}
+
+$tmpdir = '/var/lib/cassandra/tmp'
+
+file { $tmpdir:
+  ensure  => directory,
+  owner   => 'cassandra',
+  group   => 'cassandra',
+  require => Package['cassandra'],
+}
+
+cassandra::file { 'Set java.io.tmpdir':
+  file       => 'jvm.options',
+  file_lines => {
+    'java.io.tmpdir' => {
+      line => "-Djava.io.tmpdir=${tmpdir}",
+    },
+  },
+  require    => File[$tmpdir],
 }

@@ -11,32 +11,11 @@ describe 'cassandra::schema' do
     ]
   end
 
-  let!(:stdlib_stubs) do
-    MockFunction.new('concat') do |f|
-      f.stubbed.with([], '/etc/cassandra')
-       .returns(['/etc/cassandra'])
-      f.stubbed.with([], '/etc/cassandra/default.conf')
-       .returns(['/etc/cassandra/default.conf'])
-      f.stubbed.with(['/etc/cassandra'], '/etc/cassandra/default.conf')
-       .returns(['/etc/cassandra', '/etc/cassandra/default.conf'])
-    end
-    MockFunction.new('strftime') do |f|
-      f.stubbed.with('/var/lib/cassandra-%F')
-       .returns('/var/lib/cassandra-YYYY-MM-DD')
-    end
-  end
-
-  context 'Test that a connection test is made.' do
+  context 'Ensure that a connection test is made.' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
-      }
-    end
-
-    let :params do
-      {
-        cqlsh_host: 'localhost',
-        cqlsh_port: 9042
       }
     end
 
@@ -51,9 +30,7 @@ describe 'cassandra::schema' do
               cqlsh_port: 9042,
               cqlsh_user: 'cassandra',
               keyspaces: [])
-    end
 
-    it do
       read_command = '/usr/bin/cqlsh   -e \'DESC KEYSPACES\' localhost 9042'
 
       should contain_exec('::cassandra::schema connection test')
@@ -70,6 +47,7 @@ describe 'cassandra::schema' do
       {
         id: 'root',
         gid: 'root',
+        operatingsystemmajrelease: 7,
         osfamily: 'Debian'
       }
     end
@@ -87,9 +65,9 @@ describe 'cassandra::schema' do
         mode: '0600',
         owner: 'root',
         content: /username = cassandra/
-      )
+      ).that_comes_before('Exec[::cassandra::schema connection test]')
 
-      read_command = "/usr/bin/cqlsh --cqlshrc=/root/.puppetcqlshrc  -e 'DESC KEYSPACES'  "
+      read_command = "/usr/bin/cqlsh --cqlshrc=/root/.puppetcqlshrc  -e 'DESC KEYSPACES' localhost 9042"
 
       should contain_exec('::cassandra::schema connection test')
         .only_with(command: read_command,
@@ -105,6 +83,7 @@ describe 'cassandra::schema' do
       {
         id: 'root',
         gid: 'root',
+        operatingsystemmajrelease: 7,
         osfamily: 'Debian'
       }
     end
@@ -125,7 +104,7 @@ describe 'cassandra::schema' do
         content: /password = topsecret/
       )
 
-      read_command = "/usr/bin/cqlsh --cqlshrc=/root/.puppetcqlshrc  -e 'DESC KEYSPACES'  "
+      read_command = "/usr/bin/cqlsh --cqlshrc=/root/.puppetcqlshrc  -e 'DESC KEYSPACES' localhost 9042"
 
       should contain_exec('::cassandra::schema connection test')
         .only_with(command: read_command,
@@ -139,6 +118,7 @@ describe 'cassandra::schema' do
   context 'Test that users can specify a password.' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'Redhat'
       }
     end
@@ -150,7 +130,7 @@ describe 'cassandra::schema' do
     end
 
     it do
-      read_command = "/usr/bin/cqlsh -u cassandra -p topsecret  -e 'DESC KEYSPACES'  "
+      read_command = "/usr/bin/cqlsh -u cassandra -p topsecret  -e 'DESC KEYSPACES' localhost 9042"
 
       should contain_exec('::cassandra::schema connection test')
         .only_with(command: read_command,

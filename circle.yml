@@ -1,4 +1,7 @@
 --- 
+branches:
+  ignore:
+    - gh-pages # list of branches to ignore
 dependencies: 
   bundler:
     without: [development]
@@ -13,41 +16,28 @@ dependencies:
   post:
     - rvm cleanup all
 deployment: 
-  bugfix: 
-    branch: /^bugfix.*/
-    commands: 
-      - "./scripts/circle.bash merge release/patch"
-  improvement: 
-    branch: /^improvement.*/
-    commands: 
-      - "./scripts/circle.bash merge release/patch"
-  legacy_bugfix:
-    branch: /^legacy/bugfix.*/
-    commands: 
-      - "./scripts/circle.bash merge legacy/patch"
-  legacy_improvement:
-    branch: /^legacy/improvement.*/
-    commands: 
-      - "./scripts/circle.bash merge legacy/patch"
-  legacy_patch_release:
-    branch: legacy/patch
-    commands: 
-      - "./scripts/circle.bash merge legacy/minor"
   master: 
     branch: master
     commands: 
-      - "./scripts/circle.bash merge release/latest"
-      - "./scripts/circle.bash deploy"
-  patch_release: 
-    branch: release/patch
-    commands: 
-      - "./scripts/circle.bash merge release/minor"
+      - git config --global user.email "info@locp.co.uk"
+      - git config --global user.name "CircleCI"
+      - bundle exec rake deploy
+  release:
+    branch: /release-.*/
+    commands:
+      - bundle exec rake strings:generate
+      - git config --global user.email "info@locp.co.uk"
+      - git config --global user.name "CircleCI"
+      - git add docs
+      - git commit -m "Updated documentation [ci skip]."
+      - git push --set-upstream origin $CIRCLE_BRANCH
 machine: 
   environment:
+    BEAKER_GEM_VERSION: '<= 2.33.0'
     PUPPET_GEM_VERSION: '~> 4.0'
     STRICT_VARIABLES: yes
   ruby:
-    version: 2.1.6
+    version: 2.3.1
   services: 
     - docker
 notify: 
@@ -64,7 +54,11 @@ test:
         parallel: true
     - bundle exec rake validate:
         parallel: true
-    - bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/puppet.xml":
+    - bundle exec rake spec SPEC_OPTS="--format documentation --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/puppet.xml":
         parallel: true
-    - ./scripts/circle.bash acceptance_tests:
+    - bundle exec puppet module install puppetlabs-aws:
+        parallel: true
+    - bundle exec rake acceptance:aws_deploy:
+        parallel: true
+    - bundle exec rake acceptance:tests:
         parallel: true

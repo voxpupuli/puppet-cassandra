@@ -1,21 +1,52 @@
-# A class for maintaining DB schemas.
+# A class to maintain the database schema.  Please note that cqlsh expects
+# Python 2.7 to be installed.  This may be a problem of older distributions
+# (CentOS 6 for example).
+# @param connection_tries [integer] How many times do try to connect to
+#   Cassandra.  See also `connection_try_sleep`.
+# @param connection_try_sleep [integer] How much time to allow between the
+#   number of tries specified in `connection_tries`.
+# @param cql_types [hash] Creates new `cassandra::schema::cql_type` resources.
+# @param cqlsh_additional_options [string] Any additional options to be passed
+#   to the `cqlsh` command.
+# @param cqlsh_client_config [string] Set this to a file name
+#   (e.g. '/root/.puppetcqlshrc') that will then be used to contain the
+#   the credentials for connecting to Cassandra. This is a more secure option
+#   than having the credentials appearing on the command line.  This option
+#   is only available in Cassandra >= 2.1.
+# @param cqlsh_client_tmpl [string] The location of the template for configuring
+#   the credentials for the cqlsh client.  This is ignored unless
+#   `cqlsh_client_config` is set.
+# @param cqlsh_command [string] The full path to the `cqlsh` command.
+# @param cqlsh_host [string] The host for the `cqlsh` command to connect to.
+#   See also `cqlsh_port`.
+# @param cqlsh_password [string] If credentials are require for connecting,
+#   specify the password here.  See also `cqlsh_user`, `cqlsh_client_config`.
+# @param cqlsh_port [integer] The host for the `cqlsh` command to connect to.
+#   See also `cqlsh_host`.
+# @param cqlsh_user [string] If credentials are required for connecting,
+#   specify the password here. See also `cqlsh_password`,
+#   `cqlsh_client_config`
+# @param indexes [hash] Creates new `cassandra::schema::index` resources.
+# @param keyspaces [hash] Creates new `cassandra::schema::keyspace` resources.
+# @param tables [hash] Creates new `cassandra::schema::table` resources.
+# @param users [hash] Creates new `cassandra::schema::user` resources.
 class cassandra::schema (
   $connection_tries         = 6,
   $connection_try_sleep     = 30,
   $cql_types                = {},
   $cqlsh_additional_options = '',
-  $cqlsh_command            = '/usr/bin/cqlsh',
-  $cqlsh_host               = $::cassandra::rpc_address,
-  $cqlsh_password           = undef,
-  $cqlsh_port               = $::cassandra::native_transport_port,
-  $cqlsh_user               = 'cassandra',
-  $cqlsh_client_tmpl        = 'cassandra/cqlshrc.erb',
   $cqlsh_client_config      = undef,
+  $cqlsh_client_tmpl        = 'cassandra/cqlshrc.erb',
+  $cqlsh_command            = '/usr/bin/cqlsh',
+  $cqlsh_host               = 'localhost',
+  $cqlsh_password           = undef,
+  $cqlsh_port               = 9042,
+  $cqlsh_user               = 'cassandra',
   $indexes                  = {},
   $keyspaces                = {},
   $tables                   = {},
   $users                    = {},
-  ) inherits ::cassandra::params {
+  ) inherits cassandra::params {
   require '::cassandra'
 
   if $cqlsh_client_config != undef {

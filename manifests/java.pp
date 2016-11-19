@@ -1,29 +1,28 @@
-# Please see the README file for the module.
+# A class to install Java and JNA packages.
+# @param aptkey [hash] If supplied, this should be a hash of `apt::key`
+#   resources that will be passed to the create_resources function.
+#   This is ignored on non-Debian systems.
+# @param aptsource [hash] If supplied, this should be a hash of
+#   `apt::source` resources that will be passed to the create_resources
+#   function.  This is ignored on non-Red Hat`
+# @param jna_ensure [string] Is passed to the package reference for the JNA
+#   package.  Valid values are `present` or a version number.
+# @param jna_package_name [string] The name of the JNA package.
+# @param package_ensure [string] Is passed to the package reference for the JRE/JDK
+#   package.  Valid values are `present` or a version number.
+# @param package_name [string] The name of the Java package to be installed.
+# @param yumrepo [hash] If supplied, this should be a hash of *yumrepo*
+#   resources that will be passed to the create_resources function.
+#   This is ignored on non-Red Hat systems.
 class cassandra::java (
   $aptkey           = undef,
   $aptsource        = undef,
-  $ensure           = 'present',
-  $jna_ensure       = 'present',
+  $jna_ensure       = present,
   $jna_package_name = $::cassandra::params::jna_package_name,
-  $package_ensure   = 'present',
+  $package_ensure   = present,
   $package_name     = $::cassandra::params::java_package,
   $yumrepo          = undef,
   ) inherits cassandra::params {
-  # Some horrific jiggerypokery until we can deprecate the ensure parameter.
-  if $ensure != present {
-    if $package_ensure != present and $ensure != $package_ensure {
-      fail('Both ensure and package_ensure attributes are set.')
-    }
-
-    cassandra::private::deprecation_warning { 'cassandra::java::ensure':
-      item_number => 16,
-    }
-
-    $version = $ensure
-  } else {
-    $version = $package_ensure
-  }
-
   if $::osfamily == 'RedHat' and $yumrepo != undef {
     $yumrepo_defaults = {
       'before' => Package[$package_name],
@@ -58,7 +57,7 @@ class cassandra::java (
   }
 
   package { $package_name:
-    ensure => $version,
+    ensure => $package_ensure,
   }
 
   package { $jna_package_name:

@@ -1,0 +1,26 @@
+---
+AMI:
+  centos6-x86-64-euwest1:
+    :image:
+      :foss: ami-edb9069e
+    :region: eu-west-1
+  centos7-x86-64-euwest1:
+    :image:
+      :foss: ami-7abd0209
+    :region: eu-west-1
+  debian8-amd-euwest1:
+    :image:
+      :foss: ami-2897d35b
+    :region: eu-west-1
+  ubuntu1204-amd-euwest1:
+    :image:
+      :foss: ami-666e2415
+    :region: eu-west-1
+  ubuntu1404-amd-euwest1:
+    :image:
+      :foss: ami-a56c26d6
+    :region: eu-west-1
+  ubuntu1604-amd-euwest1:
+    :image:
+      :foss: ami-be3559cd
+    :region: eu-west-1

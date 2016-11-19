@@ -11,6 +11,75 @@ Retro-fitted a bug that was fixed in 2.1.1 into the 1.X.Y version of the module.
 * A hotfix for a bug in `cassandra::schema` that has been around since version 1.18.0 of this
   module.
 
+##2016-11-02 - Release 2.1.1 ([diff](https://github.com/locp/cassandra/compare/2.1.0...2.1.1))
+
+### Summary
+
+A hotfix for a bug in `cassandra::schema` that has been around since version 1.18.0 of this
+module.
+
+### Bugfixes
+
+* Fixed a bug where cql_types would not be created unless keyspaces were also provided.
+* Fixed a minor typo in the README.
+
+##2016-10-29 - Release 2.1.0 ([diff](https://github.com/locp/cassandra/compare/2.0.2...2.1.0))
+
+### Summary
+
+A mixture of new features, a new style of documentation and other
+improvements.  Also ran the [Sonar-Puppet](https://github.com/iwarapter/sonar-puppet)
+plugin against the code to improve the code quality.
+
+### Features
+
+* The following facts are now available:
+  * cassandramajorversion
+  * cassandraminorversion
+  * cassandrapatchversion
+  * cassandrarelease
+* The following attributes are now available:
+  * cassandra::commitlog_directory
+  * cassandra::commitlog_directory_mode
+  * cassandra::data_file_directories
+  * cassandra::data_file_directories_mode
+  * cassandra::hints_directory
+  * cassandra::hints_directory_mode
+  * cassandra::saved_caches_directory
+  * cassandra::saved_caches_directory_mode
+  * cassandra::systemctl
+
+### Bugfixes
+
+* Resolved all issues identified by Sonar-Puppet from 38 (2 major,
+  36 minor).  In doing so, this reduced the technical debt ration
+  from 0.9% to 0.0%.
+
+### Improvements
+
+* The reference documentation is now processed via 
+  http://locp.github.io/cassandra
+* Made a start on refactoring the spec/unit tests so that there is less
+  duplication of code.
+
+##2016-10-12 - Release 2.0.2 ([diff](https://github.com/locp/cassandra/compare/2.0.1...2.0.2))
+
+### Summary
+
+This is a non-functional patch release that fixes some issues in documentation, and fixes some
+bugs and makes some improvements in our testing framework.
+
+### Improvements
+
+* Ensure there is a framework for supporting the legacy 1.X.Y. module until the end of 2016.
+* A more obvious test rig for the beaker/acceptance tests on TravisCI.
+
+### Bugfixes
+
+* Corrected misleading documentation.
+* Ensure legacy test builds still work against Ruby 1.9.3.
+* Corrected deprecated tags in the module metadata.
+
 ##2016-10-08 - Release 1.26.0 ([diff](https://github.com/locp/cassandra/compare/1.25.2...1.26.0))
 
 ### Improvements

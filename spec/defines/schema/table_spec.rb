@@ -12,62 +12,10 @@ describe 'cassandra::schema::table' do
     ]
   end
 
-  let!(:stdlib_stubs) do
-    MockFunction.new('concat') do |f|
-      f.stubbed.with([], '/etc/cassandra')
-       .returns(['/etc/cassandra'])
-      f.stubbed.with([], '/etc/cassandra/default.conf')
-       .returns(['/etc/cassandra/default.conf'])
-      f.stubbed.with(['/etc/cassandra'], '/etc/cassandra/default.conf')
-       .returns(['/etc/cassandra', '/etc/cassandra/default.conf'])
-    end
-    MockFunction.new('count') do |f|
-      f.stubbed.with(
-        [
-          'COMPACT STORAGE',
-          'ID=\'5a1c395e-b41f-11e5-9f22-ba0be0483c18\''
-        ]
-      ).returns(2)
-    end
-    MockFunction.new('delete') do |f|
-      f.stubbed.with('userid text, username FROZEN<fullname>, emails set<text>, top_scores list<int>, todo map<timestamp, text>, COLLECTION-TYPE tuple<int, text,text>, PRIMARY KEY (userid)', 'COLLECTION-TYPE ').returns('userid text, username FROZEN<fullname>, emails set<text>, top_scores list<int>, todo map<timestamp, text>, tuple<int, text,text>, PRIMARY KEY (userid)')
-    end
-    MockFunction.new('join') do |f|
-      f.stubbed.with(
-        [
-          'COMPACT STORAGE', 'ID=\'5a1c395e-b41f-11e5-9f22-ba0be0483c18\''
-        ], ' AND '
-      ).returns("COMPACT STORAGE AND ID='5a1c395e-b41f-11e5-9f22-ba0be0483c18'")
-      f.stubbed.with(
-        [
-          'userid text', 'username FROZEN<fullname>', 'emails set<text>',
-          'top_scores list<int>', 'todo map<timestamp, text>',
-          'COLLECTION-TYPE tuple<int, text,text>', 'PRIMARY KEY (userid)'
-        ], ', '
-      ).returns('userid text, username FROZEN<fullname>, emails set<text>, top_scores list<int>, todo map<timestamp, text>, COLLECTION-TYPE tuple<int, text,text>, PRIMARY KEY (userid)')
-    end
-    MockFunction.new('join_keys_to_values') do |f|
-      f.stubbed.with(
-        {
-          'userid' => 'text', 'username' => 'FROZEN<fullname>',
-          'emails' => 'set<text>', 'top_scores' => 'list<int>',
-          'todo' => 'map<timestamp, text>',
-          'COLLECTION-TYPE' => 'tuple<int, text,text>',
-          'PRIMARY KEY' => '(userid)'
-        }, ' '
-      ).returns(
-        [
-          'userid text', 'username FROZEN<fullname>', 'emails set<text>',
-          'top_scores list<int>', 'todo map<timestamp, text>',
-          'COLLECTION-TYPE tuple<int, text,text>', 'PRIMARY KEY (userid)'
-        ]
-      )
-    end
-  end
-
   context 'Create Table' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end
@@ -98,13 +46,14 @@ describe 'cassandra::schema::table' do
     it do
       should compile
       should contain_cassandra__schema__table('users')
-      should contain_exec('/usr/bin/cqlsh   -e "CREATE TABLE IF NOT EXISTS Excelsior.users (userid text, username FROZEN<fullname>, emails set<text>, top_scores list<int>, todo map<timestamp, text>, tuple<int, text,text>, PRIMARY KEY (userid)) WITH COMPACT STORAGE AND ID=\'5a1c395e-b41f-11e5-9f22-ba0be0483c18\'"  ')
+      should contain_exec('/usr/bin/cqlsh   -e "CREATE TABLE IF NOT EXISTS Excelsior.users (userid text, username FROZEN<fullname>, emails set<text>, top_scores list<int>, todo map<timestamp, text>, tuple<int, text,text>, PRIMARY KEY (userid)) WITH COMPACT STORAGE AND ID=\'5a1c395e-b41f-11e5-9f22-ba0be0483c18\'" localhost 9042')
     end
   end
 
   context 'Drop Table' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end
@@ -120,13 +69,14 @@ describe 'cassandra::schema::table' do
 
     it do
       should compile
-      should contain_exec('/usr/bin/cqlsh   -e "DROP TABLE IF EXISTS Excelsior.users"  ')
+      should contain_exec('/usr/bin/cqlsh   -e "DROP TABLE IF EXISTS Excelsior.users" localhost 9042')
     end
   end
 
   context 'Set ensure to latest' do
     let :facts do
       {
+        operatingsystemmajrelease: 7,
         osfamily: 'RedHat'
       }
     end
