@@ -1,5 +1,5 @@
 --- 
-bundler_args: "--without development"
+bundler_args: "--without development acceptance"
 env: 
   - PUPPET_GEM_VERSION="3.8.4"
   - "PUPPET_GEM_VERSION=\"~> 4.0\" STRICT_VARIABLES=\"yes\""
