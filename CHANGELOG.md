@@ -1,5 +1,24 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-11-19 - Release 1.26.1 ([diff](https://github.com/locp/cassandra/compare/1.26.0...1.26.1))
+
+# Summary
+
+* Retro-fitted a bug that was fixed in 2.1.1 into the 1.X.Y version of the module.
+
+# Bugfixes
+
+* A hotfix for a bug in `cassandra::schema` that has been around since version 1.18.0 of this
+  module.
+
+##2016-10-08 - Release 1.26.0 ([diff](https://github.com/locp/cassandra/compare/1.25.2...1.26.0))
+
+# Improvements
+* The `cassandra::seeds` paramater can now be provided as an array or as a string.
+
+# Bugfixes
+* Ensure legacy builds still work on TravisCI.
+
 ##2016-10-01 - Release 2.0.1 ([diff](https://github.com/locp/cassandra/compare/2.0.0...2.0.1))
 
 ### Summary
@@ -25,26 +44,6 @@ section of the README for further details.
 * Support for Ubuntu 16.04.
 * Changes to how `service_ensure` is handled.
 * `cassandra::file` is now a define, not a class (as it should have been).
-
-##2016-11-15 - Release 1.26.1 ([diff](https://github.com/locp/cassandra/compare/1.26.0...1.26.1))
-
-# Summary
-
-* Retro-fitted a bug that was fixed in 2.1.1 into the 1.X.Y version of the module.
-
-# Bugfixes
-
-* A hotfix for a bug in `cassandra::schema` that has been around since version 1.18.0 of this
-  module.
-
-
-##2016-10-08 - Release 1.26.0 ([diff](https://github.com/locp/cassandra/compare/1.25.2...1.26.0))
-
-# Improvements
-* The `cassandra::seeds` paramater can now be provided as an array or as a string.
-
-# Bugfixes
-* Ensure legacy builds still work on TravisCI.
 
 ##2016-09-03 - Release 1.25.2 ([diff](https://github.com/locp/cassandra/compare/1.25.1...1.25.2))
 
