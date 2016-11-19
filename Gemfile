@@ -14,6 +14,7 @@ group :system_tests do
   gem 'coveralls',              require: false
   gem 'hiera',                  require: false
   gem 'metadata-json-lint',     require: false
+  gem 'public_suffix',          '1.4.6'
   gem 'puppet-blacksmith',      require: false
   gem 'puppet-lint',            require: false
   gem 'puppetlabs_spec_helper', require: false
