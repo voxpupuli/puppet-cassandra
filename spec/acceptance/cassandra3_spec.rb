@@ -1,7 +1,7 @@
 require 'spec_helper_acceptance'
 
 describe 'cassandra3' do
-  version = '3.0.3'
+  version = '3.0.10'
   lsbdistid = fact('lsbdistid')
   lsbmajdistrelease = fact('lsbmajdistrelease')
   osdisplay = "#{lsbdistid}#{lsbmajdistrelease}"

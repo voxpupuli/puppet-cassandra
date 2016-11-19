@@ -6,7 +6,7 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
     include cassandra::java
 
     $run_schema_tests = hiera('cassandra::run_schema_tests', true)
-    $version = '2.2.7'
+    $version = '2.2.8'
 
     if $::osfamily == 'RedHat' {
       $package_ensure = "${version}-1"
