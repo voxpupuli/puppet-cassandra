@@ -27,7 +27,15 @@ describe 'Bootstrap' do
         }
       }
       'ubuntu': {
-        if $::operatingsystemmajrelease >= 16 {
+        if $::operatingsystemmajrelease == 12.04 {
+          package {'python-software-properties':} ->
+          exec {'/usr/bin/apt-add-repository ppa:brightbox/ruby-ng':} ->
+          exec {'/usr/bin/apt-get update': } ->
+          package {'ruby2.0': } ->
+          exec { '/bin/rm /usr/bin/ruby': } ->
+          exec { '/usr/sbin/update-alternatives --install /usr/bin/ruby ruby /usr/bin/ruby2.0 1000': }
+        }
+        elsif $::operatingsystemmajrelease == 16.04 {
           package { 'locales-all': } ->
           package { 'net-tools': } ->
           package { 'sudo': } ->
@@ -50,7 +58,7 @@ describe 'Bootstrap' do
     }
   EOS
 
-  describe '########### Bootstrap' do
+  describe '########### Node specific manifest.' do
     it 'should work with no errors' do
       apply_manifest(bootstrap_pp, catch_failures: true)
       shell('[ -d /opt/rh/ruby200 ] && /usr/bin/gem install puppet -v 3.8.7 --no-rdoc --no-ri; true')
