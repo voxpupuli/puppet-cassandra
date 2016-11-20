@@ -4,7 +4,7 @@ CONFIG:
   type: foss
 HOSTS: 
   ubuntu1204: 
-    amisize: m3.large
+    amisize: t2.medium
     hypervisor: ec2
     platform: ubuntu-1204-amd64
     roles: 

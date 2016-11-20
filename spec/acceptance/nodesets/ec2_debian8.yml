@@ -4,7 +4,7 @@ CONFIG:
   type: foss
 HOSTS: 
   debian8: 
-    amisize: m3.large
+    amisize: t2.medium
     hypervisor: ec2
     platform: debian-8-amd64
     roles: 

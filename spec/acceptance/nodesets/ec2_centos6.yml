@@ -4,7 +4,7 @@ CONFIG:
   type: foss
 HOSTS: 
   centos6: 
-    amisize: m3.large
+    amisize: t2.medium
     hypervisor: ec2
     platform: el-6-x86_64
     roles: 
