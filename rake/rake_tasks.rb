@@ -27,7 +27,7 @@ end
 
 desc '[CI Only] Tag, build and push the module to PuppetForge.'
 task :deploy do
-  abort('Only deploy from master.') unless validate_branch(/^master-/)
+  abort('Only deploy from master.') unless validate_branch(/^master$/)
 
   # Find out what the local version of the module is.
   file = File.read('metadata.json')
