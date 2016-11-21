@@ -11,7 +11,7 @@ ec2_vpc_dhcp_options { $account_name:
   ensure              => present,
   region              => $region,
   domain_name         => $domain_name,
-  domain_name_servers => ['8.8.8.8', '8.8.4.4']
+  domain_name_servers => ['8.8.8.8', '8.8.4.4'],
 }
 
 ec2_vpc { $account_name:
@@ -33,7 +33,7 @@ ec2_vpc_routetable { "${account_name}-rtb":
   routes => [
     {
       'destination_cidr_block' => '10.0.0.0/16',
-      'gateway'                => 'local'
+      'gateway'                => 'local',
     },
     {
       'destination_cidr_block' => '0.0.0.0/0',
