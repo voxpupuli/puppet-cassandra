@@ -21,10 +21,7 @@ deployment:
     commands: 
       - git config --global user.email "info@locp.co.uk"
       - git config --global user.name "CircleCI"
-      - bundle exec rake strings:generate
-      - git add docs
-      - git commit -m "Updated documentation [ci skip]."
-      - git push --set-upstream origin $CIRCLE_BRANCH
+      - bundle exec rake strings:gh_pages:update
       - bundle exec rake deploy
 machine: 
   environment:
