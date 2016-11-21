@@ -1,0 +1,18 @@
+HOSTS:
+  ubuntu1604:
+    roles:
+      - master
+      - ubuntu16
+    default_apply_opts:
+      order: random
+      strict_variables:
+    platform: ubuntu-16.04-x64
+    image: ubuntu:16.04
+    hypervisor: docker
+    docker_image_commands:
+      - 'apt-get install -y locales-all net-tools sudo ufw wget ntp python-pip python-minimal'
+      - 'rm -f /usr/sbin/policy-rc.d'
+    docker_cmd: '["/sbin/init"]'
+CONFIG:
+  type: foss
+  log_level: debug
