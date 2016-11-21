@@ -13,6 +13,7 @@ def gem_env_ver(gemname)
   end
 end
 
+gem_env_ver('addressable')
 gem_env_ver('json_pure')
 gem_env_ver('net-http-persistent')
 gem_env_ver('net-ssh')
@@ -40,8 +41,16 @@ group :test do
   gem 'yard',                   require: false
 end
 
-group :system_tests do
+group :acceptance do
+  gem 'aws-sdk-core'
   gem 'beaker-rspec'
   gem 'beaker-puppet_install_helper'
+  gem 'git', '1.3.0'
+  gem 'httparty'
   gem 'pry'
+  gem 'retries'
+end
+
+group :development do
+  gem 'notes', '~> 0.1.2'
 end

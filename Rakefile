@@ -5,16 +5,10 @@ require 'puppetlabs_spec_helper/rake_tasks'
 require 'rubocop/rake_task'
 require 'rubygems'
 
+# TravisCI does not require the extra module tasks.
+require_relative 'rake/rake_tasks' unless ENV['TRAVIS'] == 'true'
+
 # Use a custom pattern with git tag. %s is replaced with the version number.
 Blacksmith::RakeTask.new do |t|
   t.tag_pattern = '%s'
 end
-
-desc 'Run metadata_lint, rubocop, lint, validate and spec.'
-task test: [
-  :metadata_lint,
-  :rubocop,
-  :lint,
-  :validate,
-  :spec
-]

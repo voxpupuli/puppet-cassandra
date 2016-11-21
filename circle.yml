@@ -6,7 +6,7 @@ dependencies:
   bundler:
     without: [development]
   cache_directories:
-    - "~/.rvm/gems"
+    - "/opt/circleci/.rvm/gems"
   override:
     - bundle install --without development:
         timeout: 240
@@ -21,7 +21,8 @@ deployment:
     commands: 
       - git config --global user.email "info@locp.co.uk"
       - git config --global user.name "CircleCI"
-      - ./scripts/circle.bash deploy
+      - bundle exec rake strings:gh_pages:update
+      - bundle exec rake deploy
 machine: 
   environment:
     BEAKER_GEM_VERSION: '<= 2.33.0'
@@ -45,7 +46,11 @@ test:
         parallel: true
     - bundle exec rake validate:
         parallel: true
-    - bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/puppet.xml":
+    - bundle exec rake spec SPEC_OPTS="--format documentation --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/puppet.xml":
         parallel: true
-    - ./scripts/circle.bash acceptance_tests:
+    - bundle exec puppet module install puppetlabs-aws:
+        parallel: true
+    - bundle exec rake acceptance:aws_deploy:
+        parallel: true
+    - bundle exec rake acceptance:tests:
         parallel: true

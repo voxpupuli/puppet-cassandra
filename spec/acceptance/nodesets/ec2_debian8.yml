@@ -1,0 +1,16 @@
+--- 
+CONFIG: 
+  log_level: debug
+  type: foss
+HOSTS: 
+  debian8: 
+    amisize: t2.medium
+    hypervisor: ec2
+    platform: debian-8-amd64
+    roles: 
+      - master
+    snapshot: foss
+    subnet_id: subnet-ee97d498
+    user: admin
+    vmname: debian8-amd-euwest1
+    vpc_id: vpc-b6097ad2
