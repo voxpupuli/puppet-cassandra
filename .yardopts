@@ -1,3 +1,4 @@
+--output-dir docs
 --markup markdown
 --tag caveats:"Caveats:"
 --tag resolution:"Resolution:"
