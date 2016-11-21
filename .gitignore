@@ -10,7 +10,6 @@
 *.swp
 Gemfile.lock
 coverage/
-docs/
 pkg/
 spec/fixtures/
 vendor/
