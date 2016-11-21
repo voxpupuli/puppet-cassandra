@@ -1,4 +1,0 @@
----
-cassandra::java::aptsource:
-  OpenJDK:
-    release: 'precise'

@@ -106,6 +106,7 @@ If in doubt, or you are stuck, please ask for help in the PR or via our
 2.1.1       | [Correct cql_types conditional in cassandra::schema class](https://github.com/locp/cassandra/pull/325)| [@aaron-miller](https://github.com/aaron-miller)
 2.0.2       | [locp/cassandra 2.0 example has two cassandra declarations](https://github.com/locp/cassandra/issues/291)| [@ericy-jana](https://github.com/ericy-jana)
 2.0.0       | [Convert cassandra::file from a class to a define](https://github.com/locp/cassandra/issues/266)| [@stanleyz](https://github.com/stanleyz)
+1.26.1      | [Correct cql_types conditional in cassandra::schema class](https://github.com/locp/cassandra/pull/325)| [@aaron-miller](https://github.com/aaron-miller)
 1.25.2      | [Ubuntu 16 doesnt like the service file](https://github.com/locp/cassandra/issues/269)| [@ahharu](https://github.com/ahharu)
 1.25.1      | [PID file name in systemd file for datastax-agent doesn't match PID file name in /etc/init.d/datastax-agent](https://github.com/locp/cassandra/issues/264)| [@pampelix](https://github.com/pampelix)
 1.25.0      | [adding support for mmap](https://github.com/locp/cassandra/pull/261)  | [@tibers](https://github.com/tibers)
