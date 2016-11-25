@@ -333,6 +333,19 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
     if $version != $assembled_version {
       fail("Test2: ${version} != ${::assembled_version}")
     }
+
+    if $::cassandramaxheapsize <= 0 {
+      fail('cassandramaxheapsize is not set.')
+    }
+    if $::cassandracmsmaxheapsize <= 0 {
+      fail('cassandracmsmaxheapsize is not set.')
+    }
+    if $::cassandraheapnewsize <= 0 {
+      fail('cassandraheapnewsize is not set.')
+    }
+    if $::cassandracmsheapnewsize <= 0 {
+      fail('cassandracmsheapnewsize is not set.')
+    }
   EOS
 
   describe '########### Facts Tests.' do
