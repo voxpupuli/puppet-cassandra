@@ -527,8 +527,16 @@ true or not set the attribute at all after initializing the cluster.
 
 ### Facts
 
+* [cassandracmsheapnewsize]
+  (http://locp.github.io/cassandra/top-level-namespace.html#cassandracmsheapnewsize-instance_method)
+* [cassandracmsmaxheapsize]
+  (http://locp.github.io/cassandra/top-level-namespace.html#cassandracmsmaxheapsize-instance_method)
+* [cassandraheapnewsize]
+  (http://locp.github.io/cassandra/top-level-namespace.html#cassandraheapnewsize-instance_method)
 * [cassandramajorversion]
   (http://locp.github.io/cassandra/top-level-namespace.html#cassandramajorversion-instance_method)
+* [cassandramaxheapsize]
+  (http://locp.github.io/cassandra/top-level-namespace.html#cassandramaxheapsize-instance_method)
 * [cassandraminorversion]
   (http://locp.github.io/cassandra/top-level-namespace.html#cassandraminorversion-instance_method)
 * [cassandrapatchversion]
