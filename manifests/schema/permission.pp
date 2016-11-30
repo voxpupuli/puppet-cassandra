@@ -1,6 +1,7 @@
 # Grant or revoke permissions.
 # To use this class, a suitable `authenticator` (e.g. PasswordAuthenticator)
-# must be set in the Cassandra class.
+# and `authorizer` (e.g. CassandraAuthorizer) must be set in the Cassandra
+# class.
 #
 # WARNING: Specifying keyspace 'ALL' and 'ALL' for permissions at the same
 # time is not currently supported by this module.
@@ -47,7 +48,7 @@ define cassandra::schema::permission (
 
   $read_script = "LIST ALL PERMISSIONS ON ${resource}"
   $upcase_permission_name = upcase($permission_name)
-  $pattern = "\s*${user_name}\s.*\s${user_name}\s.*\s${upcase_permission_name}"
+  $pattern = "\s${user_name} |\s*${user_name} |\s.*\s${upcase_permission_name}$"
   $read_command = "${::cassandra::schema::cqlsh_opts} -e \"${read_script}\" ${::cassandra::schema::cqlsh_conn} | grep '${pattern}'"
 
   if upcase($permission_name) == 'ALL' {
