@@ -131,6 +131,9 @@ RSpec.configure do |config|
       f.stubbed.with('DROP').returns('DROP')
       f.stubbed.with('MODIFY').returns('MODIFY')
       f.stubbed.with('SELECT').returns('SELECT')
+      f.stubbed.with('field').returns('FIELD')
+      f.stubbed.with('forty9ers').returns('FORTY9ERS')
+      f.stubbed.with('ravens').returns('ravens')
     end
 
     MockFunction.new('size') do |f|

@@ -3,7 +3,7 @@
 # must be set in the Cassandra class.
 #
 # WARNING: Specifying keyspace 'ALL' and 'ALL' for permissions at the same
-#          time is not currently supported by this module.
+# time is not currently supported by this module.
 #
 # @param user_name [string] The name of the user who is to be granted or
 #   revoked.
