@@ -123,6 +123,16 @@ RSpec.configure do |config|
       ).returns('\'dc1' => '3', '\'dc2' => '2')
     end
 
+    MockFunction.new('upcase') do |f|
+      f.stubbed.with('ALL').returns('ALL')
+      f.stubbed.with('ALTER').returns('ALTER')
+      f.stubbed.with('AUTHORIZE').returns('AUTHORIZE')
+      f.stubbed.with('CREATE').returns('CREATE')
+      f.stubbed.with('DROP').returns('DROP')
+      f.stubbed.with('MODIFY').returns('MODIFY')
+      f.stubbed.with('SELECT').returns('SELECT')
+    end
+
     MockFunction.new('size') do |f|
       f.stubbed.returns(42)
     end
