@@ -294,6 +294,28 @@ class { 'cassandra::schema':
       },
     }
   },
+  permissions    => {
+    'Grant select permissions to spillman to all keyspaces' => {
+      permission_name => 'SELECT',
+      user_name       => 'spillman',
+    },
+    'Grant modify to to keyspace mykeyspace to akers'       => {
+      keyspace_name   => 'mykeyspace',
+      permission_name => 'MODIFY',
+      user_name       => 'akers',
+    },
+    'Grant alter permissions to mykeyspace to boone'        => {
+      keyspace_name   => 'mykeyspace',
+      permission_name => 'ALTER',
+      user_name       => 'boone',
+    },
+    'Grant ALL permissions to mykeyspace.users to gbennet'  => {
+      keyspace_name   => 'mykeyspace',
+      permission_name => 'ALTER',
+      table_name      => 'users',
+      user_name       => 'gbennet',
+    },
+  },
   tables         => {
     'users' => {
       columns  => {
@@ -315,6 +337,9 @@ class { 'cassandra::schema':
     },
     'boone'    => {
       password => 'Niner75',
+    },
+    'gbennet'  => {
+      'password' => 'foobar',
     },
     'lucan'    => {
       'ensure' => absent
@@ -515,6 +540,8 @@ true or not set the attribute at all after initializing the cluster.
   (http://locp.github.io/cassandra/puppet_defined_types/cassandra_3A_3Aschema_3A_3Aindex.html)
 * [cassandra::schema::keyspace]
   (http://locp.github.io/cassandra/puppet_defined_types/cassandra_3A_3Aschema_3A_3Akeyspace.html)
+* [cassandra::schema::permission]
+  (http://locp.github.io/cassandra/puppet_defined_types/cassandra_3A_3Aschema_3A_3Apermission.html)
 * [cassandra::schema::table]
   (http://locp.github.io/cassandra/puppet_defined_types/cassandra_3A_3Aschema_3A_3Atable.html)
 * [cassandra::schema::user]
@@ -527,8 +554,16 @@ true or not set the attribute at all after initializing the cluster.
 
 ### Facts
 
+* [cassandracmsheapnewsize]
+  (http://locp.github.io/cassandra/top-level-namespace.html#cassandracmsheapnewsize-instance_method)
+* [cassandracmsmaxheapsize]
+  (http://locp.github.io/cassandra/top-level-namespace.html#cassandracmsmaxheapsize-instance_method)
+* [cassandraheapnewsize]
+  (http://locp.github.io/cassandra/top-level-namespace.html#cassandraheapnewsize-instance_method)
 * [cassandramajorversion]
   (http://locp.github.io/cassandra/top-level-namespace.html#cassandramajorversion-instance_method)
+* [cassandramaxheapsize]
+  (http://locp.github.io/cassandra/top-level-namespace.html#cassandramaxheapsize-instance_method)
 * [cassandraminorversion]
   (http://locp.github.io/cassandra/top-level-namespace.html#cassandraminorversion-instance_method)
 * [cassandrapatchversion]
