@@ -1,5 +1,24 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-12-01 - Release 2.2.0 ([diff](https://github.com/locp/cassandra/compare/2.1.2...2.2.0))
+
+### Summary
+
+At long last we have a defined type for handling permissions (something that
+we have been promising since May).  Added some more facts for assisting
+in JVM tuning.  Also fixed an error that was happening when attempting to
+build the project.
+
+### Features
+
+* Added the `permissions` attribute to the `cassandra::schema` class.
+* Added the `cassandra::schema::permission`
+
+### Bugfixes
+
+* Some refactoring of the ruby code since the release of Rubocop 0.46.0 which
+  was failing code that previously had passed OK.
+
 ##2016-11-02 - Release 2.1.2 ([diff](https://github.com/locp/cassandra/compare/2.1.1...2.1.2))
 
 ### Summary
