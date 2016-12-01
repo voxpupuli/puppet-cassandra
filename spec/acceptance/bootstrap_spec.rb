@@ -3,7 +3,11 @@ require 'spec_helper_acceptance'
 describe 'Bootstrap' do
   whoami_pp = <<-EOS
     notify { "operatingsystem:           ${::operatingsystem}": } ->
-    notify { "operatingsystemmajrelease: ${::operatingsystemmajrelease}": }
+    notify { "operatingsystemmajrelease: ${::operatingsystemmajrelease}": } ->
+    notify { "cassandramaxheapsize:      ${::cassandramaxheapsize}": } ->
+    notify { "cassandracmsmaxheapsize:   ${::cassandracmsmaxheapsize}": } ->
+    notify { "cassandraheapnewsize:      ${::cassandraheapnewsize}": } ->
+    notify { "cassandracmsheapnewsize:   ${::cassandracmsheapnewsize}": }
   EOS
 
   describe '########### Identify the node.' do
