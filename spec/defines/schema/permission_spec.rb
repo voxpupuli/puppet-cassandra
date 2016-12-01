@@ -66,6 +66,7 @@ describe 'cassandra::schema::permission' do
 
     it do
       should have_resource_count(9)
+      should contain_exec('GRANT SELECT ON ALL KEYSPACES TO spillman')
     end
   end
 
@@ -88,6 +89,7 @@ describe 'cassandra::schema::permission' do
 
     it do
       should have_resource_count(9)
+      should contain_exec('GRANT MODIFY ON KEYSPACE field TO akers')
     end
   end
 
@@ -110,6 +112,7 @@ describe 'cassandra::schema::permission' do
 
     it do
       should have_resource_count(9)
+      should contain_exec('GRANT ALTER ON KEYSPACE forty9ers TO boone')
     end
   end
 
@@ -132,6 +135,22 @@ describe 'cassandra::schema::permission' do
 
     it do
       should have_resource_count(18)
+      should contain_cassandra__schema__permission('boone:ALL:ravens.plays - ALTER').with(
+        ensure: 'present',
+        user_name: 'boone',
+        keyspace_name: 'ravens',
+        permission_name: 'ALTER',
+        table_name: 'plays'
+      )
+      should contain_cassandra__schema__permission('boone:ALL:ravens.plays - AUTHORIZE')
+      should contain_cassandra__schema__permission('boone:ALL:ravens.plays - DROP')
+      should contain_cassandra__schema__permission('boone:ALL:ravens.plays - MODIFY')
+      should contain_cassandra__schema__permission('boone:ALL:ravens.plays - SELECT')
+      should contain_exec('GRANT ALTER ON TABLE ravens.plays TO boone')
+      should contain_exec('GRANT AUTHORIZE ON TABLE ravens.plays TO boone')
+      should contain_exec('GRANT DROP ON TABLE ravens.plays TO boone')
+      should contain_exec('GRANT MODIFY ON TABLE ravens.plays TO boone')
+      should contain_exec('GRANT SELECT ON TABLE ravens.plays TO boone')
     end
   end
 
@@ -155,6 +174,7 @@ describe 'cassandra::schema::permission' do
 
     it do
       should have_resource_count(9)
+      should contain_exec('REVOKE SELECT ON KEYSPACE forty9ers FROM boone')
     end
   end
 end
