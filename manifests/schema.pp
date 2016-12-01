@@ -28,6 +28,8 @@
 #   `cqlsh_client_config`
 # @param indexes [hash] Creates new `cassandra::schema::index` resources.
 # @param keyspaces [hash] Creates new `cassandra::schema::keyspace` resources.
+# @param permissions [hash] Creates new `cassandra::schema::permission`
+#   resources.
 # @param tables [hash] Creates new `cassandra::schema::table` resources.
 # @param users [hash] Creates new `cassandra::schema::user` resources.
 class cassandra::schema (
@@ -44,6 +46,7 @@ class cassandra::schema (
   $cqlsh_user               = 'cassandra',
   $indexes                  = {},
   $keyspaces                = {},
+  $permissions              = {},
   $tables                   = {},
   $users                    = {},
   ) inherits cassandra::params {
@@ -108,10 +111,18 @@ class cassandra::schema (
     create_resources('cassandra::schema::user', $users)
   }
 
+  # manage permissions if present
+  if $permissions {
+    create_resources('cassandra::schema::permission', $permissions)
+  }
+
   # Resource Ordering
   Cassandra::Schema::Keyspace <| |> -> Cassandra::Schema::Cql_type <| |>
   Cassandra::Schema::Keyspace <| |> -> Cassandra::Schema::Table <| |>
+  Cassandra::Schema::Keyspace <| |> -> Cassandra::Schema::Permission <| |>
   Cassandra::Schema::Cql_type <| |> -> Cassandra::Schema::Table <| |>
   Cassandra::Schema::Table <| |> -> Cassandra::Schema::Index <| |>
+  Cassandra::Schema::Table <| |> -> Cassandra::Schema::Permission <| |>
   Cassandra::Schema::Index <| |> -> Cassandra::Schema::User <| |>
+  Cassandra::Schema::User <| |> -> Cassandra::Schema::Permission <| |>
 }
