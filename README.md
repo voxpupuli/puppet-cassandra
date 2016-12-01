@@ -540,6 +540,8 @@ true or not set the attribute at all after initializing the cluster.
   (http://locp.github.io/cassandra/puppet_defined_types/cassandra_3A_3Aschema_3A_3Aindex.html)
 * [cassandra::schema::keyspace]
   (http://locp.github.io/cassandra/puppet_defined_types/cassandra_3A_3Aschema_3A_3Akeyspace.html)
+* [cassandra::schema::permission]
+  (http://locp.github.io/cassandra/puppet_defined_types/cassandra_3A_3Aschema_3A_3Apermission.html)
 * [cassandra::schema::table]
   (http://locp.github.io/cassandra/puppet_defined_types/cassandra_3A_3Aschema_3A_3Atable.html)
 * [cassandra::schema::user]
