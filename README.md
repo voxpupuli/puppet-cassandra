@@ -294,6 +294,28 @@ class { 'cassandra::schema':
       },
     }
   },
+  permissions    => {
+    'Grant select permissions to spillman to all keyspaces' => {
+      permission_name => 'SELECT',
+      user_name       => 'spillman',
+    },
+    'Grant modify to to keyspace mykeyspace to akers'       => {
+      keyspace_name   => 'mykeyspace',
+      permission_name => 'MODIFY',
+      user_name       => 'akers',
+    },
+    'Grant alter permissions to mykeyspace to boone'        => {
+      keyspace_name   => 'mykeyspace',
+      permission_name => 'ALTER',
+      user_name       => 'boone',
+    },
+    'Grant ALL permissions to mykeyspace.users to gbennet'  => {
+      keyspace_name   => 'mykeyspace',
+      permission_name => 'ALTER',
+      table_name      => 'users',
+      user_name       => 'gbennet',
+    },
+  },
   tables         => {
     'users' => {
       columns  => {
@@ -315,6 +337,9 @@ class { 'cassandra::schema':
     },
     'boone'    => {
       password => 'Niner75',
+    },
+    'gbennet'  => {
+      'password' => 'foobar',
     },
     'lucan'    => {
       'ensure' => absent
