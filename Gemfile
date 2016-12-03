@@ -24,13 +24,11 @@ group :test do
 end
 
 group :acceptance do
-  gem 'aws-sdk-core'
   gem 'beaker-puppet_install_helper'
   gem 'beaker-rspec'
   gem 'git', '1.3.0'
   gem 'httparty'
   gem 'pry'
-  gem 'retries'
 end
 
 group :development do

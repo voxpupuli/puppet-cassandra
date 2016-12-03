@@ -3,12 +3,10 @@ branches:
   ignore:
     - gh-pages # list of branches to ignore
 dependencies: 
-  bundler:
-    without: [development]
   cache_directories:
     - "/opt/circleci/.rvm/gems"
   override:
-    - bundle install --without development acceptance:
+    - bundle install --without development:
         timeout: 240
         environment:
           PUPPET_GEM_VERSION: '~> 4.5'
