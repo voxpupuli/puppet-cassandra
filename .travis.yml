@@ -8,14 +8,13 @@ script:
   - "bundle exec puppet --version"
   - "bundle exec rake validate"
   - "bundle exec rake spec SPEC_OPTS='--format documentation'"
+  - "bundle exec rake beaker"
 matrix:
   fast_finish: true
   include:
   - env: "BEAKER_set=centos6 PUPPET_VERSION='~> 3.8'"
     rvm: 2.1.6
   - env: "BEAKER_set=centos7 PUPPET_VERSION='~> 3.8'"
-    rvm: 2.1.6
-  - env: "BEAKER_set=debian7 PUPPET_VERSION='~> 3.8'"
     rvm: 2.1.6
   - env: "BEAKER_set=debian8 PUPPET_VERSION='~> 3.8'"
     rvm: 2.1.6
