@@ -48,9 +48,9 @@ test:
         parallel: true
     - bundle exec rake spec SPEC_OPTS="--format documentation --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/puppet.xml":
         parallel: true
-    - bundle exec puppet module install puppetlabs-aws:
+    - if [ "$EC2_ACCEPTANCE" == "true" ] ; then bundle exec puppet module install puppetlabs-aws; fi:
         parallel: true
-    - bundle exec rake acceptance:aws_deploy:
+    - if [ "$EC2_ACCEPTANCE" == "true" ] ; then bundle exec rake acceptance:aws_deploy; fi:
         parallel: true
     - bundle exec rake acceptance:tests:
         parallel: true
