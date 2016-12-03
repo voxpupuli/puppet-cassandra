@@ -2,6 +2,8 @@
 env:
   - PUPPET_VERSION='~> 3.8'
 language: ruby
+rvm:
+  - 2.1.6
 cache: bundler
 before_install: rm Gemfile.lock || true
 bundler_args: --without development
@@ -12,19 +14,12 @@ script:
   - "bundle exec rake spec SPEC_OPTS='--format documentation'"
   - "bundle exec rake beaker"
 matrix:
-  fast_finish: true
   include:
   - env: "BEAKER_set=centos6"
-    rvm: 2.1.6
   - env: "BEAKER_set=centos7"
-    rvm: 2.1.6
   - env: "BEAKER_set=debian8"
-    rvm: 2.1.6
   - env: "BEAKER_set=ubuntu1204"
-    rvm: 2.1.6
   - env: "BEAKER_set=ubuntu1404"
-    rvm: 2.1.6
   - env: "BEAKER_set=ubuntu1604"
-    rvm: 2.1.6
 notifications:
   email: false
