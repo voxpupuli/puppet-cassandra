@@ -5,7 +5,6 @@ group :test do
   gem 'coveralls',              require: false
   gem 'facter',                 '>= 1.7.0'
   gem 'hiera',                  require: false
-  gem 'httparty',               require: false
   gem 'metadata-json-lint',     require: false
   gem 'puppet',                 puppetversion
   gem 'puppet-blacksmith',      require: false
