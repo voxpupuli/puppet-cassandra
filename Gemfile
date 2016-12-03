@@ -29,6 +29,7 @@ group :acceptance do
   gem 'git', '1.3.0',                 require: false
   gem 'httparty',                     require: false
   gem 'pry',                          require: false
+  gem 'serverspec',                   require: false
 end
 
 group :development do

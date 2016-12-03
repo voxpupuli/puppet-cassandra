@@ -1,4 +1,6 @@
 ---
+env:
+  - PUPPET_VERSION='~> 3.8'
 language: ruby
 cache: bundler
 before_install: rm Gemfile.lock || true
@@ -12,17 +14,17 @@ script:
 matrix:
   fast_finish: true
   include:
-  - env: "BEAKER_set=centos6 PUPPET_VERSION='~> 3.8'"
+  - env: "BEAKER_set=centos6"
     rvm: 2.1.6
-  - env: "BEAKER_set=centos7 PUPPET_VERSION='~> 3.8'"
+  - env: "BEAKER_set=centos7"
     rvm: 2.1.6
-  - env: "BEAKER_set=debian8 PUPPET_VERSION='~> 3.8'"
+  - env: "BEAKER_set=debian8"
     rvm: 2.1.6
-  - env: "BEAKER_set=ubuntu1204 PUPPET_VERSION='~> 3.8'"
+  - env: "BEAKER_set=ubuntu1204"
     rvm: 2.1.6
-  - env: "BEAKER_set=ubuntu1404 PUPPET_VERSION='~> 3.8'"
+  - env: "BEAKER_set=ubuntu1404"
     rvm: 2.1.6
-  - env: "BEAKER_set=ubuntu1604 PUPPET_VERSION='~> 3.8'"
+  - env: "BEAKER_set=ubuntu1604"
     rvm: 2.1.6
 notifications:
   email: false
