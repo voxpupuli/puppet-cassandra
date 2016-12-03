@@ -12,18 +12,18 @@ matrix:
   fast_finish: true
   include:
   - rvm: 2.3.1
-    env: "BEAKER_set=centos6 PUPPET_GEM_VERSION='~> 3.8'"
+    env: "BEAKER_set=centos6"
   - rvm: 2.3.1
-    env: "BEAKER_set=centos7 PUPPET_GEM_VERSION='~> 3.8'"
+    env: "BEAKER_set=centos7"
   - rvm: 2.3.1
-    env: "BEAKER_set=debian7 PUPPET_GEM_VERSION='~> 3.8'"
+    env: "BEAKER_set=debian7"
   - rvm: 2.3.1
-    env: "BEAKER_set=debian8 PUPPET_GEM_VERSION='~> 3.8'"
+    env: "BEAKER_set=debian8"
   - rvm: 2.3.1
-    env: "BEAKER_set=ubuntu1204 PUPPET_GEM_VERSION='~> 3.8'"
+    env: "BEAKER_set=ubuntu1204"
   - rvm: 2.3.1
-    env: "BEAKER_set=ubuntu1404 PUPPET_GEM_VERSION='~> 3.8'"
+    env: "BEAKER_set=ubuntu1404"
   - rvm: 2.3.1
-    env: "BEAKER_set=ubuntu1604 PUPPET_GEM_VERSION='~> 3.8'"
+    env: "BEAKER_set=ubuntu1604"
 notifications:
   email: false
