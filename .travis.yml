@@ -1,7 +1,5 @@
 ---
 language: ruby
-rvm:
-  - 2.3.1
 cache: bundler
 before_install: rm Gemfile.lock || true
 bundler_args: --without development
@@ -14,11 +12,18 @@ matrix:
   fast_finish: true
   include:
   - env: "BEAKER_set=centos6 PUPPET_VERSION='~> 3.8'"
+    rvm: 2.3.1
   - env: "BEAKER_set=centos7 PUPPET_VERSION='~> 3.8'"
+    rvm: 2.3.1
   - env: "BEAKER_set=debian7 PUPPET_VERSION='~> 3.8'"
+    rvm: 2.3.1
   - env: "BEAKER_set=debian8 PUPPET_VERSION='~> 3.8'"
+    rvm: 2.3.1
   - env: "BEAKER_set=ubuntu1204 PUPPET_VERSION='~> 3.8'"
+    rvm: 2.3.1
   - env: "BEAKER_set=ubuntu1404 PUPPET_VERSION='~> 3.8'"
+    rvm: 2.3.1
   - env: "BEAKER_set=ubuntu1604 PUPPET_VERSION='~> 3.8'"
+    rvm: 2.3.1
 notifications:
   email: false
