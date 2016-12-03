@@ -17,6 +17,7 @@ group :test do
   gem 'rspec_junit_formatter',  require: false
   gem 'rubocop'                 if RUBY_VERSION >= '2.0.0'
   gem 'rubocop-rspec',          '~> 1.6' if RUBY_VERSION >= '2.3.0'
+  gem 'syck',                   require: false
   gem 'travis',                 require: false
   gem 'travis-lint',            require: false
   gem 'yard',                   require: false
