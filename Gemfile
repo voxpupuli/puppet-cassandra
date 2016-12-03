@@ -6,6 +6,7 @@ group :test do
   gem 'facter',                 '>= 1.7.0'
   gem 'hiera',                  require: false
   gem 'metadata-json-lint',     require: false
+  gem 'psych',                  require: false
   gem 'puppet',                 puppetversion
   gem 'puppet-blacksmith',      require: false
   gem 'puppet-lint',            require: false
