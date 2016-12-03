@@ -1,30 +1,12 @@
 source ENV['GEM_SOURCE'] || 'https://rubygems.org'
-
-def gem_env_ver(gemname)
-  environment_var = gemname.upcase + '_GEM_VERSION'
-  environment_var = environment_var.tr('-', '_')
-
-  gemversion = ENV[environment_var]
-
-  if gemversion
-    gem gemname, gemversion, require: false
-  else
-    gem gemname, require: false
-  end
-end
-
-gem_env_ver('addressable')
-gem_env_ver('json_pure')
-gem_env_ver('net-http-persistent')
-gem_env_ver('net-ssh')
-gem_env_ver('puppet')
-gem_env_ver('tins')
+puppetversion = ENV.key?('PUPPET_VERSION') ? ENV['PUPPET_VERSION'] : ['>= 3.8']
 
 group :test do
   gem 'coveralls',              require: false
   gem 'facter',                 '>= 1.7.0'
   gem 'hiera',                  require: false
   gem 'metadata-json-lint',     require: false
+  gem 'puppet',                 puppetversion
   gem 'puppet-blacksmith',      require: false
   gem 'puppet-lint',            require: false
   gem 'puppet-strings',         require: false
