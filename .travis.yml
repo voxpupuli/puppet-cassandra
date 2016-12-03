@@ -5,7 +5,7 @@ before_install: rm Gemfile.lock || true
 bundler_args: --without development
 sudo: false
 script: 
-  - "puppet --version"
+  - "bundle exec puppet --version"
   - "bundle exec rake validate"
   - "bundle exec rake spec SPEC_OPTS='--format documentation'"
 matrix:
