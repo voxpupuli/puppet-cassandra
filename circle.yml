@@ -37,6 +37,7 @@ notify:
 test: 
   override: 
     - bundle exec puppet --version
+    - bundle exec travis-lint
     - bundle exec rake metadata_lint
     - bundle exec rake rubocop
     - bundle exec rake lint
