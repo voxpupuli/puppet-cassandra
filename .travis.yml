@@ -1,14 +1,14 @@
 ---
 env:
-  - "PUPPET_VERSION='~> 3.8' BEAKER_GEM_VERSION='<= 2.33.0' BEAKER_set=centos6"
-  - "PUPPET_VERSION='~> 3.8' BEAKER_GEM_VERSION='<= 2.33.0' BEAKER_set=centos7"
-  - "PUPPET_VERSION='~> 3.8' BEAKER_GEM_VERSION='<= 2.33.0' BEAKER_set=debian8"
-  - "PUPPET_VERSION='~> 3.8' BEAKER_GEM_VERSION='<= 2.33.0' BEAKER_set=ubuntu1204"
-  - "PUPPET_VERSION='~> 3.8' BEAKER_GEM_VERSION='<= 2.33.0' BEAKER_set=ubuntu1404"
-  - "PUPPET_VERSION='~> 3.8' BEAKER_GEM_VERSION='<= 2.33.0' BEAKER_set=ubuntu1604"
+  - "PUPPET_VERSION='~> 4.5' BEAKER_GEM_VERSION='<= 2.33.0' BEAKER_set=centos6"
+  - "PUPPET_VERSION='~> 4.5' BEAKER_GEM_VERSION='<= 2.33.0' BEAKER_set=centos7"
+  - "PUPPET_VERSION='~> 4.5' BEAKER_GEM_VERSION='<= 2.33.0' BEAKER_set=debian8"
+  - "PUPPET_VERSION='~> 4.5' BEAKER_GEM_VERSION='<= 2.33.0' BEAKER_set=ubuntu1204"
+  - "PUPPET_VERSION='~> 4.5' BEAKER_GEM_VERSION='<= 2.33.0' BEAKER_set=ubuntu1404"
+  - "PUPPET_VERSION='~> 4.5' BEAKER_GEM_VERSION='<= 2.33.0' BEAKER_set=ubuntu1604"
 language: ruby
 rvm:
-  - 2.1.6
+  - 2.3.1
 cache: bundler
 before_install: rm Gemfile.lock || true
 bundler_args: --without development

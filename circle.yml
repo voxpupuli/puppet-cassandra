@@ -9,7 +9,7 @@ dependencies:
     - bundle install --without development:
         timeout: 240
         environment:
-          PUPPET_GEM_VERSION: '~> 4.5'
+          PUPPET_GEM_VERSION: '~> 3.8'
           STRICT_VARIABLES: yes
   post:
     - rvm cleanup all
@@ -23,11 +23,10 @@ deployment:
       - bundle exec rake deploy
 machine: 
   environment:
-    BEAKER_GEM_VERSION: '<= 2.33.0'
-    PUPPET_GEM_VERSION: '~> 4.5'
+    PUPPET_GEM_VERSION: '~> 3.8'
     STRICT_VARIABLES: yes
   ruby:
-    version: 2.3.1
+    version: 2.1.6
   services: 
     - docker
 notify: 
@@ -43,4 +42,3 @@ test:
     - bundle exec rake lint
     - bundle exec rake validate
     - bundle exec rake spec SPEC_OPTS="--format documentation --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/puppet.xml"
-    - if [ "$ACCEPTANCE" == "true" ]; then BEAKER_set=debian7; fi
