@@ -9,7 +9,7 @@ dependencies:
     - bundle install --without development acceptance:
         timeout: 240
         environment:
-          PUPPET_GEM_VERSION: '~> 3.8'
+          PUPPET_VERSION: '~> 3.8'
           STRICT_VARIABLES: yes
   post:
     - rvm cleanup all
@@ -23,7 +23,7 @@ deployment:
       - bundle exec rake deploy
 machine: 
   environment:
-    PUPPET_GEM_VERSION: '~> 3.8'
+    PUPPET_VERSION: '~> 3.8'
     STRICT_VARIABLES: yes
   ruby:
     version: 2.1.6

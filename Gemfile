@@ -5,6 +5,7 @@ group :test do
   gem 'coveralls',              require: false
   gem 'facter',                 '>= 1.7.0'
   gem 'hiera',                  require: false
+  gem 'httparty',               require: false
   gem 'metadata-json-lint',     require: false
   gem 'puppet',                 puppetversion
   gem 'puppet-blacksmith',      require: false
@@ -27,7 +28,6 @@ group :acceptance do
   gem 'beaker-puppet_install_helper', require: false
   gem 'beaker-rspec',                 require: false
   gem 'git', '1.3.0',                 require: false
-  gem 'httparty',                     require: false
   gem 'pry',                          require: false
 end
 
