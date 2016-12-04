@@ -12,7 +12,8 @@ rvm:
 cache: bundler
 before_install: rm Gemfile.lock || true
 bundler_args: --without development
-sudo: false
+dist: trusty
+sudo: required
 script: 
   - "bundle exec puppet --version"
   - "bundle exec rake validate"
