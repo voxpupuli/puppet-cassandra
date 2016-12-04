@@ -23,9 +23,9 @@ group :test do
 end
 
 group :acceptance do
-  gem 'beaker',                       '<= 3.0.0' if RUBY_VERSION < '2.2.5'
+  gem 'beaker',                       require: false
   gem 'beaker-puppet_install_helper', require: false
-  gem 'beaker-rspec',                 '<= 5.6.0' if RUBY_VERSION < '2.2.5'
+  gem 'beaker-rspec',                 require: false
   gem 'git', '1.3.0',                 require: false
   gem 'httparty',                     require: false
   gem 'pry',                          require: false
