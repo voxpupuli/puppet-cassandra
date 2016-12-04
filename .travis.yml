@@ -22,3 +22,7 @@ script:
   - "bundle exec rake beaker"
 notifications:
   email: false
+branches:
+  only:
+  - /^hotfix-.*$/
+  - /^release-.*$/

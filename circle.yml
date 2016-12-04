@@ -6,7 +6,7 @@ dependencies:
   cache_directories:
     - "/opt/circleci/.rvm/gems"
   override:
-    - bundle install --without development:
+    - bundle install --without development acceptance:
         timeout: 240
         environment:
           PUPPET_GEM_VERSION: '~> 3.8'
