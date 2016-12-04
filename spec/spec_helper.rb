@@ -3,9 +3,9 @@ require 'rspec-puppet'
 require 'rspec-puppet-utils'
 require 'puppetlabs_spec_helper/module_spec_helper'
 require 'simplecov'
-require 'coveralls'
+require 'coveralls' unless ENV['TRAVIS'] == 'true'
 
-Coveralls.wear!
+Coveralls.wear! unless ENV['TRAVIS'] == 'true'
 fixture_path = File.expand_path(File.join(__FILE__, '..', 'fixtures'))
 
 RSpec.configure do |config|
