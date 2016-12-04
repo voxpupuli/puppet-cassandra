@@ -5,7 +5,6 @@ require_relative 'tasks/deploy'
 
 desc '[CI Only] Run beaker, but only for pull requests or for release branches.'
 task :acceptance do
-  Rake::Task["beaker"].invoke
   skip = true
   travis_branch = ENV['TRAVIS_BRANCH']
   travis_event_type = ENV['TRAVIS_EVENT_TYPE']
@@ -20,7 +19,7 @@ task :acceptance do
     puts 'Skipping acceptance tests.'
     exit(0)
   else
-    Rake::Task["beaker:debian7"].invoke
+    Rake::Task['beaker'].invoke
   end
 end
 
