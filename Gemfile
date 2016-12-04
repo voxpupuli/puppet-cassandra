@@ -4,7 +4,9 @@ puppetversion = ENV.key?('PUPPET_VERSION') ? ENV['PUPPET_VERSION'] : ['>= 3.8']
 group :test do
   gem 'coveralls',              require: false
   gem 'facter',                 '>= 1.7.0'
+  gem 'git',                    '1.3.0'
   gem 'hiera',                  require: false
+  gem 'httparty',               require: false
   gem 'metadata-json-lint',     require: false
   gem 'puppet',                 puppetversion
   gem 'puppet-blacksmith',      require: false
@@ -25,11 +27,6 @@ group :acceptance do
   gem 'beaker-puppet_install_helper', require: false
   gem 'beaker-rspec',                 require: false
   gem 'pry',                          require: false
-end
-
-group :deploy do
-  gem 'git',      '1.3.0'
-  gem 'httparty', require: false
 end
 
 group :development do
