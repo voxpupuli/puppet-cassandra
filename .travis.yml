@@ -22,6 +22,6 @@ script:
   - "bundle exec rake lint"
   - "bundle exec rake validate"
   - "bundle exec rake spec SPEC_OPTS='--format documentation'"
-  - "bundle exec rake beaker"
+  - "bundle exec rake acceptance"
 notifications:
   email: false
