@@ -11,11 +11,10 @@ group :test do
   gem 'puppet-lint',            require: false
   gem 'puppet-strings',         require: false
   gem 'puppetlabs_spec_helper', require: false
-  gem 'rake',                   require: false
-  gem 'rubocop-rspec',          '1.4.1' if RUBY_VERSION < '2.2.0'
   gem 'rspec-puppet',           '>= 2.3.2'
   gem 'rspec-puppet-utils',     require: false
   gem 'rspec_junit_formatter',  require: false
+  gem 'rubocop-rspec',          '1.4.1' if RUBY_VERSION < '2.2.0'
   gem 'travis',                 require: false
   gem 'travis-lint',            require: false
   gem 'yard',                   require: false
@@ -39,8 +38,8 @@ end
 
 # rspec must be v2 for ruby 1.8.7
 if RUBY_VERSION >= '1.8.7' && RUBY_VERSION < '1.9'
-  gem 'rspec', '~> 2.0'
   gem 'rake', '~> 10.0'
+  gem 'rspec', '~> 2.0'
 else
   # rubocop requires ruby >= 1.9
   gem 'rubocop'
