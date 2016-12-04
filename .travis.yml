@@ -17,12 +17,11 @@ dist: trusty
 sudo: required
 script: 
   - "bundle exec puppet --version"
+  - "bundle exec rake metadata_lint"
+  - "bundle exec rubocop"
+  - "bundle exec rake lint"
   - "bundle exec rake validate"
   - "bundle exec rake spec SPEC_OPTS='--format documentation'"
-  - "bundle exec rake beaker"
+  - "if [ "$ACCEPTANCE" == "true" ]; then bundle exec rake beaker; fi"
 notifications:
   email: false
-branches:
-  only:
-  - /^hotfix-.*$/
-  - /^release-.*$/
