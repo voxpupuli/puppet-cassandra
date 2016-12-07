@@ -27,7 +27,9 @@ describe 'Bootstrap' do
           exec { '/bin/cp /opt/rh/ruby200/enable /etc/profile.d/ruby.sh': } ->
           exec { '/bin/rm /usr/bin/ruby /usr/bin/gem': } ->
           exec { '/usr/sbin/alternatives --install /usr/bin/ruby ruby /opt/rh/ruby200/root/usr/bin/ruby 1000': } ->
-          exec { '/usr/sbin/alternatives --install /usr/bin/gem gem /opt/rh/ruby200/root/usr/bin/gem 1000': }
+          exec { '/usr/sbin/alternatives --install /usr/bin/gem gem /opt/rh/ruby200/root/usr/bin/gem 1000': } ->
+          package { 'python27': } ->
+          exec { '/bin/cp /opt/rh/python27/enable /etc/profile.d/python.sh': }
         }
       }
       'ubuntu': {
@@ -66,6 +68,18 @@ describe 'Bootstrap' do
     it 'should work with no errors' do
       apply_manifest(bootstrap_pp, catch_failures: true)
       shell('[ -d /opt/rh/ruby200 ] && /usr/bin/gem install puppet -v 3.8.7 --no-rdoc --no-ri; true')
+    end
+  end
+
+  install_cqlsh_pp = <<-EOS
+    if "${::operatingsystem}${operatingsystemmajrelease}" == 'centos6' {
+      exec { '/opt/rh/python27/root/usr/bin/pip install cqlsh': }
+    }
+  EOS
+
+  describe '########### Install cqlsh (pip).' do
+    it 'should work with no errors' do
+      apply_manifest(install_cqlsh_pp, catch_failures: true)
     end
   end
 end

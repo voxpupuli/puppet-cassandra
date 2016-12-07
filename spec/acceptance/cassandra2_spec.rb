@@ -5,7 +5,6 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
     include cassandra::datastax_repo
     include cassandra::java
 
-    $run_schema_tests = hiera('cassandra::run_schema_tests', true)
     $version = '2.2.8'
 
     if $::osfamily == 'RedHat' {
@@ -48,16 +47,9 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
       'start_native_transport'      => true,
     }
 
-    if versioncmp($::rubyversion, '1.9.0') < 0 {
-      $service_refresh = false
-    } else {
-      $service_refresh = true
-    }
-
     class { 'cassandra':
       package_ensure  => $package_ensure,
       package_name    => $cassandra_package,
-      service_refresh => $service_refresh,
       settings        => $settings,
       require         => Class['cassandra::datastax_repo', 'cassandra::java']
     }
@@ -93,90 +85,88 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
   schema_testing_create_pp = <<-EOS
     #{cassandra_install_pp}
 
-    if $run_schema_tests {
-      $cql_types = {
-        'fullname' => {
+    $cql_types = {
+      'fullname' => {
+        'keyspace' => 'mykeyspace',
+        'fields'   => {
+        'fname' => 'text',
+          'lname' => 'text',
+        },
+      },
+    }
+
+    $keyspaces = {
+      'mykeyspace' => {
+        ensure          => present,
+        replication_map => {
+          keyspace_class     => 'SimpleStrategy',
+          replication_factor => 1,
+        },
+        durable_writes  => false,
+      },
+    }
+
+    class { 'cassandra::schema':
+      cql_types      => $cql_types,
+      cqlsh_host     => $::ipaddress,
+      cqlsh_password => 'cassandra',
+      cqlsh_user     => 'cassandra',
+      indexes        => {
+        'users_lname_idx' => {
+          keyspace => 'mykeyspace',
+          table    => 'users',
+          keys     => 'lname',
+        },
+      },
+      keyspaces      => $keyspaces,
+      tables         => {
+        'users' => {
           'keyspace' => 'mykeyspace',
-          'fields'   => {
-          'fname' => 'text',
-            'lname' => 'text',
+          'columns'  => {
+            'userid'      => 'int',
+            'fname'       => 'text',
+            'lname'       => 'text',
+            'PRIMARY KEY' => '(userid)',
           },
         },
-      }
-
-      $keyspaces = {
-        'mykeyspace' => {
-          ensure          => present,
-          replication_map => {
-            keyspace_class     => 'SimpleStrategy',
-            replication_factor => 1,
-          },
-          durable_writes  => false,
+      },
+      permissions    => {
+        'Grant select permissions to spillman to all keyspaces' => {
+          permission_name => 'SELECT',
+          user_name       => 'spillman',
         },
-      }
-
-      class { 'cassandra::schema':
-        cql_types      => $cql_types,
-        cqlsh_host     => $::ipaddress,
-        cqlsh_password => 'cassandra',
-        cqlsh_user     => 'cassandra',
-        indexes        => {
-          'users_lname_idx' => {
-            keyspace => 'mykeyspace',
-            table    => 'users',
-            keys     => 'lname',
-          },
+        'Grant modify to to keyspace mykeyspace to akers'       => {
+          keyspace_name   => 'mykeyspace',
+          permission_name => 'MODIFY',
+          user_name       => 'akers',
         },
-        keyspaces      => $keyspaces,
-        tables         => {
-          'users' => {
-            'keyspace' => 'mykeyspace',
-            'columns'  => {
-              'userid'      => 'int',
-              'fname'       => 'text',
-              'lname'       => 'text',
-              'PRIMARY KEY' => '(userid)',
-            },
-          },
+        'Grant alter permissions to mykeyspace to boone'        => {
+          keyspace_name   => 'mykeyspace',
+          permission_name => 'ALTER',
+          user_name       => 'boone',
         },
-        permissions    => {
-          'Grant select permissions to spillman to all keyspaces' => {
-            permission_name => 'SELECT',
-            user_name       => 'spillman',
-          },
-          'Grant modify to to keyspace mykeyspace to akers'       => {
-            keyspace_name   => 'mykeyspace',
-            permission_name => 'MODIFY',
-            user_name       => 'akers',
-          },
-          'Grant alter permissions to mykeyspace to boone'        => {
-            keyspace_name   => 'mykeyspace',
-            permission_name => 'ALTER',
-            user_name       => 'boone',
-          },
-          'Grant ALL permissions to mykeyspace.users to gbennet'  => {
-            keyspace_name   => 'mykeyspace',
-            permission_name => 'ALTER',
-            table_name      => 'users',
-            user_name       => 'gbennet',
-          },
+        'Grant ALL permissions to mykeyspace.users to gbennet'  => {
+          keyspace_name   => 'mykeyspace',
+          permission_name => 'ALTER',
+          table_name      => 'users',
+          user_name       => 'gbennet',
         },
-        users          => {
-          'akers'    => {
-            password  => 'Niner2',
-            superuser => true,
-          },
-          'boone'    => {
-            password => 'Niner75',
-          },
-          'gbennet' => {
-            password => 'Strewth',
-          },
-          'spillman' => {
-            password => 'Niner27',
-          },
+      },
+      users          => {
+        'akers'    => {
+          password  => 'Niner2',
+          superuser => true,
         },
-      }
+        'boone'    => {
+          password => 'Niner75',
+        },
+        'gbennet' => {
+          password => 'Strewth',
+        },
+        'spillman' => {
+          password => 'Niner27',
+        },
+      },
     }
   EOS
 
@@ -200,13 +190,11 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
      }
    }
 
-   if $run_schema_tests {
-     class { 'cassandra::schema':
-       cql_types      => $cql_types,
-       cqlsh_host     => $::ipaddress,
-       cqlsh_user     => 'akers',
-       cqlsh_password => 'Niner2',
-     }
+   class { 'cassandra::schema':
+     cql_types      => $cql_types,
+     cqlsh_host     => $::ipaddress,
+     cqlsh_user     => 'akers',
+     cqlsh_password => 'Niner2',
    }
   EOS
 
@@ -223,40 +211,38 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
   permissions_revoke_pp = <<-EOS
     #{cassandra_install_pp}
 
-    if $run_schema_tests {
-      class { 'cassandra::schema':
-        cqlsh_password      => 'Niner2',
-        cqlsh_host          => $::ipaddress,
-        cqlsh_user          => 'akers',
-        cqlsh_client_config => '/root/.puppetcqlshrc',
-        permissions    => {
-          'Revoke select permissions to spillman to all keyspaces' => {
-            ensure          => absent,
-            permission_name => 'SELECT',
-            user_name       => 'spillman',
-          },
-          'Revoke modify to to keyspace mykeyspace to akers'       => {
-            ensure          => absent,
-            keyspace_name   => 'mykeyspace',
-            permission_name => 'MODIFY',
-            user_name       => 'akers',
-          },
-          'Revoke alter permissions to mykeyspace to boone'        => {
-            ensure          => absent,
-            keyspace_name   => 'mykeyspace',
-            permission_name => 'ALTER',
-            user_name       => 'boone',
-          },
-          'Revoke ALL permissions to mykeyspace.users to gbennet'  => {
-            ensure          => absent,
-            keyspace_name   => 'mykeyspace',
-            permission_name => 'ALTER',
-            table_name      => 'users',
-            user_name       => 'gbennet',
-          },
+    class { 'cassandra::schema':
+      cqlsh_password      => 'Niner2',
+      cqlsh_host          => $::ipaddress,
+      cqlsh_user          => 'akers',
+      cqlsh_client_config => '/root/.puppetcqlshrc',
+      permissions    => {
+        'Revoke select permissions to spillman to all keyspaces' => {
+          ensure          => absent,
+          permission_name => 'SELECT',
+          user_name       => 'spillman',
         },
-      }
-   }
+        'Revoke modify to to keyspace mykeyspace to akers'       => {
+          ensure          => absent,
+          keyspace_name   => 'mykeyspace',
+          permission_name => 'MODIFY',
+          user_name       => 'akers',
+        },
+        'Revoke alter permissions to mykeyspace to boone'        => {
+          ensure          => absent,
+          keyspace_name   => 'mykeyspace',
+          permission_name => 'ALTER',
+          user_name       => 'boone',
+        },
+        'Revoke ALL permissions to mykeyspace.users to gbennet'  => {
+          ensure          => absent,
+          keyspace_name   => 'mykeyspace',
+          permission_name => 'ALTER',
+          table_name      => 'users',
+          user_name       => 'gbennet',
+        },
+      },
+    }
   EOS
 
   describe '########### Revoke permissions.' do
@@ -272,20 +258,18 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
   schema_drop_user_pp = <<-EOS
     #{cassandra_install_pp}
 
-    if $run_schema_tests {
-      class { 'cassandra::schema':
-        cqlsh_password      => 'Niner2',
-        cqlsh_host          => $::ipaddress,
-        cqlsh_user          => 'akers',
-        cqlsh_client_config => '/root/.puppetcqlshrc',
-        users               => {
-          'boone' => {
-            ensure => absent,
-          },
+    class { 'cassandra::schema':
+      cqlsh_password      => 'Niner2',
+      cqlsh_host          => $::ipaddress,
+      cqlsh_user          => 'akers',
+      cqlsh_client_config => '/root/.puppetcqlshrc',
+      users               => {
+        'boone' => {
+          ensure => absent,
         },
-      }
-   }
- EOS
+      },
+    }
+  EOS
 
   describe '########### Drop the boone user.' do
     it 'should work with no errors' do
@@ -300,20 +284,18 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
   schema_testing_drop_index_pp = <<-EOS
     #{cassandra_install_pp}
 
-    if $run_schema_tests {
-      class { 'cassandra::schema':
-      cqlsh_host     => $::ipaddress,
-      cqlsh_user     => 'akers',
-      cqlsh_password => 'Niner2',
-      indexes        => {
-        'users_lname_idx' => {
-           ensure   => absent,
-           keyspace => 'mykeyspace',
-           table    => 'users',
-          },
-        },
-      }
-    }
+     class { 'cassandra::schema':
+     cqlsh_host     => $::ipaddress,
+     cqlsh_user     => 'akers',
+     cqlsh_password => 'Niner2',
+     indexes        => {
+       'users_lname_idx' => {
+          ensure   => absent,
+          keyspace => 'mykeyspace',
+          table    => 'users',
+         },
+       },
+     }
   EOS
 
   describe '########### Schema drop index.' do
@@ -329,19 +311,17 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
   schema_testing_drop_pp = <<-EOS
     #{cassandra_install_pp}
 
-    if $run_schema_tests {
-      class { 'cassandra::schema':
-        cqlsh_host     => $ipaddress,
-        cqlsh_password => 'Niner2',
-        cqlsh_user     => 'akers',
-        tables         => {
-          'users' => {
-            ensure   => absent,
-            keyspace => 'mykeyspace',
-          },
-        },
-      }
-    }
+     class { 'cassandra::schema':
+       cqlsh_host     => $ipaddress,
+       cqlsh_password => 'Niner2',
+       cqlsh_user     => 'akers',
+       tables         => {
+         'users' => {
+           ensure   => absent,
+           keyspace => 'mykeyspace',
+         },
+       },
+     }
   EOS
 
   describe '########### Schema drop (table).' do
@@ -363,13 +343,11 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
       }
     }
 
-    if $run_schema_tests {
-      class { 'cassandra::schema':
-        cqlsh_host     => $::ipaddress,
-        cqlsh_password => 'Niner2',
-        cqlsh_user     => 'akers',
-        keyspaces      => $keyspaces,
-      }
+    class { 'cassandra::schema':
+      cqlsh_host     => $::ipaddress,
+      cqlsh_password => 'Niner2',
+      cqlsh_user     => 'akers',
+      keyspaces      => $keyspaces,
     }
   EOS
 
