@@ -73,7 +73,9 @@ describe 'Bootstrap' do
 
   install_cqlsh_pp = <<-EOS
     if "${::operatingsystem}${operatingsystemmajrelease}" == 'centos6' {
-      exec { '/opt/rh/python27/root/usr/bin/pip install cqlsh': }
+      exec { '/opt/rh/python27/root/usr/bin/pip install cqlsh':
+        timeout => 0,
+      }
     }
   EOS
 
