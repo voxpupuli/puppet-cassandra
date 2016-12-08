@@ -20,14 +20,11 @@ describe 'Bootstrap' do
     case downcase($::operatingsystem) {
       'centos': {
         if $::operatingsystemmajrelease == 6 {
-          package {'yum-utils': } ->
-          package {'centos-release-scl': } ->
-          exec { '/usr/bin/yum-config-manager --enable rhel-server-rhscl-7-rpms': } ->
-          package {'ruby200': } ->
           exec { '/bin/cp /opt/rh/ruby200/enable /etc/profile.d/ruby.sh': } ->
           exec { '/bin/rm /usr/bin/ruby /usr/bin/gem': } ->
           exec { '/usr/sbin/alternatives --install /usr/bin/ruby ruby /opt/rh/ruby200/root/usr/bin/ruby 1000': } ->
-          exec { '/usr/sbin/alternatives --install /usr/bin/gem gem /opt/rh/ruby200/root/usr/bin/gem 1000': }
+          exec { '/usr/sbin/alternatives --install /usr/bin/gem gem /opt/rh/ruby200/root/usr/bin/gem 1000': } ->
+          exec { '/bin/cp /opt/rh/python27/enable /etc/profile.d/python.sh': }
         }
       }
       'ubuntu': {

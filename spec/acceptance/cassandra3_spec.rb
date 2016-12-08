@@ -16,7 +16,6 @@ describe 'cassandra3' do
     include cassandra::datastax_repo
     include cassandra::java
 
-    $run_schema_tests = hiera('cassandra::run_schema_tests', true)
     $version = '#{version}'
 
     if $::osfamily == 'RedHat' {
@@ -119,65 +118,63 @@ describe 'cassandra3' do
   schema_testing_create_pp = <<-EOS
     #{cassandra_install_pp}
 
-    if $run_schema_tests {
-      $cql_types = {
-        'fullname' => {
+    $cql_types = {
+      'fullname' => {
+        'keyspace' => 'mykeyspace',
+        'fields'   => {
+        'fname' => 'text',
+          'lname' => 'text',
+        },
+      },
+    }
+
+    $keyspaces = {
+      'mykeyspace' => {
+        ensure          => present,
+        replication_map => {
+          keyspace_class     => 'SimpleStrategy',
+          replication_factor => 1,
+        },
+        durable_writes  => false,
+      },
+    }
+
+    class { 'cassandra::schema':
+      cql_types      => $cql_types,
+      cqlsh_host     => $::ipaddress,
+      cqlsh_password => 'cassandra',
+      cqlsh_user     => 'cassandra',
+      indexes        => {
+        'users_lname_idx' => {
+          keyspace => 'mykeyspace',
+          table    => 'users',
+          keys     => 'lname',
+        },
+      },
+      keyspaces      => $keyspaces,
+      tables         => {
+        'users' => {
           'keyspace' => 'mykeyspace',
-          'fields'   => {
-          'fname' => 'text',
-            'lname' => 'text',
+          'columns'  => {
+            'userid'      => 'int',
+            'fname'       => 'text',
+            'lname'       => 'text',
+            'PRIMARY KEY' => '(userid)',
           },
         },
-      }
-
-      $keyspaces = {
-        'mykeyspace' => {
-          ensure          => present,
-          replication_map => {
-            keyspace_class     => 'SimpleStrategy',
-            replication_factor => 1,
-          },
-          durable_writes  => false,
+      },
+      users          => {
+        'spillman' => {
+          password => 'Niner27',
         },
-      }
-
-      class { 'cassandra::schema':
-        cql_types      => $cql_types,
-        cqlsh_host     => $::ipaddress,
-        cqlsh_password => 'cassandra',
-        cqlsh_user     => 'cassandra',
-        indexes        => {
-          'users_lname_idx' => {
-            keyspace => 'mykeyspace',
-            table    => 'users',
-            keys     => 'lname',
-          },
+        'akers'    => {
+          password  => 'Niner2',
+          superuser => true,
         },
-        keyspaces      => $keyspaces,
-        tables         => {
-          'users' => {
-            'keyspace' => 'mykeyspace',
-            'columns'  => {
-              'userid'      => 'int',
-              'fname'       => 'text',
-              'lname'       => 'text',
-              'PRIMARY KEY' => '(userid)',
-            },
-          },
+        'boone'    => {
+          password => 'Niner75',
         },
-        users          => {
-          'spillman' => {
-            password => 'Niner27',
-          },
-          'akers'    => {
-            password  => 'Niner2',
-            superuser => true,
-          },
-          'boone'    => {
-            password => 'Niner75',
-          },
-        },
-      }
+      },
     }
   EOS
 
@@ -207,13 +204,11 @@ describe 'cassandra3' do
      }
    }
 
-   if $run_schema_tests {
-     class { 'cassandra::schema':
-       cql_types      => $cql_types,
-       cqlsh_host     => $::ipaddress,
-       cqlsh_user     => 'akers',
-       cqlsh_password => 'Niner2',
-     }
+   class { 'cassandra::schema':
+     cql_types      => $cql_types,
+     cqlsh_host     => $::ipaddress,
+     cqlsh_user     => 'akers',
+     cqlsh_password => 'Niner2',
    }
   EOS
 
@@ -236,19 +231,17 @@ describe 'cassandra3' do
   schema_testing_drop_user_pp = <<-EOS
     #{cassandra_install_pp}
 
-    if $run_schema_tests {
-      class { 'cassandra::schema':
-        cqlsh_password      => 'Niner2',
-        cqlsh_host          => $::ipaddress,
-        cqlsh_user          => 'akers',
-        cqlsh_client_config => '/root/.puppetcqlshrc',
-        users               => {
-          'boone' => {
-            ensure => absent,
-          },
+    class { 'cassandra::schema':
+      cqlsh_password      => 'Niner2',
+      cqlsh_host          => $::ipaddress,
+      cqlsh_user          => 'akers',
+      cqlsh_client_config => '/root/.puppetcqlshrc',
+      users               => {
+        'boone' => {
+          ensure => absent,
         },
-      }
-   }
+      },
+    }
   EOS
 
   describe "########### Drop the boone user #{version} on #{osdisplay}." do
@@ -270,19 +263,17 @@ describe 'cassandra3' do
   schema_testing_drop_index_pp = <<-EOS
     #{cassandra_install_pp}
 
-    if $run_schema_tests {
-      class { 'cassandra::schema':
-      cqlsh_host     => $::ipaddress,
-      cqlsh_user     => 'akers',
-      cqlsh_password => 'Niner2',
-      indexes        => {
-        'users_lname_idx' => {
-           ensure   => absent,
-           keyspace => 'mykeyspace',
-           table    => 'users',
-          },
+    class { 'cassandra::schema':
+    cqlsh_host     => $::ipaddress,
+    cqlsh_user     => 'akers',
+    cqlsh_password => 'Niner2',
+    indexes        => {
+      'users_lname_idx' => {
+         ensure   => absent,
+         keyspace => 'mykeyspace',
+         table    => 'users',
         },
-      }
+      },
     }
   EOS
 
@@ -305,18 +296,16 @@ describe 'cassandra3' do
   schema_testing_drop_pp = <<-EOS
     #{cassandra_install_pp}
 
-    if $run_schema_tests {
-      class { 'cassandra::schema':
-        cqlsh_host     => $ipaddress,
-        cqlsh_password => 'Niner2',
-        cqlsh_user     => 'akers',
-        tables         => {
-          'users' => {
-            ensure   => absent,
-            keyspace => 'mykeyspace',
-          },
+    class { 'cassandra::schema':
+      cqlsh_host     => $ipaddress,
+      cqlsh_password => 'Niner2',
+      cqlsh_user     => 'akers',
+      tables         => {
+        'users' => {
+          ensure   => absent,
+          keyspace => 'mykeyspace',
         },
-      }
+      },
     }
   EOS
 
@@ -345,13 +334,11 @@ describe 'cassandra3' do
       }
     }
 
-    if $run_schema_tests {
-      class { 'cassandra::schema':
-        cqlsh_host     => $::ipaddress,
-        cqlsh_password => 'Niner2',
-        cqlsh_user     => 'akers',
-        keyspaces      => $keyspaces,
-      }
+    class { 'cassandra::schema':
+      cqlsh_host     => $::ipaddress,
+      cqlsh_password => 'Niner2',
+      cqlsh_user     => 'akers',
+      keyspaces      => $keyspaces,
     }
   EOS
 

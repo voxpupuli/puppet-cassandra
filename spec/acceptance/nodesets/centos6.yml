@@ -1,0 +1,17 @@
+HOSTS:
+  centos6:
+    roles:
+      - centos6
+      - nodes
+    platform: el-6-x86_64
+    image: centos:6
+    hypervisor: docker
+    docker_cmd: '["/sbin/init"]'
+    docker_image_commands:
+      - 'yum -y install gcc tar yum-utils centos-release-scl'
+      - 'yum-config-manager --enable rhel-server-rhscl-7-rpms'
+      - 'yum -y install ruby200 python27'
+      - '. /opt/rh/python27/enable && /opt/rh/python27/root/usr/bin/pip install cqlsh'
+CONFIG:
+  type: foss
+  log_level: notice

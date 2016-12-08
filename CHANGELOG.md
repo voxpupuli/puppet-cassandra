@@ -1,5 +1,19 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2016-12-08 - Release 2.2.1 ([diff](https://github.com/locp/cassandra/compare/2.2.0...2.2.1))
+
+### Summary
+
+Non-functional improvements and some documentation fixes.
+
+### Improvements
+
+* All beaker spec tests have been migrated from AWS/EC2 to Docker.
+* Installed Python 2.7 onto the CentOS 6 docker image allowing the full test
+  suite to be run against that operating system.
+* Some documentation improvements and fixed some typos.
+* The spec tests will now fail if there is not 100% coverage.
+
 ##2016-12-01 - Release 2.2.0 ([diff](https://github.com/locp/cassandra/compare/2.1.2...2.2.0))
 
 ### Summary

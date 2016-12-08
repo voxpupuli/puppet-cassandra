@@ -1,33 +1,31 @@
 #############################################################################
 # Some module specific rake tasks.
 #############################################################################
-require_relative 'tasks/acceptance'
 require_relative 'tasks/deploy'
 
-task default: ['test']
+desc '[CI Only] Run beaker, but only for pull requests or for release branches.'
+task :acceptance do
+  skip = true
+  travis_branch = ENV['TRAVIS_BRANCH']
+  travis_event_type = ENV['TRAVIS_EVENT_TYPE']
 
-# Validate that we are running on a valide CircleCI branch.  Exit false
-# if we do not seem to be on a CircleCI build at all or if the branch
-# name does not match a provided pattern.
-def validate_branch(valid_branch_pattern)
-  branch_name = ENV['CIRCLE_BRANCH']
-
-  unless branch_name
-    puts 'CIRCLE_BRANCH is not set.'
-    return false
+  if travis_event_type == 'pull_request'
+    skip = false
+  elsif travis_event_type == 'push'
+    skip = false if travis_branch =~ /^release-/ || travis_branch =~ /^hotfix-/
   end
 
-  unless branch_name =~ valid_branch_pattern
-    puts "Branch #{branch_name} is not suitable for this operation."
-    return false
+  if skip
+    puts 'Skipping acceptance tests.'
+    exit(0)
+  else
+    Rake::Task['beaker'].invoke
   end
-
-  true
 end
 
 desc '[CI Only] Tag, build and push the module to PuppetForge.'
 task :deploy do
-  abort('Only deploy from master.') unless validate_branch(/^master$/)
+  abort('Only deploy from master.') unless ENV['CIRCLE_BRANCH'] == 'master'
 
   # Find out what the local version of the module is.
   file = File.read('metadata.json')
