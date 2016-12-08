@@ -6,7 +6,7 @@ require 'rubocop/rake_task' if RUBY_VERSION >= '2.0.0'
 require 'rubygems'
 
 # TravisCI does not require the extra module tasks.
-require_relative 'rake/rake_tasks' unless ENV['TRAVIS'] == 'true'
+require_relative 'rake/rake_tasks'
 
 # Use a custom pattern with git tag. %s is replaced with the version number.
 Blacksmith::RakeTask.new do |t|

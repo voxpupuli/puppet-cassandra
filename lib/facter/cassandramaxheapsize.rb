@@ -3,7 +3,7 @@
 # (https://docs.datastax.com/en/cassandra/2.1/cassandra/operations/ops_tune_jvm_c.html)
 # for more details.
 #
-# @return [integer] max(min(1/2 ram, 1024), min(1/4 ram, 8192)
+# @return [integer] max(min(1/2 ram, 1024), min(1/4 ram, 8192))
 # @see cassandracmsheapnewsize
 # @see cassandracmsmaxheapsize
 # @see cassandraheapnewsize

@@ -1,26 +1,27 @@
 ---
+env:
+  - "PUPPET_VERSION='~> 4.5' BEAKER_set=centos6"
+  - "PUPPET_VERSION='~> 4.5' BEAKER_set=centos7"
+  - "PUPPET_VERSION='~> 4.5' BEAKER_set=debian7"
+  - "PUPPET_VERSION='~> 4.5' BEAKER_set=debian8"
+  - "PUPPET_VERSION='~> 4.5' BEAKER_set=ubuntu1204"
+  - "PUPPET_VERSION='~> 4.5' BEAKER_set=ubuntu1404"
+  - "PUPPET_VERSION='~> 4.5' BEAKER_set=ubuntu1604"
 language: ruby
+rvm:
+  - 2.3.1
 cache: bundler
 before_install: rm Gemfile.lock || true
-bundler_args: --without development acceptance
-sudo: false
+bundler_args: --without development
+dist: trusty
+sudo: required
 script: 
+  - "bundle exec puppet --version"
+  - "bundle exec rake metadata_lint"
+  - "bundle exec rubocop"
   - "bundle exec rake lint"
   - "bundle exec rake validate"
   - "bundle exec rake spec SPEC_OPTS='--format documentation'"
-matrix:
-  fast_finish: true
-  include:
-  - 
-    env: "ADDRESSABLE_GEM_VERSION=2.4.0 NET_SSH_GEM_VERSION=2.9.4 PUPPET_GEM_VERSION=3.8.4 TINS_GEM_VERSION=0.8.4 JSON_PURE_GEM_VERSION=2.0.1 NET_HTTP_PERSISTENT_GEM_VERSION=2.9.4"
-    rvm: 1.9.3
-  - rvm: 2.3.1
-    env: PUPPET_GEM_VERSION="~> 4.0"
-  - rvm: 2.1.9
-    env: PUPPET_GEM_VERSION="~> 4.0"
-  - rvm: 2.1.9
-    env: PUPPET_GEM_VERSION="~> 4.6.0"
-  - rvm: 2.1.9
-    env: PUPPET_GEM_VERSION="~> 4.5.0"
+  - "bundle exec rake acceptance"
 notifications:
   email: false

@@ -5,6 +5,7 @@
 1. [Raising an Issue](#raising-an-issue)
 1. [Contribtions](#contributions)
   * [Unit Tests](#unit-tests)
+  * [Acceptance Tests](#acceptance-tests)
 1. [Contributors](#contributors)
 1. [Further Reading](#further-reading)
 
@@ -98,6 +99,30 @@ bundle exec rake spec
 
 If in doubt, or you are stuck, please ask for help in the PR or via our
 [Gitter Room](https://gitter.im/locp/cassandra).
+
+The unit tests will also fail if the test coverage falls below 100%.
+
+### Acceptance Tests
+
+These tests are more CPU intensive and are run via Docker.  You will
+need to install further gems for this to work with the following
+command:
+
+```shell
+bundle install --with acceptance
+```
+
+Then run the tests:
+
+```shell
+bundle exec rake beaker:centos6
+bundle exec rake beaker:centos7                                        
+bundle exec rake beaker:debian7                                        
+bundle exec rake beaker:debian8                                        
+bundle exec rake beaker:ubuntu1204                                     
+bundle exec rake beaker:ubuntu1404                                     
+bundle exec rake beaker:ubuntu1604                                     
+```
 
 ## Contributors
 

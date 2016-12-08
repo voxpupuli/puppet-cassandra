@@ -3,18 +3,17 @@ branches:
   ignore:
     - gh-pages # list of branches to ignore
 dependencies: 
-  bundler:
-    without: [development]
   cache_directories:
     - "/opt/circleci/.rvm/gems"
   override:
-    - bundle install --without development:
+    - bundle install --without development acceptance:
         timeout: 240
         environment:
-          PUPPET_GEM_VERSION: '~> 4.0'
+          PUPPET_VERSION: '~> 3.8'
           STRICT_VARIABLES: yes
   post:
     - rvm cleanup all
+    - bundle clean --force
 deployment: 
   master: 
     branch: master
@@ -25,11 +24,10 @@ deployment:
       - bundle exec rake deploy
 machine: 
   environment:
-    BEAKER_GEM_VERSION: '<= 2.33.0'
-    PUPPET_GEM_VERSION: '~> 4.0'
+    PUPPET_VERSION: '~> 3.8'
     STRICT_VARIABLES: yes
   ruby:
-    version: 2.3.1
+    version: 2.1.6
   services: 
     - docker
 notify: 
@@ -38,19 +36,9 @@ notify:
       url: "https://webhooks.gitter.im/e/da8c065419a91983f0cf"
 test: 
   override: 
-    - bundle exec rake metadata_lint:
-        parallel: true
-    - bundle exec rake rubocop:
-        parallel: true
-    - bundle exec rake lint:
-        parallel: true
-    - bundle exec rake validate:
-        parallel: true
-    - bundle exec rake spec SPEC_OPTS="--format documentation --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/puppet.xml":
-        parallel: true
-    - bundle exec puppet module install puppetlabs-aws:
-        parallel: true
-    - bundle exec rake acceptance:aws_deploy:
-        parallel: true
-    - bundle exec rake acceptance:tests:
-        parallel: true
+    - bundle exec puppet --version
+    - bundle exec travis-lint
+    - bundle exec rake metadata_lint
+    - bundle exec rake lint
+    - bundle exec rake validate
+    - bundle exec rake spec SPEC_OPTS="--format documentation --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/puppet.xml"
