@@ -14,6 +14,9 @@
 # @param cassandra_yaml_tmpl [string] The path to the Puppet template for the
 #   Cassandra configuration file.  This allows the user to supply their own
 #   customized template.`
+# @param cluster_name [string] The name of the cluster that the node is to
+#   join.  Do not set this variable and also set `cluster_name` in the
+#   `settings` hash.
 # @param commitlog_directory [string] The path to the commitlog directory.
 #   If set, the directory will be managed as a Puppet resource.  Do not
 #   specify a value here and in the `settings` hash as they are mutually
@@ -125,6 +128,7 @@ class cassandra (
   $cassandra_2356_sleep_seconds = 5,
   $cassandra_9822               = false,
   $cassandra_yaml_tmpl          = 'cassandra/cassandra.yaml.erb',
+  $cluster_name                 = undef,
   $commitlog_directory          = undef,
   $commitlog_directory_mode     = '0750',
   $config_file_mode             = '0644',
@@ -258,6 +262,12 @@ class cassandra (
     require => $config_path_require,
   }
 
+  if $cluster_name != undef {
+    $cluster_name_settings = { 'cluster_name' => $cluster_name, }
+  } else {
+    $cluster_name_settings = $settings
+  }
+
   if $commitlog_directory {
     file { $commitlog_directory:
       ensure  => directory,
@@ -327,7 +337,8 @@ class cassandra (
     $commitlog_directory_settings,
     $data_file_directories_settings,
     $hints_directory_settings,
-    $saved_caches_directory_settings)
+    $saved_caches_directory_settings,
+    $cluster_name_settings)
 
   file { $config_file:
     ensure  => present,
