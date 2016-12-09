@@ -4,7 +4,7 @@ branches:
     - gh-pages # list of branches to ignore
 dependencies: 
   cache_directories:
-    - "/opt/circleci/.rvm"
+    - "/opt/circleci/.rvm/gems"
   override:
     - bundle install --without development acceptance:
         timeout: 240
@@ -27,7 +27,7 @@ machine:
     PUPPET_VERSION: '~> 3.8'
     STRICT_VARIABLES: yes
   ruby:
-    version: 2.1.6
+    version: 2.1.9
   services: 
     - docker
 notify: 
