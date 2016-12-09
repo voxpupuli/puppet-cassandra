@@ -5,9 +5,9 @@ require_relative 'tasks/deploy'
 
 desc '[CI Only] Run beaker, but only for pull requests or for release branches.'
 task :acceptance do
-  travis_event_type = ENV['TRAVIS_EVENT_TYPE']
+  travis_pull_request = ENV['TRAVIS_PULL_REQUEST']
 
-  if travis_event_type != 'push'
+  if travis_pull_request.nil? || (travis_pull_request == 'false')
     puts 'Skipping acceptance tests.'
     exit(0)
   else
