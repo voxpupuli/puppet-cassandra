@@ -9,6 +9,7 @@ HOSTS:
     hypervisor: docker
     docker_image_commands:
       - 'apt-get install -y iptables sudo'
+    docker_cmd: '["/sbin/init"]'
 CONFIG:
   type: foss
   log_level: notice
