@@ -6,16 +6,9 @@ require_relative 'tasks/deploy'
 desc '[CI Only] Run beaker, but only for pull requests or for release branches.'
 task :acceptance do
   skip = true
-  travis_branch = ENV['TRAVIS_BRANCH']
   travis_event_type = ENV['TRAVIS_EVENT_TYPE']
 
-  if travis_event_type == 'pull_request'
-    skip = false
-  elsif travis_event_type == 'push'
-    skip = false if travis_branch =~ /^release-/ || travis_branch =~ /^hotfix-/
-  end
-
-  if skip
+  if travis_event_type != 'push'
     puts 'Skipping acceptance tests.'
     exit(0)
   else
