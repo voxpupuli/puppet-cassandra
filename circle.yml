@@ -4,7 +4,7 @@ branches:
     - gh-pages # list of branches to ignore
 dependencies: 
   cache_directories:
-    - "/opt/circleci/.rvm/gems"
+    - "/opt/circleci/.rvm"
   override:
     - bundle install --without development acceptance:
         timeout: 240
