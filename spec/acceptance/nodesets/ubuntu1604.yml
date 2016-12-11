@@ -12,6 +12,9 @@ HOSTS:
     docker_image_commands:
       - 'apt-get install -y locales-all net-tools sudo ufw wget ntp python-pip python-minimal'
       - 'rm -f /usr/sbin/policy-rc.d'
+      - '/usr/bin/wget http://launchpadlibrarian.net/109052632/python-support_1.0.15_all.deb'
+      - '/usr/bin/dpkg -i python-support_1.0.15_all.deb'
+      - '/usr/bin/pip install cassandra-driver'
     docker_cmd: '["/sbin/init"]'
 CONFIG:
   type: foss

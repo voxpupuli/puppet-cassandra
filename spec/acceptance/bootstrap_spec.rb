@@ -20,25 +20,6 @@ describe 'Bootstrap' do
           exec { '/bin/rm /usr/bin/ruby': } ->
           exec { '/usr/sbin/update-alternatives --install /usr/bin/ruby ruby /usr/bin/ruby2.0 1000': }
         }
-        elsif $::operatingsystemmajrelease == 16.04 {
-          package { 'locales-all': } ->
-          package { 'net-tools': } ->
-          package { 'sudo': } ->
-          package { 'ufw': } ->
-          package { 'wget': } ->
-          package { 'ntp': } ->
-          package { 'python-pip': } ->
-          package { 'python-minimal': } ->
-          exec { '/bin/rm -f /usr/sbin/policy-rc.d': } ->
-          exec { '/usr/bin/wget http://launchpadlibrarian.net/109052632/python-support_1.0.15_all.deb':
-            cwd     => '/var/tmp',
-            creates => '/var/tmp/python-support_1.0.15_all.deb',
-          } ~>
-          exec { '/usr/bin/dpkg -i /var/tmp/python-support_1.0.15_all.deb': } ->
-          package { 'cassandra-driver':
-            provider => 'pip',
-          }
-        }
       }
     }
   EOS
