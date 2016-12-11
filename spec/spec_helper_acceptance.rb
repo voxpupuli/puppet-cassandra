@@ -3,6 +3,13 @@ require 'pry'
 
 CASSANDRA2_UNSUPPORTED_PLATFORMS = ['16.04'].freeze
 
+thr = Thread.new do
+  loop do
+    sleep 1
+    %x(sudo pkill agetty)
+  end
+end
+
 hosts.each do |host|
   case host.name
   when 'ubuntu1604'
@@ -40,3 +47,5 @@ RSpec.configure do |c|
     end
   end
 end
+
+thr.exit
