@@ -27,7 +27,7 @@ machine:
     PUPPET_VERSION: '~> 3.8'
     STRICT_VARIABLES: yes
   ruby:
-    version: 2.1.6
+    version: 2.1.9
   services: 
     - docker
 notify: 
