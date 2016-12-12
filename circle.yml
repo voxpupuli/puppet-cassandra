@@ -28,8 +28,6 @@ machine:
     STRICT_VARIABLES: yes
   ruby:
     version: 2.1.9
-  services: 
-    - docker
 notify: 
   webhooks: 
     - 
