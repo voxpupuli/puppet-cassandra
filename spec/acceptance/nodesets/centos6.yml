@@ -11,7 +11,9 @@ HOSTS:
       - 'yum -y install gcc tar yum-utils centos-release-scl'
       - 'yum-config-manager --enable rhel-server-rhscl-7-rpms'
       - 'yum -y install ruby200 python27'
-      - '. /opt/rh/python27/enable && /opt/rh/python27/root/usr/bin/pip install cqlsh'
+      - 'cp /opt/rh/python27/enable /etc/profile.d/python.sh'
+      - 'echo "" >> /etc/profile.d/python.sh'
+      - 'echo "export PYTHONPATH=/usr/lib/python2.7/site-packages" >> /etc/profile.d/python.sh'
 CONFIG:
   type: foss
   log_level: notice

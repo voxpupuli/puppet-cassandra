@@ -23,10 +23,10 @@ group :test do
 end
 
 group :acceptance do
-  gem 'beaker',                       require: false
-  gem 'beaker-puppet_install_helper', require: false
-  gem 'beaker-rspec',                 require: false
-  gem 'pry',                          require: false
+  gem 'beaker'
+  gem 'beaker-puppet_install_helper'
+  gem 'beaker-rspec'
+  gem 'pry'
 end
 
 group :development do
