@@ -33,7 +33,6 @@ RSpec.configure do |c|
       write_hiera_config_on(host,
                             [
                               'environments/%{environment}/data/fqdn/%{fqdn}',
-                              'environments/%{environment}/data/fqdn/%{fqdn}',
                               'environments/%{environment}/data/osfamily/%{osfamily}/%{lsbdistcodename}',
                               'environments/%{environment}/data/osfamily/%{osfamily}/%{lsbmajdistrelease}',
                               'environments/%{environment}/data/osfamily/%{osfamily}/%{architecture}',
