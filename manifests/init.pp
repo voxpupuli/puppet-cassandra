@@ -1,6 +1,10 @@
 # A class for installing the Cassandra package and manipulate settings in the
 # configuration file.
 #
+# @param baseline_settings [hash] If set, this is a baseline of settings that
+#   are merged with the `settings` hash.  The values of the `settings`
+#   hash overriding the values in this hash.  This is most useful when used
+#   with hiera.
 # @param cassandra_2356_sleep_seconds [boolean]
 #   This will provide a workaround for
 #   [CASSANDRA-2356](https://issues.apache.org/jira/browse/CASSANDRA-2356) by
@@ -122,6 +126,7 @@
 #   needed when the package is installed.  Will silently continue if the
 #   executable does not exist.
 class cassandra (
+  $baseline_settings            = {},
   $cassandra_2356_sleep_seconds = 5,
   $cassandra_9822               = false,
   $cassandra_yaml_tmpl          = 'cassandra/cassandra.yaml.erb',
@@ -323,7 +328,7 @@ class cassandra (
     $saved_caches_directory_settings = $settings
   }
 
-  $merged_settings = merge($settings,
+  $merged_settings = merge($baseline_settings, $settings,
     $commitlog_directory_settings,
     $data_file_directories_settings,
     $hints_directory_settings,

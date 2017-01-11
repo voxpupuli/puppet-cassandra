@@ -2,6 +2,15 @@ require 'spec_helper_acceptance'
 
 describe 'Bootstrap' do
   bootstrap_pp = <<-EOS
+    file { '/etc/profile.d/cassandra3.sh':
+      content => 'export CASSANDRA_HOME=/var/lib/cassandra',
+    }
+
+    package { 'deep_merge':
+      ensure   => present,
+      provider => 'gem'
+    }
+
     case downcase($::operatingsystem) {
       'centos': {
         if $::operatingsystemmajrelease == 6 {

@@ -33,31 +33,6 @@ describe 'cassandra3' do
       }
     }
 
-    $settings = {
-      'authenticator'               => 'PasswordAuthenticator',
-      'cluster_name'                => 'MyCassandraCluster',
-      'commitlog_directory'         => '/var/lib/cassandra/commitlog',
-      'commitlog_sync'              => 'periodic',
-      'commitlog_sync_period_in_ms' => 10000,
-      'data_file_directories'       => ['/var/lib/cassandra/data'],
-      'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
-      'hints_directory'             => '/var/lib/cassandra/hints',
-      'listen_address'              => $::ipaddress,
-      'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
-      'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
-      'seed_provider'               => [
-        {
-          'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
-          'parameters' => [
-            {
-              'seeds' => $::ipaddress,
-            },
-          ],
-        },
-      ],
-      'start_native_transport'      => true,
-    }
-
     if versioncmp($::rubyversion, '1.9.0') < 0 {
       $service_refresh = false
     } else {
@@ -68,7 +43,6 @@ describe 'cassandra3' do
       package_ensure  => $package_ensure,
       package_name    => $cassandra_package,
       service_refresh => $service_refresh,
-      settings        => $settings,
       require         => Class['cassandra::datastax_repo', 'cassandra::java']
     }
 
@@ -126,7 +100,6 @@ describe 'cassandra3' do
 
     class { 'cassandra::schema':
       cql_types      => $cql_types,
-      cqlsh_host     => $::ipaddress,
       cqlsh_password => 'cassandra',
       cqlsh_user     => 'cassandra',
       indexes        => {
@@ -185,7 +158,6 @@ describe 'cassandra3' do
 
    class { 'cassandra::schema':
      cql_types      => $cql_types,
-     cqlsh_host     => $::ipaddress,
      cqlsh_user     => 'akers',
      cqlsh_password => 'Niner2',
    }
@@ -206,7 +178,6 @@ describe 'cassandra3' do
 
     class { 'cassandra::schema':
       cqlsh_password      => 'Niner2',
-      cqlsh_host          => $::ipaddress,
       cqlsh_user          => 'akers',
       cqlsh_client_config => '/root/.puppetcqlshrc',
       users               => {
@@ -231,7 +202,6 @@ describe 'cassandra3' do
     #{cassandra_install_pp}
 
     class { 'cassandra::schema':
-    cqlsh_host     => $::ipaddress,
     cqlsh_user     => 'akers',
     cqlsh_password => 'Niner2',
     indexes        => {
@@ -258,7 +228,6 @@ describe 'cassandra3' do
     #{cassandra_install_pp}
 
     class { 'cassandra::schema':
-      cqlsh_host     => $ipaddress,
       cqlsh_password => 'Niner2',
       cqlsh_user     => 'akers',
       tables         => {
@@ -290,7 +259,6 @@ describe 'cassandra3' do
     }
 
     class { 'cassandra::schema':
-      cqlsh_host     => $::ipaddress,
       cqlsh_password => 'Niner2',
       cqlsh_user     => 'akers',
       keyspaces      => $keyspaces,
