@@ -40,6 +40,7 @@ describe 'cassandra3' do
     }
 
     class { 'cassandra':
+      hints_directory => '/var/lib/cassandra/hints',
       package_ensure  => $package_ensure,
       package_name    => $cassandra_package,
       service_refresh => $service_refresh,
