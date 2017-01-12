@@ -36,6 +36,14 @@ describe 'cassandra' do
     end
 
     it do
+      should contain_user('cassandra').with(
+        ensure: 'present',
+        comment: 'Cassandra database,,,',
+        home: '/var/lib/cassandra',
+        shell: '/bin/false',
+        managehome: true
+      )
+
       should contain_package('cassandra').with(
         ensure: 'present',
         name: 'cassandra22'
@@ -87,7 +95,16 @@ describe 'cassandra' do
         service_provider: nil,
         service_refresh: true,
         settings: {},
-        systemctl: '/usr/bin/systemctl'
+        systemctl: '/usr/bin/systemctl',
+        user: {
+          'cassandra' => {
+            'ensure'     => 'present',
+            'comment'    => 'Cassandra database,,,',
+            'home'       => '/var/lib/cassandra',
+            'shell'      => '/bin/false',
+            'managehome' => true
+          }
+        }
       )
     end
   end
@@ -111,7 +128,7 @@ describe 'cassandra' do
     end
 
     it do
-      should have_resource_count(10)
+      should have_resource_count(11)
       should contain_file('/var/lib/cassandra/commitlog')
       should contain_file('/var/lib/cassandra/data')
       should contain_file('/var/lib/cassandra/hints')
@@ -134,7 +151,7 @@ describe 'cassandra' do
     end
 
     it do
-      should have_resource_count(7)
+      should have_resource_count(8)
       should contain_exec('/sbin/chkconfig --add cassandra').with(
         unless: '/sbin/chkconfig --list cassandra'
       )
@@ -153,7 +170,6 @@ describe 'cassandra' do
 
     it do
       should contain_class('cassandra')
-      should contain_group('cassandra').with_ensure('present')
 
       should contain_package('cassandra').with(
         ensure: 'present',
@@ -181,17 +197,6 @@ describe 'cassandra' do
         )
         .that_subscribes_to('Package[cassandra]')
         .that_comes_before('Service[cassandra]')
-
-      should contain_user('cassandra')
-        .with(
-          ensure: 'present',
-          comment: 'Cassandra database,,,',
-          gid: 'cassandra',
-          home: '/var/lib/cassandra',
-          shell: '/bin/false',
-          managehome: true
-        )
-        .that_requires('Group[cassandra]')
 
       should contain_file('/etc/cassandra').with(
         ensure: 'directory',
@@ -314,7 +319,7 @@ describe 'cassandra' do
     it do
       should contain_file('/etc/cassandra/cassandra.yaml').with('mode' => '0755')
       should contain_service('cassandra').with(provider: 'base')
-      should have_resource_count(6)
+      should have_resource_count(7)
     end
   end
 

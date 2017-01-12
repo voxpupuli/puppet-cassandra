@@ -121,6 +121,8 @@
 # @param systemctl [string] The full path to the systemctl command.  Only
 #   needed when the package is installed.  Will silently continue if the
 #   executable does not exist.
+# @param user [User] A hash containing the details of the cassandra user.
+#   This is subsequently passed to the `create_resources` function.
 class cassandra (
   $cassandra_2356_sleep_seconds = 5,
   $cassandra_9822               = false,
@@ -151,12 +153,23 @@ class cassandra (
   $settings                     = {},
   $snitch_properties_file       = 'cassandra-rackdc.properties',
   $systemctl                    = $::cassandra::params::systemctl,
+  $user                         = {
+    'cassandra' => {
+      ensure     => present,
+      comment    => 'Cassandra database,,,',
+      home       => '/var/lib/cassandra',
+      shell      => '/bin/false',
+      managehome => true,
+    }
+  },
   ) inherits cassandra::params {
   if $service_provider != undef {
     Service {
       provider => $service_provider,
     }
   }
+
+  create_resources('user', $user)
 
   $config_file = "${config_path}/cassandra.yaml"
   $dc_rack_properties_file = "${config_path}/${snitch_properties_file}"
@@ -203,22 +216,6 @@ class cassandra (
         user        => 'root',
         subscribe   => Package['cassandra'],
         before      => Service['cassandra'],
-      }
-
-      group { 'cassandra':
-        ensure => present,
-      }
-
-      $user = 'cassandra'
-
-      user { $user:
-        ensure     => present,
-        comment    => 'Cassandra database,,,',
-        gid        => 'cassandra',
-        home       => '/var/lib/cassandra',
-        shell      => '/bin/false',
-        managehome => true,
-        require    => Group['cassandra'],
       }
       # End of CASSANDRA-2356 specific resources.
     }
