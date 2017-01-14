@@ -21,7 +21,7 @@
 # @param vm_max_map_count [integer] The value to set for vm.max_map_count.
 class cassandra::system::sysctl(
   $sysctl_file           = '/etc/sysctl.d/10-cassandra.conf',
-  $net_core_optmem_max   = 40960, 
+  $net_core_optmem_max   = 40960,
   $net_core_rmem_default = 16777216,
   $net_core_rmem_max     = 16777216,
   $net_core_wmem_default = 16777216,
