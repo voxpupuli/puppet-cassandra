@@ -65,7 +65,7 @@ describe 'cassandra::schema::permission' do
     end
 
     it do
-      should have_resource_count(10)
+      should have_resource_count(9)
       should contain_cassandra__schema__permission('spillman:SELECT:ALL')
       should contain_exec('GRANT SELECT ON ALL KEYSPACES TO spillman')
     end
@@ -89,7 +89,7 @@ describe 'cassandra::schema::permission' do
     end
 
     it do
-      should have_resource_count(10)
+      should have_resource_count(9)
       should contain_cassandra__schema__permission('akers:modify:field')
       should contain_exec('GRANT MODIFY ON KEYSPACE field TO akers')
     end
@@ -113,7 +113,7 @@ describe 'cassandra::schema::permission' do
     end
 
     it do
-      should have_resource_count(10)
+      should have_resource_count(9)
       should contain_cassandra__schema__permission('boone:alter:forty9ers')
       should contain_exec('GRANT ALTER ON KEYSPACE forty9ers TO boone')
     end
@@ -137,7 +137,7 @@ describe 'cassandra::schema::permission' do
     end
 
     it do
-      should have_resource_count(19)
+      should have_resource_count(18)
       should contain_cassandra__schema__permission('boone:ALL:ravens.plays')
       should contain_cassandra__schema__permission('boone:ALL:ravens.plays - ALTER').with(
         ensure: 'present',
@@ -177,7 +177,7 @@ describe 'cassandra::schema::permission' do
     end
 
     it do
-      should have_resource_count(10)
+      should have_resource_count(9)
       should contain_cassandra__schema__permission('REVOKE boone:SELECT:ravens.plays')
       should contain_exec('REVOKE SELECT ON KEYSPACE forty9ers FROM boone')
     end
