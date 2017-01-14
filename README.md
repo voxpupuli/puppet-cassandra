@@ -529,6 +529,8 @@ true or not set the attribute at all after initializing the cluster.
   (http://locp.github.io/cassandra/puppet_classes/cassandra_3A_3Aoptutils.html)
 * [cassandra::schema]
   (http://locp.github.io/cassandra/puppet_classes/cassandra_3A_3Aschema.html)
+* [cassandra::system::sysctl]
+  (http://locp.github.io/cassandra/puppet_classes/cassandra_3A_3Asystem_3A_3Asysctl.html)
 
 ### Public Defined Types
 

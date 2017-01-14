@@ -9,6 +9,7 @@
 
 # Cassandra pre-requisites
 include cassandra::datastax_repo
+include cassandra::system::sysctl
 include cassandra::java
 
 # Create a cluster called MyCassandraCluster which uses the
@@ -43,7 +44,7 @@ class { 'cassandra':
     'start_native_transport'      => true,
   },
   service_ensure         => running,
-  require                => Class['cassandra::datastax_repo', 'cassandra::java'],
+  require                => Class['cassandra::datastax_repo', 'cassandra::system::sysctl', 'cassandra::java'],
 }
 
 class { 'cassandra::datastax_agent':

@@ -4,6 +4,7 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
   cassandra_install_pp = <<-EOS
     include cassandra::datastax_repo
     include cassandra::java
+    require cassandra::system::sysctl
 
     $version = '2.2.8'
 
