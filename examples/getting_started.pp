@@ -8,9 +8,15 @@
 #############################################################################
 
 # Cassandra pre-requisites
-include cassandra::datastax_repo
-include cassandra::system::sysctl
-include cassandra::java
+require cassandra::datastax_repo
+require cassandra::system::sysctl
+require cassandra::system::transparent_hugepage
+require cassandra::java
+
+class { 'cassandra::system::swapoff':
+  device => '/dev/mapper/centos-swap',
+  before => Class['cassandra'],
+}
 
 # Create a cluster called MyCassandraCluster which uses the
 # GossipingPropertyFileSnitch.  In this very basic example

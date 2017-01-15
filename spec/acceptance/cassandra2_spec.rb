@@ -5,6 +5,8 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
     include cassandra::datastax_repo
     include cassandra::java
     require cassandra::system::sysctl
+    require cassandra::system::swapoff
+    require cassandra::system::transparent_hugepage
 
     $version = '2.2.8'
 
