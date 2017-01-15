@@ -3,12 +3,15 @@
 # @param device [string] If provided a mount resource will be created to
 #   ensure that the device is absent from /etc/fstab to permanently disable swap.
 # @param grep [string] A path to the grep command.
+# @param mount [string] The name of the swap mount point.  Ignored unless
+#   `device` has been set.
 # @param path [string] The full path to the file to check if swap is enabled.
 # @param swapoff [string] The path to the `swapoff` command.
 # @see cassandra::params
 class cassandra::system::swapoff(
   $device  = undef,
   $grep    = $::cassandra::params::grep,
+  $mount   = 'swap',
   $path    = '/proc/swaps',
   $swapoff = $::cassandra::params::swapoff,
   ) inherits cassandra::params {
@@ -18,7 +21,7 @@ class cassandra::system::swapoff(
   }
 
   if $device {
-    mount { 'swap':
+    mount { $mount:
       ensure => absent,
       device => $device,
       fstype => 'swap',

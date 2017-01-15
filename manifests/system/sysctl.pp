@@ -7,8 +7,9 @@
 # @example Basic requirement
 #   require cassandra::system::sysctl
 #
-# @param sysctl_file [string]  Path to the file to insert the settings into.
-# @param net_core_optmem_max [integer]  The value to set for
+# @param sysctl_args [string] Passed to the `sysctl` command
+# @param sysctl_file [string] Path to the file to insert the settings into.
+# @param net_core_optmem_max [integer] The value to set for
 #   net.core.optmem_max
 # @param net_core_rmem_default [integer] The value to set for
 #   net.core.rmem_default.
@@ -19,17 +20,19 @@
 # @param net_ipv4_tcp_rmem [string] The value to set for net.ipv4.tcp_rmem.
 # @param net_ipv4_tcp_wmem [string] The value to set for net.ipv4.tcp_wmem.
 # @param vm_max_map_count [integer] The value to set for vm.max_map_count.
+# @see cassandra::params
 class cassandra::system::sysctl(
-  $sysctl_file           = '/etc/sysctl.d/10-cassandra.conf',
+  $sysctl_args           = '-p',
+  $sysctl_file           = $::cassandra::params::sysctl_file,
   $net_core_optmem_max   = 40960,
   $net_core_rmem_default = 16777216,
   $net_core_rmem_max     = 16777216,
   $net_core_wmem_default = 16777216,
   $net_core_wmem_max     = 16777216,
-  $net_ipv4_tcp_rmem     = '4096, 87380, 16777216',
-  $net_ipv4_tcp_wmem     = '4096, 65536, 16777216',
+  $net_ipv4_tcp_rmem     = $::cassandra::params::net_ipv4_tcp_rmem,
+  $net_ipv4_tcp_wmem     = $::cassandra::params::net_ipv4_tcp_wmem,
   $vm_max_map_count      = 1048575,
-  ) {
+  ) inherits cassandra::params {
 
   ini_setting { "net.core.rmem_max = ${net_core_rmem_max}":
     ensure  => present,
@@ -37,7 +40,7 @@ class cassandra::system::sysctl(
     section => '',
     setting => 'net.core.rmem_max',
     value   => $net_core_rmem_max,
-    notify  => Exec["/sbin/sysctl -p ${sysctl_file}"],
+    notify  => Exec['Apply sysctl changes'],
   }
 
   ini_setting { "net.core.wmem_max = ${net_core_wmem_max}":
@@ -46,7 +49,7 @@ class cassandra::system::sysctl(
     section => '',
     setting => 'net.core.wmem_max',
     value   => $net_core_wmem_max,
-    notify  => Exec["/sbin/sysctl -p ${sysctl_file}"],
+    notify  => Exec['Apply sysctl changes'],
   }
 
   ini_setting { "net.core.rmem_default = ${net_core_rmem_default}":
@@ -55,7 +58,7 @@ class cassandra::system::sysctl(
     section => '',
     setting => 'net.core.rmem_default',
     value   => $net_core_rmem_default,
-    notify  => Exec["/sbin/sysctl -p ${sysctl_file}"],
+    notify  => Exec['Apply sysctl changes'],
   }
 
   ini_setting { "net.core.wmem_default = ${net_core_wmem_default}":
@@ -64,7 +67,7 @@ class cassandra::system::sysctl(
     section => '',
     setting => 'net.core.wmem_default',
     value   => $net_core_wmem_default,
-    notify  => Exec["/sbin/sysctl -p ${sysctl_file}"],
+    notify  => Exec['Apply sysctl changes'],
   }
 
   ini_setting { "net.core.optmem_max = ${net_core_optmem_max}":
@@ -73,7 +76,7 @@ class cassandra::system::sysctl(
     section => '',
     setting => 'net.core.optmem_max',
     value   => $net_core_optmem_max,
-    notify  => Exec["/sbin/sysctl -p ${sysctl_file}"],
+    notify  => Exec['Apply sysctl changes'],
   }
 
   ini_setting { "net.ipv4.tcp_rmem = ${net_ipv4_tcp_rmem}":
@@ -82,7 +85,7 @@ class cassandra::system::sysctl(
     section => '',
     setting => 'net.ipv4.tcp_rmem',
     value   => $net_ipv4_tcp_rmem,
-    notify  => Exec["/sbin/sysctl -p ${sysctl_file}"],
+    notify  => Exec['Apply sysctl changes'],
   }
 
   ini_setting { "net.ipv4.tcp_wmem = ${net_ipv4_tcp_wmem}":
@@ -91,7 +94,7 @@ class cassandra::system::sysctl(
     section => '',
     setting => 'net.ipv4.tcp_wmem',
     value   => $net_ipv4_tcp_wmem,
-    notify  => Exec["/sbin/sysctl -p ${sysctl_file}"],
+    notify  => Exec['Apply sysctl changes'],
   }
 
   ini_setting { "vm.max_map_count = ${vm_max_map_count}":
@@ -100,10 +103,11 @@ class cassandra::system::sysctl(
     section => '',
     setting => 'vm.max_map_count',
     value   => $vm_max_map_count,
-    notify  => Exec["/sbin/sysctl -p ${sysctl_file}"],
+    notify  => Exec['Apply sysctl changes'],
   }
 
-  exec { "/sbin/sysctl -p ${sysctl_file}":
+  exec { 'Apply sysctl changes':
+    command     => "/sbin/sysctl ${sysctl_args} ${sysctl_file}",
     refreshonly => true,
   }
 }
