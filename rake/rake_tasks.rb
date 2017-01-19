@@ -30,18 +30,6 @@ task :deploy do
   Rake::Task['deploy:forge'].invoke(local_version)
 end
 
-desc 'Generate Puppetfile from the metadata.json file'
-task :generate_puppetfile do
-  infile = File.read('metadata.json')
-  data_hash = JSON.parse(infile)
-  outfile = File.open('vagrant/environments/production/Puppetfile', 'w')
-  outfile.write("forge 'https://forgeapi.puppetlabs.com'\n")
-
-  data_hash['dependencies'].each do |dep|
-    outfile.write("mod '#{dep['name']}'\n")
-  end
-end
-
 desc 'Run metadata_lint, rubocop, lint, validate and spec.'
 task test: [
   :metadata_lint,
