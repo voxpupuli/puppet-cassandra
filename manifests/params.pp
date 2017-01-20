@@ -8,15 +8,16 @@ class cassandra::params {
           $net_ipv4_tcp_rmem = '4096 87380 16777216'
           $net_ipv4_tcp_wmem = '4096 65536 16777216'
         }
-        default: {}
+        default: {
+          $net_ipv4_tcp_rmem = '4096, 87380, 16777216'
+          $net_ipv4_tcp_wmem = '4096, 65536, 16777216'
+        }
       }
 
       $cassandra_pkg = 'cassandra'
       $config_path = '/etc/cassandra'
       $java_package = 'openjdk-7-jre-headless'
       $jna_package_name = 'libjna-java'
-      $net_ipv4_tcp_rmem = '4096, 87380, 16777216'
-      $net_ipv4_tcp_wmem = '4096, 65536, 16777216'
       $optutils_package_name = 'cassandra-tools'
       $sysctl_file = '/etc/sysctl.d/10-cassandra.conf'
       $systemctl = '/bin/systemctl'
