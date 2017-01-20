@@ -3,32 +3,34 @@
 class cassandra::params {
   case $::osfamily {
     'Debian': {
+      case $::operatingsystemmajrelease {
+        12.04: {
+          $net_ipv4_tcp_rmem = '4096 87380 16777216'
+          $net_ipv4_tcp_wmem = '4096 65536 16777216'
+        }
+        default: {}
+      }
+
       $cassandra_pkg = 'cassandra'
       $config_path = '/etc/cassandra'
-      $grep = '/bin/grep'
       $java_package = 'openjdk-7-jre-headless'
       $jna_package_name = 'libjna-java'
       $net_ipv4_tcp_rmem = '4096, 87380, 16777216'
       $net_ipv4_tcp_wmem = '4096, 65536, 16777216'
       $optutils_package_name = 'cassandra-tools'
-      $swapoff = '/sbin/swapoff'
       $sysctl_file = '/etc/sysctl.d/10-cassandra.conf'
       $systemctl = '/bin/systemctl'
     }
     'RedHat': {
       case $::operatingsystemmajrelease {
         6: {
-          $grep = '/bin/grep'
           $net_ipv4_tcp_rmem = '4096 87380 16777216'
           $net_ipv4_tcp_wmem = '4096 65536 16777216'
-          $swapoff = '/sbin/swapoff'
           $sysctl_file = '/etc/sysctl.conf'
         }
         7: {
-          $grep = '/usr/bin/grep'
           $net_ipv4_tcp_rmem = '4096, 87380, 16777216'
           $net_ipv4_tcp_wmem = '4096, 65536, 16777216'
-          $swapoff = '/usr/sbin/swapoff'
           $sysctl_file = '/etc/sysctl.d/10-cassandra.conf'
         }
         default: {}

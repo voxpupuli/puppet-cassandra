@@ -1,5 +1,7 @@
 # TODO: Find out why cassandra::params not working with vagrant and CentOS 6.2
 # TODO: Find out why cassandra::params not working with vagrant and CentOS 7.0
+# TODO: Find out why cassandra::params not working with vagrant and Ubuntu 12.04.
+# TODO: Have vagrant dynamically discover Puppet modules from metadata.json.
 Vagrant.configure('2') do |config|
   # config.vm.box = 'puppetlabs/centos-6.6-64-puppet'
   # config.vm.box = 'puppetlabs/centos-7.0-64-puppet'

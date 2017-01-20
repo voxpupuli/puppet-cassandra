@@ -23,7 +23,7 @@
 # @see cassandra::params
 class cassandra::system::sysctl(
   $sysctl_args           = '-p',
-  $sysctl_file           = $::cassandra::params::sysctl_file,
+  $sysctl_file           = $cassandra::params::sysctl_file,
   $net_core_optmem_max   = 40960,
   $net_core_rmem_default = 16777216,
   $net_core_rmem_max     = 16777216,
