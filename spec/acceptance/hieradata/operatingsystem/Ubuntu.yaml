@@ -5,3 +5,6 @@ cassandra::java::aptkey:
     server: 'keyserver.ubuntu.com'
 
 cassandra::java::package_name: 'openjdk-8-jdk'
+
+cassandra::system::swapoff::device: '/dev/mapper/localhost--vg-swap_1'
+cassandra::system::swapoff::mount: 'none'

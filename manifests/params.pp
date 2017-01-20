@@ -1,31 +1,42 @@
-# This class is meant to be called from cassandra.
-# It sets variables according to platform
-#
-# Variables
-# ---------
-# * `$::cassandra::params::cassandra_pkg`
-# defaults to 'cassandra' on Debian and 'cassandra22' on Red Hat.
-# * `$::cassandra::params::config_path`
-# defaults to '/etc/cassandra' on Debian and '/etc/cassandra/default.conf' on Red Hat.
-# * `$::cassandra::params::java_package`
-# defaults to 'openjdk-7-jre-headless' on Debian and 'java-1.8.0-openjdk-headless' on Red Hat.
-# * `$::cassandra::params::jna_package_name`
-# defaults to 'libjna-java' on Debian and 'jna' on Red Hat.
-# * `$::cassandra::params::optutils_package_name`
-# defaults to 'cassandra-tools' on Debian and 'cassandra22-tools' on Red Hat.
-# * `$::cassandra::params::systemctl`
-# defaults to '/bin/systemctl' on Debian and '/usr/bin/systemctl' on Red Hat.
+# This class is meant to be called from the locp-cassandra module.
+# It sets variables according to platform.
 class cassandra::params {
   case $::osfamily {
     'Debian': {
+      case $::operatingsystemmajrelease {
+        12.04: {
+          $net_ipv4_tcp_rmem = '4096 87380 16777216'
+          $net_ipv4_tcp_wmem = '4096 65536 16777216'
+        }
+        default: {
+          $net_ipv4_tcp_rmem = '4096, 87380, 16777216'
+          $net_ipv4_tcp_wmem = '4096, 65536, 16777216'
+        }
+      }
+
       $cassandra_pkg = 'cassandra'
       $config_path = '/etc/cassandra'
       $java_package = 'openjdk-7-jre-headless'
       $jna_package_name = 'libjna-java'
       $optutils_package_name = 'cassandra-tools'
+      $sysctl_file = '/etc/sysctl.d/10-cassandra.conf'
       $systemctl = '/bin/systemctl'
     }
     'RedHat': {
+      case $::operatingsystemmajrelease {
+        6: {
+          $net_ipv4_tcp_rmem = '4096 87380 16777216'
+          $net_ipv4_tcp_wmem = '4096 65536 16777216'
+          $sysctl_file = '/etc/sysctl.conf'
+        }
+        7: {
+          $net_ipv4_tcp_rmem = '4096, 87380, 16777216'
+          $net_ipv4_tcp_wmem = '4096, 65536, 16777216'
+          $sysctl_file = '/etc/sysctl.d/10-cassandra.conf'
+        }
+        default: {}
+      }
+
       $cassandra_pkg = 'cassandra22'
       $config_path = '/etc/cassandra/default.conf'
       $java_package = 'java-1.8.0-openjdk-headless'

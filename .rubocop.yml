@@ -1,4 +1,6 @@
 ---
+Metrics/BlockLength:
+  Enabled: false
 Metrics/LineLength:
   Enabled: false
 Style/FrozenStringLiteralComment:
