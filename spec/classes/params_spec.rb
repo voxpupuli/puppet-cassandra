@@ -3,7 +3,8 @@ require 'spec_helper'
 describe '::cassandra::params' do
   let :facts do
     {
-      osfamily: 'RedHat'
+      osfamily: 'RedHat',
+      operatingsystemmajrelease: 7
     }
   end
 

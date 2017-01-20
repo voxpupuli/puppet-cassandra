@@ -17,7 +17,8 @@ describe '::cassandra::file' do
   context 'On a Debian OS set the max and new heap size' do
     let :facts do
       {
-        osfamily: 'Debian'
+        osfamily: 'Debian',
+        operatingsystemmajrelease: 8
       }
     end
 
