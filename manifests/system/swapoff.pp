@@ -5,14 +5,12 @@
 # @param mount [string] The name of the swap mount point.  Ignored unless
 #   `device` has been set.
 # @param path [string] The full path to the file to check if swap is enabled.
-# @param swapoff [string] The path to the `swapoff` command.
 # @see cassandra::params
 class cassandra::system::swapoff(
   $device  = undef,
   $mount   = 'swap',
   $path    = '/proc/swaps',
-  $swapoff = $::cassandra::params::swapoff,
-  ) inherits cassandra::params {
+  ) {
   exec { 'Disable Swap':
     command => 'swapoff --all',
     onlyif  => "grep -q '^/' ${path}",

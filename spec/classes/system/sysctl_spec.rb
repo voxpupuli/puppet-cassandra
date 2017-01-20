@@ -13,6 +13,13 @@ describe 'cassandra::system::sysctl' do
   end
 
   context 'Test the default parameters (RedHat)' do
+    let :facts do
+      {
+        osfamily: 'RedHat',
+        operatingsystemmajrelease: 7
+      }
+    end
+
     it do
       should have_resource_count(9)
       should contain_class('Cassandra::System::Sysctl')
@@ -24,7 +31,9 @@ describe 'cassandra::system::sysctl' do
       should contain_ini_setting('net.ipv4.tcp_rmem = 4096, 87380, 16777216')
       should contain_ini_setting('net.ipv4.tcp_wmem = 4096, 65536, 16777216')
       should contain_ini_setting('vm.max_map_count = 1048575')
-      should contain_exec('/sbin/sysctl -p /etc/sysctl.d/10-cassandra.conf')
+      should contain_exec('Apply sysctl changes').with(
+        command: '/sbin/sysctl -p /etc/sysctl.d/10-cassandra.conf'
+      )
     end
   end
 end

@@ -4,7 +4,8 @@ describe 'cassandra::system::transparent_hugepage' do
   context 'Test the default parameters (RedHat)' do
     let :facts do
       {
-        osfamily: 'RedHat'
+        osfamily: 'RedHat',
+        operatingsystemmajrelease: 7
       }
     end
 
@@ -18,7 +19,8 @@ describe 'cassandra::system::transparent_hugepage' do
   context 'Test the default parameters (Debian)' do
     let :facts do
       {
-        osfamily: 'Debian'
+        osfamily: 'Debian',
+        operatingsystemmajrelease: 7
       }
     end
 

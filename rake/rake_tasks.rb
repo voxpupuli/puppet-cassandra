@@ -1,6 +1,7 @@
 #############################################################################
 # Some module specific rake tasks.
 #############################################################################
+require 'fileutils'
 require_relative 'tasks/deploy'
 
 desc '[CI Only] Run beaker, but only for pull requests or for release branches.'
@@ -38,3 +39,10 @@ task test: [
   :validate,
   :spec
 ]
+
+desc 'Clean up after a vagrant run.'
+task :vagrant_clean do
+  module_root = File.expand_path(File.join(__FILE__, '..', '..'))
+  directory = File.expand_path(File.join(module_root, 'vagrant', 'modules'))
+  FileUtils.rm_r directory if File.directory?(directory)
+end

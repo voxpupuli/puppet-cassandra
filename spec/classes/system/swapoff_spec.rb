@@ -1,13 +1,7 @@
 require 'spec_helper'
 
 describe 'cassandra::system::swapoff' do
-  context 'Test the default parameters (Debian)' do
-    let :facts do
-      {
-        osfamily: 'Debian'
-      }
-    end
-
+  context 'Test the default parameters' do
     it do
       should have_resource_count(1)
       should contain_class('cassandra::system::swapoff')
@@ -15,27 +9,7 @@ describe 'cassandra::system::swapoff' do
     end
   end
 
-  context 'Test the default parameters (Red Hat)' do
-    let :facts do
-      {
-        osfamily: 'RedHat'
-      }
-    end
-
-    it do
-      should have_resource_count(1)
-      should contain_class('cassandra::system::swapoff')
-      should contain_exec('Disable Swap')
-    end
-  end
-
-  context 'Test we can remove a swap device from /etc/fstab (Red Hat)' do
-    let :facts do
-      {
-        osfamily: 'RedHat'
-      }
-    end
-
+  context 'Test we can remove a swap device from /etc/fstab' do
     let :params do
       {
         device: '/dev/mapper/centos-swap'
