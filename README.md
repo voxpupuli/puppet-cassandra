@@ -254,6 +254,32 @@ class { 'cassandra':
 }
 ```
 
+### Hiera
+
+In your top level node classification (usually `common.yaml`), add the
+settings hash and all the tweaks you want all the clusters to use:
+
+```YAML
+cassandra::baseline_settings:
+  authenticator: AllowAllAuthenticator
+  authorizer: AllowAllAuthorizer
+  auto_bootstrap: true
+  auto_snapshot: true
+  ...
+```
+
+Then, in the individual node classification add the parts which define
+the cluster:
+
+```YAML
+cassandra::settings:
+  cluster_name: developer playground cassandra cluster
+cassandra::dc: Onsite1
+cassandra::rack: RAC1
+cassandra::package_ensure: 3.0.5-1
+cassandra::package_name: cassandra30
+``` 
+
 ## Usage
 
 ### Setup a keyspace and users
@@ -529,6 +555,12 @@ true or not set the attribute at all after initializing the cluster.
   (http://locp.github.io/cassandra/puppet_classes/cassandra_3A_3Aoptutils.html)
 * [cassandra::schema]
   (http://locp.github.io/cassandra/puppet_classes/cassandra_3A_3Aschema.html)
+* [cassandra::system::swapoff]
+  (http://locp.github.io/cassandra/puppet_classes/cassandra_3A_3Asystem_3A_3Aswapoff.html)
+* [cassandra::system::sysctl]
+  (http://locp.github.io/cassandra/puppet_classes/cassandra_3A_3Asystem_3A_3Asysctl.html)
+* [cassandra::system::transparent_hugepage]
+  (http://locp.github.io/cassandra/puppet_classes/cassandra_3A_3Asystem_3A_3Atransparent_hugepage.html)
 
 ### Public Defined Types
 
@@ -573,14 +605,15 @@ true or not set the attribute at all after initializing the cluster.
 
 ## Limitations
 
-When using a Ruby version before 1.9.0, the contents of the Cassandra
+* When using a Ruby version before 1.9.0, the contents of the Cassandra
 configuration file may change order of elements due to a problem with
 to_yaml in earlier versions of Ruby.
-
-When creating key spaces, indexes, cql_types and users the settings will only
+* When creating key spaces, indexes, cql_types and users the settings will only
 be used to create a new resource if it does not currently exist.  If a change
 is made to the Puppet manifest but the resource already exits, this change
 will not be reflected.
+* At the moment the `cassandra::system::transparent_hugepage` does not
+persist between reboots.
 
 ## Development
 

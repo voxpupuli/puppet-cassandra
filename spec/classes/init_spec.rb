@@ -65,6 +65,7 @@ describe 'cassandra' do
         .that_requires('Package[cassandra]')
 
       should contain_class('cassandra').only_with(
+        baseline_settings: {},
         cassandra_2356_sleep_seconds: 5,
         cassandra_9822: false,
         cassandra_yaml_tmpl: 'cassandra/cassandra.yaml.erb',

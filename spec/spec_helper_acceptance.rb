@@ -3,6 +3,13 @@ require 'pry'
 
 CASSANDRA2_UNSUPPORTED_PLATFORMS = ['16.04'].freeze
 
+thr = Thread.new do
+  loop do
+    sleep 1
+    `sudo pkill agetty`
+  end
+end
+
 hosts.each do |host|
   case host.name
   when 'ubuntu1604'
@@ -32,11 +39,19 @@ RSpec.configure do |c|
       # Install hiera
       write_hiera_config_on(host,
                             [
-                              'operatingsystem/%{operatingsystem}-%{operatingsystemmajrelease}',
-                              'operatingsystem/%{operatingsystem}',
-                              'common'
+                              'environments/%{environment}/data/fqdn/%{fqdn}',
+                              'environments/%{environment}/data/osfamily/%{osfamily}/%{lsbdistcodename}',
+                              'environments/%{environment}/data/osfamily/%{osfamily}/%{lsbmajdistrelease}',
+                              'environments/%{environment}/data/osfamily/%{osfamily}/%{architecture}',
+                              'environments/%{environment}/data/osfamily/%{osfamily}/common',
+                              # 'environments/%{environment}/data/modules/%{cname}',
+                              'environments/%{environment}/data/modules/%{caller_module_name}',
+                              'environments/%{environment}/data/modules/%{module_name}',
+                              'environments/%{environment}/data/common'
                             ])
       copy_hiera_data_to(host, './spec/acceptance/hieradata/')
     end
   end
 end
+
+thr.exit

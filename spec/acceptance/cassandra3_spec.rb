@@ -2,15 +2,6 @@ require 'spec_helper_acceptance'
 
 describe 'cassandra3' do
   version = '3.0.9'
-  lsbdistid = fact('lsbdistid')
-  lsbmajdistrelease = fact('lsbmajdistrelease')
-  osdisplay = "#{lsbdistid}#{lsbmajdistrelease}"
-
-  legacy_yml_dump = if (osdisplay == 'CentOS6') || (osdisplay == 'Ubuntu1204')
-                      true
-                    else
-                      false
-                    end
 
   cassandra_install_pp = <<-EOS
     include cassandra::datastax_repo
@@ -42,31 +33,6 @@ describe 'cassandra3' do
       }
     }
 
-    $settings = {
-      'authenticator'               => 'PasswordAuthenticator',
-      'cluster_name'                => 'MyCassandraCluster',
-      'commitlog_directory'         => '/var/lib/cassandra/commitlog',
-      'commitlog_sync'              => 'periodic',
-      'commitlog_sync_period_in_ms' => 10000,
-      'data_file_directories'       => ['/var/lib/cassandra/data'],
-      'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
-      'hints_directory'             => '/var/lib/cassandra/hints',
-      'listen_address'              => $::ipaddress,
-      'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
-      'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
-      'seed_provider'               => [
-        {
-          'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
-          'parameters' => [
-            {
-              'seeds' => $::ipaddress,
-            },
-          ],
-        },
-      ],
-      'start_native_transport'      => true,
-    }
-
     if versioncmp($::rubyversion, '1.9.0') < 0 {
       $service_refresh = false
     } else {
@@ -74,10 +40,10 @@ describe 'cassandra3' do
     }
 
     class { 'cassandra':
+      hints_directory => '/var/lib/cassandra/hints',
       package_ensure  => $package_ensure,
       package_name    => $cassandra_package,
       service_refresh => $service_refresh,
-      settings        => $settings,
       require         => Class['cassandra::datastax_repo', 'cassandra::java']
     }
 
@@ -98,20 +64,14 @@ describe 'cassandra3' do
     }
   EOS
 
-  describe "########### Cassandra #{version} installation on #{osdisplay}" do
+  describe "########### Cassandra #{version} installation" do
     it 'should work with no errors' do
       apply_manifest(cassandra_install_pp, catch_failures: true)
     end
 
-    if legacy_yml_dump
-      it 'should work with no errors (subsequent run)' do
-        apply_manifest(cassandra_install_pp, catch_failures: true)
-      end
-    else
-      it 'check code is idempotent' do
-        expect(apply_manifest(cassandra_install_pp,
-                              catch_failures: true).exit_code).to be_zero
-      end
+    it 'check code is idempotent' do
+      expect(apply_manifest(cassandra_install_pp,
+                            catch_failures: true).exit_code).to be_zero
     end
   end
 
@@ -141,7 +101,6 @@ describe 'cassandra3' do
 
     class { 'cassandra::schema':
       cql_types      => $cql_types,
-      cqlsh_host     => $::ipaddress,
       cqlsh_password => 'cassandra',
       cqlsh_user     => 'cassandra',
       indexes        => {
@@ -178,19 +137,13 @@ describe 'cassandra3' do
     }
   EOS
 
-  describe "########### Schema create #{version} on #{osdisplay}." do
+  describe "########### Schema create #{version}" do
     it 'should work with no errors' do
       apply_manifest(schema_testing_create_pp, catch_failures: true)
     end
 
-    if legacy_yml_dump
-      it 'should work with no errors (subsequent run)' do
-        apply_manifest(schema_testing_create_pp, catch_failures: true)
-      end
-    else
-      it 'check code is idempotent' do
-        expect(apply_manifest(schema_testing_create_pp, catch_failures: true).exit_code).to be_zero
-      end
+    it 'check code is idempotent' do
+      expect(apply_manifest(schema_testing_create_pp, catch_failures: true).exit_code).to be_zero
     end
   end
 
@@ -206,25 +159,18 @@ describe 'cassandra3' do
 
    class { 'cassandra::schema':
      cql_types      => $cql_types,
-     cqlsh_host     => $::ipaddress,
      cqlsh_user     => 'akers',
      cqlsh_password => 'Niner2',
    }
   EOS
 
-  describe "########### Schema drop type #{version} on #{osdisplay}." do
+  describe "########### Schema drop type #{version}" do
     it 'should work with no errors' do
       apply_manifest(schema_testing_drop_type_pp, catch_failures: true)
     end
 
-    if legacy_yml_dump
-      it 'should work with no errors (subsequent run)' do
-        apply_manifest(schema_testing_drop_type_pp, catch_failures: true)
-      end
-    else
-      it 'check code is idempotent' do
-        expect(apply_manifest(schema_testing_drop_type_pp, catch_failures: true).exit_code).to be_zero
-      end
+    it 'check code is idempotent' do
+      expect(apply_manifest(schema_testing_drop_type_pp, catch_failures: true).exit_code).to be_zero
     end
   end
 
@@ -233,7 +179,6 @@ describe 'cassandra3' do
 
     class { 'cassandra::schema':
       cqlsh_password      => 'Niner2',
-      cqlsh_host          => $::ipaddress,
       cqlsh_user          => 'akers',
       cqlsh_client_config => '/root/.puppetcqlshrc',
       users               => {
@@ -244,19 +189,13 @@ describe 'cassandra3' do
     }
   EOS
 
-  describe "########### Drop the boone user #{version} on #{osdisplay}." do
+  describe "########### Drop the boone user #{version}" do
     it 'should work with no errors' do
       apply_manifest(schema_testing_drop_user_pp, catch_failures: true)
     end
 
-    if legacy_yml_dump
-      it 'should work with no errors (subsequent run)' do
-        apply_manifest(schema_testing_drop_user_pp, catch_failures: true)
-      end
-    else
-      it 'check code is idempotent' do
-        expect(apply_manifest(schema_testing_drop_user_pp, catch_failures: true).exit_code).to be_zero
-      end
+    it 'check code is idempotent' do
+      expect(apply_manifest(schema_testing_drop_user_pp, catch_failures: true).exit_code).to be_zero
     end
   end
 
@@ -264,7 +203,6 @@ describe 'cassandra3' do
     #{cassandra_install_pp}
 
     class { 'cassandra::schema':
-    cqlsh_host     => $::ipaddress,
     cqlsh_user     => 'akers',
     cqlsh_password => 'Niner2',
     indexes        => {
@@ -277,19 +215,13 @@ describe 'cassandra3' do
     }
   EOS
 
-  describe "########### Schema drop index #{version} on #{osdisplay}." do
+  describe "########### Schema drop index #{version}" do
     it 'should work with no errors' do
       apply_manifest(schema_testing_drop_index_pp, catch_failures: true)
     end
 
-    if legacy_yml_dump
-      it 'should run with no errors (subsequent run)' do
-        apply_manifest(schema_testing_drop_index_pp, catch_failures: true)
-      end
-    else
-      it 'check code is idempotent' do
-        expect(apply_manifest(schema_testing_drop_index_pp, catch_failures: true).exit_code).to be_zero
-      end
+    it 'check code is idempotent' do
+      expect(apply_manifest(schema_testing_drop_index_pp, catch_failures: true).exit_code).to be_zero
     end
   end
 
@@ -297,7 +229,6 @@ describe 'cassandra3' do
     #{cassandra_install_pp}
 
     class { 'cassandra::schema':
-      cqlsh_host     => $ipaddress,
       cqlsh_password => 'Niner2',
       cqlsh_user     => 'akers',
       tables         => {
@@ -309,19 +240,13 @@ describe 'cassandra3' do
     }
   EOS
 
-  describe "########### Schema drop (table) #{version} on #{osdisplay}." do
+  describe "########### Schema drop (table) #{version}" do
     it 'should work with no errors' do
       apply_manifest(schema_testing_drop_pp, catch_failures: true)
     end
 
-    if legacy_yml_dump
-      it 'should work with no errors (subsequent run)' do
-        apply_manifest(schema_testing_drop_pp, catch_failures: true)
-      end
-    else
-      it 'check code is idempotent' do
-        expect(apply_manifest(schema_testing_drop_pp, catch_failures: true).exit_code).to be_zero
-      end
+    it 'check code is idempotent' do
+      expect(apply_manifest(schema_testing_drop_pp, catch_failures: true).exit_code).to be_zero
     end
   end
 
@@ -335,25 +260,19 @@ describe 'cassandra3' do
     }
 
     class { 'cassandra::schema':
-      cqlsh_host     => $::ipaddress,
       cqlsh_password => 'Niner2',
       cqlsh_user     => 'akers',
       keyspaces      => $keyspaces,
     }
   EOS
 
-  describe "########### Schema drop (Keyspaces) #{version} on #{osdisplay}." do
+  describe "########### Schema drop (Keyspaces) #{version}" do
     it 'should work with no errors' do
       apply_manifest(schema_testing_drop_pp, catch_failures: true)
     end
-    if legacy_yml_dump
-      it 'should work with no errors (subsequent run)' do
-        apply_manifest(schema_testing_drop_pp, catch_failures: true)
-      end
-    else
-      it 'check code is idempotent' do
-        expect(apply_manifest(schema_testing_drop_pp, catch_failures: true).exit_code).to be_zero
-      end
+
+    it 'check code is idempotent' do
+      expect(apply_manifest(schema_testing_drop_pp, catch_failures: true).exit_code).to be_zero
     end
   end
 
@@ -385,7 +304,7 @@ describe 'cassandra3' do
     }
   EOS
 
-  describe "########### Facts Tests #{version} on #{osdisplay}." do
+  describe "########### Facts Tests #{version}" do
     it 'should work with no errors' do
       apply_manifest(facts_testing_pp, catch_failures: true)
     end

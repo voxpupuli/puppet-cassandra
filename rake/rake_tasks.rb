@@ -1,21 +1,14 @@
 #############################################################################
 # Some module specific rake tasks.
 #############################################################################
+require 'fileutils'
 require_relative 'tasks/deploy'
 
 desc '[CI Only] Run beaker, but only for pull requests or for release branches.'
 task :acceptance do
-  skip = true
-  travis_branch = ENV['TRAVIS_BRANCH']
-  travis_event_type = ENV['TRAVIS_EVENT_TYPE']
+  travis_pull_request = ENV['TRAVIS_PULL_REQUEST']
 
-  if travis_event_type == 'pull_request'
-    skip = false
-  elsif travis_event_type == 'push'
-    skip = false if travis_branch =~ /^release-/ || travis_branch =~ /^hotfix-/
-  end
-
-  if skip
+  if travis_pull_request.nil? || (travis_pull_request == 'false')
     puts 'Skipping acceptance tests.'
     exit(0)
   else
@@ -46,3 +39,10 @@ task test: [
   :validate,
   :spec
 ]
+
+desc 'Clean up after a vagrant run.'
+task :vagrant_clean do
+  module_root = File.expand_path(File.join(__FILE__, '..', '..'))
+  directory = File.expand_path(File.join(module_root, 'vagrant', 'modules'))
+  FileUtils.rm_r directory if File.directory?(directory)
+end

@@ -4,6 +4,9 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
   cassandra_install_pp = <<-EOS
     include cassandra::datastax_repo
     include cassandra::java
+    # require cassandra::system::sysctl
+    require cassandra::system::swapoff
+    require cassandra::system::transparent_hugepage
 
     $version = '2.2.8'
 
@@ -22,35 +25,9 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
       }
     }
 
-    $settings = {
-      'authenticator'               => 'PasswordAuthenticator',
-      'authorizer'                  => 'CassandraAuthorizer',
-      'cluster_name'                => 'MyCassandraCluster',
-      'commitlog_directory'         => '/var/lib/cassandra/commitlog',
-      'commitlog_sync'              => 'periodic',
-      'commitlog_sync_period_in_ms' => 10000,
-      'data_file_directories'       => ['/var/lib/cassandra/data'],
-      'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
-      'listen_address'              => $::ipaddress,
-      'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
-      'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
-      'seed_provider'               => [
-        {
-          'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
-          'parameters' => [
-            {
-              'seeds' => $::ipaddress,
-            },
-          ],
-        },
-      ],
-      'start_native_transport'      => true,
-    }
-
     class { 'cassandra':
       package_ensure  => $package_ensure,
       package_name    => $cassandra_package,
-      settings        => $settings,
       require         => Class['cassandra::datastax_repo', 'cassandra::java']
     }
 
@@ -108,7 +85,6 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
 
     class { 'cassandra::schema':
       cql_types      => $cql_types,
-      cqlsh_host     => $::ipaddress,
       cqlsh_password => 'cassandra',
       cqlsh_user     => 'cassandra',
       indexes        => {
@@ -192,7 +168,6 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
 
    class { 'cassandra::schema':
      cql_types      => $cql_types,
-     cqlsh_host     => $::ipaddress,
      cqlsh_user     => 'akers',
      cqlsh_password => 'Niner2',
    }
@@ -213,7 +188,6 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
 
     class { 'cassandra::schema':
       cqlsh_password      => 'Niner2',
-      cqlsh_host          => $::ipaddress,
       cqlsh_user          => 'akers',
       cqlsh_client_config => '/root/.puppetcqlshrc',
       permissions    => {
@@ -260,7 +234,6 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
 
     class { 'cassandra::schema':
       cqlsh_password      => 'Niner2',
-      cqlsh_host          => $::ipaddress,
       cqlsh_user          => 'akers',
       cqlsh_client_config => '/root/.puppetcqlshrc',
       users               => {
@@ -285,7 +258,6 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
     #{cassandra_install_pp}
 
      class { 'cassandra::schema':
-     cqlsh_host     => $::ipaddress,
      cqlsh_user     => 'akers',
      cqlsh_password => 'Niner2',
      indexes        => {
@@ -312,7 +284,6 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
     #{cassandra_install_pp}
 
      class { 'cassandra::schema':
-       cqlsh_host     => $ipaddress,
        cqlsh_password => 'Niner2',
        cqlsh_user     => 'akers',
        tables         => {
@@ -344,7 +315,6 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
     }
 
     class { 'cassandra::schema':
-      cqlsh_host     => $::ipaddress,
       cqlsh_password => 'Niner2',
       cqlsh_user     => 'akers',
       keyspaces      => $keyspaces,
@@ -437,10 +407,10 @@ describe 'cassandra2', unless: CASSANDRA2_UNSUPPORTED_PLATFORMS.include?(fact('l
       ensure => stopped,
     } ->
     package { $cassandra_optutils_package:
-      ensure => absent
+      ensure => purged,
     } ->
     package { $cassandra_package:
-      ensure => absent
+      ensure => purged,
     } ->
     exec { 'rm -rf /var/lib/cassandra/*/* /var/log/cassandra/*': }
   EOS
