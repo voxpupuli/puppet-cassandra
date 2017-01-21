@@ -254,6 +254,32 @@ class { 'cassandra':
 }
 ```
 
+### Hiera
+
+In your top level node classification (usually `common.yaml`), add the
+settings hash and all the tweaks you want all the clusters to use:
+
+```YAML
+cassandra::baseline_settings:
+  authenticator: AllowAllAuthenticator
+  authorizer: AllowAllAuthorizer
+  auto_bootstrap: true
+  auto_snapshot: true
+  ...
+```
+
+Then, in the individual node classification add the parts which define
+the cluster:
+
+```YAML
+cassandra::settings:
+  cluster_name: developer playground cassandra cluster
+cassandra::dc: Onsite1
+cassandra::rack: RAC1
+cassandra::package_ensure: 3.0.5-1
+cassandra::package_name: cassandra30
+``` 
+
 ## Usage
 
 ### Setup a keyspace and users
