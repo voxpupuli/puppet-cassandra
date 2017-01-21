@@ -6,7 +6,6 @@ Gemfile.lock
 *.iml
 .librarian/
 log/
-modules/
 pkg/
 .project
 Puppetfile.lock
@@ -14,9 +13,5 @@ spec/fixtures/
 *.swn
 *.swo
 *.swp
-.tmp/
-.travis/secrets.tar
-.vagrant/
-vagrant/environments/production/.gitignore
 vendor/
 .yardoc/
