@@ -1,5 +1,17 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2017-01-21 - Release 2.3.0 ([diff](https://github.com/locp/cassandra/compare/2.2.1...2.3.0))
+
+New attribute to `::cassandra` class:
+
+* `baseline_settings`
+
+New defined types:
+
+* `cassandra::system::swapoff`
+* `cassandra::system::sysctl`
+* `cassandra::system::transparent_hugepage`
+
 ##2016-12-08 - Release 2.2.1 ([diff](https://github.com/locp/cassandra/compare/2.2.0...2.2.1))
 
 ### Summary
