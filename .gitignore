@@ -6,7 +6,6 @@ Gemfile.lock
 *.iml
 .librarian/
 log/
-modules/
 pkg/
 .project
 Puppetfile.lock
