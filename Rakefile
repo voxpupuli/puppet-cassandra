@@ -12,3 +12,9 @@ require_relative 'rake/rake_tasks'
 Blacksmith::RakeTask.new do |t|
   t.tag_pattern = '%s'
 end
+
+exclude_paths = [
+  'vagrant/**/*'
+]
+PuppetLint.configuration.ignore_paths = exclude_paths
+PuppetSyntax.exclude_paths = exclude_paths

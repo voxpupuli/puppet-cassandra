@@ -1,4 +1,9 @@
 ---
+AllCops:
+  Exclude:
+    - 'vagrant/modules/*/Gemfile'
+    - 'vagrant/modules/*/Rakefile'
+    - 'vagrant/modules/**/*'
 Metrics/BlockLength:
   Enabled: false
 Metrics/LineLength:
