@@ -4,6 +4,7 @@ AllCops:
     - 'vagrant/modules/*/Gemfile'
     - 'vagrant/modules/*/Rakefile'
     - 'vagrant/modules/**/*'
+    - 'vendor/**/*'
 Metrics/BlockLength:
   Enabled: false
 Metrics/LineLength:
