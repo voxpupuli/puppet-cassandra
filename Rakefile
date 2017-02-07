@@ -14,7 +14,9 @@ Blacksmith::RakeTask.new do |t|
 end
 
 exclude_paths = [
-  'vagrant/**/*'
+  'vagrant/**/*',
+  'vendor/bundle/**/*'
 ]
+
 PuppetLint.configuration.ignore_paths = exclude_paths
 PuppetSyntax.exclude_paths = exclude_paths
