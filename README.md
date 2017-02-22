@@ -21,6 +21,7 @@
     * [cassandra](#class-cassandra)
     * [cassandra::datastax_agent](#class-cassandradatastax_agent)
     * [cassandra::datastax_repo](#class-cassandradatastax_repo)
+    * [cassandra::dse](#class-cassandradse)
     * [cassandra::env](#class-cassandraenv)
     * [cassandra::file](#class-cassandrafile)
     * [cassandra::firewall_ports](#class-cassandrafirewall_ports)
