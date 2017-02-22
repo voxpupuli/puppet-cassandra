@@ -415,7 +415,8 @@ We have also added the `cassandra::opscenter` class for the opscenter node.
 ### DataStax Enterprise
 
 After configuring the relevant repository, the following snippet works on
-CentOS 7 to install DSE Cassandra 4.7.0:
+CentOS 7 to install DSE Cassandra 4.7.0, set the HADOOP_LOG_DIR, set the
+DSE_HOME and configure DataStax Enterprise to use LDAP for authentication:
 
 ```puppet
 class { 'cassandra::datastax_repo':
@@ -430,6 +431,41 @@ class { 'cassandra':
   package_ensure  => '4.7.0-1',
   package_name    => 'dse-full',
   service_name    => 'dse',
+}
+
+class { 'cassandra::dse':
+  file_lines => {
+    'Set HADOOP_LOG_DIR directory' => {
+      ensure => present,
+      path   => '/etc/dse/dse-env.sh',
+      line   => 'export HADOOP_LOG_DIR=/var/log/hadoop',
+      match  => '^# export HADOOP_LOG_DIR=<log_dir>',
+    },
+    'Set DSE_HOME'                 => {
+      ensure => present,
+      path   => '/etc/dse/dse-env.sh',
+      line   => 'export DSE_HOME=/usr/share/dse',
+      match  => '^#export DSE_HOME',
+    },
+  },
+  settings   => {
+    ldap_options => {
+      server_host                => localhost,
+      server_port                => 389,
+      search_dn                  => 'cn=Admin',
+      search_password            => secret,
+      use_ssl                    => false,
+      use_tls                    => false,
+      truststore_type            => jks,
+      user_search_base           => 'ou=users,dc=example,dc=com',
+      user_search_filter         => '(uid={0})',
+      credentials_validity_in_ms => 0,
+      connection_pool            => {
+        max_active => 8,
+        max_idle   => 8,
+      }
+    }
+  }
 }
 ```
 
@@ -454,6 +490,7 @@ cassandra::opscenter::cluster_name { 'Cluster1':
 * [cassandra](#class-cassandra)
 * [cassandra::datastax_agent](#class-cassandradatastax_agent)
 * [cassandra::datastax_repo](#class-cassandradatastax_repo)
+* [cassandra::dse](#class-cassandradse)
 * [cassandra::env](#class-cassandraenv)
 * [cassandra::file](#class-cassandrafile)
 * [cassandra::firewall_ports](#class-cassandrafirewall_ports)
@@ -1989,6 +2026,39 @@ will set the `location` attribute on an `apt::source` to
 On the Debian family, this is passed as the `release` attribute to an
 `apt::source` resource.  On the Red Hat family, it is ignored.
 Default value 'stable'
+
+### Class: cassandra::dse
+
+A class for configuring DataStax Enterprise (DSE) specific settings.
+
+#### Attributes
+
+##### `config_file`
+The full path to the DSE configuration file.
+Default value '/etc/dse/dse.yaml'
+
+##### `config_file_mode`
+The mode for the DSE configuration file.
+Default value '0644'
+
+##### `dse_yaml_tmpl`
+ A path to a template for the `dse.yaml` file.
+Default value 'cassandra/dse.yaml.erb'
+
+##### `file_lines`
+A hash of values that are passed to `create_resources` as a `file_line`
+resource.
+Default value *undef*
+
+##### `service_refresh`
+Whether or not the Cassandra service should be refreshed if the DSE
+configuration files are changed.
+Default value true
+
+##### `settings`
+Unless this attribute is set to a hash (which is then placed as YAML inside
+`dse.yaml`) then the `dse.yaml` is left unchanged.
+Default value *undef*
 
 ### Class: cassandra::env
 
