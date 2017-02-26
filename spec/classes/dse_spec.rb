@@ -3,7 +3,7 @@ describe 'cassandra::dse' do
   let(:pre_condition) do
     [
       'class stdlib () {}',
-      'define file_line($line, $path, $match) {}',
+      'define file_line($line, $path, $match) {}'
     ]
   end
 
