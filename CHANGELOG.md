@@ -1,5 +1,11 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2017-02-27 - Release 1.27.0 ([diff](https://github.com/locp/cassandra/compare/1.26.1...1.27.0))
+
+### Summary
+
+Add the `cassandra::dse` class.
+
 ##2016-11-19 - Release 1.26.1 ([diff](https://github.com/locp/cassandra/compare/1.26.0...1.26.1))
 
 ### Summary
