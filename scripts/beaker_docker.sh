@@ -21,7 +21,7 @@ fi
 case "$1" in
   connect) port=$( docker ps -n=-1 | grep -v '^CONTAINER' | \
              awk '{ i = NF - 1; print $i }' | sed 's/.*:\(.*\)-.*/\1/' )
-           ssh -v -o GSSAPIAuthentication=no root@localhost -p $port
+           ssh root@localhost -p $port
            ;;
   destroy) docker rm -f $( docker ps -n=-1 -q )
            ;;
