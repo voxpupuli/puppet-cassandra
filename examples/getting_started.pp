@@ -24,68 +24,37 @@ class { 'cassandra':
   require         => Class['cassandra::datastax_repo', 'cassandra::java'],
 }
 
-class { 'cassandra::optutils':
-  require => Class['cassandra']
-}
-
-class { 'cassandra::schema':
-  cqlsh_password => 'cassandra',
-  cqlsh_user     => 'cassandra',
-  indexes        => {
-    'users_lname_idx' => {
-      table    => 'users',
-      keys     => 'lname',
-      keyspace => 'mykeyspace',
-    },
-  },
-  keyspaces      => {
-    'mykeyspace' => {
-      durable_writes  => false,
-      replication_map => {
-        keyspace_class     => 'SimpleStrategy',
-        replication_factor => 1,
-      },
-    }
-  },
-  tables         => {
-    'users' => {
-      columns  => {
-        user_id       => 'int',
-        fname         => 'text',
-        lname         => 'text',
-        'PRIMARY KEY' => '(user_id)',
-      },
-      keyspace => 'mykeyspace',
-    },
-  },
-  users          => {
-    'spillman' => {
-      password => 'Niner27',
-    },
-    'akers'    => {
-      password  => 'Niner2',
-      superuser => true,
-    },
-    'boone'    => {
-      password => 'Niner75',
-    },
-    'lucan'    => {
-      'ensure' => absent
-    },
-  },
-}
-
-$heap_new_size = $::processorcount * 100
-
-class { 'cassandra::env':
+class { 'cassandra::dse':
   file_lines => {
-    'MAX_HEAP_SIZE' => {
-      line  => 'MAX_HEAP_SIZE="1024M"',
-      match => '#MAX_HEAP_SIZE="4G"',
+    'Set HADOOP_LOG_DIR directory' => {
+      ensure => present,
+      path   => '/etc/dse/dse-env.sh',
+      line   => 'export HADOOP_LOG_DIR=/var/log/hadoop',
+      match  => '^# export HADOOP_LOG_DIR=<log_dir>',
     },
-    'HEAP_NEWSIZE'  => {
-      line  => "HEAP_NEWSIZE='${heap_new_size}M'",
-      match => '#HEAP_NEWSIZE="800M"',
+    'Set DSE_HOME'                 => {
+      ensure => present,
+      path   => '/etc/dse/dse-env.sh',
+      line   => 'export DSE_HOME=/usr/share/dse',
+      match  => '^#export DSE_HOME',
+    },
+  },
+  settings   => {
+    ldap_options => {
+      server_host                => localhost,
+      server_port                => 389,
+      search_dn                  => 'cn=Admin',
+      search_password            => secret,
+      use_ssl                    => false,
+      use_tls                    => false,
+      truststore_type            => jks,
+      user_search_base           => 'ou=users,dc=example,dc=com',
+      user_search_filter         => '(uid={0})',
+      credentials_validity_in_ms => 0,
+      connection_pool            => {
+        max_active => 8,
+        max_idle   => 8,
+      }
     }
   }
 }

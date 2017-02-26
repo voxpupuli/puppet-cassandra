@@ -1,6 +1,28 @@
 require 'spec_helper_acceptance'
 
-describe 'cassandra class' do
+describe 'cassandra::dse class' do
+  dse_mock_pp = <<-EOS
+    $str = "#export DSE_HOME\n# export HADOOP_LOG_DIR=<log_dir>"
+
+    file { '/etc/dse':
+      ensure => directory,
+    } ->
+    file { '/etc/dse/dse-env.sh':
+      ensure  => present,
+      content => $str,
+    }
+  EOS
+
+  describe '########### Mock a DSE Installation.' do
+    it 'should work with no errors' do
+      apply_manifest(dse_mock_pp, catch_failures: true)
+    end
+    it 'check code is idempotent' do
+      expect(apply_manifest(dse_mock_pp,
+                            catch_failures: true).exit_code).to be_zero
+    end
+  end
+
   cassandra_install_pp = <<-EOS
     if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == 7 {
       $service_systemd = true
@@ -94,9 +116,44 @@ describe 'cassandra class' do
       service_systemd => $service_systemd,
       require         => Class['cassandra']
     }
+
+    class { 'cassandra::dse':
+      file_lines => {
+        'Set HADOOP_LOG_DIR directory' => {
+          ensure => present,
+          path   => '/etc/dse/dse-env.sh',
+          line   => 'export HADOOP_LOG_DIR=/var/log/hadoop',
+          match  => '^# export HADOOP_LOG_DIR=<log_dir>',
+        },
+        'Set DSE_HOME'                 => {
+          ensure => present,
+          path   => '/etc/dse/dse-env.sh',
+          line   => 'export DSE_HOME=/usr/share/dse',
+          match  => '^#export DSE_HOME',
+        },
+      },
+      settings   => {
+        ldap_options => {
+          server_host                => localhost,
+          server_port                => 389,
+          search_dn                  => 'cn=Admin',
+          search_password            => secret,
+          use_ssl                    => false,
+          use_tls                    => false,
+          truststore_type            => jks,
+          user_search_base           => 'ou=users,dc=example,dc=com',
+          user_search_filter         => '(uid={0})',
+          credentials_validity_in_ms => 0,
+          connection_pool            => {
+            max_active => 8,
+            max_idle   => 8,
+          }
+        }
+      }
+    }
   EOS
 
-  describe '########### Cassandra 2.0 installation.' do
+  describe '########### DSE settings.' do
     it 'should work with no errors' do
       apply_manifest(cassandra_install_pp, catch_failures: true)
     end
