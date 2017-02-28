@@ -17,10 +17,6 @@ describe 'cassandra::dse class' do
     it 'should work with no errors' do
       apply_manifest(dse_mock_pp, catch_failures: true)
     end
-    it 'check code is idempotent' do
-      expect(apply_manifest(dse_mock_pp,
-                            catch_failures: true).exit_code).to be_zero
-    end
   end
 
   cassandra_install_pp = <<-EOS
