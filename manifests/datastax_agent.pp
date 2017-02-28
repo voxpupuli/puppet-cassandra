@@ -1,23 +1,61 @@
-# Install and configure the optional DataStax agent.
+# A class for installing the DataStax Agent and to point it at an OpsCenter
+# instance.
+#
+# @param address_config_file The full path to the address config file.
+# @param defaults_file The full path name to the file where `java_home` is set.
+# @param java_home If the value of this variable is left as *undef*, no
+#   action is taken.  Otherwise the value is set as JAVA_HOME in
+#   `defaults_file`.
+# @param package_ensure Is passed to the package reference.  Valid values are
+#   **present** or a version number.
+# @param package_name Is passed to the package reference.
+# @param service_ensure Is passed to the service reference.
+# @param service_enable Is passed to the service reference.
+# @param service_name Is passed to the service reference.
+# @param service_provider The name of the provider that runs the service.
+#   If left as *undef* then the OS family specific default will be used,
+#   otherwise the specified value will be used instead.
+# @param settings A hash that is passed to
+#   [create_ini_settings]
+#   (https://github.com/puppetlabs/puppetlabs-inifile#function-create_ini_settings)
+#   with the following additional defaults:
+#
+#   ```puppet
+#   {
+#     path              => $address_config_file,
+#     key_val_separator => ': ',
+#     require           => Package[$package_name],
+#     notify            => Service['datastax-agent'],
+#   }
+#   ```
+#
+# @example Set agent_alias to foobar, stomp_interface to localhost and ensure that async_pool_size is absent from the file.
+#   class { 'cassandra::datastax_agent':
+#     settings => {
+#       'agent_alias'     => {
+#         'setting' => 'agent_alias',
+#         'value'   => 'foobar',
+#       },
+#       'stomp_interface' => {
+#         'setting' => 'stomp_interface',
+#         'value'   => 'localhost',
+#       },
+#       'async_pool_size' => {
+#         'ensure' => absent,
+#       },
+#     },
+#   }
 class cassandra::datastax_agent (
   $address_config_file  = '/var/lib/datastax-agent/conf/address.yaml',
-  $agent_alias          = undef,
-  $async_pool_size      = undef,
-  $async_queue_size     = undef,
   $defaults_file        = '/etc/default/datastax-agent',
-  $hosts                = undef,
   $java_home            = undef,
-  $local_interface      = undef,
   $package_ensure       = 'present',
   $package_name         = 'datastax-agent',
   $service_ensure       = 'running',
   $service_enable       = true,
   $service_name         = 'datastax-agent',
   $service_provider     = undef,
-  $service_systemd      = false,
-  $service_systemd_tmpl = 'cassandra/datastax-agent.service.erb',
-  $stomp_interface      = undef,
-  $storage_keyspace     = undef,
+  $settings             = {},
   ) inherits cassandra::params {
   if $service_provider != undef {
     System {
@@ -36,124 +74,14 @@ class cassandra::datastax_agent (
     onlyif      => "test -x ${::cassandra::params::systemctl}",
     path        => ['/usr/bin', '/bin'],
     refreshonly => true,
-    notify      => Service[$service_name],
-  }
-
-  if $stomp_interface != undef {
-    $ensure = present
-  } else {
-    $ensure = absent
+    notify      => Service['datastax-agent'],
   }
 
   file { $address_config_file:
     owner   => 'cassandra',
     group   => 'cassandra',
+    mode    => '0644',
     require => Package[$package_name],
-  }
-
-  ini_setting { 'stomp_interface':
-    ensure            => $ensure,
-    path              => $address_config_file,
-    section           => '',
-    key_val_separator => ': ',
-    setting           => 'stomp_interface',
-    value             => $stomp_interface,
-    require           => Package[$package_name],
-    notify            => Service[$service_name],
-  }
-
-  if $local_interface != undef {
-    $ensure_local_interface = present
-  } else {
-    $ensure_local_interface = absent
-  }
-
-  ini_setting { 'local_interface':
-    ensure            => $ensure_local_interface,
-    path              => $address_config_file,
-    section           => '',
-    key_val_separator => ': ',
-    setting           => 'local_interface',
-    value             => $local_interface,
-    require           => Package[$package_name],
-    notify            => Service[$service_name],
-  }
-
-  if $hosts != undef {
-    $ensure_hosts = present
-  } else {
-    $ensure_hosts = absent
-  }
-
-  ini_setting { 'hosts':
-    ensure            => $ensure_hosts,
-    path              => $address_config_file,
-    section           => '',
-    key_val_separator => ': ',
-    setting           => 'hosts',
-    value             => $hosts,
-    require           => Package[$package_name],
-    notify            => Service[$service_name],
-  }
-
-  if $storage_keyspace != undef {
-    $ensure_storage_keyspace = present
-  } else {
-    $ensure_storage_keyspace = absent
-  }
-
-  ini_setting { 'storage_keyspace':
-    ensure            => $ensure_storage_keyspace,
-    path              => $address_config_file,
-    section           => '',
-    key_val_separator => ': ',
-    setting           => 'storage_keyspace',
-    value             => $storage_keyspace,
-    require           => Package[$package_name],
-    notify            => Service[$service_name],
-  }
-
-  if $agent_alias != undef {
-    $ensure_agent_alias = present
-  } else {
-    $ensure_agent_alias = absent
-  }
-
-  ini_setting { 'agent_alias':
-    ensure            => $ensure_agent_alias,
-    path              => $address_config_file,
-    section           => '',
-    key_val_separator => ': ',
-    setting           => 'alias',
-    value             => $agent_alias,
-    require           => Package[$package_name],
-    notify            => Service[$service_name],
-  }
-
-  if $async_pool_size != undef {
-    ini_setting { 'async_pool_size':
-      ensure            => present,
-      path              => $address_config_file,
-      section           => '',
-      key_val_separator => ': ',
-      setting           => 'async_pool_size',
-      value             => $async_pool_size,
-      require           => Package[$package_name],
-      notify            => Service[$service_name],
-    }
-  }
-
-  if $async_queue_size != undef {
-    ini_setting { 'async_queue_size':
-      ensure            => present,
-      path              => $address_config_file,
-      section           => '',
-      key_val_separator => ': ',
-      setting           => 'async_queue_size',
-      value             => $async_queue_size,
-      require           => Package[$package_name],
-      notify            => Service[$service_name],
-    }
   }
 
   if $java_home != undef {
@@ -164,18 +92,29 @@ class cassandra::datastax_agent (
       key_val_separator => '=',
       setting           => 'JAVA_HOME',
       value             => $java_home,
-      notify            => Service[$service_name],
+      notify            => Service['datastax-agent'],
     }
   }
 
-  if $service_systemd {
-    cassandra::private::deprecation_warning { 'datastax_agent::service_systemd':
-      item_number => 20,
-    }
-  }
-
-  service { $service_name:
+  service { 'datastax-agent':
     ensure => $service_ensure,
     enable => $service_enable,
+    name   => $service_name,
+  }
+
+  if $settings {
+    $defaults = {
+      path              => $address_config_file,
+      key_val_separator => ': ',
+      require           => Package[$package_name],
+      notify            => Service['datastax-agent'],
+    }
+
+    $full_settings = {
+      '' => $settings,
+    }
+
+    validate_hash($full_settings)
+    create_ini_settings($full_settings, $defaults)
   }
 }

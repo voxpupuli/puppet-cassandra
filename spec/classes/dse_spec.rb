@@ -16,7 +16,7 @@ describe 'cassandra::dse' do
     end
 
     it do
-      should have_resource_count(11)
+      should have_resource_count(6)
       should contain_class('cassandra')
 
       should contain_class('cassandra::dse').with(

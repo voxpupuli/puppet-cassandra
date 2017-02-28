@@ -1,7 +1,19 @@
-# cassandra::schema::cql_type
+# Create or drop user defined data types within the schema.
+# @param keyspace [string] The name of the keyspace that the data type is to be associated with.
+# @param ensure [present|absent] ensure the data type is created, or is dropped.
+# @param fields [hash] A hash of the fields that will be components for the data type.
+# @param cql_type_name [string] The name of the CQL type to be created.
+# @example
+#   cassandra::schema::cql_type { 'fullname':
+#     keyspace => 'mykeyspace',
+#     fields   => {
+#       'fname' => 'text',
+#       'lname' => 'text',
+#     },
+#   }
 define cassandra::schema::cql_type (
   $keyspace,
-  $ensure = 'present',
+  $ensure = present,
   $fields = {},
   $cql_type_name = $title,
   ){

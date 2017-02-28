@@ -1,0 +1,18 @@
+---
+# Nasty hack with systemd due to issues found in #357.
+HOSTS:
+  ubuntu1404:
+    roles:
+      - master
+      - nodes
+      - ubuntu14
+    platform: ubuntu-14.04-x64
+    image: ubuntu:14.04
+    hypervisor: docker
+    docker_image_commands:
+      - 'apt-get install -y iptables sudo systemd'
+      - 'rm /bin/systemctl'
+      - 'ln -s /bin/true /bin/systemctl'
+CONFIG:
+  type: foss
+  log_level: notice

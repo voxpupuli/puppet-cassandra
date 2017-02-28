@@ -1,0 +1,7 @@
+---
+cassandra::run_schema_tests: false
+cassandra::system::swapoff::device: '/dev/mapper/VolGroup-lv_swap'
+cassandra::system::sysctl::sysctl_file: '/etc/sysctl.conf'
+cassandra::system::sysctl::net_ipv4_tcp_rmem: '4096 87380 16777216'
+cassandra::system::sysctl::net_ipv4_tcp_wmem: '4096 65536 16777216'
+cassandra::system::sysctl::sysctl_args: '-e -p'

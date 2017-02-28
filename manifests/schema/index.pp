@@ -1,9 +1,19 @@
-# cassandra::schema::index
+# Create or drop indexes within the schema.
+# @param ensure [present|absent] Create or dro[ the index.
+# @param class_name [string] The name of the class to be associated with an
+#   index when creating a custom index.
+# @param index [string] The name of the index.  Defaults to the name of the
+#   resource.
+# @param keys [string] The columns that the index is being created on.
+# @param keyspace [string] The name the keyspace that the index is to be associated
+#   with.
+# @param options [string] Any options to be added to the index.
+# @param table [string] The name of the table that the index is to be associated with.
 define cassandra::schema::index(
   $keyspace,
   $table,
-  $class_name = undef,
   $ensure     = present,
+  $class_name = undef,
   $index      = $title,
   $keys       = undef,
   $options    = undef,

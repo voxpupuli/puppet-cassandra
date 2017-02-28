@@ -1,3 +1,13 @@
 ---
+AllCops:
+  Exclude:
+    - 'vagrant/modules/*/Gemfile'
+    - 'vagrant/modules/*/Rakefile'
+    - 'vagrant/modules/**/*'
+    - 'vendor/**/*'
+Metrics/BlockLength:
+  Enabled: false
 Metrics/LineLength:
+  Enabled: false
+Style/FrozenStringLiteralComment:
   Enabled: false
