@@ -15,3 +15,5 @@ spec/fixtures/
 *.swp
 vendor/
 .yardoc/
+/.vagrant/
+/vagrant/modules/

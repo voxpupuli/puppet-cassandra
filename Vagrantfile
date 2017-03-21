@@ -4,10 +4,10 @@
 Vagrant.configure('2') do |config|
   # config.vm.box = 'puppetlabs/centos-6.6-64-puppet'
   # config.vm.box = 'puppetlabs/centos-7.0-64-puppet'
-  config.vm.box = 'puppetlabs/debian-7.8-64-puppet'
+  # config.vm.box = 'puppetlabs/debian-7.8-64-puppet'
   # config.vm.box = 'puppetlabs/debian-8.2-64-puppet'
   # config.vm.box = "puppetlabs/ubuntu-12.04-64-puppet"
-  # config.vm.box = "puppetlabs/ubuntu-14.04-64-puppet"
+  config.vm.box = "puppetlabs/ubuntu-14.04-64-puppet"
   # config.vm.box = "puppetlabs/ubuntu-16.04-64-puppet"
 
   config.vm.provider 'virtualbox' do |vm|
@@ -55,5 +55,5 @@ Vagrant.configure('2') do |config|
   end
 
   config.vm.network :forwarded_port, guest: 22, host: 2223, auto_correct: true, id: 'ssh'
-  config.vm.network :forwarded_port, guest: 3000, host: 3000
+  # config.vm.network :forwarded_port, guest: 3000, host: 3000
 end
