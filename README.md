@@ -56,6 +56,11 @@ A Puppet module to install and manage Cassandra, DataStax Agent & OpsCenter
 * Optionally configures an Apt repository to install the Cassandra packages
   from (on Debian).
 
+#### What the cassandra::dse class affects
+
+* Optionally configures files in the `/etc/dse` directory if one is using
+  DataStax Enterprise.
+
 #### What the cassandra::firewall_ports class affects
 
 * Optionally configures the firewall for the Cassandra related network

@@ -13,6 +13,8 @@ spec/fixtures/
 *.swn
 *.swo
 *.swp
+.vagrant/
+vagrant/modules/
 vendor/
 .yardoc/
 /.vagrant/
