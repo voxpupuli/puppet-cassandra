@@ -1,5 +1,5 @@
 require 'spec_helper'
-describe 'cassandra::datastax_repo' do
+describe 'cassandra::apache_repo' do
   let(:pre_condition) do
     [
       'class apt () {}',
