@@ -3,7 +3,7 @@ include cassandra::optutils
 
 class { 'cassandra::apache_repo':
   release => '310x',
-  before  => Class['cassandra::optutils'],
+  before  => Class['cassandra', 'cassandra::optutils'],
 }
 
 class { 'cassandra':
@@ -33,5 +33,4 @@ class { 'cassandra':
     'start_native_transport'      => true,
   },
   service_ensure         => running,
-  require                => Class['cassandra::apache_repo'],
 }
