@@ -24,7 +24,7 @@ describe 'cassandra::apache_repo' do
       should contain_class('apt::update')
 
       should contain_apt__key('apachekey').with(
-        id: '7E41C00F85BFC1706C4FFFB3350200F2B999A372',
+        id: 'A26E528B271F19B9E5D8E19EA278B781FE4B2BDA',
         source: 'https://www.apache.org/dist/cassandra/KEYS'
       )
 
