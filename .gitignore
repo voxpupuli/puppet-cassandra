@@ -17,3 +17,5 @@ spec/fixtures/
 vagrant/modules/
 vendor/
 .yardoc/
+/.vagrant/
+/vagrant/modules/

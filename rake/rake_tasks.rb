@@ -32,13 +32,13 @@ task :deploy do
 end
 
 desc 'Run metadata_lint, rubocop, lint, validate and spec.'
-task test: [
-  :metadata_lint,
-  :rubocop,
-  :lint,
-  :validate,
-  :spec
-]
+task test: %i(
+  metadata_lint
+  rubocop
+  lint
+  validate
+  spec
+)
 
 desc 'Clean up after a vagrant run.'
 task :vagrant_clean do
