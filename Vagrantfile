@@ -1,14 +1,13 @@
 # TODO: Find out why cassandra::params not working with vagrant and CentOS 6.2
 # TODO: Find out why cassandra::params not working with vagrant and CentOS 7.0
 # TODO: Find out why cassandra::params not working with vagrant and Ubuntu 12.04.
-# TODO: Have vagrant dynamically discover Puppet modules from metadata.json.
 Vagrant.configure('2') do |config|
   # config.vm.box = 'puppetlabs/centos-6.6-64-puppet'
   # config.vm.box = 'puppetlabs/centos-7.0-64-puppet'
-  config.vm.box = 'puppetlabs/debian-7.8-64-puppet'
+  # config.vm.box = 'puppetlabs/debian-7.8-64-puppet'
   # config.vm.box = 'puppetlabs/debian-8.2-64-puppet'
   # config.vm.box = "puppetlabs/ubuntu-12.04-64-puppet"
-  # config.vm.box = "puppetlabs/ubuntu-14.04-64-puppet"
+  config.vm.box = 'puppetlabs/ubuntu-14.04-64-puppet'
   # config.vm.box = "puppetlabs/ubuntu-16.04-64-puppet"
 
   config.vm.provider 'virtualbox' do |vm|
@@ -27,11 +26,20 @@ Vagrant.configure('2') do |config|
   config.vm.synced_folder './spec/acceptance/hieradata',
                           '/etc/puppetlabs/code/environments/vagrant/hieradata'
 
-  config.vm.provision :shell, inline: "test -d #{module_path_on_guest}/ || mkdir #{puppet_environment_path_on_guest}"
-  config.vm.provision :shell, inline: "test -d #{module_path_on_guest}/apt || puppet module install puppetlabs-apt --environment=#{puppet_environment}"
-  config.vm.provision :shell, inline: "test -d #{module_path_on_guest}/firewall || puppet module install puppetlabs-firewall --environment=#{puppet_environment}"
-  config.vm.provision :shell, inline: "test -d #{module_path_on_guest}/inifile || puppet module install puppetlabs-inifile --environment=#{puppet_environment}"
-  config.vm.provision :shell, inline: "test -d #{module_path_on_guest}/stdlib || puppet module install puppetlabs-stdlib --environment=#{puppet_environment}"
+  metadata_json_file = "#{File.dirname(__FILE__)}/metadata.json"
+  config.vm.provision :shell,
+                      inline: "test -d #{module_path_on_guest}/ || mkdir #{puppet_environment_path_on_guest}"
+
+  if File.exist?(metadata_json_file)
+    JSON.parse(File.read(metadata_json_file))['dependencies'].each do |key, _value|
+      module_name = key['name'].to_s
+      short_name = module_name.split('-')[1]
+      config.vm.provision :shell,
+                          inline: "test -d #{module_path_on_guest}/#{short_name} || puppet module install #{module_name} --environment=#{puppet_environment}"
+    end
+  else
+    puts 'metadata.json not found; skipping install of dependencies'
+  end
 
   config.vm.provision :puppet do |puppet|
     puppet.options = ENV['PUPPET_OPTS'].split(' ') if ENV.key?('PUPPET_OPTS') # See http://stackoverflow.com/a/27540417/224334
@@ -47,5 +55,5 @@ Vagrant.configure('2') do |config|
   end
 
   config.vm.network :forwarded_port, guest: 22, host: 2223, auto_correct: true, id: 'ssh'
-  config.vm.network :forwarded_port, guest: 3000, host: 3000
+  # config.vm.network :forwarded_port, guest: 3000, host: 3000
 end

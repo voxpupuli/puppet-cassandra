@@ -1,29 +1,20 @@
 {
   "name": "locp-cassandra",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "author": "locp",
-  "summary": "Installs Cassandra, DataStax Agent & OpsCenter on RHEL/Ubuntu/Debian.",
+  "summary": "Installs Cassandra & DataStax Agent on RHEL/Ubuntu/Debian.",
   "license": "Apache-2.0",
   "source": "https://github.com/locp/cassandra",
   "project_page": "https://github.com/locp/cassandra",
   "issues_url": "https://github.com/locp/cassandra/issues",
   "tags": [
+    "Apache",
     "cassandra",
     "cluster",
     "database",
     "datastax",
     "datastax-agent",
     "nosql"
-  ],
-  "requirements": [
-    {
-      "name": "pe",
-      "version_requirement": ">= 3.7.0 < 2015.4.0"
-    },
-    {
-      "name": "puppet",
-      "version_requirement": ">= 3.0.0 < 5.0.0"
-    }
   ],
   "dependencies": [
     {

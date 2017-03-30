@@ -55,6 +55,10 @@ RSpec.configure do |config|
       f.stubbed.with(['/var/lib/cassandra/data']).returns(true)
     end
 
+    MockFunction.new('is_hash') do |f|
+      f.stubbed.with('').returns(false)
+    end
+
     MockFunction.new('join') do |f|
       f.stubbed.with(['firstname text', 'lastname text'], ', ')
        .returns('firstname text, lastname text')
