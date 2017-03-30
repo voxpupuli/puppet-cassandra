@@ -289,7 +289,7 @@ cassandra::dc: Onsite1
 cassandra::rack: RAC1
 cassandra::package_ensure: 3.0.5-1
 cassandra::package_name: cassandra30
-``` 
+```
 
 ## Usage
 
