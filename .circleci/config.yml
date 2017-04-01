@@ -1,0 +1,36 @@
+--- 
+jobs: 
+  build: 
+    docker: 
+      - 
+        environment: 
+          PUPPET_VERSION: "~> 3.8"
+          STRICT_VARIABLES: true
+        image: "ruby:2.1.9"
+    steps: 
+      - checkout
+      - 
+        keys: 
+          - "projectname-{{ .Branch }}-{{ checksum \"Gemfile\" }}"
+          - "projectname-{{ .Branch }}"
+          - projectname-master
+        restore_cache: ~
+      - 
+        command: "bundle install --without development acceptance --path vendor/bundle"
+        name: "Bundle Install"
+        run: ~
+      - 
+        command: "bundle clean --force"
+        name: "Bundle Cleanup"
+        run: ~
+      - 
+        key: "projectname-{{ .Branch }}-{{ checksum \"Gemfile\" }}"
+        paths: 
+          - vendor/bundle
+        save_cache: ~
+      - 
+        command: "bundle clean --force"
+        name: "Bundle Cleanup"
+        run: ~
+    working_directory: /tmp
+version: 2
