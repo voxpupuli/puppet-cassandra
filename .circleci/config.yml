@@ -2,7 +2,6 @@
 version: 2
 jobs:
   build:
-    working_directory: /tmp
     docker:
       - environment:
           PUPPET_VERSION: "~> 3.8"
