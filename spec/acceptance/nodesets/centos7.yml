@@ -1,15 +1,15 @@
+---
+CONFIG:
+  log_level: notice
+  type: foss
 HOSTS:
   centos7:
-    roles:
-      - master
-      - centos7
-      - nodes
-    platform: el-7-x86_64
-    image: centos:7
-    hypervisor: docker
-    docker_cmd: '["/sbin/init"]'
+    docker_cmd: "[\"/sbin/init\"]"
     docker_image_commands:
-      - 'yum -y install gcc tar systemd-container initscripts'
-CONFIG:
-  type: foss
-  log_level: notice
+      - "yum -y install gcc tar systemd-container initscripts"
+    hypervisor: docker
+    image: "centos:7"
+    platform: el-7-x86_64
+    roles:
+      - cassandra2
+      - cassandra3

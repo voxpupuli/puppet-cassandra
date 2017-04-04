@@ -1,14 +1,15 @@
+---
+CONFIG:
+  log_level: notice
+  type: foss
 HOSTS:
   ubuntu1204:
-    roles:
-      - nodes
-      - ubuntu12
-    platform: ubuntu-1204-amd64
-    image: ubuntu:12.04
-    hypervisor: docker
-    docker_cmd: '["/sbin/init"]'
+    docker_cmd: "[\"/sbin/init\"]"
     docker_image_commands:
-      - 'apt-get install -y iptables sudo'
-CONFIG:
-  type: foss
-  log_level: notice
+      - "apt-get install -y iptables sudo"
+    hypervisor: docker
+    image: "ubuntu:12.04"
+    platform: ubuntu-1204-amd64
+    roles:
+      - cassandra2
+      - cassandra3
