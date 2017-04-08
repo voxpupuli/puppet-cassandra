@@ -9,8 +9,7 @@ HOSTS:
       strict_variables: ~
     docker_cmd: "[\"/sbin/init\"]"
     docker_image_commands:
-      - "apt-get install -y locales-all net-tools sudo ufw wget"
-      - "rm -f /usr/sbin/policy-rc.d"
+      - "apt-get install -y wget"
     hypervisor: docker
     image: "debian:8"
     platform: debian-8-amd64

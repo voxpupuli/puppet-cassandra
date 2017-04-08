@@ -4,11 +4,10 @@ CONFIG:
   type: foss
 HOSTS:
   debian7:
-    docker_image_commands:
-      - "apt-get install -y sudo ufw wget"
     hypervisor: docker
     image: "debian:7"
     platform: debian-7-amd64
-  roles:
-    - cassandra2
-    - cassandra3
+    roles:
+      - cassandra2
+      - cassandra3
+      - firewall
