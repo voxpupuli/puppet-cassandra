@@ -4,6 +4,8 @@ CONFIG:
   type: foss
 HOSTS:
   debian7:
+    docker_image_commands:
+      - "apt-get install -y wget"
     hypervisor: docker
     image: "debian:7"
     platform: debian-7-amd64
