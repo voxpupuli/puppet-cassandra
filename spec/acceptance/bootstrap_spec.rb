@@ -76,7 +76,7 @@ describe 'Bootstrap' do
     }
   EOS
 
-  describe "Node specific manifest." do
+  describe 'Node specific manifest.' do
     it 'should work with no errors' do
       apply_manifest(bootstrap_pp, catch_failures: true)
       shell('[ -d /opt/rh/ruby200 ] && /usr/bin/gem install puppet -v 3.8.7 --no-rdoc --no-ri; true')
