@@ -15,6 +15,14 @@ describe 'Bootstrap' do
 
     notify { "${::operatingsystem}-${::operatingsystemmajrelease}": }
 
+    file { '/etc/dse':
+      ensure => directory,
+    } ->
+    file { '/etc/dse/dse-env.sh':
+      ensure  => present,
+      content => "#export DSE_HOME\n# export HADOOP_LOG_DIR=<log_dir>",
+    }
+
     case downcase("${::operatingsystem}-${::operatingsystemmajrelease}") {
       'centos-6': {
         package { ['gcc', 'tar', 'yum-utils', 'centos-release-scl']: } ->
