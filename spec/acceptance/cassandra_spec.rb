@@ -21,8 +21,8 @@ describe 'Cassanda Puppet Module' do
       cassandra_optutils_package = 'cassandra21-tools'
       cassandra_package = 'cassandra21'
     elsif version == 2.2
-      debian_release = '23x'
-      debian_package_ensure = '2.2.8'
+      debian_release = '22x'
+      debian_package_ensure = '2.2.9'
       redhat_package_ensure = '2.2.8-1'
       cassandra_optutils_package = 'cassandra22-tools'
       cassandra_package = 'cassandra22'
