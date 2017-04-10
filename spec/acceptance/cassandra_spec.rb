@@ -69,16 +69,17 @@ bootstrap_pp = <<-EOS
       package { ['locales-all', 'net-tools', 'sudo', 'ufw', 'ntp', 'python-pip', 'python-minimal']: } ->
       file { '/usr/sbin/policy-rc.d':
         ensure => absent,
-      } ->
-      exec { '/usr/bin/wget http://launchpadlibrarian.net/109052632/python-support_1.0.15_all.deb':
-        cwd => '/var/tmp',
-      } ->
-      exec { '/usr/bin/dpkg -i python-support_1.0.15_all.deb':
-        cwd => '/var/tmp',
-      } ->
-      package { 'cassandra-driver':
-        provider => 'pip',
       }
+#      } ->
+#      exec { '/usr/bin/wget http://launchpadlibrarian.net/109052632/python-support_1.0.15_all.deb':
+#        cwd => '/var/tmp',
+#      } ->
+#      exec { '/usr/bin/dpkg -i python-support_1.0.15_all.deb':
+#        cwd => '/var/tmp',
+#      } ->
+#      package { 'cassandra-driver':
+#        provider => 'pip',
+#      }
     }
   }
 EOS
@@ -105,7 +106,7 @@ describe 'Cassanda Puppet Module' do
       cassandra_package = 'cassandra21'
     elsif version == 2.2
       debian_release = '23x'
-      debian_package_ensure = '2.2.9'
+      debian_package_ensure = '2.2.8'
       redhat_package_ensure = '2.2.8-1'
       cassandra_optutils_package = 'cassandra22-tools'
       cassandra_package = 'cassandra22'
