@@ -90,31 +90,16 @@ describe 'Cassanda Puppet Module' do
           exec { '/usr/sbin/update-alternatives --install /usr/bin/ruby ruby /usr/bin/ruby2.0 1000': }
         }
         'ubuntu-14.04': {
-          package {['systemd', 'iptables', 'sudo']:} ->
-          file { '/bin/systemctl':
+          package {['net-tools', 'sudo', 'ufw']:} ->
+          file { '/usr/sbin/policy-rc.d':
             ensure => absent,
-          } ->
-          file { '/bin/true':
-            ensure => link,
-            target => '/bin/systemctl',
           }
         }
         'ubuntu-16.04': {
           package { ['locales-all', 'net-tools', 'sudo', 'ufw']: } ->
-    #      package { ['locales-all', 'net-tools', 'sudo', 'ufw', 'ntp', 'python-pip', 'python-minimal']: } ->
           file { '/usr/sbin/policy-rc.d':
             ensure => absent,
           }
-    #      } ->
-    #      exec { '/usr/bin/wget http://launchpadlibrarian.net/109052632/python-support_1.0.15_all.deb':
-    #        cwd => '/var/tmp',
-    #      } ->
-    #      exec { '/usr/bin/dpkg -i python-support_1.0.15_all.deb':
-    #        cwd => '/var/tmp',
-    #      } ->
-    #      package { 'cassandra-driver':
-    #        provider => 'pip',
-    #      }
         }
       }
     EOS
@@ -142,7 +127,7 @@ describe 'Cassanda Puppet Module' do
       }
 
       require cassandra::java
-      require cassandra::system::swapoff
+      # require cassandra::system::swapoff
       require cassandra::system::transparent_hugepage
 
       if versioncmp($::rubyversion, '1.9.0') < 0 {
