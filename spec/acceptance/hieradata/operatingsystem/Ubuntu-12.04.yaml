@@ -1,9 +1,0 @@
----
-cassandra::java::aptsource:
-  OpenJDK:
-    comment: 'OpenJDK builds (all archs)'
-    location: 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu'
-    release: 'precise'
-
-cassandra::system::sysctl::net_ipv4_tcp_rmem: '4096 87380 16777216'
-cassandra::system::sysctl::net_ipv4_tcp_wmem: '4096 65536 16777216'

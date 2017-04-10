@@ -1,5 +1,89 @@
 require 'spec_helper_acceptance'
-describe 'cassandra' do
+
+bootstrap_pp = <<-EOS
+  Exec {
+    path => [
+     '/usr/local/bin',
+     '/opt/local/bin',
+     '/usr/bin',
+     '/usr/sbin',
+     '/bin',
+     '/sbin'],
+     logoutput => true,
+  }
+
+  notify { "${::operatingsystem}-${::operatingsystemmajrelease}": }
+
+  file { '/etc/dse':
+    ensure => directory,
+  } ->
+  file { '/etc/dse/dse-env.sh':
+    ensure  => present,
+    content => "#export DSE_HOME\n# export HADOOP_LOG_DIR=<log_dir>",
+  }
+
+  case downcase("${::operatingsystem}-${::operatingsystemmajrelease}") {
+    'centos-6': {
+      package { ['gcc', 'tar', 'yum-utils', 'centos-release-scl']: } ->
+      exec { 'yum-config-manager --enable rhel-server-rhscl-7-rpms': } ->
+      package { ['ruby200', 'python27']: } ->
+      exec { 'cp /opt/rh/python27/enable /etc/profile.d/python.sh': } ->
+      exec { 'echo "\n" >> /etc/profile.d/python.sh': } ->
+      exec { 'echo "export PYTHONPATH=/usr/lib/python2.7/site-packages" >> /etc/profile.d/python.sh': } ->
+      exec { '/bin/cp /opt/rh/ruby200/enable /etc/profile.d/ruby.sh': } ->
+      exec { '/bin/rm /usr/bin/ruby /usr/bin/gem': } ->
+      exec { '/usr/sbin/alternatives --install /usr/bin/ruby ruby /opt/rh/ruby200/root/usr/bin/ruby 1000': } ->
+      exec { '/usr/sbin/alternatives --install /usr/bin/gem gem /opt/rh/ruby200/root/usr/bin/gem 1000': }
+    }
+    'centos-7': {
+      package { ['gcc', 'tar', 'initscripts']: }
+    }
+    'debian-7': {
+      package { ['sudo', 'ufw', 'wget']: }
+    }
+    'debian-8': {
+      package { ['locales-all', 'net-tools', 'sudo', 'ufw']: } ->
+      file { '/usr/sbin/policy-rc.d':
+        ensure => absent,
+      }
+    }
+    'ubuntu-12.04': {
+      package {['python-software-properties', 'iptables', 'sudo']:} ->
+      exec {'/usr/bin/apt-add-repository ppa:brightbox/ruby-ng':} ->
+      exec {'/usr/bin/apt-get update': } ->
+      package {'ruby2.0': } ->
+      exec { '/bin/rm /usr/bin/ruby': } ->
+      exec { '/usr/sbin/update-alternatives --install /usr/bin/ruby ruby /usr/bin/ruby2.0 1000': }
+    }
+    'ubuntu-14.04': {
+      package {['systemd', 'iptables', 'sudo']:} ->
+      file { '/bin/systemctl':
+        ensure => absent,
+      } ->
+      file { '/bin/true':
+        ensure => link,
+        target => '/bin/systemctl',
+      }
+    }
+    'ubuntu-16.04': {
+      package { ['locales-all', 'net-tools', 'sudo', 'ufw', 'ntp', 'python-pip', 'python-minimal']: } ->
+      file { '/usr/sbin/policy-rc.d':
+        ensure => absent,
+      } ->
+      exec { '/usr/bin/wget http://launchpadlibrarian.net/109052632/python-support_1.0.15_all.deb':
+        cwd => '/var/tmp',
+      } ->
+      exec { '/usr/bin/dpkg -i python-support_1.0.15_all.deb':
+        cwd => '/var/tmp',
+      } ->
+      package { 'cassandra-driver':
+        provider => 'pip',
+      }
+    }
+  }
+EOS
+
+describe 'Cassanda Puppet Module' do
   roles = hosts[0]['roles']
   versions = []
   versions.push(2.1) if roles.include? 'cassandra2'
@@ -33,42 +117,10 @@ describe 'cassandra' do
       cassandra_package = 'cassandra30'
     end
 
-    test_cassandra_dse_pp = <<-EOS
-      class { 'cassandra::dse':
-        file_lines => {
-          'Set HADOOP_LOG_DIR directory' => {
-            ensure => present,
-            path   => '/etc/dse/dse-env.sh',
-            line   => 'export HADOOP_LOG_DIR=/var/log/hadoop',
-            match  => '^# export HADOOP_LOG_DIR=<log_dir>',
-          },
-          'Set DSE_HOME'                 => {
-            ensure => present,
-            path   => '/etc/dse/dse-env.sh',
-            line   => 'export DSE_HOME=/usr/share/dse',
-            match  => '^#export DSE_HOME',
-          },
-        },
-        settings   => {
-          ldap_options => {
-            server_host                => localhost,
-            server_port                => 389,
-            search_dn                  => 'cn=Admin',
-            search_password            => secret,
-            use_ssl                    => false,
-            use_tls                    => false,
-            truststore_type            => jks,
-            user_search_base           => 'ou=users,dc=example,dc=com',
-            user_search_filter         => '(uid={0})',
-            credentials_validity_in_ms => 0,
-            connection_pool            => {
-              max_active => 8,
-              max_idle   => 8,
-            }
-          }
-        }
-      }
-    EOS
+    it "Pre-test preparation for #{version}" do
+      apply_manifest(bootstrap_pp, catch_failures: true)
+      shell('[ -d /opt/rh/ruby200 ] && /usr/bin/gem install puppet -v 3.8.7 --no-rdoc --no-ri; true')
+    end
 
     cassandra_install_pp = <<-EOS
       if $::osfamily == 'Debian' {
@@ -78,13 +130,13 @@ describe 'cassandra' do
         }
 
         $package_ensure = '#{debian_package_ensure}'
-        $cassandra_package = '#{cassandra_package}'
-        $cassandra_optutils_package = '#{cassandra_optutils_package}'
+        $cassandra_package = 'cassandra'
+        $cassandra_optutils_package = 'cassandra-tools'
       } else {
         require cassandra::datastax_repo
         $package_ensure = '#{redhat_package_ensure}'
-        $cassandra_package = 'cassandra'
-        $cassandra_optutils_package = 'cassandra-tools'
+        $cassandra_package = '#{cassandra_package}'
+        $cassandra_optutils_package = '#{cassandra_optutils_package}'
       }
 
       require cassandra::java
@@ -134,12 +186,45 @@ describe 'cassandra' do
       }
 
       #{firewall_pp}
-      #{test_cassandra_dse_pp}
+      include cassandra::dse
+    EOS
+
+    cassandra_uninstall_pp = <<-EOS
+      Exec {
+        path => [
+          '/usr/bin',
+          '/bin' ],
+        logoutput => true,
+      }
+      if $::osfamily == 'RedHat' {
+        $cassandra_optutils_package = '#{cassandra_optutils_package}'
+        $cassandra_package = '#{cassandra_package}'
+      } else {
+        $cassandra_optutils_package = 'cassandra-tools'
+        $cassandra_package = 'cassandra'
+      }
+      service { 'cassandra':
+        ensure => stopped,
+      } ->
+      package { $cassandra_optutils_package:
+        ensure => purged,
+      } ->
+      package { $cassandra_package:
+        ensure => purged,
+      } ->
+      exec { 'rm -rf /var/lib/cassandra/*/* /var/log/cassandra/*': }
     EOS
 
     it "Install Cassandra #{version}" do
       apply_manifest(cassandra_install_pp, catch_failures: true)
+    end
+
+    it "Test installation idempotency for Cassandra #{version}" do
       expect(apply_manifest(cassandra_install_pp, catch_failures: true).exit_code).to be_zero
+    end
+
+    it "########### Uninstall Cassandra #{version}." do
+      apply_manifest(cassandra_uninstall_pp, catch_failures: true)
     end
   end
 end
