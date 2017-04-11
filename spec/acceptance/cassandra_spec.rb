@@ -13,6 +13,75 @@ describe 'Cassanda Puppet Module' do
                   '# Firewall test skipped'
                 end
 
+  bootstrap_pp = <<-EOS
+    Exec {
+      path => [
+       '/usr/local/bin',
+       '/opt/local/bin',
+       '/usr/bin',
+       '/usr/sbin',
+       '/bin',
+       '/sbin'],
+       logoutput => true,
+    }
+
+    notify { "${::operatingsystem}-${::operatingsystemmajrelease}": }
+
+    file { '/etc/dse':
+      ensure => directory,
+    } ->
+    file { '/etc/dse/dse-env.sh':
+      ensure  => present,
+      content => "#export DSE_HOME\n# export HADOOP_LOG_DIR=<log_dir>",
+    }
+
+    case downcase("${::operatingsystem}-${::operatingsystemmajrelease}") {
+      'centos-6': {
+        package { ['gcc', 'tar', 'yum-utils', 'centos-release-scl']: } ->
+        exec { 'yum-config-manager --enable rhel-server-rhscl-7-rpms': } ->
+        package { ['ruby200', 'python27']: } ->
+        exec { 'cp /opt/rh/python27/enable /etc/profile.d/python.sh': } ->
+        exec { 'echo "\n" >> /etc/profile.d/python.sh': } ->
+        exec { 'echo "export PYTHONPATH=/usr/lib/python2.7/site-packages" >> /etc/profile.d/python.sh': } ->
+        exec { '/bin/cp /opt/rh/ruby200/enable /etc/profile.d/ruby.sh': } ->
+        exec { '/bin/rm /usr/bin/ruby /usr/bin/gem': } ->
+        exec { '/usr/sbin/alternatives --install /usr/bin/ruby ruby /opt/rh/ruby200/root/usr/bin/ruby 1000': } ->
+        exec { '/usr/sbin/alternatives --install /usr/bin/gem gem /opt/rh/ruby200/root/usr/bin/gem 1000': }
+      }
+      'centos-7': {
+        package { ['gcc', 'tar', 'initscripts']: }
+      }
+      'debian-7': {
+        package { ['sudo', 'ufw', 'wget']: }
+      }
+      'debian-8': {
+        package { ['locales-all', 'net-tools', 'sudo', 'ufw']: } ->
+        file { '/usr/sbin/policy-rc.d':
+          ensure => absent,
+        }
+      }
+      'ubuntu-12.04': {
+        package {['python-software-properties', 'iptables', 'sudo']:} ->
+        exec {'/usr/bin/apt-add-repository ppa:brightbox/ruby-ng':} ->
+        exec {'/usr/bin/apt-get update': } ->
+        package {'ruby2.0': } ->
+        exec { '/bin/rm /usr/bin/ruby': } ->
+        exec { '/usr/sbin/update-alternatives --install /usr/bin/ruby ruby /usr/bin/ruby2.0 1000': }
+      }
+      'ubuntu-16.04': {
+        package { ['locales-all', 'net-tools', 'sudo', 'ufw']: } ->
+        file { '/usr/sbin/policy-rc.d':
+          ensure => absent,
+        }
+      }
+    }
+  EOS
+
+  it "Initial test preparation" do
+    apply_manifest(bootstrap_pp, catch_failures: true)
+    shell('[ -d /opt/rh/ruby200 ] && /usr/bin/gem install puppet -v 3.8.7 --no-rdoc --no-ri; true')
+  end
+
   versions.each do |version|
     if version == 2.1
       debian_release = '21x'
@@ -32,75 +101,6 @@ describe 'Cassanda Puppet Module' do
       redhat_package_ensure = '3.0.9-1'
       cassandra_optutils_package = 'cassandra30-tools'
       cassandra_package = 'cassandra30'
-    end
-
-    bootstrap_pp = <<-EOS
-      Exec {
-        path => [
-         '/usr/local/bin',
-         '/opt/local/bin',
-         '/usr/bin',
-         '/usr/sbin',
-         '/bin',
-         '/sbin'],
-         logoutput => true,
-      }
-
-      notify { "${::operatingsystem}-${::operatingsystemmajrelease}": }
-
-      file { '/etc/dse':
-        ensure => directory,
-      } ->
-      file { '/etc/dse/dse-env.sh':
-        ensure  => present,
-        content => "#export DSE_HOME\n# export HADOOP_LOG_DIR=<log_dir>",
-      }
-
-      case downcase("${::operatingsystem}-${::operatingsystemmajrelease}") {
-        'centos-6': {
-          package { ['gcc', 'tar', 'yum-utils', 'centos-release-scl']: } ->
-          exec { 'yum-config-manager --enable rhel-server-rhscl-7-rpms': } ->
-          package { ['ruby200', 'python27']: } ->
-          exec { 'cp /opt/rh/python27/enable /etc/profile.d/python.sh': } ->
-          exec { 'echo "\n" >> /etc/profile.d/python.sh': } ->
-          exec { 'echo "export PYTHONPATH=/usr/lib/python2.7/site-packages" >> /etc/profile.d/python.sh': } ->
-          exec { '/bin/cp /opt/rh/ruby200/enable /etc/profile.d/ruby.sh': } ->
-          exec { '/bin/rm /usr/bin/ruby /usr/bin/gem': } ->
-          exec { '/usr/sbin/alternatives --install /usr/bin/ruby ruby /opt/rh/ruby200/root/usr/bin/ruby 1000': } ->
-          exec { '/usr/sbin/alternatives --install /usr/bin/gem gem /opt/rh/ruby200/root/usr/bin/gem 1000': }
-        }
-        'centos-7': {
-          package { ['gcc', 'tar', 'initscripts']: }
-        }
-        'debian-7': {
-          package { ['sudo', 'ufw', 'wget']: }
-        }
-        'debian-8': {
-          package { ['locales-all', 'net-tools', 'sudo', 'ufw']: } ->
-          file { '/usr/sbin/policy-rc.d':
-            ensure => absent,
-          }
-        }
-        'ubuntu-12.04': {
-          package {['python-software-properties', 'iptables', 'sudo']:} ->
-          exec {'/usr/bin/apt-add-repository ppa:brightbox/ruby-ng':} ->
-          exec {'/usr/bin/apt-get update': } ->
-          package {'ruby2.0': } ->
-          exec { '/bin/rm /usr/bin/ruby': } ->
-          exec { '/usr/sbin/update-alternatives --install /usr/bin/ruby ruby /usr/bin/ruby2.0 1000': }
-        }
-        'ubuntu-16.04': {
-          package { ['locales-all', 'net-tools', 'sudo', 'ufw']: } ->
-          file { '/usr/sbin/policy-rc.d':
-            ensure => absent,
-          }
-        }
-      }
-    EOS
-
-    it "Pre-test preparation for #{version}" do
-      apply_manifest(bootstrap_pp, catch_failures: true)
-      shell('[ -d /opt/rh/ruby200 ] && /usr/bin/gem install puppet -v 3.8.7 --no-rdoc --no-ri; true')
     end
 
     cassandra_install_pp = <<-EOS
@@ -138,12 +138,14 @@ describe 'Cassanda Puppet Module' do
           package_ensure  => $package_ensure,
           package_name    => $cassandra_package,
           service_refresh => $service_refresh,
+          require         => Class['cassandra::java'],
         }
       } else {
         class { 'cassandra':
           package_ensure  => $package_ensure,
           package_name    => $cassandra_package,
           service_refresh => $service_refresh,
+          require         => Class['cassandra::java'],
         }
       }
 
