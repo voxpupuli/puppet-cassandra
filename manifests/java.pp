@@ -58,8 +58,10 @@ class cassandra::java (
 
   package { $package_name:
     ensure => $package_ensure,
-  } ->
+  }
+
   package { $jna_package_name:
-    ensure => $jna_ensure,
+    ensure  => $jna_ensure,
+    require => Package[$package_name],
   }
 }
