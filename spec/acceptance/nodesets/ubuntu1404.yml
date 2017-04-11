@@ -4,6 +4,10 @@ CONFIG:
   type: foss
 HOSTS:
   ubuntu1404:
+    docker_image_commands:
+      - 'apt-get install -y iptables sudo systemd'
+      - 'rm /bin/systemctl'
+      - 'ln -s /bin/true /bin/systemctl'
     hypervisor: docker
     image: "ubuntu:14.04"
     platform: ubuntu-14.04-x64

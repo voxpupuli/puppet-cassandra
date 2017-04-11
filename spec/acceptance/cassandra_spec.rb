@@ -89,12 +89,6 @@ describe 'Cassanda Puppet Module' do
           exec { '/bin/rm /usr/bin/ruby': } ->
           exec { '/usr/sbin/update-alternatives --install /usr/bin/ruby ruby /usr/bin/ruby2.0 1000': }
         }
-        'ubuntu-14.04': {
-          package {['net-tools', 'sudo', 'ufw']:} ->
-          file { '/usr/sbin/policy-rc.d':
-            ensure => absent,
-          }
-        }
         'ubuntu-16.04': {
           package { ['locales-all', 'net-tools', 'sudo', 'ufw']: } ->
           file { '/usr/sbin/policy-rc.d':
@@ -114,21 +108,25 @@ describe 'Cassanda Puppet Module' do
         class { 'cassandra::apache_repo':
           release => '#{debian_release}',
           before  => Class['cassandra', 'cassandra::optutils'],
+          require => Class['cassandra::java'],
         }
 
         $package_ensure = '#{debian_package_ensure}'
         $cassandra_package = 'cassandra'
         $cassandra_optutils_package = 'cassandra-tools'
       } else {
-        require cassandra::datastax_repo
+        class { 'cassandra::datastax_repo':
+          require => Class['cassandra::java'],
+        }
+
         $package_ensure = '#{redhat_package_ensure}'
         $cassandra_package = '#{cassandra_package}'
         $cassandra_optutils_package = '#{cassandra_optutils_package}'
       }
 
-      require cassandra::java
-      # require cassandra::system::swapoff
-      require cassandra::system::transparent_hugepage
+      class { 'cassandra::system::swapoff': } ->
+      class { 'cassandra::system::transparent_hugepage': } ->
+      class { 'cassandra::java': }
 
       if versioncmp($::rubyversion, '1.9.0') < 0 {
         $service_refresh = false
