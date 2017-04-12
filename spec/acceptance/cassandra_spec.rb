@@ -6,6 +6,7 @@ describe 'Cassanda Puppet Module' do
   versions.push(2.1) if roles.include? 'cassandra2'
   versions.push(2.2) if roles.include? 'cassandra2'
   versions.push(3.0) if roles.include? 'cassandra3'
+  osfamily = fact('osfamily')
 
   firewall_pp = if roles.include? 'firewall'
                   "include '::cassandra::firewall_ports'"
@@ -77,7 +78,7 @@ describe 'Cassanda Puppet Module' do
     }
   EOS
 
-  it 'Initial test preparation' do
+  it "Initial test preparation (#{osfamily})" do
     apply_manifest(bootstrap_pp, catch_failures: true)
     shell('[ -d /opt/rh/ruby200 ] && /usr/bin/gem install puppet -v 3.8.7 --no-rdoc --no-ri; true')
   end
@@ -174,6 +175,90 @@ describe 'Cassanda Puppet Module' do
       include cassandra::dse
     EOS
 
+    schema_create_pp = <<-EOS
+      #{cassandra_install_pp}
+      $cql_types = {
+        'fullname' => {
+          'keyspace' => 'mykeyspace',
+          'fields'   => {
+          'fname' => 'text',
+            'lname' => 'text',
+          },
+        },
+      }
+      $keyspaces = {
+        'mykeyspace' => {
+          ensure          => present,
+          replication_map => {
+            keyspace_class     => 'SimpleStrategy',
+            replication_factor => 1,
+          },
+          durable_writes  => false,
+        },
+      }
+      class { 'cassandra::schema':
+        cql_types      => $cql_types,
+        cqlsh_password => 'cassandra',
+        cqlsh_user     => 'cassandra',
+        indexes        => {
+          'users_lname_idx' => {
+            keyspace => 'mykeyspace',
+            table    => 'users',
+            keys     => 'lname',
+          },
+        },
+        keyspaces      => $keyspaces,
+        tables         => {
+          'users' => {
+            'keyspace' => 'mykeyspace',
+            'columns'  => {
+              'userid'      => 'int',
+              'fname'       => 'text',
+              'lname'       => 'text',
+              'PRIMARY KEY' => '(userid)',
+            },
+          },
+        },
+        permissions    => {
+          'Grant select permissions to spillman to all keyspaces' => {
+            permission_name => 'SELECT',
+            user_name       => 'spillman',
+          },
+          'Grant modify to to keyspace mykeyspace to akers'       => {
+            keyspace_name   => 'mykeyspace',
+            permission_name => 'MODIFY',
+            user_name       => 'akers',
+          },
+          'Grant alter permissions to mykeyspace to boone'        => {
+            keyspace_name   => 'mykeyspace',
+            permission_name => 'ALTER',
+            user_name       => 'boone',
+          },
+          'Grant ALL permissions to mykeyspace.users to gbennet'  => {
+            keyspace_name   => 'mykeyspace',
+            permission_name => 'ALTER',
+            table_name      => 'users',
+            user_name       => 'gbennet',
+          },
+        },
+        users          => {
+          'akers'    => {
+            password  => 'Niner2',
+            superuser => true,
+          },
+          'boone'    => {
+            password => 'Niner75',
+          },
+          'gbennet' => {
+            password => 'Strewth',
+          },
+          'spillman' => {
+            password => 'Niner27',
+          },
+        },
+      }
+    EOS
+
     cassandra_uninstall_pp = <<-EOS
       Exec {
         path => [
@@ -200,12 +285,24 @@ describe 'Cassanda Puppet Module' do
       exec { 'rm -rf /var/lib/cassandra/*/* /var/log/cassandra/*': }
     EOS
 
+    pp = <<-EOS
+      #{cassandra_install_pp}
+      #{schema_create_pp}
+    EOS
+
     it "Install Cassandra #{version}" do
-      apply_manifest(cassandra_install_pp, catch_failures: true)
+      apply_manifest(pp, catch_failures: true)
     end
 
     it "Test installation idempotency for Cassandra #{version}" do
-      expect(apply_manifest(cassandra_install_pp, catch_failures: true).exit_code).to be_zero
+      expect(apply_manifest(pp, catch_failures: true).exit_code).to be_zero
+    end
+
+    describe service('cassandra') do
+      it do
+        is_expected.to be_running
+        is_expected.to be_enabled
+      end
     end
 
     it "########### Uninstall Cassandra #{version}." do
