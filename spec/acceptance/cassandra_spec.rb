@@ -176,7 +176,6 @@ describe 'Cassanda Puppet Module' do
     EOS
 
     schema_create_pp = <<-EOS
-      #{cassandra_install_pp}
       $cql_types = {
         'fullname' => {
           'keyspace' => 'mykeyspace',
@@ -259,6 +258,30 @@ describe 'Cassanda Puppet Module' do
       }
     EOS
 
+    facts_testing_pp = <<-EOS
+      #{cassandra_install_pp}
+
+      if $::cassandrarelease != $version {
+        fail("Test1: ${version} != ${::cassandrarelease}")
+      }
+      $assembled_version = "${::cassandramajorversion}.${::cassandraminorversion}.${::cassandrapatchversion}"
+      if $version != $assembled_version {
+        fail("Test2: ${version} != ${::assembled_version}")
+      }
+      if $::cassandramaxheapsize <= 0 {
+        fail('cassandramaxheapsize is not set.')
+      }
+      if $::cassandracmsmaxheapsize <= 0 {
+        fail('cassandracmsmaxheapsize is not set.')
+      }
+      if $::cassandraheapnewsize <= 0 {
+        fail('cassandraheapnewsize is not set.')
+      }
+      if $::cassandracmsheapnewsize <= 0 {
+        fail('cassandracmsheapnewsize is not set.')
+      }
+    EOS
+
     cassandra_uninstall_pp = <<-EOS
       Exec {
         path => [
@@ -298,6 +321,12 @@ describe 'Cassanda Puppet Module' do
       expect(apply_manifest(pp, catch_failures: true).exit_code).to be_zero
     end
 
+    describe 'Facts Tests.' do
+      it 'should work with no errors' do
+        apply_manifest(facts_testing_pp, catch_failures: true)
+      end
+    end
+
     describe service('cassandra') do
       it do
         is_expected.to be_running
@@ -305,7 +334,17 @@ describe 'Cassanda Puppet Module' do
       end
     end
 
-    it "########### Uninstall Cassandra #{version}." do
+    if osfamily == 'RedHat' do
+      describe service('datastax-agent') do
+        it do
+          is_expected.to be_running
+          is_expected.to be_enabled
+        end
+      end
+    end
+
+    it "Uninstall Cassandra #{version}." do
+      shell("grep -v -e '^INFO' -e '^\s*INFO' /var/log/cassandra/system.log")
       apply_manifest(cassandra_uninstall_pp, catch_failures: true)
     end
   end
