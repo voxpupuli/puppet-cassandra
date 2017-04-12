@@ -334,7 +334,7 @@ describe 'Cassanda Puppet Module' do
       end
     end
 
-    if osfamily == 'RedHat' do
+    if osfamily == 'RedHat'
       describe service('datastax-agent') do
         it do
           is_expected.to be_running
