@@ -8,11 +8,16 @@ describe 'Cassanda Puppet Module' do
   versions.push(3.0) if roles.include? 'cassandra3'
   osfamily = fact('osfamily')
 
-  firewall_pp = if roles.include? 'firewall'
-                  "include '::cassandra::firewall_ports'"
-                else
-                  '# Firewall test skipped'
-                end
+  firewall_pp =
+  if roles.include? 'firewall'
+    firewall_pp = <<-EOS
+      class { '::cassandra::firewall_ports':
+        require => Class['::cassandra'],
+      }
+    EOS
+  else
+    firewall_pp = '# Firewall test skipped'
+  end
 
   bootstrap_pp = <<-EOS
     Exec {
@@ -317,16 +322,6 @@ describe 'Cassanda Puppet Module' do
       apply_manifest(pp, catch_failures: true)
     end
 
-    it "Test installation idempotency for Cassandra #{version}" do
-      expect(apply_manifest(pp, catch_failures: true).exit_code).to be_zero
-    end
-
-    describe 'Facts Tests.' do
-      it 'should work with no errors' do
-        apply_manifest(facts_testing_pp, catch_failures: true)
-      end
-    end
-
     describe service('cassandra') do
       it do
         is_expected.to be_running
@@ -341,6 +336,16 @@ describe 'Cassanda Puppet Module' do
           is_expected.to be_enabled
         end
       end
+    end
+
+    describe 'Facts Tests.' do
+      it 'should work with no errors' do
+        apply_manifest(facts_testing_pp, catch_failures: true)
+      end
+    end
+
+    it "Test installation idempotency for Cassandra #{version}" do
+      expect(apply_manifest(pp, catch_failures: true).exit_code).to be_zero
     end
 
     it "Uninstall Cassandra #{version}." do
