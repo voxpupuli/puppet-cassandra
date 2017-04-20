@@ -21,7 +21,7 @@ class TestManifests
     @cassandra_package = 'cassandra21'
   end
 
-  def ini22
+  def init22
     @debian_release = '22x'
     @debian_package_ensure = '2.2.9'
     @redhat_package_ensure = '2.2.8-1'
