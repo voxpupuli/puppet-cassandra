@@ -123,7 +123,7 @@ class TestManifests
       $cassandra_optutils_package = '#{@cassandra_optutils_package}'
     }
 
-    require cassandra::system::swapoff
+    # require cassandra::system::swapoff
     require cassandra::system::transparent_hugepage
     include cassandra::java
 

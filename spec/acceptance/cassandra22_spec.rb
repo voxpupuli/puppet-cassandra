@@ -2,7 +2,7 @@ require 'spec_helper_acceptance'
 require_relative 'test_manifests'
 
 roles = hosts[0]['roles']
-version = 2.1
+version = 2.2
 t = TestManifests.new(roles, version)
 firewall_pp = t.firewall_pp()
 cassandra_install_pp = t.cassandra_install_pp(firewall_pp)
@@ -10,7 +10,7 @@ schema_create_pp = t.schema_create_pp()
 facts_testing_pp = t.facts_testing_pp(cassandra_install_pp)
 cassandra_uninstall_pp = t.cassandra_uninstall_pp()
 
-describe 'Cassandra 2.1', if roles.include? 'cassandra2'
+describe 'Cassandra 2.2', if roles.include? 'cassandra2'
                             describe '########### Cassandra installation.' do
                               it 'should work with no errors' do
                                 apply_manifest(cassandra_install_pp, catch_failures: true)
