@@ -1,5 +1,4 @@
 require 'spec_helper_acceptance'
-require_relative 'test_manifests'
 
 osfamily = fact('osfamily')
 roles = hosts[0]['roles']
