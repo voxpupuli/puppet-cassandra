@@ -112,6 +112,12 @@ describe 'cassandra' do
       end
     end
 
+    describe "Facts Tests for #{version}" do
+      it 'should work with no errors' do
+        apply_manifest(t.facts_testing_pp, catch_failures: true)
+      end
+    end
+
     next unless version != 3.0
     describe "Uninstall #{version}." do
       it 'should work with no errors' do

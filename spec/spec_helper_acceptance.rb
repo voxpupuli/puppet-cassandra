@@ -212,13 +212,16 @@ class TestManifests
     <<-EOS
       #{cassandra_install_pp}
 
-      if $::cassandrarelease != $version {
-        fail("Test1: ${version} != ${::cassandrarelease}")
+      if $::osfamily == 'Debian' {
+        $package_comparison = $cassandrarelease
+      } else {
+        $package_comparison = "${cassandrarelease}-1"
       }
-      $assembled_version = "${::cassandramajorversion}.${::cassandraminorversion}.${::cassandrapatchversion}"
-      if $version != $assembled_version {
-        fail("Test2: ${version} != ${::assembled_version}")
+
+      if $::cassandrarelease != $package_ensure {
+        fail("cassandrarelease: ${package_comparison} != ${package_ensure}")
       }
+
       if $::cassandramaxheapsize <= 0 {
         fail('cassandramaxheapsize is not set.')
       }
