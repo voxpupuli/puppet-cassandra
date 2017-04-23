@@ -249,7 +249,7 @@ class TestManifests
   end
 
   def permissions_revoke_pp
-    pp = <<-EOS
+    <<-EOS
       #{cassandra_install_pp}
       class { 'cassandra::schema':
         cqlsh_password      => 'Niner2',
@@ -283,11 +283,10 @@ class TestManifests
         },
       }
     EOS
-    pp
   end
 
   def schema_create_pp
-    pp <<-EOS
+    <<-EOS
       #{cassandra_install_pp}
 
       $cql_types = {
@@ -371,11 +370,10 @@ class TestManifests
         },
       }
     EOS
-    pp
   end
 
   def schema_drop_index_pp
-    pp = <<-EOS
+    <<-EOS
       #{cassandra_install_pp}
       class { 'cassandra::schema':
         cqlsh_user     => 'akers',
@@ -389,11 +387,10 @@ class TestManifests
         },
       }
     EOS
-    pp
   end
 
   def schema_drop_table_pp
-    pp = <<-EOS
+    <<-EOS
       #{cassandra_install_pp}
       class { 'cassandra::schema':
         cqlsh_password => 'Niner2',
@@ -406,11 +403,10 @@ class TestManifests
         },
       }
     EOS
-    pp
   end
 
   def schema_drop_keyspace_pp
-    pp = <<-EOS
+    <<-EOS
       #{cassandra_install_pp}
       $keyspaces = {
         'mykeyspace' => {
@@ -423,7 +419,6 @@ class TestManifests
         keyspaces      => $keyspaces,
       }
     EOS
-    pp
   end
 
   def schema_drop_type_pp
