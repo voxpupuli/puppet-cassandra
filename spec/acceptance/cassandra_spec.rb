@@ -40,28 +40,83 @@ describe 'cassandra' do
       end
     end
 
-    # describe "Create schema for #{version}." do
-    #   firewall_pp = t.firewall_pp()
-    #   cassandra_install_pp = t.cassandra_install_pp(firewall_pp)
-    #   schema_create_pp = <<-EOS
-    #     #{cassandra_install_pp}
-    #     #{t.schema_create_pp}
-    #   EOS
-    #
-    #   it 'should work with no errors' do
-    #     apply_manifest(schema_create_pp, catch_failures: true)
-    #   end
-    #
-    #   if version != 2.1
-    #     it 'check code is idempotent' do
-    #       expect(apply_manifest(schema_create_pp, catch_failures: true).exit_code).to be_zero
-    #     end
-    #   end
-    # end
-
-    describe "Uninstall #{version}." do
+    describe "Create schema for #{version}." do
       it 'should work with no errors' do
-        apply_manifest(t.cassandra_uninstall_pp, catch_failures: true)
+        apply_manifest(t.schema_create_pp, catch_failures: true)
+      end
+
+      if version != 2.1
+        it 'check code is idempotent' do
+          expect(apply_manifest(t.schema_create_pp, catch_failures: true).exit_code).to be_zero
+        end
+      end
+    end
+
+    describe "Schema drop type for #{version}." do
+      it 'should work with no errors' do
+        apply_manifest(t.schema_drop_type_pp, catch_failures: true)
+      end
+
+      it 'check code is idempotent' do
+        expect(apply_manifest(t.schema_drop_type_pp, catch_failures: true).exit_code).to be_zero
+      end
+    end
+
+    describe "Revoke permissions for #{version}." do
+      it 'should work with no errors' do
+        apply_manifest(t.permissions_revoke_pp, catch_failures: true)
+      end
+
+      it 'check code is idempotent' do
+        expect(apply_manifest(t.permissions_revoke_pp, catch_failures: true).exit_code).to be_zero
+      end
+    end
+
+    describe "Drop user for #{version}" do
+      it 'should work with no errors' do
+        apply_manifest(t.schema_drop_user_pp, catch_failures: true)
+      end
+
+      it 'check code is idempotent' do
+        expect(apply_manifest(t.schema_drop_user_pp, catch_failures: true).exit_code).to be_zero
+      end
+    end
+
+    describe "Drop index for #{version}" do
+      it 'should work with no errors' do
+        apply_manifest(t.schema_drop_index_pp, catch_failures: true)
+      end
+
+      it 'check code is idempotent' do
+        expect(apply_manifest(t.schema_drop_index_pp, catch_failures: true).exit_code).to be_zero
+      end
+    end
+
+    describe "Drop table for #{version}" do
+      it 'should work with no errors' do
+        apply_manifest(t.schema_drop_table_pp, catch_failures: true)
+      end
+
+      it 'check code is idempotent' do
+        expect(apply_manifest(t.schema_drop_table_pp, catch_failures: true).exit_code).to be_zero
+      end
+    end
+
+    describe "Drop keyspace for #{version}" do
+      it 'should work with no errors' do
+        apply_manifest(t.schema_drop_keyspace_pp, catch_failures: true)
+      end
+
+      it 'check code is idempotent' do
+        expect(apply_manifest(t.schema_drop_keyspace_pp, catch_failures: true).exit_code).to be_zero
+      end
+    end
+
+    if version != 3.0
+      describe "Uninstall #{version}." do
+        it 'should work with no errors' do
+          apply_manifest(t.cassandra_uninstall_pp, catch_failures: true)
+        end
       end
     end
   end

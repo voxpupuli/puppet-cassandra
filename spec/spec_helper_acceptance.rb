@@ -248,14 +248,9 @@ class TestManifests
     pp
   end
 
-  def notify_pp
-    <<-EOS
-      notify { "#{@version}": }
-    EOS
-  end
-
   def permissions_revoke_pp
     pp = <<-EOS
+      #{cassandra_install_pp}
       class { 'cassandra::schema':
         cqlsh_password      => 'Niner2',
         cqlsh_user          => 'akers',
@@ -287,23 +282,6 @@ class TestManifests
           },
         },
       }
-    EOS
-    pp
-  end
-
-  def schema_drop_type_pp
-    pp = <<-EOS
-     $cql_types = {
-       'fullname' => {
-         'keyspace' => 'mykeyspace',
-         'ensure'   => 'absent'
-       }
-     }
-     class { 'cassandra::schema':
-       cql_types      => $cql_types,
-       cqlsh_user     => 'akers',
-       cqlsh_password => 'Niner2',
-     }
     EOS
     pp
   end
@@ -389,6 +367,89 @@ class TestManifests
           },
           'spillman' => {
             password => 'Niner27',
+          },
+        },
+      }
+    EOS
+  end
+
+  def schema_drop_index_pp
+    pp = <<-EOS
+      #{cassandra_install_pp}
+      class { 'cassandra::schema':
+        cqlsh_user     => 'akers',
+        cqlsh_password => 'Niner2',
+        indexes        => {
+          'users_lname_idx' => {
+            ensure   => absent,
+            keyspace => 'mykeyspace',
+            table    => 'users',
+          },
+        },
+      }
+    EOS
+  end
+
+  def schema_drop_table_pp
+    pp = <<-EOS
+      #{cassandra_install_pp}
+      class { 'cassandra::schema':
+        cqlsh_password => 'Niner2',
+        cqlsh_user     => 'akers',
+        tables         => {
+          'users' => {
+            ensure   => absent,
+            keyspace => 'mykeyspace',
+          },
+        },
+      }
+    EOS
+  end
+
+  def schema_drop_keyspace_pp
+    pp = <<-EOS
+      #{cassandra_install_pp}
+      $keyspaces = {
+        'mykeyspace' => {
+          ensure => absent,
+        }
+      }
+      class { 'cassandra::schema':
+        cqlsh_password => 'Niner2',
+        cqlsh_user     => 'akers',
+        keyspaces      => $keyspaces,
+      }
+    EOS
+  end
+
+  def schema_drop_type_pp
+    pp = <<-EOS
+      #{cassandra_install_pp}
+      $cql_types = {
+       'fullname' => {
+         'keyspace' => 'mykeyspace',
+         'ensure'   => 'absent'
+       }
+      }
+      class { 'cassandra::schema':
+       cql_types      => $cql_types,
+       cqlsh_user     => 'akers',
+       cqlsh_password => 'Niner2',
+      }
+    EOS
+    pp
+  end
+
+  def schema_drop_user_pp
+    <<-EOS
+      #{cassandra_install_pp}
+      class { 'cassandra::schema':
+        cqlsh_password      => 'Niner2',
+        cqlsh_user          => 'akers',
+        cqlsh_client_config => '/root/.puppetcqlshrc',
+        users               => {
+          'boone' => {
+            ensure => absent,
           },
         },
       }
