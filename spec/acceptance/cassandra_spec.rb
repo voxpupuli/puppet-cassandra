@@ -112,11 +112,10 @@ describe 'cassandra' do
       end
     end
 
-    if version != 3.0
-      describe "Uninstall #{version}." do
-        it 'should work with no errors' do
-          apply_manifest(t.cassandra_uninstall_pp, catch_failures: true)
-        end
+    next unless version != 3.0
+    describe "Uninstall #{version}." do
+      it 'should work with no errors' do
+        apply_manifest(t.cassandra_uninstall_pp, catch_failures: true)
       end
     end
   end

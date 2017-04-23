@@ -287,7 +287,7 @@ class TestManifests
   end
 
   def schema_create_pp
-    <<-EOS
+    pp <<-EOS
       #{cassandra_install_pp}
 
       $cql_types = {
@@ -371,6 +371,7 @@ class TestManifests
         },
       }
     EOS
+    pp
   end
 
   def schema_drop_index_pp
@@ -388,6 +389,7 @@ class TestManifests
         },
       }
     EOS
+    pp
   end
 
   def schema_drop_table_pp
@@ -404,6 +406,7 @@ class TestManifests
         },
       }
     EOS
+    pp
   end
 
   def schema_drop_keyspace_pp
@@ -420,6 +423,7 @@ class TestManifests
         keyspaces      => $keyspaces,
       }
     EOS
+    pp
   end
 
   def schema_drop_type_pp
@@ -441,7 +445,7 @@ class TestManifests
   end
 
   def schema_drop_user_pp
-    <<-EOS
+    pp = <<-EOS
       #{cassandra_install_pp}
       class { 'cassandra::schema':
         cqlsh_password      => 'Niner2',
@@ -454,6 +458,7 @@ class TestManifests
         },
       }
     EOS
+    pp
   end
 end
 
