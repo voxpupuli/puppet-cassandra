@@ -153,14 +153,15 @@ class TestManifests
       }
     }
 
-    if $::lsbdistid == 'Ubuntu' {
-      if $::operatingsystemmajrelease >= 16 {
-        # Workarounds for amonst other things CASSANDRA-11850
-        Exec {
-          environment => [ 'CQLSH_NO_BUNDLED=TRUE' ]
-        }
-      }
-    }
+    ## No longer required now using Apache Cassandra
+    # if $::lsbdistid == 'Ubuntu' {
+    #   if $::operatingsystemmajrelease >= 16 {
+    #     # Workarounds for amonst other things CASSANDRA-11850
+    #     Exec {
+    #       environment => [ 'CQLSH_NO_BUNDLED=TRUE' ]
+    #     }
+    #   }
+    # }
 
     class { 'cassandra::optutils':
       package_ensure => $package_ensure,
