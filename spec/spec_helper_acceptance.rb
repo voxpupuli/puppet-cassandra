@@ -126,7 +126,7 @@ class TestManifests
       $cassandra_optutils_package = '#{@cassandra_optutils_package}'
     }
 
-    # require cassandra::system::swapoff
+    require cassandra::system::swapoff
     require cassandra::system::transparent_hugepage
     include cassandra::java
 
@@ -245,6 +245,60 @@ class TestManifests
             # Firewall test skipped
           EOS
          end
+    pp
+  end
+
+  def permissions_revoke_pp
+    pp = <<-EOS
+      class { 'cassandra::schema':
+        cqlsh_password      => 'Niner2',
+        cqlsh_user          => 'akers',
+        cqlsh_client_config => '/root/.puppetcqlshrc',
+        permissions    => {
+          'Revoke select permissions to spillman to all keyspaces' => {
+            ensure          => absent,
+            permission_name => 'SELECT',
+            user_name       => 'spillman',
+          },
+          'Revoke modify to to keyspace mykeyspace to akers'       => {
+            ensure          => absent,
+            keyspace_name   => 'mykeyspace',
+            permission_name => 'MODIFY',
+            user_name       => 'akers',
+          },
+          'Revoke alter permissions to mykeyspace to boone'        => {
+            ensure          => absent,
+            keyspace_name   => 'mykeyspace',
+            permission_name => 'ALTER',
+            user_name       => 'boone',
+          },
+          'Revoke ALL permissions to mykeyspace.users to gbennet'  => {
+            ensure          => absent,
+            keyspace_name   => 'mykeyspace',
+            permission_name => 'ALTER',
+            table_name      => 'users',
+            user_name       => 'gbennet',
+          },
+        },
+      }
+    EOS
+    pp
+  end
+
+  def schema_drop_type_pp
+    pp = <<-EOS
+     $cql_types = {
+       'fullname' => {
+         'keyspace' => 'mykeyspace',
+         'ensure'   => 'absent'
+       }
+     }
+     class { 'cassandra::schema':
+       cql_types      => $cql_types,
+       cqlsh_user     => 'akers',
+       cqlsh_password => 'Niner2',
+     }
+    EOS
     pp
   end
 
