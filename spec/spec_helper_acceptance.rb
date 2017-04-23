@@ -106,7 +106,7 @@ class TestManifests
     EOS
   end
 
-  def cassandra_install_pp(firewall_pp)
+  def cassandra_install_pp
     <<-EOS
     if $::osfamily == 'Debian' {
       class { 'cassandra::apache_repo':
@@ -207,7 +207,7 @@ class TestManifests
     EOS
   end
 
-  def facts_testing_pp(cassandra_install_pp)
+  def facts_testing_pp
     <<-EOS
       #{cassandra_install_pp}
 
@@ -246,6 +246,12 @@ class TestManifests
           EOS
          end
     pp
+  end
+
+  def notify_pp
+    <<-EOS
+      notify { "#{@version}": }
+    EOS
   end
 
   def permissions_revoke_pp
@@ -304,6 +310,8 @@ class TestManifests
 
   def schema_create_pp
     <<-EOS
+      #{cassandra_install_pp}
+
       $cql_types = {
         'fullname' => {
           'keyspace' => 'mykeyspace',
