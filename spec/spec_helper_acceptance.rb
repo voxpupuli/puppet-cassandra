@@ -218,7 +218,7 @@ class TestManifests
         $package_comparison = "${cassandrarelease}-1"
       }
 
-      if $::cassandrarelease != $package_ensure {
+      if $package_comparison != $package_ensure {
         fail("cassandrarelease: ${package_comparison} != ${package_ensure}")
       }
 
@@ -461,13 +461,6 @@ class TestManifests
   end
 end
 
-thr = Thread.new do
-  loop do
-    sleep 1
-    `sudo pkill agetty`
-  end
-end
-
 hosts.each do |host|
   case host.name
   when 'ubuntu1604'
@@ -511,5 +504,3 @@ RSpec.configure do |c|
     end
   end
 end
-
-thr.exit
