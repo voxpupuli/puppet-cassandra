@@ -11,7 +11,7 @@ describe 'cassandra' do
     t = TestManifests.new(roles, version)
 
     describe "Cassandra #{version} installation." do
-      #firewall_pp = t.firewall_pp()
+      # firewall_pp = t.firewall_pp()
       cassandra_install_pp = t.cassandra_install_pp
 
       it 'should work with no errors' do
