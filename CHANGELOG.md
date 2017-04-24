@@ -1,5 +1,16 @@
 # Change Log for Puppet Module locp-cassandra
 
+##2017-04-24 - Release 2.4.1 ([diff](https://github.com/locp/cassandra/compare/2.4.0...2.4.1))
+
+### Summary
+
+A non-functional release of improvements.
+
+### Improvements
+
+* A refactoring and extension of the acceptance tests.
+* Migrated from version 1.0 to 2.0 of the CircleCI API.
+
 ##2017-03-30 - Release 2.4.0 ([diff](https://github.com/locp/cassandra/compare/2.3.0...2.4.0))
 
 ### Summary
@@ -123,7 +134,7 @@ plugin against the code to improve the code quality.
 
 ### Improvements
 
-* The reference documentation is now processed via 
+* The reference documentation is now processed via
   http://locp.github.io/cassandra
 * Made a start on refactoring the spec/unit tests so that there is less
   duplication of code.
@@ -988,7 +999,7 @@ override the default behaviour of failing on a non-supported operating system.
   service.
 * More cleaning up of the README and more links in that file to allow
   faster navigation.
-  
+
 ##2015-09-01 - Release 1.3.5 ([diff](https://github.com/locp/cassandra/compare/1.3.4...1.3.5))
 * Fixed a bug, now  allowing the user to set the running state of the
   Cassandra service.
