@@ -1,6 +1,7 @@
 ---
 env:
-  - "PUPPET_VERSION='~> 4.5' BEAKER_set=centos6"
+  - "PUPPET_VERSION='~> 4.5' BEAKER_set=centos6_2"
+  - "PUPPET_VERSION='~> 4.5' BEAKER_set=centos6_3"
   - "PUPPET_VERSION='~> 4.5' BEAKER_set=centos7"
   - "PUPPET_VERSION='~> 4.5' BEAKER_set=debian7"
   - "PUPPET_VERSION='~> 4.5' BEAKER_set=debian8"
@@ -22,7 +23,7 @@ script:
   - "bundle exec rake lint"
   - "bundle exec rake validate"
   - "bundle exec rake spec SPEC_OPTS='--format documentation'"
-  - travis_wait 40 "bundle exec rake acceptance"
+  - "bundle exec rake acceptance"
 notifications:
   email: false
 matrix:
