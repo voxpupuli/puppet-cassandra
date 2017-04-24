@@ -60,7 +60,7 @@ jobs:
         deploy:
           name: Deploy from master
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" -a -z "RUN_NIGHTLY_BUILD" ]; then
+            if [ "${CIRCLE_BRANCH}" == "master" -a -z "${RUN_NIGHTLY_BUILD}" ]; then
               git config --global user.email "info@locp.co.uk"
               git config --global user.name "CircleCI"
               bundle exec rake strings:gh_pages:update
