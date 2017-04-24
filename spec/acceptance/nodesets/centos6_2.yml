@@ -10,4 +10,3 @@ HOSTS:
     platform: el-6-x86_64
     roles:
       - cassandra2
-      - cassandra3
