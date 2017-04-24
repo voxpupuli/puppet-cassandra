@@ -56,5 +56,15 @@ jobs:
         run:
           command: "bundle exec rake spec SPEC_OPTS=\"--format documentation --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/puppet.xml\""
           name: "Spec tests"
+      -
+        deploy:
+          name: Deploy from master
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" -a -z "RUN_NIGHTLY_BUILD" ]; then
+              git config --global user.email "info@locp.co.uk"
+              git config --global user.name "CircleCI"
+              bundle exec rake strings:gh_pages:update
+              bundle exec rake deploy
+            fi
     working_directory: ~/cassandra
 version: 2
