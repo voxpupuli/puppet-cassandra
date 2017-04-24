@@ -22,9 +22,6 @@ script:
   - "bundle exec rake lint"
   - "bundle exec rake validate"
   - "bundle exec rake spec SPEC_OPTS='--format documentation'"
-    # The following line is required to fix CentOS 6 from
-    # spawning a CPU intensive agetty process.
-  - "while true; do sudo pkill agetty; sleep 5; done &"
   - "bundle exec rake acceptance"
 notifications:
   email: false
