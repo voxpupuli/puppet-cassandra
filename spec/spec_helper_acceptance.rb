@@ -371,6 +371,15 @@ class TestManifests
           'spillman' => {
             password => 'Niner27',
           },
+          'bob' => {
+            password => 'kaZe89a',
+            login    => false,
+          },
+          'john' => {
+            superuser => true,
+            password  => 'kaZe89a',
+            login     => true,
+          },
         },
       }
     EOS
