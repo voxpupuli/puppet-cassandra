@@ -7,6 +7,10 @@
 
 - Integration with github\_changelog\_generator [\#389](https://github.com/locp/cassandra/pull/389) ([dallinb](https://github.com/dallinb))
 
+**Closed issues:**
+
+- Rubocop failing tests since upgrade from 0.48.1 to 0.49.0 [\#391](https://github.com/locp/cassandra/issues/391)
+
 **Merged pull requests:**
 
 - Switch to role management instead of user one [\#388](https://github.com/locp/cassandra/pull/388) ([SergK](https://github.com/SergK))
