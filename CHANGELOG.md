@@ -1,5 +1,16 @@
 # Change Log
 
+## [2.5.0](https://github.com/locp/cassandra/tree/2.5.0) (2017-05-24)
+[Full Changelog](https://github.com/locp/cassandra/compare/2.4.1...2.5.0)
+
+**Implemented enhancements:**
+
+- Integration with github\_changelog\_generator [\#389](https://github.com/locp/cassandra/pull/389) ([dallinb](https://github.com/dallinb))
+
+**Merged pull requests:**
+
+- Switch to role management instead of user one [\#388](https://github.com/locp/cassandra/pull/388) ([SergK](https://github.com/SergK))
+
 ##2017-04-24 - Release 2.4.1 ([diff](https://github.com/locp/cassandra/compare/2.4.0...2.4.1))
 
 ### Summary
