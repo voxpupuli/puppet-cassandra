@@ -29,24 +29,43 @@ define cassandra::schema::user (
     $create_script1 = "CREATE USER IF NOT EXISTS ${user_name}"
 
     if $password != undef {
-      $create_script2 = "${create_script1} WITH PASSWORD '${password}'"
+      $create_script2  = "${create_script1} WITH PASSWORD '${password}'"
+      $alter_script1   = "ALTER USER ${user_name} WITH PASSWORD '${password}'"
     } else {
-      $create_script2 = $create_script1
+      $create_script2  = "${create_script1} WITH PASSWORD ''"
+      $alter_script1   = "ALTER USER ${user_name} WITH PASSWORD ''"
     }
 
-    if $superuser {
+    if $superuser and $user_name != $::cassandra::schema::cqlsh_user {
       $create_script = "${create_script2} SUPERUSER"
-    } else {
+      $alter_script  = "${alter_script1} SUPERUSER"
+    } elsif $superuser and $user_name == $::cassandra::schema::cqlsh_user {
+      $create_script = "${create_script2} SUPERUSER"
+      $alter_script  = $alter_script1
+    } elsif !$superuser and $user_name != $::cassandra::schema::cqlsh_user {
       $create_script = "${create_script2} NOSUPERUSER"
+      $alter_script  = "${alter_script1} NOSUPERUSER"
+    } elsif !$superuser and $user_name == $::cassandra::schema::cqlsh_user {
+      $create_script = "${create_script2} NOSUPERUSER"
+      $alter_script  = $alter_script1
     }
 
     $create_command = "${::cassandra::schema::cqlsh_opts} -e \"${create_script}\" ${::cassandra::schema::cqlsh_conn}"
+    $alter_command  = "${::cassandra::schema::cqlsh_opts} -e \"${alter_script}\" ${::cassandra::schema::cqlsh_conn}"
 
     exec { "Create user (${user_name})":
       command => $create_command,
       unless  => $read_command,
       require => Exec['::cassandra::schema connection test'],
     }
+
+    exec { "Alter user (${user_name})":
+      command => $alter_command,
+      onlyif  => $read_command,
+      require => Exec['::cassandra::schema connection test'],
+    }
+
+
   } elsif $ensure == absent {
     $delete_script = "DROP USER ${user_name}"
     $delete_command = "${::cassandra::schema::cqlsh_opts} -e \"${delete_script}\" ${::cassandra::schema::cqlsh_conn}"
