@@ -71,7 +71,9 @@ class TestManifests
         package { 'python27-python':
           ensure => '2.7.8-18.el6',
         } ->
-        package { 'python27': } ->
+        # package { 'python27':
+        #   ensure => '1.1-17.el6'
+        # } ->
         exec { 'cp /opt/rh/python27/enable /etc/profile.d/python.sh': } ->
         exec { 'echo "\n" >> /etc/profile.d/python.sh': } ->
         exec { 'echo "export PYTHONPATH=/usr/lib/python2.7/site-packages" >> /etc/profile.d/python.sh': } ->
