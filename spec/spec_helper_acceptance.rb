@@ -67,7 +67,10 @@ class TestManifests
       'centos-6': {
         package { ['gcc', 'tar', 'yum-utils', 'centos-release-scl']: } ->
         exec { 'yum-config-manager --enable rhel-server-rhscl-7-rpms': } ->
-        package { ['ruby200', 'python27']: } ->
+        package { 'ruby200': } ->
+        package { 'python27-python':
+          ensure => '2.7.8-18.el6',
+        } ->
         exec { 'cp /opt/rh/python27/enable /etc/profile.d/python.sh': } ->
         exec { 'echo "\n" >> /etc/profile.d/python.sh': } ->
         exec { 'echo "export PYTHONPATH=/usr/lib/python2.7/site-packages" >> /etc/profile.d/python.sh': } ->
@@ -152,16 +155,6 @@ class TestManifests
         require         => Class['cassandra::java'],
       }
     }
-
-    ## No longer required now using Apache Cassandra
-    # if $::lsbdistid == 'Ubuntu' {
-    #   if $::operatingsystemmajrelease >= 16 {
-    #     # Workarounds for amonst other things CASSANDRA-11850
-    #     Exec {
-    #       environment => [ 'CQLSH_NO_BUNDLED=TRUE' ]
-    #     }
-    #   }
-    # }
 
     class { 'cassandra::optutils':
       package_ensure => $package_ensure,

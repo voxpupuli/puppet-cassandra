@@ -5,7 +5,7 @@
 #   ensure a user is created, or **absent** to remove the user if it exists.
 # @param password [string] A password for the user.
 # @param superuser [boolean] If the user is to be a super-user on the system.
-# @param login [boolean] True allows the role to log in.
+# @param login [boolean] Allows the role to log in.
 # @param user_name [string] The name of the user.
 # @example
 #   cassandra::schema::user { 'akers':
