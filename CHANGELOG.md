@@ -1,11 +1,15 @@
 # Change Log
 
-## [2.5.0](https://github.com/locp/cassandra/tree/2.5.0) (2017-05-24)
+## [2.5.0](https://github.com/locp/cassandra/tree/2.5.0) (2017-05-31)
 [Full Changelog](https://github.com/locp/cassandra/compare/2.4.1...2.5.0)
 
 **Implemented enhancements:**
 
 - Integration with github\_changelog\_generator [\#389](https://github.com/locp/cassandra/pull/389) ([dallinb](https://github.com/dallinb))
+
+**Fixed bugs:**
+
+- Tests failing for CentOS 6 on "Create schema for 2.1" [\#392](https://github.com/locp/cassandra/issues/392)
 
 **Closed issues:**
 
