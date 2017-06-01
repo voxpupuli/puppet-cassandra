@@ -140,7 +140,7 @@ describe 'cassandra' do
         unless: '/sbin/chkconfig --list cassandra'
       )
         .that_requires('Package[cassandra]')
-        .that_comes_before('Service[cassandra]')
+                                                            .that_comes_before('Service[cassandra]')
     end
   end
 

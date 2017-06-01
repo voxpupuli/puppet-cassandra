@@ -1,3 +1,4 @@
+require 'github_changelog_generator/task'
 require 'metadata-json-lint/rake_task'
 require 'puppet_blacksmith/rake_tasks'
 require 'puppet-strings/tasks'
@@ -21,15 +22,10 @@ exclude_paths = [
 PuppetLint.configuration.ignore_paths = exclude_paths
 PuppetSyntax.exclude_paths = exclude_paths
 
-begin
-  require 'github_changelog_generator/task'
-  GitHubChangelogGenerator::RakeTask.new :changelog do |config|
-    version = Blacksmith::Modulefile.new.version
-    config.future_release = version.to_s
-    config.unreleased = false
-    config.since_tag = '2.4.1'
-    config.exclude_labels = %w[duplicate question invalid wontfix modulesync]
-    config.user = 'locp'
-    config.project = 'cassandra'
-  end
+GitHubChangelogGenerator::RakeTask.new :changelog do |config|
+  version = Blacksmith::Modulefile.new.version
+  config.future_release = version.to_s
+  config.unreleased_only = true
+  config.user = 'locp'
+  config.project = 'cassandra'
 end
