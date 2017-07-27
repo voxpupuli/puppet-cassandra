@@ -39,7 +39,7 @@ class cassandra::apache_repo (
       yumrepo { 'cassandra_apache':
         ensure   => present,
         descr    => $descr,
-        baseurl  => $baseurl,
+        baseurl  => "${baseurl}/${release}",
         enabled  => 1,
         gpgcheck => 0,
       }
