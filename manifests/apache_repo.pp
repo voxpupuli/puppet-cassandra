@@ -29,6 +29,21 @@ class cassandra::apache_repo (
   $release = 'main',
   ) {
   case $::osfamily {
+    'RedHat': {
+      if $pkg_url != undef {
+        $baseurl = $pkg_url
+      } else {
+        $baseurl = 'http://www.apache.org/dist/cassandra/redhat'
+      }
+
+      yumrepo { 'apache_cassandra':
+        ensure   => present,
+        descr    => $descr,
+        baseurl  => $baseurl,
+        enabled  => 1,
+        gpgcheck => 0,
+      }
+    }
     'Debian': {
       include apt
       include apt::update
