@@ -41,7 +41,8 @@ class cassandra::apache_repo (
         descr    => $descr,
         baseurl  => "${baseurl}/${release}",
         enabled  => 1,
-        gpgcheck => 0,
+        gpgcheck => 1,
+        gpgkey   => $key_url,
       }
     }
     'Debian': {
