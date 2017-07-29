@@ -28,8 +28,7 @@ describe 'cassandra::schema' do
               cqlsh_host: 'localhost',
               cqlsh_password: nil,
               cqlsh_port: 9042,
-              cqlsh_user: 'cassandra',
-              keyspaces: [])
+              cqlsh_user: 'cassandra')
 
       read_command = '/usr/bin/cqlsh   -e \'DESC KEYSPACES\' localhost 9042'
 
