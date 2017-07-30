@@ -18,7 +18,7 @@ class TestManifests
 
   def init21
     @debian_release = '21x'
-    @debian_package_ensure = '2.1.17'
+    @debian_package_ensure = '2.1.18'
     @redhat_package_ensure = '2.1.15-1'
     @cassandra_optutils_package = 'cassandra21-tools'
     @cassandra_package = 'cassandra21'
@@ -26,7 +26,7 @@ class TestManifests
 
   def init22
     @debian_release = '22x'
-    @debian_package_ensure = '2.2.9'
+    @debian_package_ensure = '2.2.10'
     @redhat_package_ensure = '2.2.8-1'
     @cassandra_optutils_package = 'cassandra22-tools'
     @cassandra_package = 'cassandra22'
@@ -34,7 +34,7 @@ class TestManifests
 
   def init30
     @debian_release = '30x'
-    @debian_package_ensure = '3.0.13'
+    @debian_package_ensure = '3.0.14'
     @redhat_package_ensure = '3.0.9-1'
     @cassandra_optutils_package = 'cassandra30-tools'
     @cassandra_package = 'cassandra30'

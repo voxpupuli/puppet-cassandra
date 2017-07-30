@@ -23,7 +23,6 @@ describe 'cassandra::datastax_repo' do
         'descr'   => 'DataStax Repo for Apache Cassandra',
         'key_id'  => '7E41C00F85BFC1706C4FFFB3350200F2B999A372',
         'key_url' => 'http://debian.datastax.com/debian/repo_key',
-        'pkg_url' => nil,
         'release' => 'stable'
       )
 
