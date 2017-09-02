@@ -650,6 +650,9 @@ will not be reflected.
 persist between reboots.
 * Currently Apache Cassandra only provides binary packages for Debian so
 the `cassandra::apache_repo` is not of much use to Red Hat family users.
+* Acceptance for Debian 7 are confined to Cassandra 2.1 and 2.2.  There is
+a conflict between the GLIBC on Debian 7 and the newer releases of Cassandra
+3.X.
 
 ## Development
 

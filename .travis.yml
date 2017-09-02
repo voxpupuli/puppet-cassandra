@@ -3,7 +3,7 @@ env:
   - "PUPPET_VERSION='~> 4.5' BEAKER_set=centos6_2"
   - "PUPPET_VERSION='~> 4.5' BEAKER_set=centos6_3"
   - "PUPPET_VERSION='~> 4.5' BEAKER_set=centos7"
-#  - "PUPPET_VERSION='~> 4.5' BEAKER_set=debian7"
+  - "PUPPET_VERSION='~> 4.5' BEAKER_set=debian7"
   - "PUPPET_VERSION='~> 4.5' BEAKER_set=debian8"
   - "PUPPET_VERSION='~> 4.5' BEAKER_set=ubuntu1204"
   - "PUPPET_VERSION='~> 4.5' BEAKER_set=ubuntu1404"
@@ -26,5 +26,3 @@ script:
   - "bundle exec rake acceptance"
 notifications:
   email: false
-matrix:
-  fast_finish: true

@@ -11,5 +11,4 @@ HOSTS:
     platform: debian-7-amd64
     roles: 
       - cassandra2
-      - cassandra3
       - firewall
