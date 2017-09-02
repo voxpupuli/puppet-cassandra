@@ -22,6 +22,7 @@ group :test do
   gem 'rspec-puppet-utils', require: false
   gem 'rspec_junit_formatter', require: false
   gem 'rubocop-rspec', '1.4.1' if RUBY_VERSION < '2.2.0'
+  gem 'semantic_puppet',       require: false
   gem 'travis', require: false
   gem 'travis-lint', require: false
   gem 'yard', require: false
