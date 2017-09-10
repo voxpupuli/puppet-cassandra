@@ -35,9 +35,10 @@ class TestManifests
   def init30
     @debian_release = '30x'
     @debian_package_ensure = '3.0.14'
-    @redhat_package_ensure = '3.0.9-1'
-    @cassandra_optutils_package = 'cassandra30-tools'
-    @cassandra_package = 'cassandra30'
+    @redhat_release = '30x'
+    @redhat_package_ensure = '3.0.14-1'
+    @cassandra_optutils_package = 'cassandra-tools'
+    @cassandra_package = 'cassandra'
   end
 
   def bootstrap_pp
@@ -121,9 +122,21 @@ class TestManifests
       $cassandra_package = 'cassandra'
       $cassandra_optutils_package = 'cassandra-tools'
     } else {
-      class { 'cassandra::datastax_repo':
-        before  => Class['cassandra', 'cassandra::optutils'],
+
+      if #{@version} < 3.0 {
+        class { 'cassandra::datastax_repo':
+          before  => Class['cassandra', 'cassandra::optutils'],
+        }
+      } else {
+        yumrepo { 'datastax':
+          ensure => absent,
+        } ->
+        class { 'cassandra::apache_repo':
+          release => '#{@redhat_release}',
+          before  => Class['cassandra', 'cassandra::optutils'],
+        }
       }
+
       $package_ensure = '#{@redhat_package_ensure}'
       $cassandra_package = '#{@cassandra_package}'
       $cassandra_optutils_package = '#{@cassandra_optutils_package}'
