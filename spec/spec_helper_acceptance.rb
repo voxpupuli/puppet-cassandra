@@ -6,14 +6,13 @@ class TestManifests
     # Instance variables
     @roles = roles
     @version = version
-    @operatingsystemmajrelease = operatingsystemmajrelease
 
     if version == 2.1
       init21
     elsif version == 2.2
       init22
     elsif version == 3.0
-      init30
+      init30(operatingsystemmajrelease)
     end
   end
 
@@ -33,11 +32,12 @@ class TestManifests
     @cassandra_package = 'cassandra22'
   end
 
-  def init30
+  def init30(operatingsystemmajrelease)
     @debian_release = '30x'
     @debian_package_ensure = '3.0.14'
+    print "operatingsystemmajrelease := #{operatingsystemmajrelease}"
 
-    if @operatingsystemmajrelease == 6
+    if operatingsystemmajrelease == '6'
       @redhat_package_ensure = '3.0.9-1'
       @cassandra_optutils_package = 'cassandra30-tools'
       @cassandra_package = 'cassandra30'
@@ -130,16 +130,16 @@ class TestManifests
       $cassandra_package = 'cassandra'
       $cassandra_optutils_package = 'cassandra-tools'
     } else {
-      if #{@version} < 3.0 and $::hostname =~ /^centos7.*/ {
-        class { 'cassandra::datastax_repo':
-          before  => Class['cassandra', 'cassandra::optutils'],
-        }
-      } else {
+      if #{@version} >= 3.0 and $::operatingsystemmajrelease >= 7 {
         yumrepo { 'datastax':
           ensure => absent,
         } ->
         class { 'cassandra::apache_repo':
           release => '#{@redhat_release}',
+          before  => Class['cassandra', 'cassandra::optutils'],
+        }
+      } else {
+        class { 'cassandra::datastax_repo':
           before  => Class['cassandra', 'cassandra::optutils'],
         }
       }
