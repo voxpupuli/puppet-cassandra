@@ -2,7 +2,7 @@ require 'spec_helper_acceptance'
 
 osfamily = fact('osfamily')
 roles = hosts[0]['roles']
-t = TestManifests.new(roles, 0)
+t = TestManifests.new(roles, 0, 0)
 bootstrap_pp = t.bootstrap_pp()
 
 describe 'Test Entry Criteria' do

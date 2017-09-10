@@ -2,10 +2,11 @@ require 'beaker-rspec'
 require 'pry'
 
 class TestManifests
-  def initialize(roles, version)
+  def initialize(roles, version, operatingsystemmajrelease)
     # Instance variables
     @roles = roles
     @version = version
+    @operatingsystemmajrelease = operatingsystemmajrelease
 
     if version == 2.1
       init21
@@ -35,10 +36,17 @@ class TestManifests
   def init30
     @debian_release = '30x'
     @debian_package_ensure = '3.0.14'
-    @redhat_release = '30x'
-    @redhat_package_ensure = '3.0.14-1'
-    @cassandra_optutils_package = 'cassandra-tools'
-    @cassandra_package = 'cassandra'
+
+    if @operatingsystemmajrelease == 6
+      @redhat_package_ensure = '3.0.9-1'
+      @cassandra_optutils_package = 'cassandra30-tools'
+      @cassandra_package = 'cassandra30'
+    else
+      @redhat_release = '30x'
+      @redhat_package_ensure = '3.0.14-1'
+      @cassandra_optutils_package = 'cassandra-tools'
+      @cassandra_package = 'cassandra'
+    end
   end
 
   def bootstrap_pp
@@ -54,7 +62,7 @@ class TestManifests
        logoutput => true,
     }
 
-    notify { "${::operatingsystem}-${::operatingsystemmajrelease}": }
+    notify { "${::hostname}:${::operatingsystem}-${::operatingsystemmajrelease}": }
 
     file { '/etc/dse':
       ensure => directory,
@@ -122,8 +130,7 @@ class TestManifests
       $cassandra_package = 'cassandra'
       $cassandra_optutils_package = 'cassandra-tools'
     } else {
-
-      if #{@version} < 3.0 {
+      if #{@version} < 3.0 and $::hostname =~ /^centos7.*/ {
         class { 'cassandra::datastax_repo':
           before  => Class['cassandra', 'cassandra::optutils'],
         }
