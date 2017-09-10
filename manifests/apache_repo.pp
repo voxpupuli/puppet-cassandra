@@ -32,7 +32,7 @@ class cassandra::apache_repo (
       if $pkg_url != undef {
         $baseurl = $pkg_url
       } else {
-        $url = "http://www.apache.org/dist/cassandra/redhat"
+        $url = 'http://www.apache.org/dist/cassandra/redhat'
         $baseurl = "${url}/${release}"
       }
 
