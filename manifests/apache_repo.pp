@@ -1,9 +1,5 @@
 # An optional class that will allow a suitable repository to be configured
-# from which packages for Apache Cassandra can be downloaded.  Changing
-# the defaults will allow any Debian Apt repository to be configured.
-# Currently Apache only provide a Debian repository
-# (http://cassandra.apache.org/download/) mentions of Yum are for wishful
-# thinking.
+# from which packages for Apache Cassandra can be downloaded.
 # @param descr [string] On the Red Hat family, this is passed as the `descr`
 #   attribute to a `yumrepo` resource.  On the Debian family, it is passed as
 #   the `comment` attribute to an `apt::source` resource.
@@ -12,15 +8,18 @@
 #   ignored.
 # @param key_url [string] On the Debian family, this is passed as the
 #   `source` attribute to an `apt::key` resource.  On the Red Hat family,
-#   it is ignored.
-# @param pkg_url [string] If left as the default, this will set the `baseurl`
-#   to 'http://rpm.datastax.com/community' on a `yumrepo` resource
-#   on the Red Hat family.  On the Debian family, leaving this as the default
+#   it is set to the `gpgkey` attribute on the `yumrepo` resource.
+# @param pkg_url [string] On the Red Hat family, leaving this as default will
+#   set the `baseurl` on the `yumrepo` resource to
+#   'http://www.apache.org/dist/cassandra/redhat' with whatever is set in the
+#   'release' attribute appended.
+#   On the Debian family, leaving this as the default
 #   will set the `location` attribute on an `apt::source` to
 #   'http://www.apache.org/dist/cassandra/debian'.
 # @param release [string] On the Debian family, this is passed as the `release`
-#   attribute to an `apt::source` resource.  On the Red Hat family, it is
-#   ignored.
+#   attribute to an `apt::source` resource.  On the Red Hat family, it is the
+#   major version number of Cassandra, without dot, and with an appended 'x'
+#   (e.g. '311x')
 class cassandra::apache_repo (
   $descr   = 'Repo for Apache Cassandra',
   $key_id  = 'A26E528B271F19B9E5D8E19EA278B781FE4B2BDA',
@@ -33,13 +32,14 @@ class cassandra::apache_repo (
       if $pkg_url != undef {
         $baseurl = $pkg_url
       } else {
-        $baseurl = 'http://www.apache.org/dist/cassandra/redhat'
+        $url = 'http://www.apache.org/dist/cassandra/redhat'
+        $baseurl = "${url}/${release}"
       }
 
       yumrepo { 'cassandra_apache':
         ensure   => present,
         descr    => $descr,
-        baseurl  => "${baseurl}/${release}",
+        baseurl  => $baseurl,
         enabled  => 1,
         gpgcheck => 1,
         gpgkey   => $key_url,

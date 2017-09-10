@@ -8,7 +8,7 @@ describe 'cassandra' do
   versions.push(3.0) if roles.include? 'cassandra3'
 
   versions.each do |version|
-    t = TestManifests.new(roles, version)
+    t = TestManifests.new(roles, version, fact('operatingsystemmajrelease'))
 
     describe "Cassandra #{version} installation." do
       # firewall_pp = t.firewall_pp()

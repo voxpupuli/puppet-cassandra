@@ -2,7 +2,7 @@ require 'beaker-rspec'
 require 'pry'
 
 class TestManifests
-  def initialize(roles, version)
+  def initialize(roles, version, operatingsystemmajrelease)
     # Instance variables
     @roles = roles
     @version = version
@@ -12,7 +12,7 @@ class TestManifests
     elsif version == 2.2
       init22
     elsif version == 3.0
-      init30
+      init30(operatingsystemmajrelease)
     end
   end
 
@@ -32,12 +32,21 @@ class TestManifests
     @cassandra_package = 'cassandra22'
   end
 
-  def init30
+  def init30(operatingsystemmajrelease)
     @debian_release = '30x'
     @debian_package_ensure = '3.0.14'
-    @redhat_package_ensure = '3.0.9-1'
-    @cassandra_optutils_package = 'cassandra30-tools'
-    @cassandra_package = 'cassandra30'
+    print "operatingsystemmajrelease := #{operatingsystemmajrelease}"
+
+    if operatingsystemmajrelease == '6'
+      @redhat_package_ensure = '3.0.9-1'
+      @cassandra_optutils_package = 'cassandra30-tools'
+      @cassandra_package = 'cassandra30'
+    else
+      @redhat_release = '30x'
+      @redhat_package_ensure = '3.0.14-1'
+      @cassandra_optutils_package = 'cassandra-tools'
+      @cassandra_package = 'cassandra'
+    end
   end
 
   def bootstrap_pp
@@ -53,7 +62,7 @@ class TestManifests
        logoutput => true,
     }
 
-    notify { "${::operatingsystem}-${::operatingsystemmajrelease}": }
+    notify { "${::hostname}:${::operatingsystem}-${::operatingsystemmajrelease}": }
 
     file { '/etc/dse':
       ensure => directory,
@@ -121,9 +130,20 @@ class TestManifests
       $cassandra_package = 'cassandra'
       $cassandra_optutils_package = 'cassandra-tools'
     } else {
-      class { 'cassandra::datastax_repo':
-        before  => Class['cassandra', 'cassandra::optutils'],
+      if #{@version} >= 3.0 and $::operatingsystemmajrelease >= 7 {
+        yumrepo { 'datastax':
+          ensure => absent,
+        } ->
+        class { 'cassandra::apache_repo':
+          release => '#{@redhat_release}',
+          before  => Class['cassandra', 'cassandra::optutils'],
+        }
+      } else {
+        class { 'cassandra::datastax_repo':
+          before  => Class['cassandra', 'cassandra::optutils'],
+        }
       }
+
       $package_ensure = '#{@redhat_package_ensure}'
       $cassandra_package = '#{@cassandra_package}'
       $cassandra_optutils_package = '#{@cassandra_optutils_package}'
