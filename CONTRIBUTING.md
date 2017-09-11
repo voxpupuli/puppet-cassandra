@@ -128,6 +128,7 @@ bundle exec rake beaker:ubuntu1604
 
 **Release** | **PR/Issue**                                        | **Contributer**
 ------------|-----------------------------------------------------|----------------------------------------------------
+2.6.0       | [Adding Red Hat OS](https://github.com/locp/cassandra/pull/396) | [@stijnvdb](https://github.com/stijnvdb)
 2.3.0       | [Hiera documentation](https://github.com/locp/cassandra/pull/329)  | [@tibers](https://github.com/tibers)
 2.1.1       | [Correct cql_types conditional in cassandra::schema class](https://github.com/locp/cassandra/pull/325)| [@aaron-miller](https://github.com/aaron-miller)
 2.0.2       | [locp/cassandra 2.0 example has two cassandra declarations](https://github.com/locp/cassandra/issues/291)| [@ericy-jana](https://github.com/ericy-jana)

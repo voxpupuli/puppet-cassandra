@@ -26,7 +26,6 @@ describe 'cassandra::datastax_agent' do
 
       should contain_class('cassandra::datastax_agent').only_with(
         'defaults_file'        => '/etc/default/datastax-agent',
-        'java_home'            => nil,
         'package_ensure'       => 'present',
         'package_name'         => 'datastax-agent',
         'service_ensure'       => 'running',

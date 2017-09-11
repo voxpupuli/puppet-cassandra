@@ -26,5 +26,3 @@ script:
   - "bundle exec rake acceptance"
 notifications:
   email: false
-matrix:
-  fast_finish: true

@@ -648,8 +648,9 @@ is made to the Puppet manifest but the resource already exits, this change
 will not be reflected.
 * At the moment the `cassandra::system::transparent_hugepage` does not
 persist between reboots.
-* Currently Apache Cassandra only provides binary packages for Debian so
-the `cassandra::apache_repo` is not of much use to Red Hat family users.
+* Acceptance for Debian 7 are confined to Cassandra 2.1 and 2.2.  There is
+a conflict between the GLIBC on Debian 7 and the newer releases of Cassandra
+3.X.
 
 ## Development
 
