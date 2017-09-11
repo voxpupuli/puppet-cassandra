@@ -1,5 +1,16 @@
 # Change Log
 
+## [2.6.0](https://github.com/locp/cassandra/tree/2.6.0) (2017-09-11)
+[Full Changelog](https://github.com/locp/cassandra/compare/2.5.0...2.6.0)
+
+**Fixed bugs:**
+
+- Unit and acceptance tests are failing that have been successful in the past. [\#397](https://github.com/locp/cassandra/issues/397)
+
+**Merged pull requests:**
+
+- Implement apache_repo for RedHat [\#400](https://github.com/locp/cassandra/pull/400) ([stijnvdb](https://github.com/stijnvdb))
+
 ## [2.5.0](https://github.com/locp/cassandra/tree/2.5.0) (2017-05-31)
 [Full Changelog](https://github.com/locp/cassandra/compare/2.4.1...2.5.0)
 
