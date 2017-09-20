@@ -1,31 +1,56 @@
-require 'github_changelog_generator/task'
-require 'metadata-json-lint/rake_task'
-require 'puppet_blacksmith/rake_tasks'
-require 'puppet-strings/tasks'
 require 'puppetlabs_spec_helper/rake_tasks'
-require 'rubocop/rake_task' if RUBY_VERSION >= '2.0.0'
-require 'rubygems'
+require 'puppet_blacksmith/rake_tasks'
+require 'voxpupuli/release/rake_tasks'
+require 'puppet-strings/tasks'
 
-# TravisCI does not require the extra module tasks.
-require_relative 'rake/rake_tasks'
+PuppetLint.configuration.log_format = '%{path}:%{line}:%{check}:%{KIND}:%{message}'
+PuppetLint.configuration.fail_on_warnings = true
+PuppetLint.configuration.send('relative')
+PuppetLint.configuration.send('disable_140chars')
+PuppetLint.configuration.send('disable_class_inherits_from_params_class')
+PuppetLint.configuration.send('disable_documentation')
+PuppetLint.configuration.send('disable_single_quote_string_with_variables')
 
-# Use a custom pattern with git tag. %s is replaced with the version number.
-Blacksmith::RakeTask.new do |t|
-  t.tag_pattern = '%s'
-end
-
-exclude_paths = [
-  'vagrant/**/*',
-  'vendor/bundle/**/*'
-]
-
+exclude_paths = %w(
+  pkg/**/*
+  vendor/**/*
+  .vendor/**/*
+  spec/**/*
+)
 PuppetLint.configuration.ignore_paths = exclude_paths
 PuppetSyntax.exclude_paths = exclude_paths
 
-GitHubChangelogGenerator::RakeTask.new :changelog do |config|
-  version = Blacksmith::Modulefile.new.version
-  config.future_release = version.to_s
-  config.unreleased_only = true
-  config.user = 'locp'
-  config.project = 'cassandra'
+desc 'Run acceptance tests'
+RSpec::Core::RakeTask.new(:acceptance) do |t|
+  t.pattern = 'spec/acceptance'
 end
+
+desc 'Run tests metadata_lint, release_checks'
+task test: [
+  :metadata_lint,
+  :release_checks,
+]
+
+desc "Run main 'test' task and report merged results to coveralls"
+task test_with_coveralls: [:test] do
+  if Dir.exist?(File.expand_path('../lib', __FILE__))
+    require 'coveralls/rake/task'
+    Coveralls::RakeTask.new
+    Rake::Task['coveralls:push'].invoke
+  else
+    puts 'Skipping reporting to coveralls.  Module has no lib dir'
+  end
+end
+
+begin
+  require 'github_changelog_generator/task'
+  GitHubChangelogGenerator::RakeTask.new :changelog do |config|
+    version = (Blacksmith::Modulefile.new).version
+    config.future_release = "v#{version}" if version =~ /^\d+\.\d+.\d+$/
+    config.header = "# Changelog\n\nAll notable changes to this project will be documented in this file.\nEach new release typically also includes the latest modulesync defaults.\nThese should not affect the functionality of the module."
+    config.exclude_labels = %w{duplicate question invalid wontfix wont-fix modulesync skip-changelog}
+    config.user = 'voxpupuli'
+  end
+rescue LoadError
+end
+# vim: syntax=ruby
