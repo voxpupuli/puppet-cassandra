@@ -534,3 +534,5 @@ Security/YAMLLoad:
 # This affects hiera interpolation, as well as some configs that we push.
 Style/FormatStringToken:
   Enabled: false
+Style/FormatStringToken:
+  Enabled: false
