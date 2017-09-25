@@ -14,7 +14,7 @@ case "${::operatingsystem}-${operatingsystemmajrelease}" {
 }
 
 class { 'cassandra::system::swapoff':
-  device => $device
+  device => $device,
 }
 
 if $sysctl_args {

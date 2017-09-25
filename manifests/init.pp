@@ -176,7 +176,7 @@ class cassandra (
       $data_dir_require = Package['cassandra']
       $data_dir_before = []
 
-      if $::operatingsystemmajrelease == 7 and $::cassandra::service_provider == 'init' {
+      if $::operatingsystemmajrelease == '7' and $::cassandra::service_provider == 'init' {
         exec { "/sbin/chkconfig --add ${service_name}":
           unless  => "/sbin/chkconfig --list ${service_name}",
           require => Package['cassandra'],
