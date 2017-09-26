@@ -22,9 +22,9 @@ describe 'cassandra::datastax_agent' do
     end
 
     it do
-      should have_resource_count(4)
+      is_expected.to have_resource_count(4)
 
-      should contain_class('cassandra::datastax_agent').only_with(
+      is_expected.to contain_class('cassandra::datastax_agent').only_with(
         'defaults_file'        => '/etc/default/datastax-agent',
         'package_ensure'       => 'present',
         'package_name'         => 'datastax-agent',
@@ -35,12 +35,12 @@ describe 'cassandra::datastax_agent' do
         'local_interface'      => nil
       )
 
-      should contain_package('datastax-agent').with(
+      is_expected.to contain_package('datastax-agent').with(
         ensure: 'present',
         notify: 'Exec[datastax_agent_reload_systemctl]'
       ).that_notifies('Exec[datastax_agent_reload_systemctl]')
 
-      should contain_exec('datastax_agent_reload_systemctl').only_with(
+      is_expected.to contain_exec('datastax_agent_reload_systemctl').only_with(
         command: '/usr/bin/systemctl daemon-reload',
         onlyif: 'test -x /usr/bin/systemctl',
         path: ['/usr/bin', '/bin'],
@@ -48,14 +48,14 @@ describe 'cassandra::datastax_agent' do
         notify: 'Service[datastax-agent]'
       ).that_notifies('Service[datastax-agent]')
 
-      should contain_file('/var/lib/datastax-agent/conf/address.yaml')
-        .with(
+      is_expected.to contain_file('/var/lib/datastax-agent/conf/address.yaml').
+        with(
           owner: 'cassandra',
           group: 'cassandra',
           mode: '0644'
         ).that_requires('Package[datastax-agent]')
 
-      should contain_service('datastax-agent').only_with(
+      is_expected.to contain_service('datastax-agent').only_with(
         ensure: 'running',
         enable: true,
         name: 'datastax-agent'
@@ -72,7 +72,7 @@ describe 'cassandra::datastax_agent' do
     end
 
     it do
-      should contain_exec('datastax_agent_reload_systemctl').with(
+      is_expected.to contain_exec('datastax_agent_reload_systemctl').with(
         command: '/bin/systemctl daemon-reload',
         onlyif: 'test -x /bin/systemctl',
         path: ['/usr/bin', '/bin'],
@@ -96,7 +96,7 @@ describe 'cassandra::datastax_agent' do
     end
 
     it do
-      should contain_ini_setting('java_home').with(
+      is_expected.to contain_ini_setting('java_home').with(
         ensure: 'present',
         path: '/etc/default/datastax-agent',
         section: '',
@@ -134,7 +134,7 @@ describe 'cassandra::datastax_agent' do
     end
 
     it do
-      should have_resource_count(4)
+      is_expected.to have_resource_count(4)
     end
   end
 end

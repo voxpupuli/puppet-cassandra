@@ -23,16 +23,16 @@ describe 'cassandra::apache_repo' do
     end
 
     it do
-      should have_resource_count(1)
+      is_expected.to have_resource_count(1)
 
-      should contain_class('cassandra::apache_repo').only_with(
+      is_expected.to contain_class('cassandra::apache_repo').only_with(
         'descr'   => 'Repo for Apache Cassandra',
         'key_id'  => 'A26E528B271F19B9E5D8E19EA278B781FE4B2BDA',
         'key_url' => 'https://www.apache.org/dist/cassandra/KEYS',
         'release' => '311x'
       )
 
-      should contain_yumrepo('cassandra_apache').with(
+      is_expected.to contain_yumrepo('cassandra_apache').with(
         ensure: 'present',
         descr: 'Repo for Apache Cassandra',
         baseurl: 'http://www.apache.org/dist/cassandra/redhat/311x',
@@ -53,23 +53,23 @@ describe 'cassandra::apache_repo' do
     end
 
     it do
-      should have_resource_count(3)
-      should contain_class('apt')
-      should contain_class('apt::update')
+      is_expected.to have_resource_count(3)
+      is_expected.to contain_class('apt')
+      is_expected.to contain_class('apt::update')
 
-      should contain_apt__key('apache.cassandra').with(
+      is_expected.to contain_apt__key('apache.cassandra').with(
         id: 'A26E528B271F19B9E5D8E19EA278B781FE4B2BDA',
         source: 'https://www.apache.org/dist/cassandra/KEYS'
       )
 
-      should contain_apt__source('cassandra.sources').with(
+      is_expected.to contain_apt__source('cassandra.sources').with(
         location: 'http://www.apache.org/dist/cassandra/debian',
         comment: 'Repo for Apache Cassandra',
         release: 'main',
         include: { 'src' => false }
       ).that_notifies('Exec[update-apache-cassandra-repo]')
 
-      should contain_exec('update-apache-cassandra-repo').with(
+      is_expected.to contain_exec('update-apache-cassandra-repo').with(
         refreshonly: true,
         command: '/bin/true'
       )

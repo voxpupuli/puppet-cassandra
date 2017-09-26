@@ -9,6 +9,6 @@
 Facter.add('cassandrarelease') do
   setcode do
     version = Facter::Util::Resolution.exec('nodetool version')
-    version.match(/\d+\.\d+\.\d+/).to_s if version && version != ''
+    version.match(%r{\d+\.\d+\.\d+}).to_s if version && version != ''
   end
 end

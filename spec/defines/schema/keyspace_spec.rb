@@ -34,9 +34,9 @@ describe 'cassandra::schema::keyspace' do
     end
 
     it do
-      should compile
-      should contain_class('cassandra::schema')
-      should contain_exec('/usr/bin/cqlsh   -e "CREATE KEYSPACE IF NOT EXISTS foobar WITH REPLICATION = { \'class\' : \'SimpleStrategy\', \'replication_factor\' : 3 } AND DURABLE_WRITES = true" localhost 9042')
+      is_expected.to compile
+      is_expected.to contain_class('cassandra::schema')
+      is_expected.to contain_exec('/usr/bin/cqlsh   -e "CREATE KEYSPACE IF NOT EXISTS foobar WITH REPLICATION = { \'class\' : \'SimpleStrategy\', \'replication_factor\' : 3 } AND DURABLE_WRITES = true" localhost 9042')
     end
   end
 
@@ -63,8 +63,8 @@ describe 'cassandra::schema::keyspace' do
     end
 
     it do
-      should contain_cassandra__schema__keyspace('foobar')
-      should contain_exec('/usr/bin/cqlsh   -e "CREATE KEYSPACE IF NOT EXISTS foobar WITH REPLICATION = { \'class\' : \'NetworkTopologyStrategy\', \'dc1\': 3, \'dc2\': 2 } AND DURABLE_WRITES = true" localhost 9042')
+      is_expected.to contain_cassandra__schema__keyspace('foobar')
+      is_expected.to contain_exec('/usr/bin/cqlsh   -e "CREATE KEYSPACE IF NOT EXISTS foobar WITH REPLICATION = { \'class\' : \'NetworkTopologyStrategy\', \'dc1\': 3, \'dc2\': 2 } AND DURABLE_WRITES = true" localhost 9042')
     end
   end
 
@@ -84,8 +84,8 @@ describe 'cassandra::schema::keyspace' do
     end
 
     it do
-      should compile
-      should contain_exec('/usr/bin/cqlsh   -e "DROP KEYSPACE foobar" localhost 9042')
+      is_expected.to compile
+      is_expected.to contain_exec('/usr/bin/cqlsh   -e "DROP KEYSPACE foobar" localhost 9042')
     end
   end
 
@@ -105,6 +105,6 @@ describe 'cassandra::schema::keyspace' do
       }
     end
 
-    it { should raise_error(Puppet::Error) }
+    it { is_expected.to raise_error(Puppet::Error) }
   end
 end

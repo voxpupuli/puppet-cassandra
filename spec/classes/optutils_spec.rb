@@ -9,10 +9,10 @@ describe 'cassandra::optutils' do
     end
 
     it do
-      should have_resource_count(1)
-      should contain_package('cassandra22-tools').with(ensure: 'present')
+      is_expected.to have_resource_count(1)
+      is_expected.to contain_package('cassandra22-tools').with(ensure: 'present')
 
-      should contain_class('cassandra::optutils').with(
+      is_expected.to contain_class('cassandra::optutils').with(
         package_ensure: 'present',
         package_name: 'cassandra22-tools'
       )
@@ -28,9 +28,9 @@ describe 'cassandra::optutils' do
     end
 
     it do
-      should contain_package('cassandra-tools').with(ensure: 'present')
+      is_expected.to contain_package('cassandra-tools').with(ensure: 'present')
 
-      should contain_class('cassandra::optutils').with(
+      is_expected.to contain_class('cassandra::optutils').with(
         package_ensure: 'present',
         package_name: 'cassandra-tools'
       )
@@ -53,7 +53,7 @@ describe 'cassandra::optutils' do
     end
 
     it do
-      should contain_package('foobar-java').with(ensure: 42)
+      is_expected.to contain_package('foobar-java').with(ensure: 42)
     end
   end
 
@@ -70,6 +70,6 @@ describe 'cassandra::optutils' do
       }
     end
 
-    it { should contain_package('cassandra-tools').with_ensure('2.1.13') }
+    it { is_expected.to contain_package('cassandra-tools').with_ensure('2.1.13') }
   end
 end

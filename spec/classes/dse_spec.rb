@@ -16,10 +16,10 @@ describe 'cassandra::dse' do
     end
 
     it do
-      should have_resource_count(6)
-      should contain_class('cassandra')
+      is_expected.to have_resource_count(6)
+      is_expected.to contain_class('cassandra')
 
-      should contain_class('cassandra::dse').with(
+      is_expected.to contain_class('cassandra::dse').with(
         config_file_mode: '0644',
         config_file: '/etc/dse/dse.yaml'
       )

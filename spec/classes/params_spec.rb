@@ -9,8 +9,8 @@ describe '::cassandra::params' do
   end
 
   it do
-    should compile
-    should contain_class('cassandra::params')
-    should have_resource_count(0)
+    is_expected.to compile
+    is_expected.to contain_class('cassandra::params')
+    is_expected.to have_resource_count(0)
   end
 end

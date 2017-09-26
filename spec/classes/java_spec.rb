@@ -18,9 +18,9 @@ describe 'cassandra::java' do
     end
 
     it do
-      should contain_class('cassandra::java')
-      should contain_package('java-1.8.0-openjdk-headless')
-      should contain_package('jna')
+      is_expected.to contain_class('cassandra::java')
+      is_expected.to contain_package('java-1.8.0-openjdk-headless')
+      is_expected.to contain_package('jna')
     end
   end
 
@@ -33,10 +33,10 @@ describe 'cassandra::java' do
     end
 
     it do
-      should contain_class('cassandra::java')
-      should contain_package('openjdk-7-jre-headless')
-      should contain_package('libjna-java')
-      should have_resource_count(2)
+      is_expected.to contain_class('cassandra::java')
+      is_expected.to contain_package('openjdk-7-jre-headless')
+      is_expected.to contain_package('libjna-java')
+      is_expected.to have_resource_count(2)
     end
   end
 
@@ -55,7 +55,7 @@ describe 'cassandra::java' do
     end
 
     it do
-      should contain_package('openjdk-7-jre-headless').with_ensure('2.1.13')
+      is_expected.to contain_package('openjdk-7-jre-headless').with_ensure('2.1.13')
     end
   end
 
@@ -77,8 +77,8 @@ describe 'cassandra::java' do
     end
 
     it do
-      should contain_package('foobar-java').with(ensure: 42)
-      should contain_package('foobar-jna').with(ensure: 'latest')
+      is_expected.to contain_package('foobar-java').with(ensure: 42)
+      is_expected.to contain_package('foobar-jna').with(ensure: 'latest')
     end
   end
 
@@ -102,7 +102,7 @@ describe 'cassandra::java' do
     end
 
     it do
-      should contain_yumrepo('ACME').with(
+      is_expected.to contain_yumrepo('ACME').with(
         baseurl: 'http://yum.acme.org/repos',
         descr: 'YUM Repository for ACME Products'
       ).that_comes_before('Package[java-1.8.0-openjdk-headless]')
@@ -137,25 +137,25 @@ describe 'cassandra::java' do
     end
 
     it do
-      should contain_apt__key('openjdk-r')
-        .with(
+      is_expected.to contain_apt__key('openjdk-r').
+        with(
           id: 'DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
           server: 'keyserver.ubuntu.com'
-        )
-        .that_comes_before('Package[openjdk-7-jre-headless]')
-      should contain_apt__source('openjdk-r')
-        .with(
+        ).
+        that_comes_before('Package[openjdk-7-jre-headless]')
+      is_expected.to contain_apt__source('openjdk-r').
+        with(
           comment: 'OpenJDK builds (all archs)',
           location: 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu',
           repos: 'main',
           release: 'trusty'
         )
-      should contain_exec('cassandra::java::apt_update')
-        .with(
+      is_expected.to contain_exec('cassandra::java::apt_update').
+        with(
           refreshonly: true,
           command: '/bin/true'
-        )
-        .that_comes_before('Package[openjdk-7-jre-headless]')
+        ).
+        that_comes_before('Package[openjdk-7-jre-headless]')
     end
   end
 end

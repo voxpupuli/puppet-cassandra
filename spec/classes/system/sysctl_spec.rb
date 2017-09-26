@@ -21,17 +21,17 @@ describe 'cassandra::system::sysctl' do
     end
 
     it do
-      should have_resource_count(9)
-      should contain_class('Cassandra::System::Sysctl')
-      should contain_ini_setting('net.core.optmem_max = 40960')
-      should contain_ini_setting('net.core.rmem_default = 16777216')
-      should contain_ini_setting('net.core.rmem_max = 16777216')
-      should contain_ini_setting('net.core.wmem_default = 16777216')
-      should contain_ini_setting('net.core.wmem_max = 16777216')
-      should contain_ini_setting('net.ipv4.tcp_rmem = 4096, 87380, 16777216')
-      should contain_ini_setting('net.ipv4.tcp_wmem = 4096, 65536, 16777216')
-      should contain_ini_setting('vm.max_map_count = 1048575')
-      should contain_exec('Apply sysctl changes').with(
+      is_expected.to have_resource_count(9)
+      is_expected.to contain_class('Cassandra::System::Sysctl')
+      is_expected.to contain_ini_setting('net.core.optmem_max = 40960')
+      is_expected.to contain_ini_setting('net.core.rmem_default = 16777216')
+      is_expected.to contain_ini_setting('net.core.rmem_max = 16777216')
+      is_expected.to contain_ini_setting('net.core.wmem_default = 16777216')
+      is_expected.to contain_ini_setting('net.core.wmem_max = 16777216')
+      is_expected.to contain_ini_setting('net.ipv4.tcp_rmem = 4096, 87380, 16777216')
+      is_expected.to contain_ini_setting('net.ipv4.tcp_wmem = 4096, 65536, 16777216')
+      is_expected.to contain_ini_setting('vm.max_map_count = 1048575')
+      is_expected.to contain_exec('Apply sysctl changes').with(
         command: '/sbin/sysctl -p /etc/sysctl.d/10-cassandra.conf'
       )
     end

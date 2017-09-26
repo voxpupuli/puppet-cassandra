@@ -34,10 +34,10 @@ describe 'cassandra::schema::cql_type' do
     end
 
     it do
-      should compile
-      should contain_class('cassandra::schema')
-      should contain_cassandra__schema__cql_type('fullname')
-      should contain_exec('/usr/bin/cqlsh   -e "CREATE TYPE IF NOT EXISTS Excelsior.fullname (firstname text, lastname text)" localhost 9042')
+      is_expected.to compile
+      is_expected.to contain_class('cassandra::schema')
+      is_expected.to contain_cassandra__schema__cql_type('fullname')
+      is_expected.to contain_exec('/usr/bin/cqlsh   -e "CREATE TYPE IF NOT EXISTS Excelsior.fullname (firstname text, lastname text)" localhost 9042')
     end
   end
 
@@ -58,9 +58,9 @@ describe 'cassandra::schema::cql_type' do
     end
 
     it do
-      should compile
-      should contain_cassandra__schema__cql_type('address')
-      should contain_exec('/usr/bin/cqlsh   -e "DROP type Excalibur.address" localhost 9042')
+      is_expected.to compile
+      is_expected.to contain_cassandra__schema__cql_type('address')
+      is_expected.to contain_exec('/usr/bin/cqlsh   -e "DROP type Excalibur.address" localhost 9042')
     end
   end
 
@@ -79,6 +79,6 @@ describe 'cassandra::schema::cql_type' do
       }
     end
 
-    it { should raise_error(Puppet::Error) }
+    it { is_expected.to raise_error(Puppet::Error) }
   end
 end

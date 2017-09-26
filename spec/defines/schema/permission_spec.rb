@@ -27,7 +27,7 @@ describe 'cassandra::schema::permission' do
       }
     end
 
-    it { should raise_error(Puppet::Error) }
+    it { is_expected.to raise_error(Puppet::Error) }
   end
 
   context 'Set ensure to latest' do
@@ -45,7 +45,7 @@ describe 'cassandra::schema::permission' do
       }
     end
 
-    it { should raise_error(Puppet::Error) }
+    it { is_expected.to raise_error(Puppet::Error) }
   end
 
   context 'spillman:SELECT:ALL' do
@@ -65,9 +65,9 @@ describe 'cassandra::schema::permission' do
     end
 
     it do
-      should have_resource_count(9)
-      should contain_cassandra__schema__permission('spillman:SELECT:ALL')
-      should contain_exec('GRANT SELECT ON ALL KEYSPACES TO spillman')
+      is_expected.to have_resource_count(9)
+      is_expected.to contain_cassandra__schema__permission('spillman:SELECT:ALL')
+      is_expected.to contain_exec('GRANT SELECT ON ALL KEYSPACES TO spillman')
     end
   end
 
@@ -89,9 +89,9 @@ describe 'cassandra::schema::permission' do
     end
 
     it do
-      should have_resource_count(9)
-      should contain_cassandra__schema__permission('akers:modify:field')
-      should contain_exec('GRANT MODIFY ON KEYSPACE field TO akers')
+      is_expected.to have_resource_count(9)
+      is_expected.to contain_cassandra__schema__permission('akers:modify:field')
+      is_expected.to contain_exec('GRANT MODIFY ON KEYSPACE field TO akers')
     end
   end
 
@@ -113,9 +113,9 @@ describe 'cassandra::schema::permission' do
     end
 
     it do
-      should have_resource_count(9)
-      should contain_cassandra__schema__permission('boone:alter:forty9ers')
-      should contain_exec('GRANT ALTER ON KEYSPACE forty9ers TO boone')
+      is_expected.to have_resource_count(9)
+      is_expected.to contain_cassandra__schema__permission('boone:alter:forty9ers')
+      is_expected.to contain_exec('GRANT ALTER ON KEYSPACE forty9ers TO boone')
     end
   end
 
@@ -137,24 +137,24 @@ describe 'cassandra::schema::permission' do
     end
 
     it do
-      should have_resource_count(18)
-      should contain_cassandra__schema__permission('boone:ALL:ravens.plays')
-      should contain_cassandra__schema__permission('boone:ALL:ravens.plays - ALTER').with(
+      is_expected.to have_resource_count(18)
+      is_expected.to contain_cassandra__schema__permission('boone:ALL:ravens.plays')
+      is_expected.to contain_cassandra__schema__permission('boone:ALL:ravens.plays - ALTER').with(
         ensure: 'present',
         user_name: 'boone',
         keyspace_name: 'ravens',
         permission_name: 'ALTER',
         table_name: 'plays'
       )
-      should contain_cassandra__schema__permission('boone:ALL:ravens.plays - AUTHORIZE')
-      should contain_cassandra__schema__permission('boone:ALL:ravens.plays - DROP')
-      should contain_cassandra__schema__permission('boone:ALL:ravens.plays - MODIFY')
-      should contain_cassandra__schema__permission('boone:ALL:ravens.plays - SELECT')
-      should contain_exec('GRANT ALTER ON TABLE ravens.plays TO boone')
-      should contain_exec('GRANT AUTHORIZE ON TABLE ravens.plays TO boone')
-      should contain_exec('GRANT DROP ON TABLE ravens.plays TO boone')
-      should contain_exec('GRANT MODIFY ON TABLE ravens.plays TO boone')
-      should contain_exec('GRANT SELECT ON TABLE ravens.plays TO boone')
+      is_expected.to contain_cassandra__schema__permission('boone:ALL:ravens.plays - AUTHORIZE')
+      is_expected.to contain_cassandra__schema__permission('boone:ALL:ravens.plays - DROP')
+      is_expected.to contain_cassandra__schema__permission('boone:ALL:ravens.plays - MODIFY')
+      is_expected.to contain_cassandra__schema__permission('boone:ALL:ravens.plays - SELECT')
+      is_expected.to contain_exec('GRANT ALTER ON TABLE ravens.plays TO boone')
+      is_expected.to contain_exec('GRANT AUTHORIZE ON TABLE ravens.plays TO boone')
+      is_expected.to contain_exec('GRANT DROP ON TABLE ravens.plays TO boone')
+      is_expected.to contain_exec('GRANT MODIFY ON TABLE ravens.plays TO boone')
+      is_expected.to contain_exec('GRANT SELECT ON TABLE ravens.plays TO boone')
     end
   end
 
@@ -177,9 +177,9 @@ describe 'cassandra::schema::permission' do
     end
 
     it do
-      should have_resource_count(9)
-      should contain_cassandra__schema__permission('REVOKE boone:SELECT:ravens.plays')
-      should contain_exec('REVOKE SELECT ON KEYSPACE forty9ers FROM boone')
+      is_expected.to have_resource_count(9)
+      is_expected.to contain_cassandra__schema__permission('REVOKE boone:SELECT:ravens.plays')
+      is_expected.to contain_exec('REVOKE SELECT ON KEYSPACE forty9ers FROM boone')
     end
   end
 end
