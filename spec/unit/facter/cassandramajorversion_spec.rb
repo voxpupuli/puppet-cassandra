@@ -10,11 +10,12 @@ describe 'Facter::Util::Fact' do
       allow(Facter::Util::Resolution).
         to receive(:exec).with('nodetool version').
         and_return('2.1.11.969')
-      expect(Facter.fact(:cassandrarelease).value).to eql('2.1.11')
-      expect(Facter.fact(:cassandramajorversion).value).to be(2)
-      expect(Facter.fact(:cassandraminorversion).value).to be(1)
-      expect(Facter.fact(:cassandrapatchversion).value).to be(11)
     end
+
+    it { expect(Facter.fact(:cassandrarelease).value).to eql('2.1.11') }
+    it { expect(Facter.fact(:cassandramajorversion).value).to be(2) }
+    it { expect(Facter.fact(:cassandraminorversion).value).to be(1) }
+    it { expect(Facter.fact(:cassandrapatchversion).value).to be(11) }
   end
 
   describe 'cassandrarelease DDC' do
@@ -22,11 +23,12 @@ describe 'Facter::Util::Fact' do
       allow(Facter::Util::Resolution).
         to receive(:exec).with('nodetool version').
         and_return('3.0.1')
-      expect(Facter.fact(:cassandrarelease).value).to eql('3.0.1')
-      expect(Facter.fact(:cassandramajorversion).value).to be(3)
-      expect(Facter.fact(:cassandraminorversion).value).to be(0)
-      expect(Facter.fact(:cassandrapatchversion).value).to be(1)
     end
+
+    it { expect(Facter.fact(:cassandrarelease).value).to eql('3.0.1') }
+    it { expect(Facter.fact(:cassandramajorversion).value).to be(3) }
+    it { expect(Facter.fact(:cassandraminorversion).value).to be(0) }
+    it { expect(Facter.fact(:cassandrapatchversion).value).to be(1) }
   end
 
   describe 'Cassandra not installed or not running' do
@@ -34,10 +36,11 @@ describe 'Facter::Util::Fact' do
       allow(Facter::Util::Resolution).
         to receive(:exec).with('nodetool version').
         and_return('')
-      expect(Facter.fact(:cassandrarelease).value).to be(nil)
-      expect(Facter.fact(:cassandramajorversion).value).to be(nil)
-      expect(Facter.fact(:cassandraminorversion).value).to be(nil)
-      expect(Facter.fact(:cassandrapatchversion).value).to be(nil)
     end
+
+    it { expect(Facter.fact(:cassandrarelease).value).to be(nil) }
+    it { expect(Facter.fact(:cassandramajorversion).value).to be(nil) }
+    it { expect(Facter.fact(:cassandraminorversion).value).to be(nil) }
+    it { expect(Facter.fact(:cassandrapatchversion).value).to be(nil) }
   end
 end

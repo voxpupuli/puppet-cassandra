@@ -10,11 +10,12 @@ describe 'Facter::Util::Fact' do
       allow(Facter::Util::Resolution).
         to receive(:exec).with('nodetool version').
         and_return('2.1.11.969')
-      expect(Facter.fact(:cassandrarelease).value).to eql('2.1.11')
-      expect(Facter.fact(:cassandramajorversion).value).to be(2)
-      expect(Facter.fact(:cassandraminorversion).value).to be(1)
-      expect(Facter.fact(:cassandrapatchversion).value).to be(11)
     end
+
+    it { expect(Facter.fact(:cassandrarelease).value).to eql('2.1.11') }
+    it { expect(Facter.fact(:cassandramajorversion).value).to be(2) }
+    it { expect(Facter.fact(:cassandraminorversion).value).to be(1) }
+    it { expect(Facter.fact(:cassandrapatchversion).value).to be(11) }
   end
 
   describe 'cassandrarelease DDC' do
@@ -22,11 +23,12 @@ describe 'Facter::Util::Fact' do
       allow(Facter::Util::Resolution).
         to receive(:exec).with('nodetool version').
         and_return('3.0.1')
-      expect(Facter.fact(:cassandrarelease).value).to eql('3.0.1')
-      expect(Facter.fact(:cassandramajorversion).value).to be(3)
-      expect(Facter.fact(:cassandraminorversion).value).to be(0)
-      expect(Facter.fact(:cassandrapatchversion).value).to be(1)
     end
+
+    it { expect(Facter.fact(:cassandrarelease).value).to eql('3.0.1') }
+    it { expect(Facter.fact(:cassandramajorversion).value).to be(3) }
+    it { expect(Facter.fact(:cassandraminorversion).value).to be(0) }
+    it { expect(Facter.fact(:cassandrapatchversion).value).to be(1) }
   end
 
   describe 'Cassandra not installed or not running' do
@@ -34,11 +36,12 @@ describe 'Facter::Util::Fact' do
       allow(Facter::Util::Resolution).
         to receive(:exec).with('nodetool version').
         and_return('')
-      expect(Facter.fact(:cassandrarelease).value).to be(nil)
-      expect(Facter.fact(:cassandramajorversion).value).to be(nil)
-      expect(Facter.fact(:cassandraminorversion).value).to be(nil)
-      expect(Facter.fact(:cassandrapatchversion).value).to be(nil)
     end
+
+    it { expect(Facter.fact(:cassandrarelease).value).to be(nil) }
+    it { expect(Facter.fact(:cassandramajorversion).value).to be(nil) }
+    it { expect(Facter.fact(:cassandraminorversion).value).to be(nil) }
+    it { expect(Facter.fact(:cassandrapatchversion).value).to be(nil) }
   end
 
   describe 'Heap settings' do
@@ -48,12 +51,10 @@ describe 'Facter::Util::Fact' do
         Facter.fact(:processorcount).stubs(:value).returns('4')
       end
 
-      it do
-        expect(Facter.fact(:cassandramaxheapsize).value).to eq(512)
-        expect(Facter.fact(:cassandracmsmaxheapsize).value).to be(512)
-        expect(Facter.fact(:cassandraheapnewsize).value).to be(128)
-        expect(Facter.fact(:cassandracmsheapnewsize).value).to be(128)
-      end
+      it { expect(Facter.fact(:cassandramaxheapsize).value).to eq(512) }
+      it { expect(Facter.fact(:cassandracmsmaxheapsize).value).to be(512) }
+      it { expect(Facter.fact(:cassandraheapnewsize).value).to be(128) }
+      it { expect(Facter.fact(:cassandracmsheapnewsize).value).to be(128) }
     end
 
     context 'm4.large' do
@@ -62,12 +63,10 @@ describe 'Facter::Util::Fact' do
         Facter.fact(:processorcount).stubs(:value).returns('2')
       end
 
-      it do
-        expect(Facter.fact(:cassandramaxheapsize).value).to be(2048)
-        expect(Facter.fact(:cassandracmsmaxheapsize).value).to be(2048)
-        expect(Facter.fact(:cassandraheapnewsize).value).to be(200)
-        expect(Facter.fact(:cassandracmsheapnewsize).value).to be(200)
-      end
+      it { expect(Facter.fact(:cassandramaxheapsize).value).to be(2048) }
+      it { expect(Facter.fact(:cassandracmsmaxheapsize).value).to be(2048) }
+      it { expect(Facter.fact(:cassandraheapnewsize).value).to be(200) }
+      it { expect(Facter.fact(:cassandracmsheapnewsize).value).to be(200) }
     end
 
     context 'm4.xlarge' do
@@ -76,12 +75,10 @@ describe 'Facter::Util::Fact' do
         Facter.fact(:processorcount).stubs(:value).returns('2')
       end
 
-      it do
-        expect(Facter.fact(:cassandramaxheapsize).value).to be(4096)
-        expect(Facter.fact(:cassandracmsmaxheapsize).value).to be(4096)
-        expect(Facter.fact(:cassandraheapnewsize).value).to be(200)
-        expect(Facter.fact(:cassandracmsheapnewsize).value).to be(200)
-      end
+      it { expect(Facter.fact(:cassandramaxheapsize).value).to be(4096) }
+      it { expect(Facter.fact(:cassandracmsmaxheapsize).value).to be(4096) }
+      it { expect(Facter.fact(:cassandraheapnewsize).value).to be(200) }
+      it { expect(Facter.fact(:cassandracmsheapnewsize).value).to be(200) }
     end
 
     context 'c4.2xlarge' do
@@ -90,12 +87,10 @@ describe 'Facter::Util::Fact' do
         Facter.fact(:processorcount).stubs(:value).returns('8')
       end
 
-      it do
-        expect(Facter.fact(:cassandramaxheapsize).value).to be(3840)
-        expect(Facter.fact(:cassandracmsmaxheapsize).value).to be(3840)
-        expect(Facter.fact(:cassandraheapnewsize).value).to be(800)
-        expect(Facter.fact(:cassandracmsheapnewsize).value).to be(800)
-      end
+      it { expect(Facter.fact(:cassandramaxheapsize).value).to be(3840) }
+      it { expect(Facter.fact(:cassandracmsmaxheapsize).value).to be(3840) }
+      it { expect(Facter.fact(:cassandraheapnewsize).value).to be(800) }
+      it { expect(Facter.fact(:cassandracmsheapnewsize).value).to be(800) }
     end
 
     context 'i2.2xlarge' do
@@ -104,12 +99,10 @@ describe 'Facter::Util::Fact' do
         Facter.fact(:processorcount).stubs(:value).returns('8')
       end
 
-      it do
-        expect(Facter.fact(:cassandramaxheapsize).value).to be(8192)
-        expect(Facter.fact(:cassandracmsmaxheapsize).value).to be(14_336)
-        expect(Facter.fact(:cassandraheapnewsize).value).to be(800)
-        expect(Facter.fact(:cassandracmsheapnewsize).value).to be(800)
-      end
+      it { expect(Facter.fact(:cassandramaxheapsize).value).to be(8192) }
+      it { expect(Facter.fact(:cassandracmsmaxheapsize).value).to be(14_336) }
+      it { expect(Facter.fact(:cassandraheapnewsize).value).to be(800) }
+      it { expect(Facter.fact(:cassandracmsheapnewsize).value).to be(800) }
     end
   end
 end
