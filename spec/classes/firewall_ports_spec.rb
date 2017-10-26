@@ -1,12 +1,5 @@
 require 'spec_helper'
 describe 'cassandra::firewall_ports' do
-  let(:pre_condition) do
-    [
-      'class cassandra () {}',
-      'define firewall ($action, $dport, $proto, $source) {}'
-    ]
-  end
-
   context 'Run with defaults.' do
     it do
       is_expected.to have_resource_count(2)

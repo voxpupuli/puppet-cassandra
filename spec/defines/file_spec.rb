@@ -1,19 +1,6 @@
 require 'spec_helper'
 
 describe '::cassandra::file' do
-  let(:pre_condition) do
-    [
-      'class stdlib () {}',
-      'define ini_setting($ensure = nil,
-         $path,
-         $section,
-         $key_val_separator       = nil,
-         $setting,
-         $value                   = nil) {}',
-      'define file_line($line, $path, $match) {}'
-    ]
-  end
-
   context 'On a Debian OS set the max and new heap size' do
     let :facts do
       {

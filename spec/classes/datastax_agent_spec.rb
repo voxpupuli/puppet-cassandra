@@ -1,18 +1,6 @@
 require 'spec_helper'
 
 describe 'cassandra::datastax_agent' do
-  let(:pre_condition) do
-    [
-      'class cassandra() {}',
-      'define ini_setting($ensure = nil,
-         $path,
-         $section,
-         $key_val_separator       = nil,
-         $setting,
-         $value                   = nil) {}'
-    ]
-  end
-
   context 'Test for cassandra::datastax_agent with defaults (RedHat).' do
     let :facts do
       {
@@ -134,7 +122,7 @@ describe 'cassandra::datastax_agent' do
     end
 
     it do
-      is_expected.to have_resource_count(4)
+      is_expected.to have_resource_count(7)
     end
   end
 end
