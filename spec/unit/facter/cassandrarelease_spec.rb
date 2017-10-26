@@ -1,46 +1,27 @@
 require 'spec_helper'
 
-describe 'Facter::Util::Fact' do
-  before do
-    Facter.clear
-  end
+describe 'cassandrarelease' do
+  before { Facter.clear }
+  after { Facter.clear }
 
   describe 'cassandrarelease DSE' do
     it do
-      allow(Facter::Util::Resolution).
-        to receive(:exec).with('nodetool version').
-        and_return('2.1.11.969')
+      Facter::Util::Resolution.stubs(:exec).with('nodetool version').returns('2.1.11.969')
+      expect(Facter.fact(:cassandrarelease).value).to eql('2.1.11')
     end
-
-    it { expect(Facter.fact(:cassandrarelease).value).to eql('2.1.11') }
-    it { expect(Facter.fact(:cassandramajorversion).value).to be(2) }
-    it { expect(Facter.fact(:cassandraminorversion).value).to be(1) }
-    it { expect(Facter.fact(:cassandrapatchversion).value).to be(11) }
   end
 
   describe 'cassandrarelease DDC' do
     it do
-      allow(Facter::Util::Resolution).
-        to receive(:exec).with('nodetool version').
-        and_return('3.0.1')
+      Facter::Util::Resolution.stubs(:exec).with('nodetool version').returns('3.0.1')
+      expect(Facter.fact(:cassandrarelease).value).to eql('3.0.1')
     end
-
-    it { expect(Facter.fact(:cassandrarelease).value).to eql('3.0.1') }
-    it { expect(Facter.fact(:cassandramajorversion).value).to be(3) }
-    it { expect(Facter.fact(:cassandraminorversion).value).to be(0) }
-    it { expect(Facter.fact(:cassandrapatchversion).value).to be(1) }
   end
 
   describe 'Cassandra not installed or not running' do
     it do
-      allow(Facter::Util::Resolution).
-        to receive(:exec).with('nodetool version').
-        and_return('')
+      Facter::Util::Resolution.stubs(:exec).with('nodetool version').returns('')
+      expect(Facter.fact(:cassandrarelease).value).to be(nil)
     end
-
-    it { expect(Facter.fact(:cassandrarelease).value).to be(nil) }
-    it { expect(Facter.fact(:cassandramajorversion).value).to be(nil) }
-    it { expect(Facter.fact(:cassandraminorversion).value).to be(nil) }
-    it { expect(Facter.fact(:cassandrapatchversion).value).to be(nil) }
   end
 end
