@@ -1,12 +1,5 @@
 require 'spec_helper'
 describe 'cassandra::dse' do
-  let(:pre_condition) do
-    [
-      'class stdlib () {}',
-      'define file_line($line, $path, $match) {}'
-    ]
-  end
-
   context 'with defaults for all parameters' do
     let :facts do
       {
@@ -16,7 +9,7 @@ describe 'cassandra::dse' do
     end
 
     it do
-      is_expected.to have_resource_count(6)
+      is_expected.to have_resource_count(13)
       is_expected.to contain_class('cassandra')
 
       is_expected.to contain_class('cassandra::dse').with(

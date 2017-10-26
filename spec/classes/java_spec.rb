@@ -1,18 +1,9 @@
 require 'spec_helper'
 describe 'cassandra::java' do
-  let(:pre_condition) do
-    [
-      'class apt () {}',
-      'class apt::update () {}',
-      'define apt::key ($id, $server) {}',
-      'define apt::source ($location, $comment, $release, $repos) {}'
-    ]
-  end
-
   context 'On a RedHat OS with defaults for all parameters' do
     let :facts do
       {
-        operatingsystemmajrelease: 7,
+        operatingsystemmajrelease: '7',
         osfamily: 'RedHat'
       }
     end
@@ -27,7 +18,7 @@ describe 'cassandra::java' do
   context 'On a Debian OS with defaults for all parameters' do
     let :facts do
       {
-        operatingsystemmajrelease: 7,
+        operatingsystemmajrelease: '7',
         osfamily: 'Debian'
       }
     end
@@ -43,7 +34,7 @@ describe 'cassandra::java' do
   context 'On a Debian OS with package_ensure set' do
     let :facts do
       {
-        operatingsystemmajrelease: 7,
+        operatingsystemmajrelease: '7',
         osfamily: 'Debian'
       }
     end
@@ -62,7 +53,7 @@ describe 'cassandra::java' do
   context 'With package names set to foobar' do
     let :facts do
       {
-        operatingsystemmajrelease: 7,
+        operatingsystemmajrelease: '7',
         osfamily: 'RedHat'
       }
     end
@@ -85,7 +76,7 @@ describe 'cassandra::java' do
   context 'Ensure that a YUM repo can be specified.' do
     let :facts do
       {
-        operatingsystemmajrelease: 7,
+        operatingsystemmajrelease: '7',
         osfamily: 'RedHat'
       }
     end
@@ -112,7 +103,7 @@ describe 'cassandra::java' do
   context 'Ensure that Apt key and source can be specified.' do
     let :facts do
       {
-        operatingsystemmajrelease: 7,
+        operatingsystemmajrelease: '7',
         osfamily: 'Debian'
       }
     end

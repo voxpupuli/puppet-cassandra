@@ -1,17 +1,6 @@
 require 'spec_helper'
 
 describe 'cassandra::system::sysctl' do
-  let(:pre_condition) do
-    [
-      'define ini_setting($ensure = nil,
-         $path,
-         $section,
-         $key_val_separator = nil,
-         $setting,
-         $value             = nil) {}'
-    ]
-  end
-
   context 'Test the default parameters (RedHat)' do
     let :facts do
       {

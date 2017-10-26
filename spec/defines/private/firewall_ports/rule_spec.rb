@@ -1,9 +1,5 @@
 require 'spec_helper'
 describe 'cassandra::private::firewall_ports::rule' do
-  let(:pre_condition) do
-    ['define firewall ($action, $dport, $proto, $source) {}']
-  end
-
   context 'Test that rules can be set.' do
     let(:title) { '200_Public_0.0.0.0/0' }
     let :params do

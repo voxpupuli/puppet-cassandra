@@ -1,14 +1,5 @@
 require 'spec_helper'
 describe 'cassandra::apache_repo' do
-  let(:pre_condition) do
-    [
-      'class apt () {}',
-      'class apt::update () {}',
-      'define apt::key ($id, $source) {}',
-      'define apt::source ($location, $comment, $release, $include) {}'
-    ]
-  end
-
   context 'On a RedHat OS with defaults for all parameters' do
     let :facts do
       {

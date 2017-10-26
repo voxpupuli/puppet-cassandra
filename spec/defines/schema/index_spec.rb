@@ -1,17 +1,6 @@
 require 'spec_helper'
 
 describe 'cassandra::schema::index' do
-  let(:pre_condition) do
-    [
-      'define ini_setting($ensure = nil,
-         $path,
-         $section,
-         $key_val_separator       = nil,
-         $setting,
-         $value                   = nil) {}'
-    ]
-  end
-
   context 'Create a basic index' do
     let :facts do
       {

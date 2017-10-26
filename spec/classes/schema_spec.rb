@@ -1,16 +1,5 @@
 require 'spec_helper'
 describe 'cassandra::schema' do
-  let(:pre_condition) do
-    [
-      'define ini_setting($ensure = nil,
-         $path,
-         $section,
-         $key_val_separator       = nil,
-         $setting,
-         $value                   = nil) {}'
-    ]
-  end
-
   context 'Ensure that a connection test is made.' do
     let :facts do
       {

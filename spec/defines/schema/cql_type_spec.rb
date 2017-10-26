@@ -1,17 +1,6 @@
 require 'spec_helper'
 
 describe 'cassandra::schema::cql_type' do
-  let(:pre_condition) do
-    [
-      'define ini_setting($ensure = nil,
-         $path,
-         $section,
-         $key_val_separator       = nil,
-         $setting,
-         $value                   = nil) {}'
-    ]
-  end
-
   context 'CQL TYPE (fullname)' do
     let :facts do
       {
