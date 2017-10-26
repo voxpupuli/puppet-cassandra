@@ -12,6 +12,7 @@ AllCops:
     - Gemfile
     - Rakefile
     - Guardfile
+    - Vagrantfile
 Lint/ConditionPosition:
   Enabled: True
 
@@ -44,6 +45,9 @@ Style/HashSyntax:
 
 Style/RedundantReturn:
   Enabled: True
+
+Style/EndOfLine:
+  Enabled: False
 
 Lint/AmbiguousOperator:
   Enabled: True
@@ -534,5 +538,8 @@ Security/YAMLLoad:
 # This affects hiera interpolation, as well as some configs that we push.
 Style/FormatStringToken:
   Enabled: false
-Style/FormatStringToken:
+
+# This is useful, but sometimes a little too picky about where unit tests files
+# are located.
+RSpec/FilePath:
   Enabled: false
