@@ -3,9 +3,9 @@ require 'spec_helper'
 describe 'cassandra::system::swapoff' do
   context 'Test the default parameters' do
     it do
-      should have_resource_count(1)
-      should contain_class('cassandra::system::swapoff')
-      should contain_exec('Disable Swap')
+      is_expected.to have_resource_count(1)
+      is_expected.to contain_class('cassandra::system::swapoff')
+      is_expected.to contain_exec('Disable Swap')
     end
   end
 
@@ -17,10 +17,10 @@ describe 'cassandra::system::swapoff' do
     end
 
     it do
-      should have_resource_count(2)
-      should contain_class('cassandra::system::swapoff')
-      should contain_exec('Disable Swap')
-      should contain_mount('swap').with(
+      is_expected.to have_resource_count(2)
+      is_expected.to contain_class('cassandra::system::swapoff')
+      is_expected.to contain_exec('Disable Swap')
+      is_expected.to contain_mount('swap').with(
         ensure: 'absent',
         device: '/dev/mapper/centos-swap',
         fstype: 'swap'

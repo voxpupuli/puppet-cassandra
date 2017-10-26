@@ -1,28 +1,46 @@
 ---
-env:
-  - "PUPPET_VERSION='~> 4.5' BEAKER_set=centos6_2"
-  - "PUPPET_VERSION='~> 4.5' BEAKER_set=centos6_3"
-  - "PUPPET_VERSION='~> 4.5' BEAKER_set=centos7"
-  - "PUPPET_VERSION='~> 4.5' BEAKER_set=debian7"
-  - "PUPPET_VERSION='~> 4.5' BEAKER_set=debian8"
-  - "PUPPET_VERSION='~> 4.5' BEAKER_set=ubuntu1204"
-  - "PUPPET_VERSION='~> 4.5' BEAKER_set=ubuntu1404"
-  - "PUPPET_VERSION='~> 4.5' BEAKER_set=ubuntu1604"
-language: ruby
-rvm:
-  - 2.3.1
-cache: bundler
-before_install: rm Gemfile.lock || true
-bundler_args: --without development
+sudo: false
 dist: trusty
-sudo: required
-script: 
-  - "bundle exec puppet --version"
-  - "bundle exec rake metadata_lint"
-  - "bundle exec rubocop"
-  - "bundle exec rake lint"
-  - "bundle exec rake validate"
-  - "bundle exec rake spec SPEC_OPTS='--format documentation'"
-  - "bundle exec rake acceptance"
+language: ruby
+cache: bundler
+before_install:
+  - bundle -v
+  - rm Gemfile.lock || true
+  - gem update --system
+  - gem update bundler
+  - gem --version
+  - bundle -v
+script:
+  - 'bundle exec rake $CHECK'
+matrix:
+  fast_finish: true
+  include:
+  - rvm: 2.1.9
+    bundler_args: --without system_tests development
+    env: PUPPET_VERSION="~> 4.0" CHECK=test
+  - rvm: 2.4.1
+    bundler_args: --without system_tests development
+    env: PUPPET_VERSION="~> 5.0" CHECK=test_with_coveralls
+  - rvm: 2.4.1
+    bundler_args: --without system_tests development
+    env: PUPPET_VERSION="~> 5.0" CHECK=rubocop
+  - rvm: 2.4.1
+    bundler_args: --without system_tests development
+    env: PUPPET_VERSION="~> 5.0" CHECK=build DEPLOY_TO_FORGE=yes
+branches:
+  only:
+  - master
+  - /^v\d/
 notifications:
   email: false
+deploy:
+  provider: puppetforge
+  user: puppet
+  password:
+    secure: ""
+  on:
+    tags: true
+    # all_branches is required to use tags
+    all_branches: true
+    # Only publish the build marked with "DEPLOY_TO_FORGE"
+    condition: "$DEPLOY_TO_FORGE = yes"

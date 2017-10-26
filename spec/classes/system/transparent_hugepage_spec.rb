@@ -10,9 +10,9 @@ describe 'cassandra::system::transparent_hugepage' do
     end
 
     it do
-      should have_resource_count(1)
-      should contain_class('cassandra::system::transparent_hugepage')
-      should contain_exec('Disable Java Hugepages')
+      is_expected.to have_resource_count(1)
+      is_expected.to contain_class('cassandra::system::transparent_hugepage')
+      is_expected.to contain_exec('Disable Java Hugepages')
     end
   end
 
@@ -25,9 +25,9 @@ describe 'cassandra::system::transparent_hugepage' do
     end
 
     it do
-      should have_resource_count(1)
-      should contain_class('cassandra::system::transparent_hugepage')
-      should contain_exec('Disable Java Hugepages')
+      is_expected.to have_resource_count(1)
+      is_expected.to contain_class('cassandra::system::transparent_hugepage')
+      is_expected.to contain_exec('Disable Java Hugepages')
     end
   end
 end

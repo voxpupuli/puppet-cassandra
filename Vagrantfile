@@ -1,3 +1,4 @@
+# rubocop:disable Style/FileName
 # TODO: Find out why cassandra::params not working with vagrant and CentOS 6.2
 # TODO: Find out why cassandra::params not working with vagrant and CentOS 7.0
 # TODO: Find out why cassandra::params not working with vagrant and Ubuntu 12.04.

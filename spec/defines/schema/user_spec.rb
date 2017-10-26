@@ -1,17 +1,6 @@
 require 'spec_helper'
 
 describe 'cassandra::schema::user' do
-  let(:pre_condition) do
-    [
-      'define ini_setting($ensure = nil,
-         $path,
-         $section,
-         $key_val_separator       = nil,
-         $setting,
-         $value                   = nil) {}'
-    ]
-  end
-
   context 'Create a supper user on cassandrarelease undef' do
     let :facts do
       {
@@ -31,8 +20,8 @@ describe 'cassandra::schema::user' do
     end
 
     it do
-      should contain_cassandra__schema__user('akers').with_ensure('present')
-      should contain_exec('Create user (akers)').with(
+      is_expected.to contain_cassandra__schema__user('akers').with_ensure('present')
+      is_expected.to contain_exec('Create user (akers)').with(
         command: '/usr/bin/cqlsh   -e "CREATE USER IF NOT EXISTS akers WITH PASSWORD \'Niner2\' SUPERUSER" localhost 9042'
       )
     end
@@ -57,8 +46,8 @@ describe 'cassandra::schema::user' do
     end
 
     it do
-      should contain_cassandra__schema__user('akers').with_ensure('present')
-      should contain_exec('Create user (akers)').with(
+      is_expected.to contain_cassandra__schema__user('akers').with_ensure('present')
+      is_expected.to contain_exec('Create user (akers)').with(
         command: '/usr/bin/cqlsh   -e "CREATE USER IF NOT EXISTS akers WITH PASSWORD \'Niner2\' SUPERUSER" localhost 9042'
       )
     end
@@ -82,8 +71,8 @@ describe 'cassandra::schema::user' do
     end
 
     it do
-      should contain_cassandra__schema__user('akers').with_ensure('present')
-      should contain_exec('Create user (akers)').with(
+      is_expected.to contain_cassandra__schema__user('akers').with_ensure('present')
+      is_expected.to contain_exec('Create user (akers)').with(
         command: '/usr/bin/cqlsh   -e "CREATE USER IF NOT EXISTS akers WITH PASSWORD \'Niner2\' NOSUPERUSER" localhost 9042'
       )
     end
@@ -108,8 +97,8 @@ describe 'cassandra::schema::user' do
     end
 
     it do
-      should contain_cassandra__schema__user('akers').with_ensure('present')
-      should contain_exec('Create user (akers)').with(
+      is_expected.to contain_cassandra__schema__user('akers').with_ensure('present')
+      is_expected.to contain_exec('Create user (akers)').with(
         command: '/usr/bin/cqlsh   -e "CREATE ROLE IF NOT EXISTS akers WITH PASSWORD = \'Niner2\' AND SUPERUSER = true AND LOGIN = true" localhost 9042'
       )
     end
@@ -134,8 +123,8 @@ describe 'cassandra::schema::user' do
     end
 
     it do
-      should contain_cassandra__schema__user('bob').with_ensure('present')
-      should contain_exec('Create user (bob)').with(
+      is_expected.to contain_cassandra__schema__user('bob').with_ensure('present')
+      is_expected.to contain_exec('Create user (bob)').with(
         command: '/usr/bin/cqlsh   -e "CREATE ROLE IF NOT EXISTS bob WITH PASSWORD = \'kaZe89a\'" localhost 9042'
       )
     end
@@ -160,7 +149,7 @@ describe 'cassandra::schema::user' do
     end
 
     it do
-      should contain_exec('Delete user (akers)').with(
+      is_expected.to contain_exec('Delete user (akers)').with(
         command: '/usr/bin/cqlsh   -e "DROP ROLE akers" localhost 9042'
       )
     end
@@ -185,7 +174,7 @@ describe 'cassandra::schema::user' do
     end
 
     it do
-      should contain_exec('Delete user (akers)').with(
+      is_expected.to contain_exec('Delete user (akers)').with(
         command: '/usr/bin/cqlsh   -e "DROP USER akers" localhost 9042'
       )
     end
@@ -206,6 +195,6 @@ describe 'cassandra::schema::user' do
       }
     end
 
-    it { should raise_error(Puppet::Error) }
+    it { is_expected.to raise_error(Puppet::Error) }
   end
 end
