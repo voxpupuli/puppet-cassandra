@@ -19,7 +19,8 @@ describe 'cassandra::java' do
     let :facts do
       {
         operatingsystemmajrelease: '7',
-        osfamily: 'Debian'
+        osfamily: 'Debian',
+        lsbdistid: 'Debian'
       }
     end
 
@@ -35,7 +36,8 @@ describe 'cassandra::java' do
     let :facts do
       {
         operatingsystemmajrelease: '7',
-        osfamily: 'Debian'
+        osfamily: 'Debian',
+        lsbdistid: 'Debian'
       }
     end
 
@@ -104,7 +106,8 @@ describe 'cassandra::java' do
     let :facts do
       {
         operatingsystemmajrelease: '7',
-        osfamily: 'Debian'
+        osfamily: 'Debian',
+        lsbdistid: 'Debian'
       }
     end
 
