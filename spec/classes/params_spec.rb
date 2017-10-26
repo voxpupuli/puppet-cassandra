@@ -4,7 +4,7 @@ describe '::cassandra::params' do
   let :facts do
     {
       osfamily: 'RedHat',
-      operatingsystemmajrelease: 7
+      operatingsystemmajrelease: '7'
     }
   end
 

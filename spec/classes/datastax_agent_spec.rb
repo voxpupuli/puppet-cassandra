@@ -5,14 +5,15 @@ describe 'cassandra::datastax_agent' do
     let :facts do
       {
         osfamily: 'RedHat',
-        operatingsystemmajrelease: 6
+        operatingsystemmajrelease: '6'
       }
     end
 
     it do
-      is_expected.to have_resource_count(4)
+      is_expected.to have_resource_count(10)
 
       is_expected.to contain_class('cassandra::datastax_agent').only_with(
+        'address_config_file'  => '/var/lib/datastax-agent/conf/address.yaml',
         'defaults_file'        => '/etc/default/datastax-agent',
         'package_ensure'       => 'present',
         'package_name'         => 'datastax-agent',
@@ -55,7 +56,7 @@ describe 'cassandra::datastax_agent' do
     let :facts do
       {
         osfamily: 'Debian',
-        operatingsystemmajrelease: 6
+        operatingsystemmajrelease: '6'
       }
     end
 
@@ -73,7 +74,7 @@ describe 'cassandra::datastax_agent' do
     let :facts do
       {
         osfamily: 'Debian',
-        operatingsystemmajrelease: 6
+        operatingsystemmajrelease: '6'
       }
     end
 
@@ -99,7 +100,7 @@ describe 'cassandra::datastax_agent' do
     let :facts do
       {
         osfamily: 'Debian',
-        operatingsystemmajrelease: 6
+        operatingsystemmajrelease: '6'
       }
     end
 
@@ -122,7 +123,7 @@ describe 'cassandra::datastax_agent' do
     end
 
     it do
-      is_expected.to have_resource_count(7)
+      is_expected.to have_resource_count(16)
     end
   end
 end

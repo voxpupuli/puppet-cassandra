@@ -228,8 +228,8 @@ class cassandra (
       # End of CASSANDRA-2356 specific resources.
     }
     default: {
-      $config_file_before  = []
-      $config_file_require = [ User['cassandra'], File[$config_path] ]
+      $config_file_before  = [ Package['cassandra'] ]
+      $config_file_require = []
       $config_path_require = []
       $dc_rack_properties_file_require = Package['cassandra']
       $dc_rack_properties_file_before  = []
