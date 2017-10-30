@@ -4,8 +4,8 @@
 
 1. [Raising an Issue](#raising-an-issue)
 1. [Contribtions](#contributions)
-  * [Unit Tests](#unit-tests)
-  * [Acceptance Tests](#acceptance-tests)
+    * [Unit Tests](#unit-tests)
+    * [Acceptance Tests](#acceptance-tests)
 1. [Contributors](#contributors)
 1. [Further Reading](#further-reading)
 
