@@ -56,6 +56,7 @@ describe 'cassandra' do
         cassandra_yaml_tmpl: 'cassandra/cassandra.yaml.erb',
         commitlog_directory_mode: '0750',
         config_file_mode: '0644',
+        config_file_replace: true,
         config_path: '/etc/cassandra/default.conf',
         data_file_directories_mode: '0750',
         dc: 'DC1',
