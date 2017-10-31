@@ -27,6 +27,8 @@
 #   specified.
 # @param config_file_mode [string] The permissions mode of the cassandra configuration
 #   file.
+# @param config_file_replace [boolean] A flag that dictates if the module should
+#   overwrite the config file if it exists.
 # @param config_path [string] The path to the cassandra configuration file.
 # @param data_file_directories [array] The path(s) to the date directory or
 #   directories.
