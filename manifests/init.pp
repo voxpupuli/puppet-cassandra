@@ -25,6 +25,8 @@
 # @param commitlog_directory_mode [string]  The mode for the
 #   `commitlog_directory` is ignored unless `commitlog_directory` is
 #   specified.
+# @param manage_config_file [boolean] Whether or not to manage the cassandra configuration
+#   file.
 # @param config_file_mode [string] The permissions mode of the cassandra configuration
 #   file.
 # @param config_path [string] The path to the cassandra configuration file.
@@ -132,6 +134,7 @@ class cassandra (
   $cassandra_yaml_tmpl          = 'cassandra/cassandra.yaml.erb',
   $commitlog_directory          = undef,
   $commitlog_directory_mode     = '0750',
+  Boolean $manage_config_file   = true,
   $config_file_mode             = '0644',
   $config_path                  = $::cassandra::params::config_path,
   $data_file_directories        = undef,
@@ -255,12 +258,14 @@ class cassandra (
     refreshonly => true,
   }
 
-  file { $config_path:
-    ensure  => directory,
-    group   => 'cassandra',
-    owner   => 'cassandra',
-    mode    => '0755',
-    require => $config_path_require,
+  if $manage_config_file {
+    file { $config_path:
+      ensure  => directory,
+      group   => 'cassandra',
+      owner   => 'cassandra',
+      mode    => '0755',
+      require => $config_path_require,
+    }
   }
 
   if $commitlog_directory {
