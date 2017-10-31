@@ -133,6 +133,7 @@ class cassandra (
   $commitlog_directory          = undef,
   $commitlog_directory_mode     = '0750',
   $config_file_mode             = '0644',
+  $config_file_replace          = true,
   $config_path                  = $::cassandra::params::config_path,
   $data_file_directories        = undef,
   $data_file_directories_mode   = '0750',
@@ -336,6 +337,7 @@ class cassandra (
 
   file { $config_file:
     ensure  => present,
+    replace => $config_file_replace,
     owner   => 'cassandra',
     group   => 'cassandra',
     content => template($cassandra_yaml_tmpl),
