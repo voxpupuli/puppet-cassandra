@@ -27,6 +27,8 @@
 #   specified.
 # @param config_file_mode [string] The permissions mode of the cassandra configuration
 #   file.
+# @param config_file_replace [boolean] A flag that dictates if the module should
+#   overwrite the config file if it exists.
 # @param config_path [string] The path to the cassandra configuration file.
 # @param data_file_directories [array] The path(s) to the date directory or
 #   directories.
@@ -133,6 +135,7 @@ class cassandra (
   $commitlog_directory          = undef,
   $commitlog_directory_mode     = '0750',
   $config_file_mode             = '0644',
+  $config_file_replace          = true,
   $config_path                  = $::cassandra::params::config_path,
   $data_file_directories        = undef,
   $data_file_directories_mode   = '0750',
@@ -336,6 +339,7 @@ class cassandra (
 
   file { $config_file:
     ensure  => present,
+    replace => $config_file_replace,
     owner   => 'cassandra',
     group   => 'cassandra',
     content => template($cassandra_yaml_tmpl),
