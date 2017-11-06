@@ -1,12 +1,5 @@
 # Cassandra
-[![Puppet Forge](http://img.shields.io/puppetforge/v/locp/cassandra.svg)](https://forge.puppetlabs.com/locp/cassandra)
-[![Github Tag](https://img.shields.io/github/tag/locp/cassandra.svg)](https://github.com/locp/cassandra)
-[![Build Status](https://travis-ci.org/locp/cassandra.png?branch=master)](https://travis-ci.org/locp/cassandra)
-[![Coverage Status](https://coveralls.io/repos/locp/cassandra/badge.svg?branch=master&service=github)](https://coveralls.io/github/locp/cassandra?branch=master)
-[![Join the chat at https://gitter.im/locp/cassandra](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/locp/cassandra?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![CircleCI](https://circleci.com/gh/locp/cassandra.svg?style=svg)](https://circleci.com/gh/locp/cassandra)
-[![Puppet Forge Downloads](http://img.shields.io/puppetforge/dt/locp/cassandra.svg)](https://forge.puppetlabs.com/locp/cassandra)
-[![Puppet Forge Endorsement](https://img.shields.io/puppetforge/e/locp/cassandra.svg)](https://forge.puppetlabs.com/locp/cassandra)
+[![Build Status](https://travis-ci.org/voxpupuli/puppet-cassandra.png?branch=master)](https://travis-ci.org/voxpupuli/puppet-cassandra)
 
 ## Table of Contents
 
@@ -107,14 +100,14 @@ directory.  These resources will now need to be defined in your
 manifest/profile.
 
 For a list of features that have been deprecated in this release, please see
-https://github.com/locp/cassandra/wiki/Deprecations
+https://github.com/voxpupuli/puppet-cassandra/wiki/Deprecations
 
 For details on migrating from the version 1.X.X attributes to the `settings`
 hash, see
-(https://github.com/locp/cassandra/wiki/Suggested-Baseline-Settings)
+(https://github.com/voxpupuli/puppet-cassandra/wiki/Suggested-Baseline-Settings)
 
 Please also see the notes for 2.0.0 in the
-[CHANGELOG](https://forge.puppet.com/locp/cassandra/changelog).
+[CHANGELOG](./CHANGELOG.md).
 
 #### Changes in 1.19.0
 
@@ -246,7 +239,7 @@ class { 'cassandra':
 However, **PLEASE** note that this is the **ABSOLUTE MINIMUM** configuration
 to get Cassandra up and running but will probably give you a rather badly
 configured node.  Please see
-[Suggested Baseline Settings](https://github.com/locp/cassandra/wiki/Suggested-Baseline-Settings)
+[Suggested Baseline Settings](https://github.com/voxpupuli/puppet-cassandra/wiki/Suggested-Baseline-Settings)
 for details on making your configuration a lot more robust.
 
 For this code to run with version 3.X of Cassandra, the `hints_directory` will
@@ -635,7 +628,7 @@ class { 'cassandra':
 The reference documentation is generated using the
 [puppet-strings](https://github.com/puppetlabs/puppet-strings) tool.  To see
 all of it, please go to
-[http://locp.github.io/cassandra](http://locp.github.io/cassandra/_index.html).
+[http://voxpupuli.github.io/puppet-cassandra](http://voxpupuli.github.io/puppet-cassandra/_index.html).
 
 ## Limitations
 
@@ -660,11 +653,11 @@ Details on how to do this are available at
 https://guides.github.com/activities/contributing-to-open-source.
 
 Please also see the
-[CONTRIBUTING.md](https://github.com/locp/cassandra/blob/master/CONTRIBUTING.md)
+[CONTRIBUTING.md](./CONTRIBUTING.md)
 page for project specific requirements.
 
 ### Additional Contributers
 
 For a list of contributers see
-[CONTRIBUTING.md](https://github.com/locp/cassandra/blob/master/CONTRIBUTING.md)
-and https://github.com/locp/cassandra/graphs/contributors
+[CONTRIBUTING.md](./CONTRIBUTING.md)
+and https://github.com/voxpupuli/puppet-cassandra/graphs/contributors
