@@ -1,12 +1,12 @@
 {
-  "name": "locp-cassandra",
+  "name": "puppet-cassandra",
   "version": "2.6.0",
-  "author": "locp",
+  "author": "Vox Pupuli",
   "summary": "Installs Cassandra & DataStax Agent on RHEL/Ubuntu/Debian.",
   "license": "Apache-2.0",
-  "source": "https://github.com/locp/cassandra",
-  "project_page": "https://github.com/locp/cassandra",
-  "issues_url": "https://github.com/locp/cassandra/issues",
+  "source": "https://github.com/voxpupuli/puppet-cassandra",
+  "project_page": "https://github.com/voxpupuli/puppet-cassandra",
+  "issues_url": "https://github.com/voxpupuli/puppet-cassandra/issues",
   "tags": [
     "Apache",
     "cassandra",
