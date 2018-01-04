@@ -6,7 +6,7 @@
 <title>
   Puppet Class: cassandra::datastax_agent
   
-    &mdash; Documentation by YARD 0.9.10
+    &mdash; Documentation by YARD 0.9.12
   
 </title>
 
@@ -380,9 +380,7 @@ with the following additional defaults:</p>
 117
 118
 119
-120
-121
-122</pre>
+120</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/datastax_agent.pp', line 48</span>
@@ -457,8 +455,6 @@ class cassandra::datastax_agent (
     $full_settings = {
       &#39;&#39; =&gt; $settings,
     }
-
-    validate_hash($full_settings)
     create_ini_settings($full_settings, $defaults)
   }
 }</pre>

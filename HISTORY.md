@@ -1,4 +1,4 @@
-## 2017-04-24 - Release 2.4.1 ([diff](https://github.com/locp/cassandra/compare/2.4.0...2.4.1))
+## [2.4.1](https://github.com/voxpupuli/puppet-cassandra/compare/2.4.0...2.4.1) (2017-04-24)
 
 ### Summary
 
@@ -9,7 +9,7 @@ A non-functional release of improvements.
 * A refactoring and extension of the acceptance tests.
 * Migrated from version 1.0 to 2.0 of the CircleCI API.
 
-## 2017-03-30 - Release 2.4.0 ([diff](https://github.com/locp/cassandra/compare/2.3.0...2.4.0))
+## [2.4.0](https://github.com/voxpupuli/puppet-cassandra/compare/2.3.0...2.4.0) (2017-03-30)
 
 ### Summary
 
