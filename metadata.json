@@ -1,6 +1,6 @@
 {
   "name": "puppet-cassandra",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "author": "Vox Pupuli",
   "summary": "Installs Cassandra & DataStax Agent on RHEL/Ubuntu/Debian.",
   "license": "Apache-2.0",
@@ -77,6 +77,12 @@
         "14.04",
         "16.04"
       ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">=4.7.1 <6.0.0"
     }
   ]
 }
