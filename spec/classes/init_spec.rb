@@ -72,6 +72,7 @@ describe 'cassandra' do
         service_provider: nil,
         service_refresh: true,
         settings: {},
+        snitch_properties_file: 'cassandra-rackdc.properties',
         systemctl: '/usr/bin/systemctl'
       )
     end

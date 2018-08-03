@@ -10,9 +10,11 @@ describe 'cassandra::datastax_agent' do
     end
 
     it do
+      is_expected.to compile.with_all_deps
+
       is_expected.to have_resource_count(10)
 
-      is_expected.to contain_class('cassandra::datastax_agent').only_with(
+      is_expected.to contain_class('cassandra::datastax_agent').with(
         'address_config_file'  => '/var/lib/datastax-agent/conf/address.yaml',
         'defaults_file'        => '/etc/default/datastax-agent',
         'package_ensure'       => 'present',
@@ -20,8 +22,7 @@ describe 'cassandra::datastax_agent' do
         'service_ensure'       => 'running',
         'service_enable'       => true,
         'service_name'         => 'datastax-agent',
-        'stomp_interface'      => nil,
-        'local_interface'      => nil
+        'settings'             => {}
       )
 
       is_expected.to contain_package('datastax-agent').with(
