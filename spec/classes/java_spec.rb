@@ -107,7 +107,11 @@ describe 'cassandra::java' do
       {
         operatingsystemmajrelease: '7',
         osfamily: 'Debian',
-        lsbdistid: 'Debian'
+        lsbdistid: 'Debian',
+        os: {
+          name: 'Debian',
+          release: { major: '7' }
+        }
       }
     end
 

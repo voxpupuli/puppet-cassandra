@@ -38,13 +38,17 @@ describe 'cassandra::apache_repo' do
     let :facts do
       {
         osfamily: 'Debian',
-        lsbdistid: 'Ubuntu',
-        lsbdistrelease: '14.04'
+        lsbdistid: 'Debian',
+        lsbdistrelease: '9',
+        os: {
+          name: 'Debian',
+          release: { major: '9' }
+        }
       }
     end
 
     it do
-      is_expected.to have_resource_count(14)
+      is_expected.to have_resource_count(16)
       is_expected.to contain_class('apt')
       is_expected.to contain_class('apt::update')
 
