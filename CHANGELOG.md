@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v2.7.3](https://github.com/voxpupuli/puppet-cassandra/tree/v2.7.3) (2018-10-19)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-cassandra/compare/v2.7.2...v2.7.3)
+
+**Merged pull requests:**
+
+- modulesync 2.1.0 and allow puppet 6.x [\#439](https://github.com/voxpupuli/puppet-cassandra/pull/439) ([bastelfreak](https://github.com/bastelfreak))
+-  allow puppetlabs/stdlib 5.x and puppetlabs/apt 6.x [\#438](https://github.com/voxpupuli/puppet-cassandra/pull/438) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [v2.7.2](https://github.com/voxpupuli/puppet-cassandra/tree/v2.7.2) (2018-08-18)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-cassandra/compare/v2.7.1...v2.7.2)
