@@ -1,0 +1,18 @@
+---
+CONFIG:
+  log_level: debug
+  type: foss
+HOSTS:
+  ubuntu1804:
+    default_apply_opts:
+      order: random
+      strict_variables: ~
+    docker_cmd: "[\"/sbin/init\"]"
+    docker_image_commands:
+      - "apt-get install -y locales-all wget"
+    hypervisor: docker
+    image: "ubuntu:18.04"
+    platform: ubuntu-18.04-x64
+    roles:
+      - cassandra3
+      - firewall
