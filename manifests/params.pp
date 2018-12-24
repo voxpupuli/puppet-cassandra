@@ -4,19 +4,26 @@ class cassandra::params {
   case $::osfamily {
     'Debian': {
       case $::operatingsystemmajrelease {
-        12.04: {
+        '12.04': {
           $net_ipv4_tcp_rmem = '4096 87380 16777216'
           $net_ipv4_tcp_wmem = '4096 65536 16777216'
+          $java_package = 'openjdk-7-jre-headless'
         }
+        '18.04': {
+          $net_ipv4_tcp_rmem = '4096 87380 16777216'
+          $net_ipv4_tcp_wmem = '4096 65536 16777216'
+          $java_package = 'openjdk-8-jre-headless'
+        }
+        # non-Ubuntu Debian is just... Debian
         default: {
           $net_ipv4_tcp_rmem = '4096, 87380, 16777216'
           $net_ipv4_tcp_wmem = '4096, 65536, 16777216'
+          $java_package = 'openjdk-7-jre-headless'
         }
       }
 
       $cassandra_pkg = 'cassandra'
       $config_path = '/etc/cassandra'
-      $java_package = 'openjdk-7-jre-headless'
       $jna_package_name = 'libjna-java'
       $optutils_package_name = 'cassandra-tools'
       $sysctl_file = '/etc/sysctl.d/10-cassandra.conf'
