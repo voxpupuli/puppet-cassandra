@@ -95,7 +95,13 @@ class cassandra::schema (
 
   # See if we can make a connection to Cassandra.  Try $connection_tries
   # number of times with $connection_try_sleep in seconds between each try.
-  $connection_test = "${cqlsh_opts} -e 'DESC KEYSPACES' ${cqlsh_conn}"
+  $connection_test_tmp = "${cqlsh_opts} -e 'DESC KEYSPACES' ${cqlsh_conn}"
+  if $use_scl {
+    $connection_test = "/usr/bin/scl enable ${scl_name} \"${connection_test_tmp}\""
+  } else {
+    $connection_test = $connection_test_tmp
+  }
+
   exec { '::cassandra::schema connection test':
     command   => $connection_test,
     returns   => 0,
