@@ -49,7 +49,9 @@ describe 'cassandra::schema::permission' do
     let(:params) do
       {
         user_name: 'spillman',
-        permission_name: 'SELECT'
+        permission_name: 'SELECT',
+        use_scl: false,
+        scl_name: 'nodefault'
       }
     end
 
@@ -73,7 +75,9 @@ describe 'cassandra::schema::permission' do
       {
         user_name: 'akers',
         keyspace_name: 'field',
-        permission_name: 'MODIFY'
+        permission_name: 'MODIFY',
+        use_scl: false,
+        scl_name: 'nodefault'
       }
     end
 
@@ -97,7 +101,9 @@ describe 'cassandra::schema::permission' do
       {
         user_name: 'boone',
         keyspace_name: 'forty9ers',
-        permission_name: 'ALTER'
+        permission_name: 'ALTER',
+        use_scl: false,
+        scl_name: 'nodefault'
       }
     end
 
@@ -121,7 +127,9 @@ describe 'cassandra::schema::permission' do
       {
         user_name: 'boone',
         keyspace_name: 'ravens',
-        table_name: 'plays'
+        table_name: 'plays',
+        use_scl: false,
+        scl_name: 'nodefault'
       }
     end
 
@@ -161,7 +169,9 @@ describe 'cassandra::schema::permission' do
         ensure: 'absent',
         user_name: 'boone',
         keyspace_name: 'forty9ers',
-        permission_name: 'SELECT'
+        permission_name: 'SELECT',
+        use_scl: false,
+        scl_name: 'nodefault'
       }
     end
 

@@ -13,6 +13,8 @@ describe 'cassandra::schema::table' do
 
     let(:params) do
       {
+        use_scl: false,
+        scl_name: 'nodefault',
         keyspace: 'Excelsior',
         columns:
           {
@@ -51,6 +53,8 @@ describe 'cassandra::schema::table' do
 
     let(:params) do
       {
+        use_scl: false,
+        scl_name: 'nodefault',
         keyspace: 'Excelsior',
         ensure: 'absent'
       }

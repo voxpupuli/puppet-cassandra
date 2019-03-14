@@ -18,7 +18,9 @@ describe 'cassandra::schema::keyspace' do
           {
             'keyspace_class'     => 'SimpleStrategy',
             'replication_factor' => 3
-          }
+          },
+        use_scl: false,
+        scl_name: 'nodefault'
       }
     end
 
@@ -47,7 +49,9 @@ describe 'cassandra::schema::keyspace' do
             'keyspace_class' => 'NetworkTopologyStrategy',
             'dc1'            => '3',
             'dc2'            => '2'
-          }
+          },
+        use_scl: false,
+        scl_name: 'nodefault'
       }
     end
 
@@ -68,7 +72,9 @@ describe 'cassandra::schema::keyspace' do
     let(:title) { 'foobar' }
     let(:params) do
       {
-        ensure: 'absent'
+        ensure: 'absent',
+        use_scl: false,
+        scl_name: 'nodefault'
       }
     end
 

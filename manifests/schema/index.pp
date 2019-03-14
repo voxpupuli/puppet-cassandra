@@ -17,6 +17,8 @@ define cassandra::schema::index(
   $index      = $title,
   $keys       = undef,
   $options    = undef,
+  $use_scl    = $::cassandra::params::use_scl,
+  $scl_name   = $::cassandra::params::scl_name,
   ) {
   include 'cassandra::schema'
 

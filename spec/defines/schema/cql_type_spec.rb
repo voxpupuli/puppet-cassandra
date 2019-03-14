@@ -18,7 +18,9 @@ describe 'cassandra::schema::cql_type' do
           {
             'firstname' => 'text',
             'lastname'  => 'text'
-          }
+          },
+        'use_scl'  => false,
+        'scl_name' => 'nodefault'
       }
     end
 
@@ -42,7 +44,9 @@ describe 'cassandra::schema::cql_type' do
     let(:params) do
       {
         'ensure'   => 'absent',
-        'keyspace' => 'Excalibur'
+        'keyspace' => 'Excalibur',
+        'use_scl'  => false,
+        'scl_name' => 'nodefault'
       }
     end
 

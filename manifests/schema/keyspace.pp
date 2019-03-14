@@ -26,6 +26,8 @@ define cassandra::schema::keyspace(
   $durable_writes  = true,
   $keyspace_name   = $title,
   $replication_map = {},
+  $use_scl         = $::cassandra::params::use_scl,
+  $scl_name        = $::cassandra::params::scl_name,
   ) {
   include 'cassandra::schema'
 

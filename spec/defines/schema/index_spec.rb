@@ -15,7 +15,9 @@ describe 'cassandra::schema::index' do
       {
         keys: 'lname',
         keyspace: 'mykeyspace',
-        table: 'users'
+        table: 'users',
+        use_scl: false,
+        scl_name: 'nodefault'
       }
     end
 
@@ -41,7 +43,9 @@ describe 'cassandra::schema::index' do
         class_name: 'path.to.the.IndexClass',
         keys: 'email',
         keyspace: 'Excelsior',
-        table: 'users'
+        table: 'users',
+        use_scl: false,
+        scl_name: 'nodefault'
       }
     end
 
@@ -66,7 +70,9 @@ describe 'cassandra::schema::index' do
         keys: 'email',
         keyspace: 'Excelsior',
         options: "{'storage': '/mnt/ssd/indexes/'}",
-        table: 'users'
+        table: 'users',
+        use_scl: false,
+        scl_name: 'nodefault'
       }
     end
 
@@ -91,7 +97,9 @@ describe 'cassandra::schema::index' do
         ensure: 'absent',
         keys: 'lname',
         keyspace: 'Excelsior',
-        table: 'users'
+        table: 'users',
+        use_scl: false,
+        scl_name: 'nodefault'
       }
     end
 

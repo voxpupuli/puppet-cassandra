@@ -22,6 +22,8 @@ define cassandra::schema::user (
   $password  = undef,
   $superuser = false,
   $user_name = $title,
+  $use_scl   = $::cassandra::params::use_scl,
+  $scl_name  = $::cassandra::params::scl_name,
   ){
   include 'cassandra::schema'
 

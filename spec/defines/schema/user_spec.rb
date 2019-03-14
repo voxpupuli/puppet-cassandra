@@ -14,6 +14,8 @@ describe 'cassandra::schema::user' do
 
     let(:params) do
       {
+        use_scl: false,
+        scl_name: 'nodefault',
         password: 'Niner2',
         superuser: true
       }
@@ -40,6 +42,8 @@ describe 'cassandra::schema::user' do
 
     let(:params) do
       {
+        use_scl: false,
+        scl_name: 'nodefault',
         password: 'Niner2',
         superuser: true
       }
@@ -66,6 +70,8 @@ describe 'cassandra::schema::user' do
 
     let(:params) do
       {
+        use_scl: false,
+        scl_name: 'nodefault',
         password: 'Niner2'
       }
     end
@@ -91,6 +97,8 @@ describe 'cassandra::schema::user' do
 
     let(:params) do
       {
+        use_scl: false,
+        scl_name: 'nodefault',
         password: 'Niner2',
         superuser: true
       }
@@ -117,6 +125,8 @@ describe 'cassandra::schema::user' do
 
     let(:params) do
       {
+        use_scl: false,
+        scl_name: 'nodefault',
         password: 'kaZe89a',
         login: false
       }
@@ -143,6 +153,8 @@ describe 'cassandra::schema::user' do
 
     let(:params) do
       {
+        use_scl: false,
+        scl_name: 'nodefault',
         password: 'Niner2',
         ensure: 'absent'
       }
@@ -168,6 +180,8 @@ describe 'cassandra::schema::user' do
 
     let(:params) do
       {
+        use_scl: false,
+        scl_name: 'nodefault',
         password: 'Niner2',
         ensure: 'absent'
       }

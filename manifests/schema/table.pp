@@ -22,6 +22,8 @@ define cassandra::schema::table (
   $columns = {},
   $options = [],
   $table   = $title,
+  $use_scl  = $::cassandra::params::use_scl,
+  $scl_name = $::cassandra::params::scl_name,
   ){
   include 'cassandra::schema'
   $read_script = "DESC TABLE ${keyspace}.${table}"

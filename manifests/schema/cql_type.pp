@@ -16,6 +16,8 @@ define cassandra::schema::cql_type (
   $ensure = present,
   $fields = {},
   $cql_type_name = $title,
+  $use_scl       = $::cassandra::params::use_scl,
+  $scl_name      = $::cassandra::params::scl_name,
   ){
   include 'cassandra::schema'
   $read_script = "DESC TYPE ${keyspace}.${cql_type_name}"

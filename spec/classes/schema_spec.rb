@@ -42,7 +42,9 @@ describe 'cassandra::schema' do
 
     let :params do
       {
-        cqlsh_client_config: '/root/.puppetcqlshrc'
+        cqlsh_client_config: '/root/.puppetcqlshrc',
+        use_scl: false,
+        scl_name: 'nodefault'
       }
     end
 
@@ -79,7 +81,9 @@ describe 'cassandra::schema' do
     let :params do
       {
         cqlsh_client_config: '/root/.puppetcqlshrc',
-        cqlsh_password: 'topsecret'
+        cqlsh_password: 'topsecret',
+        use_scl: false,
+        scl_name: 'nodefault'
       }
     end
 
