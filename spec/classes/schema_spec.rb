@@ -63,8 +63,7 @@ describe 'cassandra::schema' do
                   returns: 0,
                   tries: 6,
                   try_sleep: 30,
-                  unless: read_command,
-                  require: 'Exec[test testscl SCL]')
+                  unless: read_command)
     end
   end
 

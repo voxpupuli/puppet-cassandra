@@ -54,16 +54,6 @@ class cassandra::schema (
   ) inherits cassandra::params {
   require '::cassandra'
 
-  # Test that the SCL is valid
-  if $use_scl {
-    exec { "test ${scl_name} SCL":
-      command => "/usr/bin/scl enable ${scl_name} \"echo test\"",
-    }
-    $scl_require = Exec["test ${scl_name} SCL"]
-  } else {
-    $scl_require = undef
-  }
-
   # Pass the SCL info to create_resources below as a hash
   $scl = {
     'use_scl'  => $use_scl,
@@ -108,7 +98,6 @@ class cassandra::schema (
     tries     => $connection_tries,
     try_sleep => $connection_try_sleep,
     unless    => $connection_test,
-    require   => $scl_require,
   }
 
   # manage keyspaces if present
