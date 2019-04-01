@@ -33,8 +33,8 @@ define cassandra::schema::permission (
   $keyspace_name    = 'ALL',
   $permission_name  = 'ALL',
   $table_name       = undef,
-  $use_scl          = $::cassandra::params::use_scl,
-  $scl_name         = $::cassandra::params::scl_name,
+  $use_scl          = $cassandra::params::use_scl,
+  $scl_name         = $cassandra::params::scl_name,
   ){
   include 'cassandra::schema'
 

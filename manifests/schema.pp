@@ -49,8 +49,8 @@ class cassandra::schema (
   $permissions              = {},
   $tables                   = {},
   $users                    = {},
-  $use_scl                  = $::cassandra::params::use_scl,
-  $scl_name                 = $::cassandra::params::scl_name,
+  $use_scl                  = $cassandra::params::use_scl,
+  $scl_name                 = $cassandra::params::scl_name,
   ) inherits cassandra::params {
   require '::cassandra'
 
