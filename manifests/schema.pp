@@ -49,8 +49,16 @@ class cassandra::schema (
   $permissions              = {},
   $tables                   = {},
   $users                    = {},
+  Boolean $use_scl          = $cassandra::params::use_scl,
+  String[1] $scl_name       = $cassandra::params::scl_name,
   ) inherits cassandra::params {
   require '::cassandra'
+
+  # Pass the SCL info to create_resources below as a hash
+  $scl = {
+    'use_scl'  => $use_scl,
+    'scl_name' => $scl_name,
+  }
 
   if $cqlsh_client_config != undef {
     file { $cqlsh_client_config :
@@ -77,7 +85,13 @@ class cassandra::schema (
 
   # See if we can make a connection to Cassandra.  Try $connection_tries
   # number of times with $connection_try_sleep in seconds between each try.
-  $connection_test = "${cqlsh_opts} -e 'DESC KEYSPACES' ${cqlsh_conn}"
+  $connection_test_tmp = "${cqlsh_opts} -e 'DESC KEYSPACES' ${cqlsh_conn}"
+  if $use_scl {
+    $connection_test = "/usr/bin/scl enable ${scl_name} \"${connection_test_tmp}\""
+  } else {
+    $connection_test = $connection_test_tmp
+  }
+
   exec { '::cassandra::schema connection test':
     command   => $connection_test,
     returns   => 0,
@@ -88,32 +102,32 @@ class cassandra::schema (
 
   # manage keyspaces if present
   if $keyspaces {
-    create_resources('cassandra::schema::keyspace', $keyspaces)
+    create_resources('cassandra::schema::keyspace', $keyspaces, $scl)
   }
 
   # manage cql_types if present
   if $cql_types {
-    create_resources('cassandra::schema::cql_type', $cql_types)
+    create_resources('cassandra::schema::cql_type', $cql_types, $scl)
   }
 
   # manage tables if present
   if $tables {
-    create_resources('cassandra::schema::table', $tables)
+    create_resources('cassandra::schema::table', $tables, $scl)
   }
 
   # manage indexes if present
   if $indexes {
-    create_resources('cassandra::schema::index', $indexes)
+    create_resources('cassandra::schema::index', $indexes, $scl)
   }
 
   # manage users if present
   if $users {
-    create_resources('cassandra::schema::user', $users)
+    create_resources('cassandra::schema::user', $users, $scl)
   }
 
   # manage permissions if present
   if $permissions {
-    create_resources('cassandra::schema::permission', $permissions)
+    create_resources('cassandra::schema::permission', $permissions, $scl)
   }
 
   # Resource Ordering

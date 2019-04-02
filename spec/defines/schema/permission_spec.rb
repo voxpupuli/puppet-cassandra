@@ -49,14 +49,55 @@ describe 'cassandra::schema::permission' do
     let(:params) do
       {
         user_name: 'spillman',
-        permission_name: 'SELECT'
+        permission_name: 'SELECT',
+        use_scl: false,
+        scl_name: 'nodefault'
       }
     end
 
     it do
       is_expected.to have_resource_count(9)
       is_expected.to contain_cassandra__schema__permission('spillman:SELECT:ALL')
-      is_expected.to contain_exec('GRANT SELECT ON ALL KEYSPACES TO spillman')
+      read_script =  '/usr/bin/cqlsh   -e "LIST ALL PERMISSIONS ON ALL KEYSPACES" '
+      read_script += 'localhost 9042 | grep \' spillman | *spillman | .* SELECT$\''
+      script_command = 'GRANT SELECT ON ALL KEYSPACES TO spillman'
+      exec_command = "/usr/bin/cqlsh   -e \"#{script_command}\" localhost 9042"
+      is_expected.to contain_exec(script_command).
+        only_with(command: exec_command,
+                  unless: read_script,
+                  require: 'Exec[::cassandra::schema connection test]')
+    end
+  end
+
+  context 'spillman:SELECT:ALL with SCL' do
+    let(:title) { 'spillman:SELECT:ALL' }
+    let :facts do
+      {
+        operatingsystemmajrelease: 7,
+        osfamily: 'RedHat'
+      }
+    end
+
+    let(:params) do
+      {
+        user_name: 'spillman',
+        permission_name: 'SELECT',
+        use_scl: true,
+        scl_name: 'testscl'
+      }
+    end
+
+    it do
+      is_expected.to have_resource_count(9)
+      is_expected.to contain_cassandra__schema__permission('spillman:SELECT:ALL')
+      read_script =  '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"LIST ALL PERMISSIONS ON ALL KEYSPACES\" '
+      read_script += 'localhost 9042 | grep \' spillman | *spillman | .* SELECT$\'"'
+      script_command = 'GRANT SELECT ON ALL KEYSPACES TO spillman'
+      exec_command = "/usr/bin/scl enable testscl \"/usr/bin/cqlsh   -e \\\"#{script_command}\\\" localhost 9042\""
+      is_expected.to contain_exec(script_command).
+        only_with(command: exec_command,
+                  unless: read_script,
+                  require: 'Exec[::cassandra::schema connection test]')
     end
   end
 
@@ -73,14 +114,56 @@ describe 'cassandra::schema::permission' do
       {
         user_name: 'akers',
         keyspace_name: 'field',
-        permission_name: 'MODIFY'
+        permission_name: 'MODIFY',
+        use_scl: false,
+        scl_name: 'nodefault'
       }
     end
 
     it do
       is_expected.to have_resource_count(9)
       is_expected.to contain_cassandra__schema__permission('akers:modify:field')
-      is_expected.to contain_exec('GRANT MODIFY ON KEYSPACE field TO akers')
+      read_script =  '/usr/bin/cqlsh   -e "LIST ALL PERMISSIONS ON KEYSPACE field" '
+      read_script += 'localhost 9042 | grep \' akers | *akers | .* MODIFY$\''
+      script_command = 'GRANT MODIFY ON KEYSPACE field TO akers'
+      exec_command = "/usr/bin/cqlsh   -e \"#{script_command}\" localhost 9042"
+      is_expected.to contain_exec(script_command).
+        only_with(command: exec_command,
+                  unless: read_script,
+                  require: 'Exec[::cassandra::schema connection test]')
+    end
+  end
+
+  context 'akers:modify:field with SCL' do
+    let(:title) { 'akers:modify:field' }
+    let :facts do
+      {
+        operatingsystemmajrelease: 7,
+        osfamily: 'RedHat'
+      }
+    end
+
+    let(:params) do
+      {
+        user_name: 'akers',
+        keyspace_name: 'field',
+        permission_name: 'MODIFY',
+        use_scl: true,
+        scl_name: 'testscl'
+      }
+    end
+
+    it do
+      is_expected.to have_resource_count(9)
+      is_expected.to contain_cassandra__schema__permission('akers:modify:field')
+      read_script =  '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"LIST ALL PERMISSIONS ON KEYSPACE field\" '
+      read_script += 'localhost 9042 | grep \' akers | *akers | .* MODIFY$\'"'
+      script_command = 'GRANT MODIFY ON KEYSPACE field TO akers'
+      exec_command = "/usr/bin/scl enable testscl \"/usr/bin/cqlsh   -e \\\"#{script_command}\\\" localhost 9042\""
+      is_expected.to contain_exec(script_command).
+        only_with(command: exec_command,
+                  unless: read_script,
+                  require: 'Exec[::cassandra::schema connection test]')
     end
   end
 
@@ -97,14 +180,56 @@ describe 'cassandra::schema::permission' do
       {
         user_name: 'boone',
         keyspace_name: 'forty9ers',
-        permission_name: 'ALTER'
+        permission_name: 'ALTER',
+        use_scl: false,
+        scl_name: 'nodefault'
       }
     end
 
     it do
       is_expected.to have_resource_count(9)
       is_expected.to contain_cassandra__schema__permission('boone:alter:forty9ers')
-      is_expected.to contain_exec('GRANT ALTER ON KEYSPACE forty9ers TO boone')
+      read_script =  '/usr/bin/cqlsh   -e "LIST ALL PERMISSIONS ON KEYSPACE forty9ers" '
+      read_script += 'localhost 9042 | grep \' boone | *boone | .* ALTER$\''
+      script_command = 'GRANT ALTER ON KEYSPACE forty9ers TO boone'
+      exec_command = "/usr/bin/cqlsh   -e \"#{script_command}\" localhost 9042"
+      is_expected.to contain_exec(script_command).
+        only_with(command: exec_command,
+                  unless: read_script,
+                  require: 'Exec[::cassandra::schema connection test]')
+    end
+  end
+
+  context 'boone:alter:forty9ers with SCL' do
+    let(:title) { 'boone:alter:forty9ers' }
+    let :facts do
+      {
+        operatingsystemmajrelease: 7,
+        osfamily: 'RedHat'
+      }
+    end
+
+    let(:params) do
+      {
+        user_name: 'boone',
+        keyspace_name: 'forty9ers',
+        permission_name: 'ALTER',
+        use_scl: true,
+        scl_name: 'testscl'
+      }
+    end
+
+    it do
+      is_expected.to have_resource_count(9)
+      is_expected.to contain_cassandra__schema__permission('boone:alter:forty9ers')
+      read_script =  '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"LIST ALL PERMISSIONS ON KEYSPACE forty9ers\" '
+      read_script += 'localhost 9042 | grep \' boone | *boone | .* ALTER$\'"'
+      script_command = 'GRANT ALTER ON KEYSPACE forty9ers TO boone'
+      exec_command = "/usr/bin/scl enable testscl \"/usr/bin/cqlsh   -e \\\"#{script_command}\\\" localhost 9042\""
+      is_expected.to contain_exec(script_command).
+        only_with(command: exec_command,
+                  unless: read_script,
+                  require: 'Exec[::cassandra::schema connection test]')
     end
   end
 
@@ -121,29 +246,86 @@ describe 'cassandra::schema::permission' do
       {
         user_name: 'boone',
         keyspace_name: 'ravens',
-        table_name: 'plays'
+        table_name: 'plays',
+        use_scl: false,
+        scl_name: 'nodefault'
       }
     end
 
     it do
       is_expected.to have_resource_count(18)
       is_expected.to contain_cassandra__schema__permission('boone:ALL:ravens.plays')
-      is_expected.to contain_cassandra__schema__permission('boone:ALL:ravens.plays - ALTER').with(
-        ensure: 'present',
+    end
+
+    expected_values = %w[ALTER AUTHORIZE DROP MODIFY SELECT]
+    expected_values.each do |val|
+      it do
+        is_expected.to contain_cassandra__schema__permission("boone:ALL:ravens.plays - #{val}").with(
+          ensure: 'present',
+          user_name: 'boone',
+          keyspace_name: 'ravens',
+          permission_name: val,
+          table_name: 'plays'
+        )
+      end
+      read_script =  '/usr/bin/cqlsh   -e "LIST ALL PERMISSIONS ON TABLE ravens.plays" '
+      read_script += "localhost 9042 | grep ' boone | *boone | .* #{val}$'"
+      script_command = "GRANT #{val} ON TABLE ravens.plays TO boone"
+      exec_command = "/usr/bin/cqlsh   -e \"#{script_command}\" localhost 9042"
+      it do
+        is_expected.to contain_exec(script_command).
+          only_with(command: exec_command,
+                    unless: read_script,
+                    require: 'Exec[::cassandra::schema connection test]')
+      end
+    end
+  end
+
+  context 'boone:ALL:ravens.plays with SCL' do
+    let(:title) { 'boone:ALL:ravens.plays' }
+    let :facts do
+      {
+        operatingsystemmajrelease: 7,
+        osfamily: 'RedHat'
+      }
+    end
+
+    let(:params) do
+      {
         user_name: 'boone',
         keyspace_name: 'ravens',
-        permission_name: 'ALTER',
-        table_name: 'plays'
-      )
-      is_expected.to contain_cassandra__schema__permission('boone:ALL:ravens.plays - AUTHORIZE')
-      is_expected.to contain_cassandra__schema__permission('boone:ALL:ravens.plays - DROP')
-      is_expected.to contain_cassandra__schema__permission('boone:ALL:ravens.plays - MODIFY')
-      is_expected.to contain_cassandra__schema__permission('boone:ALL:ravens.plays - SELECT')
-      is_expected.to contain_exec('GRANT ALTER ON TABLE ravens.plays TO boone')
-      is_expected.to contain_exec('GRANT AUTHORIZE ON TABLE ravens.plays TO boone')
-      is_expected.to contain_exec('GRANT DROP ON TABLE ravens.plays TO boone')
-      is_expected.to contain_exec('GRANT MODIFY ON TABLE ravens.plays TO boone')
-      is_expected.to contain_exec('GRANT SELECT ON TABLE ravens.plays TO boone')
+        table_name: 'plays',
+        use_scl: true,
+        scl_name: 'testscl'
+      }
+    end
+
+    it do
+      is_expected.to have_resource_count(18)
+      is_expected.to contain_cassandra__schema__permission('boone:ALL:ravens.plays')
+    end
+
+    expected_values = %w[ALTER AUTHORIZE DROP MODIFY SELECT]
+    expected_values.each do |val|
+      it do
+        is_expected.to contain_cassandra__schema__permission("boone:ALL:ravens.plays - #{val}").with(
+          ensure: 'present',
+          user_name: 'boone',
+          keyspace_name: 'ravens',
+          permission_name: val,
+          table_name: 'plays'
+        )
+      end
+      read_script =  '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"LIST ALL PERMISSIONS ON TABLE ravens.plays\" '
+      read_script += "localhost 9042 | grep ' boone | *boone | .* #{val}$'\""
+      script_command = "GRANT #{val} ON TABLE ravens.plays TO boone"
+      exec_command = "/usr/bin/scl enable testscl \"/usr/bin/cqlsh   -e \\\"#{script_command}\\\" localhost 9042\""
+      it do
+        is_expected.to contain_exec(script_command).
+          only_with(command: exec_command,
+                    unless: read_script,
+                    require: 'Exec[::cassandra::schema connection test]')
+      end
     end
   end
 
@@ -161,14 +343,57 @@ describe 'cassandra::schema::permission' do
         ensure: 'absent',
         user_name: 'boone',
         keyspace_name: 'forty9ers',
-        permission_name: 'SELECT'
+        permission_name: 'SELECT',
+        use_scl: false,
+        scl_name: 'nodefault'
       }
     end
 
     it do
       is_expected.to have_resource_count(9)
       is_expected.to contain_cassandra__schema__permission('REVOKE boone:SELECT:ravens.plays')
-      is_expected.to contain_exec('REVOKE SELECT ON KEYSPACE forty9ers FROM boone')
+      read_script =  '/usr/bin/cqlsh   -e "LIST ALL PERMISSIONS ON KEYSPACE forty9ers" '
+      read_script += "localhost 9042 | grep ' boone | *boone | .* SELECT$'"
+      script_command = 'REVOKE SELECT ON KEYSPACE forty9ers FROM boone'
+      exec_command = "/usr/bin/cqlsh   -e \"#{script_command}\" localhost 9042"
+      is_expected.to contain_exec(script_command).
+        only_with(command: exec_command,
+                  onlyif: read_script,
+                  require: 'Exec[::cassandra::schema connection test]')
+    end
+  end
+
+  context 'REVOKE boone:SELECT:ravens.plays with SCL' do
+    let(:title) { 'REVOKE boone:SELECT:ravens.plays' }
+    let :facts do
+      {
+        operatingsystemmajrelease: 7,
+        osfamily: 'RedHat'
+      }
+    end
+
+    let(:params) do
+      {
+        ensure: 'absent',
+        user_name: 'boone',
+        keyspace_name: 'forty9ers',
+        permission_name: 'SELECT',
+        use_scl: true,
+        scl_name: 'testscl'
+      }
+    end
+
+    it do
+      is_expected.to have_resource_count(9)
+      is_expected.to contain_cassandra__schema__permission('REVOKE boone:SELECT:ravens.plays')
+      read_script =  '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"LIST ALL PERMISSIONS ON KEYSPACE forty9ers\" '
+      read_script += "localhost 9042 | grep ' boone | *boone | .* SELECT$'\""
+      script_command = 'REVOKE SELECT ON KEYSPACE forty9ers FROM boone'
+      exec_command = "/usr/bin/scl enable testscl \"/usr/bin/cqlsh   -e \\\"#{script_command}\\\" localhost 9042\""
+      is_expected.to contain_exec(script_command).
+        only_with(command: exec_command,
+                  onlyif: read_script,
+                  require: 'Exec[::cassandra::schema connection test]')
     end
   end
 end

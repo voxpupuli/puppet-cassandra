@@ -50,6 +50,8 @@ class cassandra::params {
       $jna_package_name = 'jna'
       $optutils_package_name = 'cassandra22-tools'
       $systemctl = '/usr/bin/systemctl'
+      $use_scl = false
+      $scl_name = 'nodefault'
     }
     default: {
       $config_path_parents = []

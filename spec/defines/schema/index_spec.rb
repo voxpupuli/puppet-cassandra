@@ -15,14 +15,51 @@ describe 'cassandra::schema::index' do
       {
         keys: 'lname',
         keyspace: 'mykeyspace',
-        table: 'users'
+        table: 'users',
+        use_scl: false,
+        scl_name: 'nodefault'
       }
     end
 
     it do
       is_expected.to compile
       is_expected.to contain_cassandra__schema__index('user_index')
-      is_expected.to contain_exec('/usr/bin/cqlsh   -e "CREATE INDEX IF NOT EXISTS user_index ON mykeyspace.users (lname)" localhost 9042')
+      read_command = '/usr/bin/cqlsh   -e "DESC INDEX mykeyspace.user_index" localhost 9042'
+      exec_command = '/usr/bin/cqlsh   -e "CREATE INDEX IF NOT EXISTS user_index ON mykeyspace.users (lname)" localhost 9042'
+      is_expected.to contain_exec(exec_command).
+        only_with(unless: read_command,
+                  require: 'Exec[::cassandra::schema connection test]')
+    end
+  end
+
+  context 'Create a basic index with SCL' do
+    let :facts do
+      {
+        operatingsystemmajrelease: 7,
+        osfamily: 'RedHat'
+      }
+    end
+
+    let(:title) { 'user_index' }
+
+    let(:params) do
+      {
+        keys: 'lname',
+        keyspace: 'mykeyspace',
+        table: 'users',
+        use_scl: true,
+        scl_name: 'testscl'
+      }
+    end
+
+    it do
+      is_expected.to compile
+      is_expected.to contain_cassandra__schema__index('user_index')
+      read_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"DESC INDEX mykeyspace.user_index\" localhost 9042"'
+      exec_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"CREATE INDEX IF NOT EXISTS user_index ON mykeyspace.users (lname)\" localhost 9042"'
+      is_expected.to contain_exec(exec_command).
+        only_with(unless: read_command,
+                  require: 'Exec[::cassandra::schema connection test]')
     end
   end
 
@@ -41,15 +78,53 @@ describe 'cassandra::schema::index' do
         class_name: 'path.to.the.IndexClass',
         keys: 'email',
         keyspace: 'Excelsior',
-        table: 'users'
+        table: 'users',
+        use_scl: false,
+        scl_name: 'nodefault'
       }
     end
 
     it do
       is_expected.to compile
-      is_expected.to contain_exec('/usr/bin/cqlsh   -e "CREATE CUSTOM INDEX IF NOT EXISTS user_index ON Excelsior.users (email) USING \'path.to.the.IndexClass\'" localhost 9042')
+      read_command = '/usr/bin/cqlsh   -e "DESC INDEX Excelsior.user_index" localhost 9042'
+      exec_command = '/usr/bin/cqlsh   -e "CREATE CUSTOM INDEX IF NOT EXISTS user_index ON Excelsior.users (email) USING \'path.to.the.IndexClass\'" localhost 9042'
+      is_expected.to contain_exec(exec_command).
+        only_with(unless: read_command,
+                  require: 'Exec[::cassandra::schema connection test]')
     end
   end
+
+  context 'Create a custom index with SCL.' do
+    let :facts do
+      {
+        operatingsystemmajrelease: 7,
+        osfamily: 'RedHat'
+      }
+    end
+
+    let(:title) { 'user_index' }
+
+    let(:params) do
+      {
+        class_name: 'path.to.the.IndexClass',
+        keys: 'email',
+        keyspace: 'Excelsior',
+        table: 'users',
+        use_scl: true,
+        scl_name: 'testscl'
+      }
+    end
+
+    it do
+      is_expected.to compile
+      read_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"DESC INDEX Excelsior.user_index\" localhost 9042"'
+      exec_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"CREATE CUSTOM INDEX IF NOT EXISTS user_index ON Excelsior.users (email) USING \'path.to.the.IndexClass\'\" localhost 9042"'
+      is_expected.to contain_exec(exec_command).
+        only_with(unless: read_command,
+                  require: 'Exec[::cassandra::schema connection test]')
+    end
+  end
+
   context 'Create a custom index with options.' do
     let :facts do
       {
@@ -66,13 +141,55 @@ describe 'cassandra::schema::index' do
         keys: 'email',
         keyspace: 'Excelsior',
         options: "{'storage': '/mnt/ssd/indexes/'}",
-        table: 'users'
+        table: 'users',
+        use_scl: false,
+        scl_name: 'nodefault'
       }
     end
 
     it do
       is_expected.to compile
-      is_expected.to contain_exec('/usr/bin/cqlsh   -e "CREATE CUSTOM INDEX IF NOT EXISTS user_index ON Excelsior.users (email) USING \'path.to.the.IndexClass\' WITH OPTIONS = {\'storage\': \'/mnt/ssd/indexes/\'}" localhost 9042')
+      read_command = '/usr/bin/cqlsh   -e "DESC INDEX Excelsior.user_index" localhost 9042'
+      exec_command =  '/usr/bin/cqlsh   -e "CREATE CUSTOM INDEX IF NOT EXISTS user_index ON '
+      exec_command += 'Excelsior.users (email) USING \'path.to.the.IndexClass\' WITH OPTIONS = {'
+      exec_command += '\'storage\': \'/mnt/ssd/indexes/\'}" localhost 9042'
+      is_expected.to contain_exec(exec_command).
+        only_with(unless: read_command,
+                  require: 'Exec[::cassandra::schema connection test]')
+    end
+  end
+
+  context 'Create a custom index with options with SCL.' do
+    let :facts do
+      {
+        operatingsystemmajrelease: 7,
+        osfamily: 'RedHat'
+      }
+    end
+
+    let(:title) { 'user_index' }
+
+    let(:params) do
+      {
+        class_name: 'path.to.the.IndexClass',
+        keys: 'email',
+        keyspace: 'Excelsior',
+        options: "{'storage': '/mnt/ssd/indexes/'}",
+        table: 'users',
+        use_scl: true,
+        scl_name: 'testscl'
+      }
+    end
+
+    it do
+      is_expected.to compile
+      read_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"DESC INDEX Excelsior.user_index\" localhost 9042"'
+      exec_command =  '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"CREATE CUSTOM INDEX IF NOT EXISTS user_index ON '
+      exec_command += 'Excelsior.users (email) USING \'path.to.the.IndexClass\' WITH OPTIONS = {'
+      exec_command += '\'storage\': \'/mnt/ssd/indexes/\'}\" localhost 9042"'
+      is_expected.to contain_exec(exec_command).
+        only_with(unless: read_command,
+                  require: 'Exec[::cassandra::schema connection test]')
     end
   end
 
@@ -91,13 +208,50 @@ describe 'cassandra::schema::index' do
         ensure: 'absent',
         keys: 'lname',
         keyspace: 'Excelsior',
-        table: 'users'
+        table: 'users',
+        use_scl: false,
+        scl_name: 'nodefault'
       }
     end
 
     it do
       is_expected.to compile
-      is_expected.to contain_exec('/usr/bin/cqlsh   -e "DROP INDEX Excelsior.user_index" localhost 9042')
+      read_command = '/usr/bin/cqlsh   -e "DESC INDEX Excelsior.user_index" localhost 9042'
+      exec_command = '/usr/bin/cqlsh   -e "DROP INDEX Excelsior.user_index" localhost 9042'
+      is_expected.to contain_exec(exec_command).
+        only_with(onlyif: read_command,
+                  require: 'Exec[::cassandra::schema connection test]')
+    end
+  end
+
+  context 'Drop Index with SCL' do
+    let :facts do
+      {
+        operatingsystemmajrelease: 7,
+        osfamily: 'RedHat'
+      }
+    end
+
+    let(:title) { 'user_index' }
+
+    let(:params) do
+      {
+        ensure: 'absent',
+        keys: 'lname',
+        keyspace: 'Excelsior',
+        table: 'users',
+        use_scl: true,
+        scl_name: 'testscl'
+      }
+    end
+
+    it do
+      is_expected.to compile
+      read_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"DESC INDEX Excelsior.user_index\" localhost 9042"'
+      exec_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"DROP INDEX Excelsior.user_index\" localhost 9042"'
+      is_expected.to contain_exec(exec_command).
+        only_with(onlyif: read_command,
+                  require: 'Exec[::cassandra::schema connection test]')
     end
   end
 

@@ -33,8 +33,16 @@ define cassandra::schema::permission (
   $keyspace_name    = 'ALL',
   $permission_name  = 'ALL',
   $table_name       = undef,
+  Boolean $use_scl = $cassandra::params::use_scl,
+  String[1] $scl_name = $cassandra::params::scl_name,
   ){
   include 'cassandra::schema'
+
+  if $use_scl {
+    $quote = '\"'
+  } else {
+    $quote = '"'
+  }
 
   if upcase($keyspace_name) == 'ALL' and upcase($permission_name) == 'ALL' {
     fail('"ALL" keyspaces AND "ALL" permissions are mutually exclusive.')
@@ -49,7 +57,12 @@ define cassandra::schema::permission (
   $read_script = "LIST ALL PERMISSIONS ON ${resource}"
   $upcase_permission_name = upcase($permission_name)
   $pattern = "\s${user_name} |\s*${user_name} |\s.*\s${upcase_permission_name}$"
-  $read_command = "${::cassandra::schema::cqlsh_opts} -e \"${read_script}\" ${::cassandra::schema::cqlsh_conn} | grep '${pattern}'"
+  $read_command_tmp = "${::cassandra::schema::cqlsh_opts} -e ${quote}${read_script}${quote} ${::cassandra::schema::cqlsh_conn} | grep '${pattern}'"
+  if $use_scl {
+    $read_command = "/usr/bin/scl enable ${scl_name} \"${read_command_tmp}\""
+  } else {
+    $read_command = $read_command_tmp
+  }
 
   if upcase($permission_name) == 'ALL' {
     cassandra::schema::permission { "${title} - ALTER":
@@ -58,6 +71,8 @@ define cassandra::schema::permission (
       keyspace_name   => $keyspace_name,
       permission_name => 'ALTER',
       table_name      => $table_name,
+      use_scl         => $use_scl,
+      scl_name        => $scl_name,
     }
 
     cassandra::schema::permission { "${title} - AUTHORIZE":
@@ -66,6 +81,8 @@ define cassandra::schema::permission (
       keyspace_name   => $keyspace_name,
       permission_name => 'AUTHORIZE',
       table_name      => $table_name,
+      use_scl         => $use_scl,
+      scl_name        => $scl_name,
     }
 
     # The CREATE permission is not relevant to tables.
@@ -76,6 +93,8 @@ define cassandra::schema::permission (
         keyspace_name   => $keyspace_name,
         permission_name => 'CREATE',
         table_name      => $table_name,
+        use_scl         => $use_scl,
+        scl_name        => $scl_name,
       }
     }
 
@@ -85,6 +104,8 @@ define cassandra::schema::permission (
       keyspace_name   => $keyspace_name,
       permission_name => 'DROP',
       table_name      => $table_name,
+      use_scl         => $use_scl,
+      scl_name        => $scl_name,
     }
 
     cassandra::schema::permission { "${title} - MODIFY":
@@ -93,6 +114,8 @@ define cassandra::schema::permission (
       keyspace_name   => $keyspace_name,
       permission_name => 'MODIFY',
       table_name      => $table_name,
+      use_scl         => $use_scl,
+      scl_name        => $scl_name,
     }
 
     cassandra::schema::permission { "${title} - SELECT":
@@ -101,11 +124,17 @@ define cassandra::schema::permission (
       keyspace_name   => $keyspace_name,
       permission_name => 'SELECT',
       table_name      => $table_name,
+      use_scl         => $use_scl,
+      scl_name        => $scl_name,
     }
   } elsif $ensure == present {
     $create_script = "GRANT ${permission_name} ON ${resource} TO ${user_name}"
-    $create_command = "${::cassandra::schema::cqlsh_opts} -e \"${create_script}\" ${::cassandra::schema::cqlsh_conn
-}"
+    $create_command_tmp = "${::cassandra::schema::cqlsh_opts} -e ${quote}${create_script}${quote} ${::cassandra::schema::cqlsh_conn}"
+    if $use_scl {
+      $create_command = "/usr/bin/scl enable ${scl_name} \"${create_command_tmp}\""
+    } else {
+      $create_command = $create_command_tmp
+    }
 
     exec { $create_script:
       command => $create_command,
@@ -114,7 +143,12 @@ define cassandra::schema::permission (
     }
   } elsif $ensure == absent {
     $delete_script = "REVOKE ${permission_name} ON ${resource} FROM ${user_name}"
-    $delete_command = "${::cassandra::schema::cqlsh_opts} -e \"${delete_script}\" ${::cassandra::schema::cqlsh_conn}"
+    $delete_command_tmp = "${::cassandra::schema::cqlsh_opts} -e ${quote}${delete_script}${quote} ${::cassandra::schema::cqlsh_conn}"
+    if $use_scl {
+      $delete_command = "/usr/bin/scl enable ${scl_name} \"${delete_command_tmp}\""
+    } else {
+      $delete_command = $delete_command_tmp
+    }
 
     exec { $delete_script:
       command => $delete_command,
