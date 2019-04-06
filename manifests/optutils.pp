@@ -7,7 +7,7 @@ class cassandra::optutils (
   $package_ensure = 'present',
   $package_name   = $::cassandra::params::optutils_package_name,
   ) inherits cassandra::params {
-  include '::cassandra'
+  include 'cassandra'
 
   package { $package_name:
     ensure  => $package_ensure,
