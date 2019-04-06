@@ -116,12 +116,12 @@ Then run the tests:
 
 ```shell
 bundle exec rake beaker:centos6
-bundle exec rake beaker:centos7                                        
-bundle exec rake beaker:debian7                                        
-bundle exec rake beaker:debian8                                        
-bundle exec rake beaker:ubuntu1204                                     
-bundle exec rake beaker:ubuntu1404                                     
-bundle exec rake beaker:ubuntu1604                                     
+bundle exec rake beaker:centos7
+bundle exec rake beaker:debian7
+bundle exec rake beaker:debian8
+bundle exec rake beaker:ubuntu1204
+bundle exec rake beaker:ubuntu1404
+bundle exec rake beaker:ubuntu1604
 ```
 
 ## Contributors
