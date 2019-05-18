@@ -37,6 +37,7 @@ end
 RSpec.configure do |c|
   # Coverage generation
   c.after(:suite) do
+    c.moch_with :mocha
     RSpec::Puppet::Coverage.report!
   end
 end
