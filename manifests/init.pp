@@ -258,14 +258,12 @@ class cassandra (
     refreshonly => true,
   }
 
-  if $manage_config_file {
-    file { $config_path:
-      ensure  => directory,
-      group   => 'cassandra',
-      owner   => 'cassandra',
-      mode    => '0755',
-      require => $config_path_require,
-    }
+  file { $config_path:
+    ensure  => directory,
+    group   => 'cassandra',
+    owner   => 'cassandra',
+    mode    => '0755',
+    require => $config_path_require,
   }
 
   if $commitlog_directory {
@@ -339,14 +337,27 @@ class cassandra (
     $hints_directory_settings,
     $saved_caches_directory_settings)
 
-  file { $config_file:
-    ensure  => present,
-    owner   => 'cassandra',
-    group   => 'cassandra',
-    content => template($cassandra_yaml_tmpl),
-    mode    => $config_file_mode,
-    require => $config_file_require,
-    before  => $config_file_before,
+  if $manage_config_file {
+    file { $config_file:
+      ensure  => present,
+      owner   => 'cassandra',
+      group   => 'cassandra',
+      content => template($cassandra_yaml_tmpl),
+      mode    => $config_file_mode,
+      require => $config_file_require,
+      before  => $config_file_before,
+    }
+
+    $service_dependencies = [
+          File[$config_file],
+          File[$dc_rack_properties_file],
+          Package['cassandra'],
+        ]
+  } else {
+    $service_dependencies = [
+          File[$dc_rack_properties_file],
+          Package['cassandra'],
+        ]
   }
 
   file { $dc_rack_properties_file:
@@ -365,22 +376,14 @@ class cassandra (
         ensure    => $service_ensure,
         name      => $service_name,
         enable    => $service_enable,
-        subscribe => [
-          File[$config_file],
-          File[$dc_rack_properties_file],
-          Package['cassandra'],
-        ],
+        subscribe => $service_dependencies,
       }
     } else {
       service { 'cassandra':
         ensure  => $service_ensure,
         name    => $service_name,
         enable  => $service_enable,
-        require => [
-          File[$config_file],
-          File[$dc_rack_properties_file],
-          Package['cassandra'],
-        ],
+        require => $service_dependencies,
       }
     }
   }
