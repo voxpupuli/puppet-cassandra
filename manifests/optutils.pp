@@ -5,7 +5,7 @@
 #   be installed.
 class cassandra::optutils (
   $package_ensure = 'present',
-  $package_name   = $::cassandra::params::optutils_package_name,
+  $package_name   = $cassandra::params::optutils_package_name,
   ) inherits cassandra::params {
   include 'cassandra'
 

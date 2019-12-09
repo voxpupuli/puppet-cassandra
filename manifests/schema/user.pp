@@ -49,7 +49,7 @@ define cassandra::schema::user (
     $read_script = 'LIST USERS'
   }
   $str_match = '\s'
-  $read_command_tmp = "${::cassandra::schema::cqlsh_opts} -e ${quote}${read_script}${quote} ${::cassandra::schema::cqlsh_conn} | grep '${str_match}*${user_name} |'"
+  $read_command_tmp = "${cassandra::schema::cqlsh_opts} -e ${quote}${read_script}${quote} ${cassandra::schema::cqlsh_conn} | grep '${str_match}*${user_name} |'"
   if $use_scl {
     $read_command = "/usr/bin/scl enable ${scl_name} \"${read_command_tmp}\""
   } else {
@@ -103,7 +103,7 @@ define cassandra::schema::user (
       }
     }
 
-    $create_command_tmp = "${::cassandra::schema::cqlsh_opts} -e ${quote}${create_script}${quote} ${::cassandra::schema::cqlsh_conn}"
+    $create_command_tmp = "${cassandra::schema::cqlsh_opts} -e ${quote}${create_script}${quote} ${cassandra::schema::cqlsh_conn}"
     if $use_scl {
       $create_command = "/usr/bin/scl enable ${scl_name} \"${create_command_tmp}\""
     } else {
@@ -120,7 +120,7 @@ define cassandra::schema::user (
     } else {
       $delete_script = "DROP USER ${user_name}"
     }
-    $delete_command_tmp = "${::cassandra::schema::cqlsh_opts} -e ${quote}${delete_script}${quote} ${::cassandra::schema::cqlsh_conn}"
+    $delete_command_tmp = "${cassandra::schema::cqlsh_opts} -e ${quote}${delete_script}${quote} ${cassandra::schema::cqlsh_conn}"
     if $use_scl {
       $delete_command = "/usr/bin/scl enable ${scl_name} \"${delete_command_tmp}\""
     } else {

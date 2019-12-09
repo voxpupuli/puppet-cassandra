@@ -34,7 +34,7 @@ define cassandra::schema::table (
   }
 
   $read_script = "DESC TABLE ${keyspace}.${table}"
-  $read_command_tmp = "${::cassandra::schema::cqlsh_opts} -e ${quote}${read_script}${quote} ${::cassandra::schema::cqlsh_conn}"
+  $read_command_tmp = "${cassandra::schema::cqlsh_opts} -e ${quote}${read_script}${quote} ${cassandra::schema::cqlsh_conn}"
   if $use_scl {
     $read_command = "/usr/bin/scl enable ${scl_name} \"${read_command_tmp}\""
   } else {
@@ -53,7 +53,7 @@ define cassandra::schema::table (
       $create_script = "${create_script1} (${cols_def_rm_collection_type})"
     }
 
-    $create_command_tmp = "${::cassandra::schema::cqlsh_opts} -e ${quote}${create_script}${quote} ${::cassandra::schema::cqlsh_conn}"
+    $create_command_tmp = "${cassandra::schema::cqlsh_opts} -e ${quote}${create_script}${quote} ${cassandra::schema::cqlsh_conn}"
     if $use_scl {
       $create_command = "/usr/bin/scl enable ${scl_name} \"${create_command_tmp}\""
     } else {
@@ -65,7 +65,7 @@ define cassandra::schema::table (
     }
   } elsif $ensure == absent {
     $delete_script = "DROP TABLE IF EXISTS ${keyspace}.${table}"
-    $delete_command_tmp = "${::cassandra::schema::cqlsh_opts} -e ${quote}${delete_script}${quote} ${::cassandra::schema::cqlsh_conn}"
+    $delete_command_tmp = "${cassandra::schema::cqlsh_opts} -e ${quote}${delete_script}${quote} ${cassandra::schema::cqlsh_conn}"
     if $use_scl {
       $delete_command = "/usr/bin/scl enable ${scl_name} \"${delete_command_tmp}\""
     } else {

@@ -136,7 +136,7 @@ class cassandra (
   $commitlog_directory_mode     = '0750',
   Boolean $manage_config_file   = true,
   $config_file_mode             = '0644',
-  $config_path                  = $::cassandra::params::config_path,
+  $config_path                  = $cassandra::params::config_path,
   $data_file_directories        = undef,
   $data_file_directories_mode   = '0750',
   $dc                           = 'DC1',
@@ -145,7 +145,7 @@ class cassandra (
   $hints_directory              = undef,
   $hints_directory_mode         = '0750',
   $package_ensure               = 'present',
-  $package_name                 = $::cassandra::params::cassandra_pkg,
+  $package_name                 = $cassandra::params::cassandra_pkg,
   $prefer_local                 = undef,
   $rack                         = 'RAC1',
   $rackdc_tmpl                  = 'cassandra/cassandra-rackdc.properties.erb',
@@ -158,7 +158,7 @@ class cassandra (
   $service_refresh              = true,
   $settings                     = {},
   $snitch_properties_file       = 'cassandra-rackdc.properties',
-  $systemctl                    = $::cassandra::params::systemctl,
+  $systemctl                    = $cassandra::params::systemctl,
   ) inherits cassandra::params {
   if $service_provider != undef {
     Service {
@@ -179,7 +179,7 @@ class cassandra (
       $data_dir_require = Package['cassandra']
       $data_dir_before = []
 
-      if $::operatingsystemmajrelease == '7' and $::cassandra::service_provider == 'init' {
+      if $::operatingsystemmajrelease == '7' and $cassandra::service_provider == 'init' {
         exec { "/sbin/chkconfig --add ${service_name}":
           unless  => "/sbin/chkconfig --list ${service_name}",
           require => Package['cassandra'],
