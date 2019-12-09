@@ -37,6 +37,7 @@ class cassandra::java (
         'before' => Package[$package_name],
       }
 
+      include apt
       create_resources(apt::key, $aptkey, $aptkey_defaults)
     }
 
