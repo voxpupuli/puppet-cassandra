@@ -169,7 +169,7 @@ class cassandra (
   $config_file = "${config_path}/cassandra.yaml"
   $dc_rack_properties_file = "${config_path}/${snitch_properties_file}"
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat': {
       $config_file_require = Package['cassandra']
       $config_file_before  = []
@@ -179,7 +179,7 @@ class cassandra (
       $data_dir_require = Package['cassandra']
       $data_dir_before = []
 
-      if $::operatingsystemmajrelease == '7' and $cassandra::service_provider == 'init' {
+      if $facts['os']['release']['major'] == '7' and $cassandra::service_provider == 'init' {
         exec { "/sbin/chkconfig --add ${service_name}":
           unless  => "/sbin/chkconfig --list ${service_name}",
           require => Package['cassandra'],
@@ -238,9 +238,9 @@ class cassandra (
       $dc_rack_properties_file_before  = []
 
       if $fail_on_non_supported_os {
-        fail("OS family ${::osfamily} not supported")
+        fail("OS family ${facts['os']['family']} not supported")
       } else {
-        warning("OS family ${::osfamily} not supported")
+        warning("OS family ${facts['os']['family']} not supported")
       }
     }
   }

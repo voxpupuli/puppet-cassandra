@@ -5,7 +5,16 @@ describe 'cassandra::schema::keyspace' do
     let :facts do
       {
         operatingsystemmajrelease: 7,
-        osfamily: 'RedHat'
+        osfamily: 'RedHat',
+        os: {
+          'family' => 'RedHat',
+          'name' => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -41,7 +50,16 @@ describe 'cassandra::schema::keyspace' do
     let :facts do
       {
         operatingsystemmajrelease: 7,
-        osfamily: 'RedHat'
+        osfamily: 'RedHat',
+        os: {
+          'family' => 'RedHat',
+          'name' => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -76,7 +94,16 @@ describe 'cassandra::schema::keyspace' do
     let :facts do
       {
         operatingsystemmajrelease: 7,
-        osfamily: 'RedHat'
+        osfamily: 'RedHat',
+        os: {
+          'family' => 'RedHat',
+          'name' => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -112,7 +139,16 @@ describe 'cassandra::schema::keyspace' do
     let :facts do
       {
         operatingsystemmajrelease: 7,
-        osfamily: 'RedHat'
+        osfamily: 'RedHat',
+        os: {
+          'family' => 'RedHat',
+          'name' => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -148,7 +184,16 @@ describe 'cassandra::schema::keyspace' do
     let :facts do
       {
         operatingsystemmajrelease: 7,
-        osfamily: 'RedHat'
+        osfamily: 'RedHat',
+        os: {
+          'family' => 'RedHat',
+          'name' => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -175,7 +220,16 @@ describe 'cassandra::schema::keyspace' do
     let :facts do
       {
         operatingsystemmajrelease: 7,
-        osfamily: 'RedHat'
+        osfamily: 'RedHat',
+        os: {
+          'family' => 'RedHat',
+          'name' => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -202,7 +256,16 @@ describe 'cassandra::schema::keyspace' do
     let :facts do
       {
         operatingsystemmajrelease: 7,
-        osfamily: 'RedHat'
+        osfamily: 'RedHat',
+        os: {
+          'family' => 'RedHat',
+          'name' => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 

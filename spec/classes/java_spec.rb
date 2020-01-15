@@ -4,7 +4,15 @@ describe 'cassandra::java' do
     let :facts do
       {
         operatingsystemmajrelease: '7',
-        osfamily: 'RedHat'
+        osfamily: 'RedHat',
+        os: {
+          'family'  => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -20,7 +28,16 @@ describe 'cassandra::java' do
       {
         operatingsystemmajrelease: '7',
         osfamily: 'Debian',
-        lsbdistid: 'Debian'
+        lsbdistid: 'Debian',
+        os: {
+          'name'    => 'Debian',
+          'family'  => 'Debian',
+          'release' => {
+            'full'  => '7.8',
+            'major' => '7',
+            'minor' => '8'
+          }
+        }
       }
     end
 
@@ -37,7 +54,16 @@ describe 'cassandra::java' do
       {
         operatingsystemmajrelease: '7',
         osfamily: 'Debian',
-        lsbdistid: 'Debian'
+        lsbdistid: 'Debian',
+        os: {
+          'name'    => 'Debian',
+          'family'  => 'Debian',
+          'release' => {
+            'full'  => '7.8',
+            'major' => '7',
+            'minor' => '8'
+          }
+        }
       }
     end
 
@@ -56,7 +82,15 @@ describe 'cassandra::java' do
     let :facts do
       {
         operatingsystemmajrelease: '7',
-        osfamily: 'RedHat'
+        osfamily: 'RedHat',
+        os: {
+          'family'  => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -79,7 +113,15 @@ describe 'cassandra::java' do
     let :facts do
       {
         operatingsystemmajrelease: '7',
-        osfamily: 'RedHat'
+        osfamily: 'RedHat',
+        os: {
+          'family'  => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -109,8 +151,13 @@ describe 'cassandra::java' do
         osfamily: 'Debian',
         lsbdistid: 'Debian',
         os: {
-          name: 'Debian',
-          release: { major: '7' }
+          'name'    => 'Debian',
+          'family'  => 'Debian',
+          'release' => {
+            'full'  => '7.8',
+            'major' => '7',
+            'minor' => '8'
+          }
         }
       }
     end

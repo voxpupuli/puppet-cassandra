@@ -5,7 +5,15 @@ describe 'cassandra::system::transparent_hugepage' do
     let :facts do
       {
         osfamily: 'RedHat',
-        operatingsystemmajrelease: 7
+        operatingsystemmajrelease: 7,
+        os: {
+          'family'  => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -20,7 +28,15 @@ describe 'cassandra::system::transparent_hugepage' do
     let :facts do
       {
         osfamily: 'Debian',
-        operatingsystemmajrelease: 7
+        operatingsystemmajrelease: 7,
+        os: {
+          'family'  => 'Debian',
+          'release' => {
+            'full'  => '7.8',
+            'major' => '7',
+            'minor' => '8'
+          }
+        }
       }
     end
 

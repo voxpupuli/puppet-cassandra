@@ -4,7 +4,16 @@ describe 'cassandra::schema' do
     let :facts do
       {
         operatingsystemmajrelease: 7,
-        osfamily: 'RedHat'
+        osfamily: 'RedHat',
+        os: {
+          'family' => 'RedHat',
+          'name' => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -34,7 +43,16 @@ describe 'cassandra::schema' do
     let :facts do
       {
         operatingsystemmajrelease: 7,
-        osfamily: 'RedHat'
+        osfamily: 'RedHat',
+        os: {
+          'family' => 'RedHat',
+          'name' => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -70,10 +88,23 @@ describe 'cassandra::schema' do
   context 'Test that users can specify a credentials file.' do
     let :facts do
       {
-        id: 'root',
-        gid: 'root',
+        id: 0,
+        gid: 0,
         operatingsystemmajrelease: 7,
-        osfamily: 'Debian'
+        osfamily: 'Debian',
+        os: {
+          'family' => 'Debian',
+          'name' => 'Debian',
+          'release' => {
+            'full'  => '7.8',
+            'major' => '7',
+            'minor' => '8'
+          }
+        },
+        identity: {
+          uid: 0,
+          gid: 0
+        }
       }
     end
 
@@ -88,9 +119,9 @@ describe 'cassandra::schema' do
     it do
       is_expected.to contain_file('/root/.puppetcqlshrc').with(
         ensure: 'file',
-        group: 'root',
+        group: 0,
         mode: '0600',
-        owner: 'root',
+        owner: 0,
         content: %r{username = cassandra}
       ).that_comes_before('Exec[::cassandra::schema connection test]')
 
@@ -108,10 +139,23 @@ describe 'cassandra::schema' do
   context 'Test that users can specify a credentials file and password.' do
     let :facts do
       {
-        id: 'root',
-        gid: 'root',
+        id: 0,
+        gid: 0,
         operatingsystemmajrelease: 7,
-        osfamily: 'Debian'
+        osfamily: 'Debian',
+        os: {
+          'family' => 'Debian',
+          'name' => 'Debian',
+          'release' => {
+            'full'  => '7.8',
+            'major' => '7',
+            'minor' => '8'
+          }
+        },
+        identity: {
+          uid: 0,
+          gid: 0
+        }
       }
     end
 
@@ -127,9 +171,9 @@ describe 'cassandra::schema' do
     it do
       is_expected.to contain_file('/root/.puppetcqlshrc').with(
         ensure: 'file',
-        group: 'root',
+        group: 0,
         mode: '0600',
-        owner: 'root',
+        owner: 0,
         content: %r{password = topsecret}
       )
 
@@ -148,7 +192,16 @@ describe 'cassandra::schema' do
     let :facts do
       {
         operatingsystemmajrelease: 7,
-        osfamily: 'Redhat'
+        osfamily: 'Redhat',
+        os: {
+          'family' => 'RedHat',
+          'name' => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 

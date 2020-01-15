@@ -23,7 +23,7 @@ class cassandra::java (
   $package_name     = $cassandra::params::java_package,
   $yumrepo          = undef,
   ) inherits cassandra::params {
-  if $::osfamily == 'RedHat' and $yumrepo != undef {
+  if $facts['os']['family'] == 'RedHat' and $yumrepo != undef {
     $yumrepo_defaults = {
       'before' => Package[$package_name],
     }
@@ -31,7 +31,7 @@ class cassandra::java (
     create_resources(yumrepo, $yumrepo, $yumrepo_defaults)
   }
 
-  if $::osfamily == 'Debian' {
+  if $facts['os']['family'] == 'Debian' {
     if $aptkey != undef {
       $aptkey_defaults = {
         'before' => Package[$package_name],

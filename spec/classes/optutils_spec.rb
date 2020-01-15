@@ -4,7 +4,16 @@ describe 'cassandra::optutils' do
     let :facts do
       {
         operatingsystemmajrelease: '7',
-        osfamily: 'RedHat'
+        osfamily: 'RedHat',
+        os: {
+          'family' => 'RedHat',
+          'name' => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -23,7 +32,16 @@ describe 'cassandra::optutils' do
     let :facts do
       {
         operatingsystemmajrelease: '7',
-        osfamily: 'Debian'
+        osfamily: 'Debian',
+        os: {
+          'family' => 'Debian',
+          'name' => 'Debian',
+          'release' => {
+            'full'  => '7.8',
+            'major' => '7',
+            'minor' => '8'
+          }
+        }
       }
     end
 
@@ -41,7 +59,15 @@ describe 'cassandra::optutils' do
     let :facts do
       {
         operatingsystemmajrelease: '7',
-        osfamily: 'Debian'
+        osfamily: 'Debian',
+        os: {
+          'family'  => 'Debian',
+          'release' => {
+            'full'  => '7.8',
+            'major' => '7',
+            'minor' => '8'
+          }
+        }
       }
     end
 
@@ -61,7 +87,15 @@ describe 'cassandra::optutils' do
     let :facts do
       {
         operatingsystemmajrelease: '7',
-        osfamily: 'Debian'
+        osfamily: 'Debian',
+        os: {
+          'family'  => 'Debian',
+          'release' => {
+            'full'  => '7.8',
+            'major' => '7',
+            'minor' => '8'
+          }
+        }
       }
     end
     let :params do

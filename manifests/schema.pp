@@ -63,9 +63,9 @@ class cassandra::schema (
   if $cqlsh_client_config != undef {
     file { $cqlsh_client_config :
       ensure  => file,
-      group   => $::gid,
+      group   => $facts['identity']['gid'],
       mode    => '0600',
-      owner   => $::id,
+      owner   => $facts['identity']['uid'],
       content => template( $cqlsh_client_tmpl ),
       before  => Exec['::cassandra::schema connection test'],
     }

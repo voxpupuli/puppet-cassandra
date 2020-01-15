@@ -37,14 +37,14 @@ class { 'cassandra':
     'commitlog_sync'              => 'periodic',
     'commitlog_sync_period_in_ms' => 10000,
     'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
-    'listen_address'              => $::ipaddress,
+    'listen_address'              => $facts['networking']['ip'],
     'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
     'seed_provider'               => [
       {
         'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
         'parameters' => [
           {
-            'seeds' => $::ipaddress,
+            'seeds' => $facts['networking']['ip'],
           },
         ],
       },

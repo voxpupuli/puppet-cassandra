@@ -6,7 +6,16 @@ describe 'cassandra::schema::user' do
       {
         operatingsystemmajrelease: 7,
         osfamily: 'RedHat',
-        cassandrarelease: nil
+        cassandrarelease: nil,
+        os: {
+          'family' => 'RedHat',
+          'name' => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -38,7 +47,16 @@ describe 'cassandra::schema::user' do
       {
         operatingsystemmajrelease: 7,
         osfamily: 'RedHat',
-        cassandrarelease: nil
+        cassandrarelease: nil,
+        os: {
+          'family' => 'RedHat',
+          'name' => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -70,7 +88,16 @@ describe 'cassandra::schema::user' do
       {
         operatingsystemmajrelease: 7,
         osfamily: 'RedHat',
-        cassandrarelease: '2.0.1'
+        cassandrarelease: '2.0.1',
+        os: {
+          'family' => 'RedHat',
+          'name' => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -102,7 +129,16 @@ describe 'cassandra::schema::user' do
       {
         operatingsystemmajrelease: 7,
         osfamily: 'RedHat',
-        cassandrarelease: '2.0.1'
+        cassandrarelease: '2.0.1',
+        os: {
+          'family' => 'RedHat',
+          'name' => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -134,7 +170,16 @@ describe 'cassandra::schema::user' do
       {
         operatingsystemmajrelease: 7,
         osfamily: 'RedHat',
-        cassandrarelease: '2.0.1'
+        cassandrarelease: '2.0.1',
+        os: {
+          'family' => 'RedHat',
+          'name' => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -165,7 +210,16 @@ describe 'cassandra::schema::user' do
       {
         operatingsystemmajrelease: 7,
         osfamily: 'RedHat',
-        cassandrarelease: '2.0.1'
+        cassandrarelease: '2.0.1',
+        os: {
+          'family' => 'RedHat',
+          'name' => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -196,7 +250,16 @@ describe 'cassandra::schema::user' do
       {
         operatingsystemmajrelease: 7,
         osfamily: 'RedHat',
-        cassandrarelease: '3.0.9'
+        cassandrarelease: '3.0.9',
+        os: {
+          'family' => 'RedHat',
+          'name' => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -228,7 +291,16 @@ describe 'cassandra::schema::user' do
       {
         operatingsystemmajrelease: 7,
         osfamily: 'RedHat',
-        cassandrarelease: '3.0.9'
+        cassandrarelease: '3.0.9',
+        os: {
+          'family' => 'RedHat',
+          'name' => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -260,7 +332,16 @@ describe 'cassandra::schema::user' do
       {
         operatingsystemmajrelease: 7,
         osfamily: 'RedHat',
-        cassandrarelease: '3.0.9'
+        cassandrarelease: '3.0.9',
+        os: {
+          'family' => 'RedHat',
+          'name' => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -292,7 +373,16 @@ describe 'cassandra::schema::user' do
       {
         operatingsystemmajrelease: 7,
         osfamily: 'RedHat',
-        cassandrarelease: '3.0.9'
+        cassandrarelease: '3.0.9',
+        os: {
+          'family' => 'RedHat',
+          'name' => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -324,7 +414,16 @@ describe 'cassandra::schema::user' do
       {
         operatingsystemmajrelease: 7,
         osfamily: 'RedHat',
-        cassandrarelease: '3.0.9'
+        cassandrarelease: '3.0.9',
+        os: {
+          'family' => 'RedHat',
+          'name' => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -354,7 +453,16 @@ describe 'cassandra::schema::user' do
       {
         operatingsystemmajrelease: 7,
         osfamily: 'RedHat',
-        cassandrarelease: '3.0.9'
+        cassandrarelease: '3.0.9',
+        os: {
+          'family' => 'RedHat',
+          'name' => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -384,7 +492,16 @@ describe 'cassandra::schema::user' do
       {
         operatingsystemmajrelease: 7,
         osfamily: 'RedHat',
-        cassandrarelease: '2.0.2'
+        cassandrarelease: '2.0.2',
+        os: {
+          'family' => 'RedHat',
+          'name' => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -414,7 +531,16 @@ describe 'cassandra::schema::user' do
       {
         operatingsystemmajrelease: 7,
         osfamily: 'RedHat',
-        cassandrarelease: '2.0.2'
+        cassandrarelease: '2.0.2',
+        os: {
+          'family' => 'RedHat',
+          'name' => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -443,7 +569,16 @@ describe 'cassandra::schema::user' do
     let :facts do
       {
         operatingsystemmajrelease: 7,
-        osfamily: 'RedHat'
+        osfamily: 'RedHat',
+        os: {
+          'family' => 'RedHat',
+          'name' => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 

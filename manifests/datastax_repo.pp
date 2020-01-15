@@ -26,7 +26,7 @@ class cassandra::datastax_repo (
   $pkg_url = undef,
   $release = 'stable',
   ) {
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat': {
       if $pkg_url != undef {
         $baseurl = $pkg_url
@@ -76,7 +76,7 @@ class cassandra::datastax_repo (
       }
     }
     default: {
-      warning("OS family ${::osfamily} not supported")
+      warning("OS family ${facts['os']['family']} not supported")
     }
   }
 }

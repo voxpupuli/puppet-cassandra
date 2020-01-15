@@ -3,7 +3,15 @@ describe 'cassandra::datastax_repo' do
   context 'On a RedHat OS with defaults for all parameters' do
     let :facts do
       {
-        osfamily: 'RedHat'
+        osfamily: 'RedHat',
+        os: {
+          'family'  => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -34,8 +42,13 @@ describe 'cassandra::datastax_repo' do
         lsbdistid: 'Debian',
         lsbdistrelease: '9',
         os: {
-          name: 'Debian',
-          release: { major: '9' }
+          'name' => 'Debian',
+          'family' => 'Debian',
+          'release' => {
+            'major' => '9',
+            'minor' => '9',
+            'full'  => '9.9'
+          }
         }
       }
     end
