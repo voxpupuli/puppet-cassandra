@@ -41,7 +41,6 @@ describe 'cassandra::datastax_repo' do
     end
 
     it do
-      is_expected.to have_resource_count(16)
       is_expected.to contain_class('apt')
       is_expected.to contain_class('apt::update')
 

@@ -1,48 +1,61 @@
 require 'spec_helper'
 
-describe 'cassandracmsheapnewsize' do
+describe Facter::Util::Fact do
   before { Facter.clear }
   after { Facter.clear }
 
   describe 'Heap settings' do
-    describe 'Rasberry Pi 3' do
-      it do
+    context 'Rasberry Pi 3' do
+      before do
         Facter.fact(:memorysize_mb).stubs(:value).returns('1024')
-        Facter.fact(:processorcount).stubs(:value).returns('4')
-        expect(Facter.fact(:cassandracmsheapnewsize).value).to be(128)
+        Facter.add(:processorcount) { setcode { '4' } }
       end
+
+      it { expect(Facter.fact(:cassandracmsheapnewsize).value).to be(128) }
     end
 
-    describe 'm4.large' do
-      it do
+    context 'm4.large' do
+      before do
         Facter.fact(:memorysize_mb).stubs(:value).returns('8191.9')
-        Facter.fact(:processorcount).stubs(:value).returns('2')
-        expect(Facter.fact(:cassandracmsheapnewsize).value).to be(200)
+        Facter.add(:processorcount) { setcode { '2' } }
       end
+
+      it { expect(Facter.fact(:cassandracmsheapnewsize).value).to be(200) }
     end
 
-    describe 'm4.xlarge' do
-      it do
+    context 'm4.xlarge' do
+      before do
         Facter.fact(:memorysize_mb).stubs(:value).returns('16384')
-        Facter.fact(:processorcount).stubs(:value).returns('2')
-        expect(Facter.fact(:cassandracmsheapnewsize).value).to be(200)
+        Facter.add(:processorcount) { setcode { '2' } }
       end
+
+      it { expect(Facter.fact(:cassandracmsheapnewsize).value).to be(200) }
     end
 
-    describe 'c4.2xlarge' do
-      it do
+    context 'c4.2xlarge' do
+      before do
         Facter.fact(:memorysize_mb).stubs(:value).returns('15360')
-        Facter.fact(:processorcount).stubs(:value).returns('8')
-        expect(Facter.fact(:cassandracmsheapnewsize).value).to be(800)
+        if Facter.fact(:processorcount).value.nil?
+          Facter.add(:processorcount) { setcode { '8' } }
+        else
+          Facter.fact(:processorcount).stubs(:value).returns('8')
+        end
       end
+
+      it { expect(Facter.fact(:cassandracmsheapnewsize).value).to eq(800) } # BROKEN in CI
     end
 
-    describe 'i2.2xlarge' do
-      it do
+    context 'i2.2xlarge' do
+      before do
         Facter.fact(:memorysize_mb).stubs(:value).returns('62464')
-        Facter.fact(:processorcount).stubs(:value).returns('8')
-        expect(Facter.fact(:cassandracmsheapnewsize).value).to be(800)
+        if Facter.fact(:processorcount).value.nil?
+          Facter.add(:processorcount) { setcode { '8' } }
+        else
+          Facter.fact(:processorcount).stubs(:value).returns('8')
+        end
       end
+
+      it { expect(Facter.fact(:cassandracmsheapnewsize).value).to eq(800) } # BROKEN in CI
     end
   end
 end

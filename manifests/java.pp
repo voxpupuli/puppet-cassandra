@@ -32,6 +32,8 @@ class cassandra::java (
   }
 
   if $::osfamily == 'Debian' {
+    include apt
+
     if $aptkey != undef {
       $aptkey_defaults = {
         'before' => Package[$package_name],

@@ -18,6 +18,12 @@ describe 'cassandra::java' do
   context 'On a Debian OS with defaults for all parameters' do
     let :facts do
       {
+        os: {
+          name: 'Debian',
+          release: {
+            major: '7'
+          }
+        },
         operatingsystemmajrelease: '7',
         osfamily: 'Debian',
         lsbdistid: 'Debian'
@@ -28,13 +34,18 @@ describe 'cassandra::java' do
       is_expected.to contain_class('cassandra::java')
       is_expected.to contain_package('openjdk-7-jre-headless')
       is_expected.to contain_package('libjna-java')
-      is_expected.to have_resource_count(2)
     end
   end
 
   context 'On a Debian OS with package_ensure set' do
     let :facts do
       {
+        os: {
+          name: 'Debian',
+          release: {
+            major: '7'
+          }
+        },
         operatingsystemmajrelease: '7',
         osfamily: 'Debian',
         lsbdistid: 'Debian'
