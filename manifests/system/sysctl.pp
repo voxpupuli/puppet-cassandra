@@ -29,8 +29,8 @@ class cassandra::system::sysctl(
   $net_core_rmem_max     = 16777216,
   $net_core_wmem_default = 16777216,
   $net_core_wmem_max     = 16777216,
-  $net_ipv4_tcp_rmem     = $::cassandra::params::net_ipv4_tcp_rmem,
-  $net_ipv4_tcp_wmem     = $::cassandra::params::net_ipv4_tcp_wmem,
+  $net_ipv4_tcp_rmem     = $cassandra::params::net_ipv4_tcp_rmem,
+  $net_ipv4_tcp_wmem     = $cassandra::params::net_ipv4_tcp_wmem,
   $vm_max_map_count      = 1048575,
   ) inherits cassandra::params {
 

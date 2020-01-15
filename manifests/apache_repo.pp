@@ -27,7 +27,7 @@ class cassandra::apache_repo (
   $pkg_url = undef,
   $release = 'main',
   ) {
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat': {
       if $pkg_url != undef {
         $baseurl = $pkg_url
@@ -79,7 +79,7 @@ class cassandra::apache_repo (
       }
     }
     default: {
-      warning("OS family ${::osfamily} not supported")
+      warning("OS family ${facts['os']['family']} not supported")
     }
   }
 }

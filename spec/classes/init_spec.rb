@@ -4,8 +4,16 @@ describe 'cassandra' do
   context 'On an unknown OS with defaults for all parameters' do
     let :facts do
       {
-        operatingsystemmajrelease: '10',
-        osfamily: 'Darwin'
+        operatingsystemmajrelease: '16',
+        osfamily: 'Darwin',
+        os: {
+          'family'  => 'Darwin',
+          'release' => {
+            'full'  => '16.0.0',
+            'major' => '16',
+            'minor' => '0'
+          }
+        }
       }
     end
 
@@ -16,7 +24,16 @@ describe 'cassandra' do
     let :facts do
       {
         osfamily: 'RedHat',
-        operatingsystemmajrelease: '7'
+        operatingsystemmajrelease: '7',
+        os: {
+          'family' => 'RedHat',
+          'name' => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -82,7 +99,15 @@ describe 'cassandra' do
     let :facts do
       {
         osfamily: 'RedHat',
-        operatingsystemmajrelease: '7'
+        operatingsystemmajrelease: '7',
+        os: {
+          'family'  => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -109,7 +134,15 @@ describe 'cassandra' do
     let :facts do
       {
         osfamily: 'RedHat',
-        operatingsystemmajrelease: '7'
+        operatingsystemmajrelease: '7',
+        os: {
+          'family'  => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -133,7 +166,15 @@ describe 'cassandra' do
     let :facts do
       {
         operatingsystemmajrelease: '8',
-        osfamily: 'Debian'
+        osfamily: 'Debian',
+        os: {
+          'family'  => 'Debian',
+          'release' => {
+            'full'  => '8.11',
+            'major' => '8',
+            'minor' => '11'
+          }
+        }
       }
     end
 
@@ -217,13 +258,21 @@ describe 'cassandra' do
     end
   end
 
-  context 'CASSANDRA-9822 activated on Debian' do
+  context 'CASSANDRA-9822 activated on Ubuntu 16.04' do
     let :facts do
       {
-        operatingsystemmajrelease: '7',
+        operatingsystemmajrelease: '16.04',
         osfamily: 'Debian',
         lsbdistid: 'Ubuntu',
-        lsbdistrelease: '14.04'
+        lsbdistrelease: '16.04',
+        os: {
+          'name'    => 'Ubuntu',
+          'family'  => 'Debian',
+          'release' => {
+            'full'  => '16.04',
+            'major' => '16.04'
+          }
+        }
       }
     end
 
@@ -245,7 +294,15 @@ describe 'cassandra' do
     let :facts do
       {
         operatingsystemmajrelease: '7',
-        osfamily: 'RedHat'
+        osfamily: 'RedHat',
+        os: {
+          'family'  => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -282,8 +339,16 @@ describe 'cassandra' do
   context 'On an unsupported OS pleading tolerance' do
     let :facts do
       {
-        operatingsystemmajrelease: '10',
-        osfamily: 'Darwin'
+        operatingsystemmajrelease: '16',
+        osfamily: 'Darwin',
+        os: {
+          'family'  => 'Darwin',
+          'release' => {
+            'full'  => '16.0.0',
+            'major' => '16',
+            'minor' => '0'
+          }
+        }
       }
     end
     let :params do
@@ -308,7 +373,15 @@ describe 'cassandra' do
     let :facts do
       {
         operatingsystemmajrelease: '8',
-        osfamily: 'Debian'
+        osfamily: 'Debian',
+        os: {
+          'family'  => 'Debian',
+          'release' => {
+            'full'  => '8.11',
+            'major' => '8',
+            'minor' => '11'
+          }
+        }
       }
     end
 
@@ -331,7 +404,15 @@ describe 'cassandra' do
     let :facts do
       {
         operatingsystemmajrelease: '8',
-        osfamily: 'Debian'
+        osfamily: 'Debian',
+        os: {
+          'family'  => 'Debian',
+          'release' => {
+            'full'  => '8.11',
+            'major' => '8',
+            'minor' => '11'
+          }
+        }
       }
     end
 
@@ -348,7 +429,15 @@ describe 'cassandra' do
     let :facts do
       {
         operatingsystemmajrelease: '7',
-        osfamily: 'RedHat'
+        osfamily: 'RedHat',
+        os: {
+          'family'  => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 
@@ -365,7 +454,15 @@ describe 'cassandra' do
     let :facts do
       {
         operatingsystemmajrelease: '7',
-        osfamily: 'RedHat'
+        osfamily: 'RedHat',
+        os: {
+          'family'  => 'RedHat',
+          'release' => {
+            'full'  => '7.6.1810',
+            'major' => '7',
+            'minor' => '6'
+          }
+        }
       }
     end
 

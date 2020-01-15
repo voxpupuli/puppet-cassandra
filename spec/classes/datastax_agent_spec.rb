@@ -5,7 +5,16 @@ describe 'cassandra::datastax_agent' do
     let :facts do
       {
         osfamily: 'RedHat',
-        operatingsystemmajrelease: '6'
+        operatingsystemmajrelease: '6',
+        os: {
+          'name'    => 'RedHat',
+          'family'  => 'RedHat',
+          'release' => {
+            'full'  => '6.10',
+            'major' => '6',
+            'minor' => '10'
+          }
+        }
       }
     end
 
@@ -57,7 +66,15 @@ describe 'cassandra::datastax_agent' do
     let :facts do
       {
         osfamily: 'Debian',
-        operatingsystemmajrelease: '6'
+        operatingsystemmajrelease: '7',
+        os: {
+          'family'  => 'Debian',
+          'release' => {
+            'full'  => '7.8',
+            'major' => '7',
+            'minor' => '8'
+          }
+        }
       }
     end
 
@@ -75,7 +92,15 @@ describe 'cassandra::datastax_agent' do
     let :facts do
       {
         osfamily: 'Debian',
-        operatingsystemmajrelease: '6'
+        operatingsystemmajrelease: '7',
+        os: {
+          'family'  => 'Debian',
+          'release' => {
+            'full'  => '7.8',
+            'major' => '7',
+            'minor' => '8'
+          }
+        }
       }
     end
 
@@ -101,7 +126,15 @@ describe 'cassandra::datastax_agent' do
     let :facts do
       {
         osfamily: 'Debian',
-        operatingsystemmajrelease: '6'
+        operatingsystemmajrelease: '7',
+        os: {
+          'family'  => 'Debian',
+          'release' => {
+            'full'  => '7.8',
+            'major' => '7',
+            'minor' => '8'
+          }
+        }
       }
     end
 

@@ -35,14 +35,14 @@ class { 'cassandra':
     'commitlog_sync'              => 'periodic',
     'commitlog_sync_period_in_ms' => 10000,
     'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
-    'listen_address'              => $::ipaddress,
+    'listen_address'              => $facts['networking']['ip'],
     'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
     'seed_provider'               => [
       {
         'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
         'parameters' => [
           {
-            'seeds' => $::ipaddress,
+            'seeds' => $facts['networking']['ip'],
           },
         ],
       },
@@ -78,7 +78,7 @@ class { 'cassandra::optutils':
 class { 'cassandra::schema':
   cqlsh_password => 'cassandra',
   cqlsh_user     => 'cassandra',
-  cqlsh_host     => $::ipaddress,
+  cqlsh_host     => $facts['networking']['ip'],
   indexes        => {
     'users_lname_idx' => {
       table    => 'users',
@@ -147,16 +147,15 @@ class { 'cassandra::schema':
     },
   },
 }
-
-if $::memorysize_mb < 24576.0 {
-  $max_heap_size_in_mb = floor($::memorysize_mb / 2)
-} elsif $::memorysize_mb < 8192.0 {
-  $max_heap_size_in_mb = floor($::memorysize_mb / 4)
+if ($facts['memory']['system']['total_bytes'] / (1024*1024)) < 24576.0 {
+  $max_heap_size_in_mb = floor(($facts['memory']['system']['total_bytes'] / (1024*1024)) / 2)
+} elsif ($facts['memory']['system']['total_bytes'] / (1024*1024)) < 8192.0 {
+  $max_heap_size_in_mb = floor(($facts['memory']['system']['total_bytes'] / (1024*1024)) / 4)
 } else {
   $max_heap_size_in_mb = 8192
 }
 
-$heap_new_size = $::processorcount * 100
+$heap_new_size = $facts['processors']['count'] * 100
 
 cassandra::file { "Set Java/Cassandra max heap size to ${max_heap_size_in_mb}.":
   file       => 'cassandra-env.sh',

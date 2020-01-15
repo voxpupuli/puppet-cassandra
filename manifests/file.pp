@@ -56,7 +56,7 @@
 #   }
 define cassandra::file(
   $file             = $title,
-  $config_path      = $::cassandra::config_path,
+  $config_path      = $cassandra::config_path,
   $file_lines       = undef,
   $service_refresh  = true,
   ) {

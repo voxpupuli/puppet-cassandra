@@ -1,11 +1,20 @@
 require 'spec_helper'
 
-describe '::cassandra::file' do
+describe 'cassandra::file' do
   context 'On a Debian OS set the max and new heap size' do
     let :facts do
       {
         osfamily: 'Debian',
-        operatingsystemmajrelease: 8
+        operatingsystemmajrelease: 8,
+        os: {
+          'family' => 'Debian',
+          'name' => 'Debian',
+          'release' => {
+            'full'  => '8.11',
+            'major' => '8',
+            'minor' => '11'
+          }
+        }
       }
     end
 

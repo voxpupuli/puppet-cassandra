@@ -136,7 +136,7 @@ class cassandra (
   $commitlog_directory_mode     = '0750',
   Boolean $manage_config_file   = true,
   $config_file_mode             = '0644',
-  $config_path                  = $::cassandra::params::config_path,
+  $config_path                  = $cassandra::params::config_path,
   $data_file_directories        = undef,
   $data_file_directories_mode   = '0750',
   $dc                           = 'DC1',
@@ -145,7 +145,7 @@ class cassandra (
   $hints_directory              = undef,
   $hints_directory_mode         = '0750',
   $package_ensure               = 'present',
-  $package_name                 = $::cassandra::params::cassandra_pkg,
+  $package_name                 = $cassandra::params::cassandra_pkg,
   $prefer_local                 = undef,
   $rack                         = 'RAC1',
   $rackdc_tmpl                  = 'cassandra/cassandra-rackdc.properties.erb',
@@ -158,7 +158,7 @@ class cassandra (
   $service_refresh              = true,
   $settings                     = {},
   $snitch_properties_file       = 'cassandra-rackdc.properties',
-  $systemctl                    = $::cassandra::params::systemctl,
+  $systemctl                    = $cassandra::params::systemctl,
   ) inherits cassandra::params {
   if $service_provider != undef {
     Service {
@@ -169,7 +169,7 @@ class cassandra (
   $config_file = "${config_path}/cassandra.yaml"
   $dc_rack_properties_file = "${config_path}/${snitch_properties_file}"
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat': {
       $config_file_require = Package['cassandra']
       $config_file_before  = []
@@ -179,7 +179,7 @@ class cassandra (
       $data_dir_require = Package['cassandra']
       $data_dir_before = []
 
-      if $::operatingsystemmajrelease == '7' and $::cassandra::service_provider == 'init' {
+      if $facts['os']['release']['major'] == '7' and $cassandra::service_provider == 'init' {
         exec { "/sbin/chkconfig --add ${service_name}":
           unless  => "/sbin/chkconfig --list ${service_name}",
           require => Package['cassandra'],
@@ -238,9 +238,9 @@ class cassandra (
       $dc_rack_properties_file_before  = []
 
       if $fail_on_non_supported_os {
-        fail("OS family ${::osfamily} not supported")
+        fail("OS family ${facts['os']['family']} not supported")
       } else {
-        warning("OS family ${::osfamily} not supported")
+        warning("OS family ${facts['os']['family']} not supported")
       }
     }
   }

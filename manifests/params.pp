@@ -1,9 +1,9 @@
 # This class is meant to be called from the locp-cassandra module.
 # It sets variables according to platform.
 class cassandra::params {
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Debian': {
-      case $::operatingsystemmajrelease {
+      case $facts['os']['release']['major'] {
         '12.04': {
           $net_ipv4_tcp_rmem = '4096 87380 16777216'
           $net_ipv4_tcp_wmem = '4096 65536 16777216'
@@ -30,13 +30,13 @@ class cassandra::params {
       $systemctl = '/bin/systemctl'
     }
     'RedHat': {
-      case $::operatingsystemmajrelease {
-        6: {
+      case $facts['os']['release']['major'] {
+        '6': {
           $net_ipv4_tcp_rmem = '4096 87380 16777216'
           $net_ipv4_tcp_wmem = '4096 65536 16777216'
           $sysctl_file = '/etc/sysctl.conf'
         }
-        7: {
+        '7': {
           $net_ipv4_tcp_rmem = '4096, 87380, 16777216'
           $net_ipv4_tcp_wmem = '4096, 65536, 16777216'
           $sysctl_file = '/etc/sysctl.d/10-cassandra.conf'
