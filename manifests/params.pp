@@ -28,6 +28,8 @@ class cassandra::params {
       $optutils_package_name = 'cassandra-tools'
       $sysctl_file = '/etc/sysctl.d/10-cassandra.conf'
       $systemctl = '/bin/systemctl'
+      $use_scl = false
+      $scl_name = 'nodefault'
     }
     'RedHat': {
       case $facts['os']['release']['major'] {
