@@ -147,14 +147,11 @@ class { 'cassandra::schema':
     },
   },
 }
-if ($facts['memory']['system']['total_bytes'] / (1024*1024)) < 24576.0 {
-  $max_heap_size_in_mb = floor(($facts['memory']['system']['total_bytes'] / (1024*1024)) / 2)
-} elsif ($facts['memory']['system']['total_bytes'] / (1024*1024)) < 8192.0 {
-  $max_heap_size_in_mb = floor(($facts['memory']['system']['total_bytes'] / (1024*1024)) / 4)
-} else {
-  $max_heap_size_in_mb = 8192
-}
 
+$ram_sz_mb = floor($facts['memory']['system']['total_bytes'] / (1024*1024))
+$half_of_ram = floor($ram_sz_mb / 2)
+$quarter_of_ram = floor($ram_sz_mb / 4)
+$max_heap_size_in_mb = max(min($half_of_ram, 1024), min($quarter_of_ram, 8192))
 $heap_new_size = $facts['processors']['count'] * 100
 
 cassandra::file { "Set Java/Cassandra max heap size to ${max_heap_size_in_mb}.":
