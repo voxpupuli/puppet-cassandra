@@ -4,6 +4,40 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v3.0.0](https://github.com/voxpupuli/puppet-cassandra/tree/v3.0.0) (2020-05-09)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-cassandra/compare/v2.7.3...v3.0.0)
+
+**Breaking changes:**
+
+- drop EOL Ubuntu 14.04 [\#449](https://github.com/voxpupuli/puppet-cassandra/pull/449) ([bastelfreak](https://github.com/bastelfreak))
+- Drop support for Puppet 4 [\#448](https://github.com/voxpupuli/puppet-cassandra/pull/448) ([bastelfreak](https://github.com/bastelfreak))
+
+**Implemented enhancements:**
+
+- Add SCL support to cassandra::schema [\#445](https://github.com/voxpupuli/puppet-cassandra/pull/445) ([russellshackleford](https://github.com/russellshackleford))
+- Add Ubuntu 18.04 support [\#443](https://github.com/voxpupuli/puppet-cassandra/pull/443) ([paulseward](https://github.com/paulseward))
+
+**Fixed bugs:**
+
+- Wrong logic? [\#459](https://github.com/voxpupuli/puppet-cassandra/issues/459)
+- Actually choosing to manage the config file, not directory of it [\#417](https://github.com/voxpupuli/puppet-cassandra/pull/417) ([zmarois](https://github.com/zmarois))
+
+**Closed issues:**
+
+- Metadata: Outdated module dependencies. [\#450](https://github.com/voxpupuli/puppet-cassandra/issues/450)
+- ubuntu18 [\#441](https://github.com/voxpupuli/puppet-cassandra/issues/441)
+
+**Merged pull requests:**
+
+- Bugfix: Correct example of calculating MAX\_HEAP\_SIZE.  Fixes \#459. [\#460](https://github.com/voxpupuli/puppet-cassandra/pull/460) ([dallinb](https://github.com/dallinb))
+- Various test fixups [\#457](https://github.com/voxpupuli/puppet-cassandra/pull/457) ([alexjfisher](https://github.com/alexjfisher))
+- Allow puppetlabs/stdlib 6.x [\#455](https://github.com/voxpupuli/puppet-cassandra/pull/455) ([dhoppe](https://github.com/dhoppe))
+- allow puppetlabs/inifile 4.x [\#453](https://github.com/voxpupuli/puppet-cassandra/pull/453) ([bastelfreak](https://github.com/bastelfreak))
+- Add default SCL params to Debian family OS [\#452](https://github.com/voxpupuli/puppet-cassandra/pull/452) ([iain-buclaw-sociomantic](https://github.com/iain-buclaw-sociomantic))
+- fix puppet-string annotations & Generate REFERENCE.md [\#451](https://github.com/voxpupuli/puppet-cassandra/pull/451) ([bastelfreak](https://github.com/bastelfreak))
+- Allow puppetlabs/apt 7.x, puppetlabs/inifile 3.x [\#447](https://github.com/voxpupuli/puppet-cassandra/pull/447) ([dhoppe](https://github.com/dhoppe))
+
 ## [v2.7.3](https://github.com/voxpupuli/puppet-cassandra/tree/v2.7.3) (2018-10-19)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-cassandra/compare/v2.7.2...v2.7.3)
