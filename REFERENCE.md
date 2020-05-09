@@ -130,7 +130,7 @@ Data type: `string`
 
 The path to the cassandra configuration file.
 
-Default value: $::cassandra::params::config_path
+Default value: $cassandra::params::config_path
 
 ##### `data_file_directories`
 
@@ -224,7 +224,7 @@ Data type: `string`
 The name of the Cassandra package which must be available
 from a repository.
 
-Default value: $::cassandra::params::cassandra_pkg
+Default value: $cassandra::params::cassandra_pkg
 
 ##### `prefer_local`
 
@@ -381,7 +381,7 @@ The full path to the systemctl command.  Only
 needed when the package is installed.  Will silently continue if the
 executable does not exist.
 
-Default value: $::cassandra::params::systemctl
+Default value: $cassandra::params::systemctl
 
 ### cassandra::apache_repo
 
@@ -882,7 +882,7 @@ Data type: `string`
 
 The name of the JNA package.
 
-Default value: $::cassandra::params::jna_package_name
+Default value: $cassandra::params::jna_package_name
 
 ##### `package_ensure`
 
@@ -899,7 +899,7 @@ Data type: `string`
 
 The name of the Java package to be installed.
 
-Default value: $::cassandra::params::java_package
+Default value: $cassandra::params::java_package
 
 ##### `yumrepo`
 
@@ -935,7 +935,7 @@ Data type: `string`
 The name of the optional utilities package to
 be installed.
 
-Default value: $::cassandra::params::optutils_package_name
+Default value: $cassandra::params::optutils_package_name
 
 ### cassandra::params
 
@@ -1235,7 +1235,7 @@ Data type: `string`
 
 The value to set for net.ipv4.tcp_rmem.
 
-Default value: $::cassandra::params::net_ipv4_tcp_rmem
+Default value: $cassandra::params::net_ipv4_tcp_rmem
 
 ##### `net_ipv4_tcp_wmem`
 
@@ -1243,7 +1243,7 @@ Data type: `string`
 
 The value to set for net.ipv4.tcp_wmem.
 
-Default value: $::cassandra::params::net_ipv4_tcp_wmem
+Default value: $cassandra::params::net_ipv4_tcp_wmem
 
 ##### `vm_max_map_count`
 
@@ -1351,7 +1351,7 @@ Data type: `string`
 
 The path to the configuration directory.
 
-Default value: $::cassandra::config_path
+Default value: $cassandra::config_path
 
 ##### `file_lines`
 
