@@ -23,7 +23,7 @@ class { 'cassandra':
         'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
         'parameters' => [
           {
-            'seeds' => $::ipaddress,
+            'seeds' => $facts['networking']['ip'],
           },
         ],
       },

@@ -56,7 +56,7 @@ class cassandra::datastax_agent (
   $service_name         = 'datastax-agent',
   $service_provider     = undef,
   $settings             = {},
-  ) inherits cassandra::params {
+) inherits cassandra::params {
   require 'cassandra'
 
   if $service_provider != undef {
@@ -72,8 +72,8 @@ class cassandra::datastax_agent (
   }
 
   exec { 'datastax_agent_reload_systemctl':
-    command     => "${::cassandra::params::systemctl} daemon-reload",
-    onlyif      => "test -x ${::cassandra::params::systemctl}",
+    command     => "${cassandra::params::systemctl} daemon-reload",
+    onlyif      => "test -x ${cassandra::params::systemctl}",
     path        => ['/usr/bin', '/bin'],
     refreshonly => true,
     notify      => Service['datastax-agent'],

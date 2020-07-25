@@ -2,7 +2,7 @@
 require cassandra::datastax_repo
 require cassandra::system::transparent_hugepage
 
-case "${::operatingsystem}-${operatingsystemmajrelease}" {
+case "${facts['os']['name']}-${operatingsystemmajrelease}" {
   'CentOS-6': {
     $device = '/dev/mapper/VolGroup-lv_swap'
     $sysctl_args = '-e -p'

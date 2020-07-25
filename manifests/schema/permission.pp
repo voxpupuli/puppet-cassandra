@@ -35,7 +35,7 @@ define cassandra::schema::permission (
   $table_name       = undef,
   Boolean $use_scl = $cassandra::params::use_scl,
   String[1] $scl_name = $cassandra::params::scl_name,
-  ){
+) {
   include 'cassandra::schema'
 
   if $use_scl {
@@ -57,7 +57,7 @@ define cassandra::schema::permission (
   $read_script = "LIST ALL PERMISSIONS ON ${resource}"
   $upcase_permission_name = upcase($permission_name)
   $pattern = "\s${user_name} |\s*${user_name} |\s.*\s${upcase_permission_name}$"
-  $read_command_tmp = "${::cassandra::schema::cqlsh_opts} -e ${quote}${read_script}${quote} ${::cassandra::schema::cqlsh_conn} | grep '${pattern}'"
+  $read_command_tmp = "${cassandra::schema::cqlsh_opts} -e ${quote}${read_script}${quote} ${cassandra::schema::cqlsh_conn} | grep '${pattern}'"
   if $use_scl {
     $read_command = "/usr/bin/scl enable ${scl_name} \"${read_command_tmp}\""
   } else {
@@ -129,7 +129,7 @@ define cassandra::schema::permission (
     }
   } elsif $ensure == present {
     $create_script = "GRANT ${permission_name} ON ${resource} TO ${user_name}"
-    $create_command_tmp = "${::cassandra::schema::cqlsh_opts} -e ${quote}${create_script}${quote} ${::cassandra::schema::cqlsh_conn}"
+    $create_command_tmp = "${cassandra::schema::cqlsh_opts} -e ${quote}${create_script}${quote} ${cassandra::schema::cqlsh_conn}"
     if $use_scl {
       $create_command = "/usr/bin/scl enable ${scl_name} \"${create_command_tmp}\""
     } else {
@@ -143,7 +143,7 @@ define cassandra::schema::permission (
     }
   } elsif $ensure == absent {
     $delete_script = "REVOKE ${permission_name} ON ${resource} FROM ${user_name}"
-    $delete_command_tmp = "${::cassandra::schema::cqlsh_opts} -e ${quote}${delete_script}${quote} ${::cassandra::schema::cqlsh_conn}"
+    $delete_command_tmp = "${cassandra::schema::cqlsh_opts} -e ${quote}${delete_script}${quote} ${cassandra::schema::cqlsh_conn}"
     if $use_scl {
       $delete_command = "/usr/bin/scl enable ${scl_name} \"${delete_command_tmp}\""
     } else {

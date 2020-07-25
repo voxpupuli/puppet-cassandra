@@ -9,7 +9,7 @@
 #   with.
 # @param options [string] Any options to be added to the index.
 # @param table [string] The name of the table that the index is to be associated with.
-define cassandra::schema::index(
+define cassandra::schema::index (
   $keyspace,
   $table,
   $ensure     = present,
@@ -19,7 +19,7 @@ define cassandra::schema::index(
   $options    = undef,
   Boolean $use_scl = $cassandra::params::use_scl,
   String[1] $scl_name = $cassandra::params::scl_name,
-  ) {
+) {
   include 'cassandra::schema'
 
   if $use_scl {
@@ -34,7 +34,7 @@ define cassandra::schema::index(
   $fqtn = "${keyspace}.${table}"
 
   $read_script = "DESC INDEX ${fqin}"
-  $read_command_tmp = "${::cassandra::schema::cqlsh_opts} -e ${quote}${read_script}${quote} ${::cassandra::schema::cqlsh_conn}"
+  $read_command_tmp = "${cassandra::schema::cqlsh_opts} -e ${quote}${read_script}${quote} ${cassandra::schema::cqlsh_conn}"
   if $use_scl {
     $read_command = "/usr/bin/scl enable ${scl_name} \"${read_command_tmp}\""
   } else {
@@ -60,7 +60,7 @@ define cassandra::schema::index(
       $create_script = $create_part2
     }
 
-    $create_command_tmp = "${::cassandra::schema::cqlsh_opts} -e ${quote}${create_script}${quote} ${::cassandra::schema::cqlsh_conn}"
+    $create_command_tmp = "${cassandra::schema::cqlsh_opts} -e ${quote}${create_script}${quote} ${cassandra::schema::cqlsh_conn}"
     if $use_scl {
       $create_command = "/usr/bin/scl enable ${scl_name} \"${create_command_tmp}\""
     } else {
@@ -73,7 +73,7 @@ define cassandra::schema::index(
     }
   } elsif $ensure == absent {
     $delete_script = "DROP INDEX ${fqin}"
-    $delete_command_tmp = "${::cassandra::schema::cqlsh_opts} -e ${quote}${delete_script}${quote} ${::cassandra::schema::cqlsh_conn}"
+    $delete_command_tmp = "${cassandra::schema::cqlsh_opts} -e ${quote}${delete_script}${quote} ${cassandra::schema::cqlsh_conn}"
     if $use_scl {
       $delete_command = "/usr/bin/scl enable ${scl_name} \"${delete_command_tmp}\""
     } else {
@@ -87,4 +87,3 @@ define cassandra::schema::index(
     fail("Unknown action (${ensure}) for ensure attribute.")
   }
 }
-

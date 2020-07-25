@@ -38,7 +38,7 @@ class cassandra::firewall_ports (
   $ssh_port                    = 22,
   $opscenter_ports             = [9042, 9160, 61620, 61621],
   $opscenter_subnets           = ['0.0.0.0/0'],
-  ) {
+) {
   # Public connections on any node.
   $public_subnets_array = prefix($public_subnets, '200_Public_')
 
@@ -47,10 +47,10 @@ class cassandra::firewall_ports (
   }
 
   # If this is a Cassandra node.
-  if defined ( Class['::cassandra'] ) {
+  if defined ( Class['::cassandra']) {
     # Inter-node connections for Cassandra
     $inter_node_subnets_array = prefix($inter_node_subnets,
-      '210_InterNode_')
+    '210_InterNode_')
 
     cassandra::private::firewall_ports::rule { $inter_node_subnets_array:
       ports => $inter_node_ports,
@@ -59,15 +59,15 @@ class cassandra::firewall_ports (
     # Client connections for Cassandra
     $client_subnets_array = prefix($client_subnets, '220_Client_')
 
-    cassandra::private::firewall_ports::rule {$client_subnets_array:
+    cassandra::private::firewall_ports::rule { $client_subnets_array:
       ports => $client_ports,
     }
   }
 
   # Connections for DataStax Agent
-  if defined ( Class['::cassandra::datastax_agent'] ) or defined ( Class['::cassandra::opscenter'] ) {
+  if defined ( Class['::cassandra::datastax_agent']) or defined ( Class['::cassandra::opscenter']) {
     $opscenter_subnets_opc_agent = prefix($opscenter_subnets,
-      '230_OpsCenter_')
+    '230_OpsCenter_')
 
     cassandra::private::firewall_ports::rule { $opscenter_subnets_opc_agent:
       ports => $opscenter_ports,

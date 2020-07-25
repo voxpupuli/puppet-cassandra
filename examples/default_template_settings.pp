@@ -67,10 +67,10 @@ class { 'cassandra':
     'rpc_server_type'                          => 'sync',
     'saved_caches_directory'                   => '/var/lib/cassandra/saved_caches',
     'seed_provider'                            => [{
-      'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
-      'parameters' => [{
-        'seeds' => '127.0.0.1',
-      }],
+        'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
+        'parameters' => [{
+            'seeds' => '127.0.0.1',
+        }],
     }],
     'server_encryption_options'                => {
       'internode_encryption' => 'none',

@@ -26,8 +26,8 @@ class cassandra::apache_repo (
   $key_url = 'https://www.apache.org/dist/cassandra/KEYS',
   $pkg_url = undef,
   $release = 'main',
-  ) {
-  case $::osfamily {
+) {
+  case $facts['os']['family'] {
     'RedHat': {
       if $pkg_url != undef {
         $baseurl = $pkg_url
@@ -49,7 +49,7 @@ class cassandra::apache_repo (
       include apt
       include apt::update
 
-      apt::key {'apache.cassandra':
+      apt::key { 'apache.cassandra':
         id     => $key_id,
         source => $key_url,
         before => Apt::Source['cassandra.sources'],
@@ -61,7 +61,7 @@ class cassandra::apache_repo (
         $location = 'http://www.apache.org/dist/cassandra/debian'
       }
 
-      apt::source {'cassandra.sources':
+      apt::source { 'cassandra.sources':
         location => $location,
         comment  => $descr,
         release  => $release,
@@ -72,14 +72,14 @@ class cassandra::apache_repo (
       }
 
       # Required to wrap apt_update
-      exec {'update-apache-cassandra-repo':
+      exec { 'update-apache-cassandra-repo':
         refreshonly => true,
         command     => '/bin/true',
         require     => Exec['apt_update'],
       }
     }
     default: {
-      warning("OS family ${::osfamily} not supported")
+      warning("OS family ${facts['os']['family']} not supported")
     }
   }
 }

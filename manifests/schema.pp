@@ -51,7 +51,7 @@ class cassandra::schema (
   $users                    = {},
   Boolean $use_scl          = $cassandra::params::use_scl,
   String[1] $scl_name       = $cassandra::params::scl_name,
-  ) inherits cassandra::params {
+) inherits cassandra::params {
   require 'cassandra'
 
   # Pass the SCL info to create_resources below as a hash
@@ -63,9 +63,9 @@ class cassandra::schema (
   if $cqlsh_client_config != undef {
     file { $cqlsh_client_config :
       ensure  => file,
-      group   => $::gid,
+      group   => $facts['identity']['group'],
       mode    => '0600',
-      owner   => $::id,
+      owner   => $facts['identity']['user'],
       content => template( $cqlsh_client_tmpl ),
       before  => Exec['::cassandra::schema connection test'],
     }

@@ -18,12 +18,12 @@ class cassandra::java (
   $aptkey           = undef,
   $aptsource        = undef,
   $jna_ensure       = present,
-  $jna_package_name = $::cassandra::params::jna_package_name,
+  $jna_package_name = $cassandra::params::jna_package_name,
   $package_ensure   = present,
-  $package_name     = $::cassandra::params::java_package,
+  $package_name     = $cassandra::params::java_package,
   $yumrepo          = undef,
-  ) inherits cassandra::params {
-  if $::osfamily == 'RedHat' and $yumrepo != undef {
+) inherits cassandra::params {
+  if $facts['os']['family'] == 'RedHat' and $yumrepo != undef {
     $yumrepo_defaults = {
       'before' => Package[$package_name],
     }
@@ -31,7 +31,7 @@ class cassandra::java (
     create_resources(yumrepo, $yumrepo, $yumrepo_defaults)
   }
 
-  if $::osfamily == 'Debian' {
+  if $facts['os']['family'] == 'Debian' {
     if $aptkey != undef {
       $aptkey_defaults = {
         'before' => Package[$package_name],
