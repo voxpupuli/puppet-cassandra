@@ -6,15 +6,15 @@
 #   `device` has been set.
 # @param path [string] The full path to the file to check if swap is enabled.
 # @see cassandra::params
-class cassandra::system::swapoff(
+class cassandra::system::swapoff (
   $device  = undef,
   $mount   = 'swap',
   $path    = '/proc/swaps',
-  ) {
+) {
   exec { 'Disable Swap':
     command => 'swapoff --all',
     onlyif  => "grep -q '^/' ${path}",
-    path    => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin' ],
+    path    => ['/bin', '/sbin', '/usr/bin', '/usr/sbin'],
   }
 
   if $device {

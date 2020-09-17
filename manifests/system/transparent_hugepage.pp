@@ -5,10 +5,10 @@
 # @see cassandra::params
 class cassandra::system::transparent_hugepage (
   $path = '/sys/kernel/mm/transparent_hugepage/defrag',
-  ) inherits cassandra::params {
+) inherits cassandra::params {
   exec { 'Disable Java Hugepages':
     command => "/bin/echo never > ${path}",
-    path    => [ '/bin', '/usr/bin' ],
+    path    => ['/bin', '/usr/bin'],
     unless  => "grep -q '\\[never\\]' ${path}",
   }
 }

@@ -24,7 +24,7 @@ define cassandra::schema::user (
   $user_name = $title,
   Boolean $use_scl = $cassandra::params::use_scl,
   String[1] $scl_name = $cassandra::params::scl_name,
-  ){
+) {
   include 'cassandra::schema'
 
   if $use_scl {

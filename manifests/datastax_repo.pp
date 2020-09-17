@@ -25,7 +25,7 @@ class cassandra::datastax_repo (
   $key_url = 'http://debian.datastax.com/debian/repo_key',
   $pkg_url = undef,
   $release = 'stable',
-  ) {
+) {
   case $facts['os']['family'] {
     'RedHat': {
       if $pkg_url != undef {
@@ -46,7 +46,7 @@ class cassandra::datastax_repo (
       include apt
       include apt::update
 
-      apt::key {'datastaxkey':
+      apt::key { 'datastaxkey':
         id     => $key_id,
         source => $key_url,
         before => Apt::Source['datastax'],
@@ -58,7 +58,7 @@ class cassandra::datastax_repo (
         $location = 'http://debian.datastax.com/community'
       }
 
-      apt::source {'datastax':
+      apt::source { 'datastax':
         location => $location,
         comment  => $descr,
         release  => $release,
@@ -69,7 +69,7 @@ class cassandra::datastax_repo (
       }
 
       # Required to wrap apt_update
-      exec {'update-cassandra-repos':
+      exec { 'update-cassandra-repos':
         refreshonly => true,
         command     => '/bin/true',
         require     => Exec['apt_update'],

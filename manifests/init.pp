@@ -159,7 +159,7 @@ class cassandra (
   $settings                     = {},
   $snitch_properties_file       = 'cassandra-rackdc.properties',
   $systemctl                    = $cassandra::params::systemctl,
-  ) inherits cassandra::params {
+) inherits cassandra::params {
   if $service_provider != undef {
     Service {
       provider => $service_provider,
@@ -188,10 +188,10 @@ class cassandra (
       }
     }
     'Debian': {
-      $config_file_require = [ User['cassandra'], File[$config_path] ]
+      $config_file_require = [User['cassandra'], File[$config_path]]
       $config_file_before  = Package['cassandra']
       $config_path_require = []
-      $dc_rack_properties_file_require = [ User['cassandra'], File[$config_path] ]
+      $dc_rack_properties_file_require = [User['cassandra'], File[$config_path]]
       $dc_rack_properties_file_before  = Package['cassandra']
       $data_dir_require = File[$config_file]
       $data_dir_before = Package['cassandra']
@@ -231,7 +231,7 @@ class cassandra (
       # End of CASSANDRA-2356 specific resources.
     }
     default: {
-      $config_file_before  = [ Package['cassandra'] ]
+      $config_file_before  = [Package['cassandra']]
       $config_file_require = []
       $config_path_require = []
       $dc_rack_properties_file_require = Package['cassandra']
@@ -276,8 +276,7 @@ class cassandra (
       before  => $data_dir_before,
     }
 
-    $commitlog_directory_settings = merge($settings,
-      { 'commitlog_directory' => $commitlog_directory, })
+    $commitlog_directory_settings = merge($settings, { 'commitlog_directory' => $commitlog_directory, })
   } else {
     $commitlog_directory_settings = $settings
   }
@@ -292,9 +291,7 @@ class cassandra (
       before  => $data_dir_before,
     }
 
-    $data_file_directories_settings = merge($settings, {
-      'data_file_directories' => $data_file_directories,
-    })
+    $data_file_directories_settings = merge($settings, { 'data_file_directories' => $data_file_directories, })
   } else {
     $data_file_directories_settings = $settings
   }
@@ -309,8 +306,7 @@ class cassandra (
       before  => $data_dir_before,
     }
 
-    $hints_directory_settings = merge($settings,
-      { 'hints_directory' => $hints_directory, })
+    $hints_directory_settings = merge($settings, { 'hints_directory' => $hints_directory, })
   } else {
     $hints_directory_settings = $settings
   }
@@ -325,8 +321,7 @@ class cassandra (
       before  => $data_dir_before,
     }
 
-    $saved_caches_directory_settings = merge($settings,
-      { 'saved_caches_directory' => $saved_caches_directory, })
+    $saved_caches_directory_settings = merge($settings, { 'saved_caches_directory' => $saved_caches_directory, })
   } else {
     $saved_caches_directory_settings = $settings
   }
@@ -335,11 +330,11 @@ class cassandra (
     $commitlog_directory_settings,
     $data_file_directories_settings,
     $hints_directory_settings,
-    $saved_caches_directory_settings)
+  $saved_caches_directory_settings)
 
   if $manage_config_file {
     file { $config_file:
-      ensure  => present,
+      ensure  => file,
       owner   => 'cassandra',
       group   => 'cassandra',
       content => template($cassandra_yaml_tmpl),
@@ -349,15 +344,15 @@ class cassandra (
     }
 
     $service_dependencies = [
-          File[$config_file],
-          File[$dc_rack_properties_file],
-          Package['cassandra'],
-        ]
+      File[$config_file],
+      File[$dc_rack_properties_file],
+      Package['cassandra'],
+    ]
   } else {
     $service_dependencies = [
-          File[$dc_rack_properties_file],
-          Package['cassandra'],
-        ]
+      File[$dc_rack_properties_file],
+      Package['cassandra'],
+    ]
   }
 
   file { $dc_rack_properties_file:

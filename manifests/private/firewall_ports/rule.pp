@@ -3,9 +3,9 @@
 # API provided by cassandra::firewall_ports instead) but is documented
 # here for completeness.
 # @param ports [integer] The number(s) of the port(s) to be opened.
-define cassandra::private::firewall_ports::rule(
-    $ports,
-  ) {
+define cassandra::private::firewall_ports::rule (
+  $ports,
+) {
   $array_var1 = split($title, '_')
   $rule_number = $array_var1[0]
   $rule_description = $array_var1[1]

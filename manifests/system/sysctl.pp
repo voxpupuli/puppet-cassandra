@@ -21,7 +21,7 @@
 # @param net_ipv4_tcp_wmem [string] The value to set for net.ipv4.tcp_wmem.
 # @param vm_max_map_count [integer] The value to set for vm.max_map_count.
 # @see cassandra::params
-class cassandra::system::sysctl(
+class cassandra::system::sysctl (
   $sysctl_args           = '-p',
   $sysctl_file           = $cassandra::params::sysctl_file,
   $net_core_optmem_max   = 40960,
@@ -32,8 +32,7 @@ class cassandra::system::sysctl(
   $net_ipv4_tcp_rmem     = $cassandra::params::net_ipv4_tcp_rmem,
   $net_ipv4_tcp_wmem     = $cassandra::params::net_ipv4_tcp_wmem,
   $vm_max_map_count      = 1048575,
-  ) inherits cassandra::params {
-
+) inherits cassandra::params {
   ini_setting { "net.core.rmem_max = ${net_core_rmem_max}":
     ensure  => present,
     path    => $sysctl_file,
