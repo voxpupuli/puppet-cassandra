@@ -52,7 +52,7 @@ class cassandra::dse (
   $file_lines       = undef,
   $service_refresh  = true,
   $settings         = undef,
-  ) {
+) {
   include cassandra
   include stdlib
 
@@ -73,7 +73,7 @@ class cassandra::dse (
 
   if is_hash($settings) {
     file { $config_file:
-      ensure  => present,
+      ensure  => file,
       owner   => 'cassandra',
       group   => 'cassandra',
       content => template($dse_yaml_tmpl),

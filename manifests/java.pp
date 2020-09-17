@@ -22,7 +22,7 @@ class cassandra::java (
   $package_ensure   = present,
   $package_name     = $cassandra::params::java_package,
   $yumrepo          = undef,
-  ) inherits cassandra::params {
+) inherits cassandra::params {
   if $facts['os']['family'] == 'RedHat' and $yumrepo != undef {
     $yumrepo_defaults = {
       'before' => Package[$package_name],

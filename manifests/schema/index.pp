@@ -9,7 +9,7 @@
 #   with.
 # @param options [string] Any options to be added to the index.
 # @param table [string] The name of the table that the index is to be associated with.
-define cassandra::schema::index(
+define cassandra::schema::index (
   $keyspace,
   $table,
   $ensure     = present,
@@ -19,7 +19,7 @@ define cassandra::schema::index(
   $options    = undef,
   Boolean $use_scl = $cassandra::params::use_scl,
   String[1] $scl_name = $cassandra::params::scl_name,
-  ) {
+) {
   include 'cassandra::schema'
 
   if $use_scl {
@@ -87,4 +87,3 @@ define cassandra::schema::index(
     fail("Unknown action (${ensure}) for ensure attribute.")
   }
 }
-

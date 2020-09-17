@@ -56,7 +56,7 @@ class cassandra::datastax_agent (
   $service_name         = 'datastax-agent',
   $service_provider     = undef,
   $settings             = {},
-  ) inherits cassandra::params {
+) inherits cassandra::params {
   require 'cassandra'
 
   if $service_provider != undef {

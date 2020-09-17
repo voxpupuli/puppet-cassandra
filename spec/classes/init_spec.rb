@@ -59,7 +59,7 @@ describe 'cassandra' do
 
       is_expected.to contain_file('/etc/cassandra/default.conf/cassandra.yaml').
         with(
-          ensure: 'present',
+          ensure: 'file',
           owner: 'cassandra',
           group: 'cassandra',
           mode: '0644'
@@ -229,7 +229,7 @@ describe 'cassandra' do
 
       is_expected.to contain_file('/etc/cassandra/cassandra.yaml').
         with(
-          ensure: 'present',
+          ensure: 'file',
           owner: 'cassandra',
           group: 'cassandra',
           mode: '0644'
