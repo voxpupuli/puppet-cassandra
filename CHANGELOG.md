@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v3.1.0](https://github.com/voxpupuli/puppet-cassandra/tree/v3.1.0) (2020-09-18)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-cassandra/compare/v3.0.0...v3.1.0)
+
+**Merged pull requests:**
+
+- modulesync 3.0.0 & puppet-lint autofix [\#465](https://github.com/voxpupuli/puppet-cassandra/pull/465) ([bastelfreak](https://github.com/bastelfreak))
+- Bump puppet-firewall version to allow version 2.x [\#464](https://github.com/voxpupuli/puppet-cassandra/pull/464) ([waipeng](https://github.com/waipeng))
+
 ## [v3.0.0](https://github.com/voxpupuli/puppet-cassandra/tree/v3.0.0) (2020-05-09)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-cassandra/compare/v2.7.3...v3.0.0)
@@ -20,7 +29,7 @@ These should not affect the functionality of the module.
 
 **Fixed bugs:**
 
-- Wrong logic? [\#459](https://github.com/voxpupuli/puppet-cassandra/issues/459)
+- Wrong logic in example code [\#459](https://github.com/voxpupuli/puppet-cassandra/issues/459)
 - Actually choosing to manage the config file, not directory of it [\#417](https://github.com/voxpupuli/puppet-cassandra/pull/417) ([zmarois](https://github.com/zmarois))
 
 **Closed issues:**
