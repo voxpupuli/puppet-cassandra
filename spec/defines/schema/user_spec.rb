@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'cassandra::schema::user' do
@@ -11,7 +13,7 @@ describe 'cassandra::schema::user' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -31,11 +33,11 @@ describe 'cassandra::schema::user' do
     end
 
     it do
-      is_expected.to contain_cassandra__schema__user('akers').with_ensure('present')
+      expect(subject).to contain_cassandra__schema__user('akers').with_ensure('present')
       read_command = '/usr/bin/cqlsh   -e "LIST USERS" localhost 9042 | grep \'\s*akers |\''
       exec_command =  '/usr/bin/cqlsh   -e "CREATE USER IF NOT EXISTS akers'
       exec_command += ' WITH PASSWORD \'Niner2\' SUPERUSER" localhost 9042'
-      is_expected.to contain_exec('Create user (akers)').
+      expect(subject).to contain_exec('Create user (akers)').
         only_with(command: exec_command,
                   unless: read_command,
                   require: 'Exec[::cassandra::schema connection test]')
@@ -52,7 +54,7 @@ describe 'cassandra::schema::user' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -72,11 +74,11 @@ describe 'cassandra::schema::user' do
     end
 
     it do
-      is_expected.to contain_cassandra__schema__user('akers').with_ensure('present')
+      expect(subject).to contain_cassandra__schema__user('akers').with_ensure('present')
       read_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"LIST USERS\" localhost 9042 | grep \'\s*akers |\'"'
       exec_command =  '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"CREATE USER IF NOT EXISTS akers'
       exec_command += ' WITH PASSWORD \'Niner2\' SUPERUSER\" localhost 9042"'
-      is_expected.to contain_exec('Create user (akers)').
+      expect(subject).to contain_exec('Create user (akers)').
         only_with(command: exec_command,
                   unless: read_command,
                   require: 'Exec[::cassandra::schema connection test]')
@@ -93,7 +95,7 @@ describe 'cassandra::schema::user' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -113,11 +115,11 @@ describe 'cassandra::schema::user' do
     end
 
     it do
-      is_expected.to contain_cassandra__schema__user('akers').with_ensure('present')
+      expect(subject).to contain_cassandra__schema__user('akers').with_ensure('present')
       read_command = '/usr/bin/cqlsh   -e "LIST USERS" localhost 9042 | grep \'\s*akers |\''
       exec_command =  '/usr/bin/cqlsh   -e "CREATE USER IF NOT EXISTS akers'
       exec_command += ' WITH PASSWORD \'Niner2\' SUPERUSER" localhost 9042'
-      is_expected.to contain_exec('Create user (akers)').
+      expect(subject).to contain_exec('Create user (akers)').
         only_with(command: exec_command,
                   unless: read_command,
                   require: 'Exec[::cassandra::schema connection test]')
@@ -134,7 +136,7 @@ describe 'cassandra::schema::user' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -154,11 +156,11 @@ describe 'cassandra::schema::user' do
     end
 
     it do
-      is_expected.to contain_cassandra__schema__user('akers').with_ensure('present')
+      expect(subject).to contain_cassandra__schema__user('akers').with_ensure('present')
       read_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"LIST USERS\" localhost 9042 | grep \'\s*akers |\'"'
       exec_command =  '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"CREATE USER IF NOT EXISTS akers'
       exec_command += ' WITH PASSWORD \'Niner2\' SUPERUSER\" localhost 9042"'
-      is_expected.to contain_exec('Create user (akers)').
+      expect(subject).to contain_exec('Create user (akers)').
         only_with(command: exec_command,
                   unless: read_command,
                   require: 'Exec[::cassandra::schema connection test]')
@@ -175,7 +177,7 @@ describe 'cassandra::schema::user' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -194,11 +196,11 @@ describe 'cassandra::schema::user' do
     end
 
     it do
-      is_expected.to contain_cassandra__schema__user('akers').with_ensure('present')
+      expect(subject).to contain_cassandra__schema__user('akers').with_ensure('present')
       read_command = '/usr/bin/cqlsh   -e "LIST USERS" localhost 9042 | grep \'\s*akers |\''
       exec_command =  '/usr/bin/cqlsh   -e "CREATE USER IF NOT EXISTS akers'
       exec_command += ' WITH PASSWORD \'Niner2\' NOSUPERUSER" localhost 9042'
-      is_expected.to contain_exec('Create user (akers)').
+      expect(subject).to contain_exec('Create user (akers)').
         only_with(command: exec_command,
                   unless: read_command,
                   require: 'Exec[::cassandra::schema connection test]')
@@ -215,7 +217,7 @@ describe 'cassandra::schema::user' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -234,11 +236,11 @@ describe 'cassandra::schema::user' do
     end
 
     it do
-      is_expected.to contain_cassandra__schema__user('akers').with_ensure('present')
+      expect(subject).to contain_cassandra__schema__user('akers').with_ensure('present')
       read_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"LIST USERS\" localhost 9042 | grep \'\s*akers |\'"'
       exec_command =  '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"CREATE USER IF NOT EXISTS akers'
       exec_command += ' WITH PASSWORD \'Niner2\' NOSUPERUSER\" localhost 9042"'
-      is_expected.to contain_exec('Create user (akers)').
+      expect(subject).to contain_exec('Create user (akers)').
         only_with(command: exec_command,
                   unless: read_command,
                   require: 'Exec[::cassandra::schema connection test]')
@@ -255,7 +257,7 @@ describe 'cassandra::schema::user' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -275,11 +277,11 @@ describe 'cassandra::schema::user' do
     end
 
     it do
-      is_expected.to contain_cassandra__schema__user('akers').with_ensure('present')
+      expect(subject).to contain_cassandra__schema__user('akers').with_ensure('present')
       read_command = '/usr/bin/cqlsh   -e "LIST ROLES" localhost 9042 | grep \'\s*akers |\''
       exec_command =  '/usr/bin/cqlsh   -e "CREATE ROLE IF NOT EXISTS akers'
       exec_command += ' WITH PASSWORD = \'Niner2\' AND SUPERUSER = true AND LOGIN = true" localhost 9042'
-      is_expected.to contain_exec('Create user (akers)').
+      expect(subject).to contain_exec('Create user (akers)').
         only_with(command: exec_command,
                   unless: read_command,
                   require: 'Exec[::cassandra::schema connection test]')
@@ -296,7 +298,7 @@ describe 'cassandra::schema::user' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -316,11 +318,11 @@ describe 'cassandra::schema::user' do
     end
 
     it do
-      is_expected.to contain_cassandra__schema__user('akers').with_ensure('present')
+      expect(subject).to contain_cassandra__schema__user('akers').with_ensure('present')
       read_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"LIST ROLES\" localhost 9042 | grep \'\s*akers |\'"'
       exec_command =  '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"CREATE ROLE IF NOT EXISTS akers'
       exec_command += ' WITH PASSWORD = \'Niner2\' AND SUPERUSER = true AND LOGIN = true\" localhost 9042"'
-      is_expected.to contain_exec('Create user (akers)').
+      expect(subject).to contain_exec('Create user (akers)').
         only_with(command: exec_command,
                   unless: read_command,
                   require: 'Exec[::cassandra::schema connection test]')
@@ -337,7 +339,7 @@ describe 'cassandra::schema::user' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -357,11 +359,11 @@ describe 'cassandra::schema::user' do
     end
 
     it do
-      is_expected.to contain_cassandra__schema__user('bob').with_ensure('present')
+      expect(subject).to contain_cassandra__schema__user('bob').with_ensure('present')
       read_command = '/usr/bin/cqlsh   -e "LIST ROLES" localhost 9042 | grep \'\s*bob |\''
       exec_command =  '/usr/bin/cqlsh   -e "CREATE ROLE IF NOT EXISTS bob'
       exec_command += ' WITH PASSWORD = \'kaZe89a\'" localhost 9042'
-      is_expected.to contain_exec('Create user (bob)').
+      expect(subject).to contain_exec('Create user (bob)').
         only_with(command: exec_command,
                   unless: read_command,
                   require: 'Exec[::cassandra::schema connection test]')
@@ -378,7 +380,7 @@ describe 'cassandra::schema::user' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -398,11 +400,11 @@ describe 'cassandra::schema::user' do
     end
 
     it do
-      is_expected.to contain_cassandra__schema__user('bob').with_ensure('present')
+      expect(subject).to contain_cassandra__schema__user('bob').with_ensure('present')
       read_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"LIST ROLES\" localhost 9042 | grep \'\s*bob |\'"'
       exec_command =  '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"CREATE ROLE IF NOT EXISTS bob'
       exec_command += ' WITH PASSWORD = \'kaZe89a\'\" localhost 9042"'
-      is_expected.to contain_exec('Create user (bob)').
+      expect(subject).to contain_exec('Create user (bob)').
         only_with(command: exec_command,
                   unless: read_command,
                   require: 'Exec[::cassandra::schema connection test]')
@@ -419,7 +421,7 @@ describe 'cassandra::schema::user' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -441,7 +443,7 @@ describe 'cassandra::schema::user' do
     it do
       read_command = '/usr/bin/cqlsh   -e "LIST ROLES" localhost 9042 | grep \'\s*akers |\''
       exec_command = '/usr/bin/cqlsh   -e "DROP ROLE akers" localhost 9042'
-      is_expected.to contain_exec('Delete user (akers)').
+      expect(subject).to contain_exec('Delete user (akers)').
         only_with(command: exec_command,
                   onlyif: read_command,
                   require: 'Exec[::cassandra::schema connection test]')
@@ -458,7 +460,7 @@ describe 'cassandra::schema::user' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -480,7 +482,7 @@ describe 'cassandra::schema::user' do
     it do
       read_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"LIST ROLES\" localhost 9042 | grep \'\s*akers |\'"'
       exec_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"DROP ROLE akers\" localhost 9042"'
-      is_expected.to contain_exec('Delete user (akers)').
+      expect(subject).to contain_exec('Delete user (akers)').
         only_with(command: exec_command,
                   onlyif: read_command,
                   require: 'Exec[::cassandra::schema connection test]')
@@ -497,7 +499,7 @@ describe 'cassandra::schema::user' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -519,7 +521,7 @@ describe 'cassandra::schema::user' do
     it do
       read_command = '/usr/bin/cqlsh   -e "LIST USERS" localhost 9042 | grep \'\s*akers |\''
       exec_command = '/usr/bin/cqlsh   -e "DROP USER akers" localhost 9042'
-      is_expected.to contain_exec('Delete user (akers)').
+      expect(subject).to contain_exec('Delete user (akers)').
         only_with(command: exec_command,
                   onlyif: read_command,
                   require: 'Exec[::cassandra::schema connection test]')
@@ -536,7 +538,7 @@ describe 'cassandra::schema::user' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -558,7 +560,7 @@ describe 'cassandra::schema::user' do
     it do
       read_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"LIST USERS\" localhost 9042 | grep \'\s*akers |\'"'
       exec_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"DROP USER akers\" localhost 9042"'
-      is_expected.to contain_exec('Delete user (akers)').
+      expect(subject).to contain_exec('Delete user (akers)').
         only_with(command: exec_command,
                   onlyif: read_command,
                   require: 'Exec[::cassandra::schema connection test]')
@@ -574,7 +576,7 @@ describe 'cassandra::schema::user' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }

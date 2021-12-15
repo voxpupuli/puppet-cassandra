@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'cassandra::schema::permission' do
-  context 'Set ensure to latest' do
+  context 'with user_name' do
     let :facts do
       {
         operatingsystemmajrelease: 7,
@@ -10,7 +12,7 @@ describe 'cassandra::schema::permission' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -37,7 +39,7 @@ describe 'cassandra::schema::permission' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -65,7 +67,7 @@ describe 'cassandra::schema::permission' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -83,13 +85,13 @@ describe 'cassandra::schema::permission' do
     end
 
     it do
-      is_expected.to have_resource_count(9)
-      is_expected.to contain_cassandra__schema__permission('spillman:SELECT:ALL')
+      expect(subject).to have_resource_count(9)
+      expect(subject).to contain_cassandra__schema__permission('spillman:SELECT:ALL')
       read_script =  '/usr/bin/cqlsh   -e "LIST ALL PERMISSIONS ON ALL KEYSPACES" '
       read_script += 'localhost 9042 | grep \' spillman | *spillman | .* SELECT$\''
       script_command = 'GRANT SELECT ON ALL KEYSPACES TO spillman'
       exec_command = "/usr/bin/cqlsh   -e \"#{script_command}\" localhost 9042"
-      is_expected.to contain_exec(script_command).
+      expect(subject).to contain_exec(script_command).
         only_with(command: exec_command,
                   unless: read_script,
                   require: 'Exec[::cassandra::schema connection test]')
@@ -106,7 +108,7 @@ describe 'cassandra::schema::permission' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -124,13 +126,13 @@ describe 'cassandra::schema::permission' do
     end
 
     it do
-      is_expected.to have_resource_count(9)
-      is_expected.to contain_cassandra__schema__permission('spillman:SELECT:ALL')
+      expect(subject).to have_resource_count(9)
+      expect(subject).to contain_cassandra__schema__permission('spillman:SELECT:ALL')
       read_script =  '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"LIST ALL PERMISSIONS ON ALL KEYSPACES\" '
       read_script += 'localhost 9042 | grep \' spillman | *spillman | .* SELECT$\'"'
       script_command = 'GRANT SELECT ON ALL KEYSPACES TO spillman'
       exec_command = "/usr/bin/scl enable testscl \"/usr/bin/cqlsh   -e \\\"#{script_command}\\\" localhost 9042\""
-      is_expected.to contain_exec(script_command).
+      expect(subject).to contain_exec(script_command).
         only_with(command: exec_command,
                   unless: read_script,
                   require: 'Exec[::cassandra::schema connection test]')
@@ -147,7 +149,7 @@ describe 'cassandra::schema::permission' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -166,13 +168,13 @@ describe 'cassandra::schema::permission' do
     end
 
     it do
-      is_expected.to have_resource_count(9)
-      is_expected.to contain_cassandra__schema__permission('akers:modify:field')
+      expect(subject).to have_resource_count(9)
+      expect(subject).to contain_cassandra__schema__permission('akers:modify:field')
       read_script =  '/usr/bin/cqlsh   -e "LIST ALL PERMISSIONS ON KEYSPACE field" '
       read_script += 'localhost 9042 | grep \' akers | *akers | .* MODIFY$\''
       script_command = 'GRANT MODIFY ON KEYSPACE field TO akers'
       exec_command = "/usr/bin/cqlsh   -e \"#{script_command}\" localhost 9042"
-      is_expected.to contain_exec(script_command).
+      expect(subject).to contain_exec(script_command).
         only_with(command: exec_command,
                   unless: read_script,
                   require: 'Exec[::cassandra::schema connection test]')
@@ -189,7 +191,7 @@ describe 'cassandra::schema::permission' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -208,13 +210,13 @@ describe 'cassandra::schema::permission' do
     end
 
     it do
-      is_expected.to have_resource_count(9)
-      is_expected.to contain_cassandra__schema__permission('akers:modify:field')
+      expect(subject).to have_resource_count(9)
+      expect(subject).to contain_cassandra__schema__permission('akers:modify:field')
       read_script =  '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"LIST ALL PERMISSIONS ON KEYSPACE field\" '
       read_script += 'localhost 9042 | grep \' akers | *akers | .* MODIFY$\'"'
       script_command = 'GRANT MODIFY ON KEYSPACE field TO akers'
       exec_command = "/usr/bin/scl enable testscl \"/usr/bin/cqlsh   -e \\\"#{script_command}\\\" localhost 9042\""
-      is_expected.to contain_exec(script_command).
+      expect(subject).to contain_exec(script_command).
         only_with(command: exec_command,
                   unless: read_script,
                   require: 'Exec[::cassandra::schema connection test]')
@@ -231,7 +233,7 @@ describe 'cassandra::schema::permission' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -250,13 +252,13 @@ describe 'cassandra::schema::permission' do
     end
 
     it do
-      is_expected.to have_resource_count(9)
-      is_expected.to contain_cassandra__schema__permission('boone:alter:forty9ers')
+      expect(subject).to have_resource_count(9)
+      expect(subject).to contain_cassandra__schema__permission('boone:alter:forty9ers')
       read_script =  '/usr/bin/cqlsh   -e "LIST ALL PERMISSIONS ON KEYSPACE forty9ers" '
       read_script += 'localhost 9042 | grep \' boone | *boone | .* ALTER$\''
       script_command = 'GRANT ALTER ON KEYSPACE forty9ers TO boone'
       exec_command = "/usr/bin/cqlsh   -e \"#{script_command}\" localhost 9042"
-      is_expected.to contain_exec(script_command).
+      expect(subject).to contain_exec(script_command).
         only_with(command: exec_command,
                   unless: read_script,
                   require: 'Exec[::cassandra::schema connection test]')
@@ -273,7 +275,7 @@ describe 'cassandra::schema::permission' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -292,13 +294,13 @@ describe 'cassandra::schema::permission' do
     end
 
     it do
-      is_expected.to have_resource_count(9)
-      is_expected.to contain_cassandra__schema__permission('boone:alter:forty9ers')
+      expect(subject).to have_resource_count(9)
+      expect(subject).to contain_cassandra__schema__permission('boone:alter:forty9ers')
       read_script =  '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"LIST ALL PERMISSIONS ON KEYSPACE forty9ers\" '
       read_script += 'localhost 9042 | grep \' boone | *boone | .* ALTER$\'"'
       script_command = 'GRANT ALTER ON KEYSPACE forty9ers TO boone'
       exec_command = "/usr/bin/scl enable testscl \"/usr/bin/cqlsh   -e \\\"#{script_command}\\\" localhost 9042\""
-      is_expected.to contain_exec(script_command).
+      expect(subject).to contain_exec(script_command).
         only_with(command: exec_command,
                   unless: read_script,
                   require: 'Exec[::cassandra::schema connection test]')
@@ -315,7 +317,7 @@ describe 'cassandra::schema::permission' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -334,14 +336,14 @@ describe 'cassandra::schema::permission' do
     end
 
     it do
-      is_expected.to have_resource_count(18)
-      is_expected.to contain_cassandra__schema__permission('boone:ALL:ravens.plays')
+      expect(subject).to have_resource_count(18)
+      expect(subject).to contain_cassandra__schema__permission('boone:ALL:ravens.plays')
     end
 
     expected_values = %w[ALTER AUTHORIZE DROP MODIFY SELECT]
     expected_values.each do |val|
       it do
-        is_expected.to contain_cassandra__schema__permission("boone:ALL:ravens.plays - #{val}").with(
+        expect(subject).to contain_cassandra__schema__permission("boone:ALL:ravens.plays - #{val}").with(
           ensure: 'present',
           user_name: 'boone',
           keyspace_name: 'ravens',
@@ -349,12 +351,13 @@ describe 'cassandra::schema::permission' do
           table_name: 'plays'
         )
       end
+
       read_script =  '/usr/bin/cqlsh   -e "LIST ALL PERMISSIONS ON TABLE ravens.plays" '
       read_script += "localhost 9042 | grep ' boone | *boone | .* #{val}$'"
       script_command = "GRANT #{val} ON TABLE ravens.plays TO boone"
       exec_command = "/usr/bin/cqlsh   -e \"#{script_command}\" localhost 9042"
       it do
-        is_expected.to contain_exec(script_command).
+        expect(subject).to contain_exec(script_command).
           only_with(command: exec_command,
                     unless: read_script,
                     require: 'Exec[::cassandra::schema connection test]')
@@ -372,7 +375,7 @@ describe 'cassandra::schema::permission' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -391,14 +394,14 @@ describe 'cassandra::schema::permission' do
     end
 
     it do
-      is_expected.to have_resource_count(18)
-      is_expected.to contain_cassandra__schema__permission('boone:ALL:ravens.plays')
+      expect(subject).to have_resource_count(18)
+      expect(subject).to contain_cassandra__schema__permission('boone:ALL:ravens.plays')
     end
 
     expected_values = %w[ALTER AUTHORIZE DROP MODIFY SELECT]
     expected_values.each do |val|
       it do
-        is_expected.to contain_cassandra__schema__permission("boone:ALL:ravens.plays - #{val}").with(
+        expect(subject).to contain_cassandra__schema__permission("boone:ALL:ravens.plays - #{val}").with(
           ensure: 'present',
           user_name: 'boone',
           keyspace_name: 'ravens',
@@ -406,12 +409,13 @@ describe 'cassandra::schema::permission' do
           table_name: 'plays'
         )
       end
+
       read_script =  '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"LIST ALL PERMISSIONS ON TABLE ravens.plays\" '
       read_script += "localhost 9042 | grep ' boone | *boone | .* #{val}$'\""
       script_command = "GRANT #{val} ON TABLE ravens.plays TO boone"
       exec_command = "/usr/bin/scl enable testscl \"/usr/bin/cqlsh   -e \\\"#{script_command}\\\" localhost 9042\""
       it do
-        is_expected.to contain_exec(script_command).
+        expect(subject).to contain_exec(script_command).
           only_with(command: exec_command,
                     unless: read_script,
                     require: 'Exec[::cassandra::schema connection test]')
@@ -429,7 +433,7 @@ describe 'cassandra::schema::permission' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -449,13 +453,13 @@ describe 'cassandra::schema::permission' do
     end
 
     it do
-      is_expected.to have_resource_count(9)
-      is_expected.to contain_cassandra__schema__permission('REVOKE boone:SELECT:ravens.plays')
+      expect(subject).to have_resource_count(9)
+      expect(subject).to contain_cassandra__schema__permission('REVOKE boone:SELECT:ravens.plays')
       read_script =  '/usr/bin/cqlsh   -e "LIST ALL PERMISSIONS ON KEYSPACE forty9ers" '
       read_script += "localhost 9042 | grep ' boone | *boone | .* SELECT$'"
       script_command = 'REVOKE SELECT ON KEYSPACE forty9ers FROM boone'
       exec_command = "/usr/bin/cqlsh   -e \"#{script_command}\" localhost 9042"
-      is_expected.to contain_exec(script_command).
+      expect(subject).to contain_exec(script_command).
         only_with(command: exec_command,
                   onlyif: read_script,
                   require: 'Exec[::cassandra::schema connection test]')
@@ -472,7 +476,7 @@ describe 'cassandra::schema::permission' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -492,13 +496,13 @@ describe 'cassandra::schema::permission' do
     end
 
     it do
-      is_expected.to have_resource_count(9)
-      is_expected.to contain_cassandra__schema__permission('REVOKE boone:SELECT:ravens.plays')
+      expect(subject).to have_resource_count(9)
+      expect(subject).to contain_cassandra__schema__permission('REVOKE boone:SELECT:ravens.plays')
       read_script =  '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"LIST ALL PERMISSIONS ON KEYSPACE forty9ers\" '
       read_script += "localhost 9042 | grep ' boone | *boone | .* SELECT$'\""
       script_command = 'REVOKE SELECT ON KEYSPACE forty9ers FROM boone'
       exec_command = "/usr/bin/scl enable testscl \"/usr/bin/cqlsh   -e \\\"#{script_command}\\\" localhost 9042\""
-      is_expected.to contain_exec(script_command).
+      expect(subject).to contain_exec(script_command).
         only_with(command: exec_command,
                   onlyif: read_script,
                   require: 'Exec[::cassandra::schema connection test]')

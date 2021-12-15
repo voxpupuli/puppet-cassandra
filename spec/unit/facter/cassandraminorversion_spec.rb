@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'cassandraminorversion' do
   before { Facter.clear }
+
   after { Facter.clear }
 
   describe 'cassandrarelease DSE' do

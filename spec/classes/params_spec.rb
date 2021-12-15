@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'cassandra::params' do
@@ -17,8 +19,8 @@ describe 'cassandra::params' do
   end
 
   it do
-    is_expected.to compile
-    is_expected.to contain_class('cassandra::params')
-    is_expected.to have_resource_count(0)
+    expect(subject).to compile
+    expect(subject).to contain_class('cassandra::params')
+    expect(subject).to have_resource_count(0)
   end
 end
