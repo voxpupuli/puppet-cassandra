@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'beaker-rspec'
 require 'pry'
 
@@ -7,11 +9,12 @@ class TestManifests
     @roles = roles
     @version = version
 
-    if version == 2.1
+    case version
+    when 2.1
       init21
-    elsif version == 2.2
+    when 2.2
       init22
-    elsif version == 3.0
+    when 3.0
       init30(operatingsystemmajrelease)
     end
   end
@@ -251,18 +254,17 @@ class TestManifests
   end
 
   def firewall_pp
-    pp = if @roles.include? 'firewall'
-           <<-EOS
-            class { 'cassandra::firewall_ports':
-              require => Class['cassandra'],
+    if @roles.include? 'firewall'
+      <<-EOS
+            class { '::cassandra::firewall_ports':
+              require => Class['::cassandra'],
             }
-          EOS
-         else
-           <<-EOS
+      EOS
+    else
+      <<-EOS
             # Firewall test skipped
-          EOS
-         end
-    pp
+      EOS
+    end
   end
 
   def permissions_revoke_pp
@@ -448,7 +450,7 @@ class TestManifests
   end
 
   def schema_drop_type_pp
-    pp = <<-EOS
+    <<-EOS
       #{cassandra_install_pp}
       $cql_types = {
        'fullname' => {
@@ -462,11 +464,10 @@ class TestManifests
        cqlsh_password => 'Niner2',
       }
     EOS
-    pp
   end
 
   def schema_drop_user_pp
-    pp = <<-EOS
+    <<-EOS
       #{cassandra_install_pp}
       class { 'cassandra::schema':
         cqlsh_password      => 'Niner2',
@@ -479,7 +480,6 @@ class TestManifests
         },
       }
     EOS
-    pp
   end
 end
 
