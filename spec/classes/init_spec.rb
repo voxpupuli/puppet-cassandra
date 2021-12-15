@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'cassandra' do
@@ -7,9 +9,9 @@ describe 'cassandra' do
         operatingsystemmajrelease: '16',
         osfamily: 'Darwin',
         os: {
-          'family'  => 'Darwin',
+          'family' => 'Darwin',
           'release' => {
-            'full'  => '16.0.0',
+            'full' => '16.0.0',
             'major' => '16',
             'minor' => '0'
           }
@@ -29,7 +31,7 @@ describe 'cassandra' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -38,26 +40,26 @@ describe 'cassandra' do
     end
 
     it do
-      is_expected.to contain_package('cassandra').with(
+      expect(subject).to contain_package('cassandra').with(
         ensure: 'present',
         name: 'cassandra22'
       ).that_notifies('Exec[cassandra_reload_systemctl]')
 
-      is_expected.to contain_exec('cassandra_reload_systemctl').only_with(
+      expect(subject).to contain_exec('cassandra_reload_systemctl').only_with(
         command: '/usr/bin/systemctl daemon-reload',
         onlyif: 'test -x /usr/bin/systemctl',
         path: ['/usr/bin', '/bin'],
         refreshonly: true
       )
 
-      is_expected.to contain_file('/etc/cassandra/default.conf').with(
+      expect(subject).to contain_file('/etc/cassandra/default.conf').with(
         ensure: 'directory',
         group: 'cassandra',
         owner: 'cassandra',
         mode: '0755'
       ).that_requires('Package[cassandra]')
 
-      is_expected.to contain_file('/etc/cassandra/default.conf/cassandra.yaml').
+      expect(subject).to contain_file('/etc/cassandra/default.conf/cassandra.yaml').
         with(
           ensure: 'file',
           owner: 'cassandra',
@@ -66,10 +68,10 @@ describe 'cassandra' do
         ).
         that_requires('Package[cassandra]')
 
-      is_expected.to contain_class('cassandra').only_with(
+      expect(subject).to contain_class('cassandra').only_with(
         baseline_settings: {},
         cassandra_2356_sleep_seconds: 5,
-        cassandra_9822: false,
+        cassandra_9822: false, # rubocop:disable Naming/VariableNumber
         cassandra_yaml_tmpl: 'cassandra/cassandra.yaml.erb',
         commitlog_directory_mode: '0750',
         manage_config_file: true,
@@ -101,9 +103,9 @@ describe 'cassandra' do
         osfamily: 'RedHat',
         operatingsystemmajrelease: '7',
         os: {
-          'family'  => 'RedHat',
+          'family' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -122,11 +124,11 @@ describe 'cassandra' do
     end
 
     it do
-      is_expected.to have_resource_count(10)
-      is_expected.to contain_file('/var/lib/cassandra/commitlog')
-      is_expected.to contain_file('/var/lib/cassandra/data')
-      is_expected.to contain_file('/var/lib/cassandra/hints')
-      is_expected.to contain_file('/var/lib/cassandra/saved_caches')
+      expect(subject).to have_resource_count(10)
+      expect(subject).to contain_file('/var/lib/cassandra/commitlog')
+      expect(subject).to contain_file('/var/lib/cassandra/data')
+      expect(subject).to contain_file('/var/lib/cassandra/hints')
+      expect(subject).to contain_file('/var/lib/cassandra/saved_caches')
     end
   end
 
@@ -136,9 +138,9 @@ describe 'cassandra' do
         osfamily: 'RedHat',
         operatingsystemmajrelease: '7',
         os: {
-          'family'  => 'RedHat',
+          'family' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -153,8 +155,8 @@ describe 'cassandra' do
     end
 
     it do
-      is_expected.to have_resource_count(7)
-      is_expected.to contain_exec('/sbin/chkconfig --add cassandra').with(
+      expect(subject).to have_resource_count(7)
+      expect(subject).to contain_exec('/sbin/chkconfig --add cassandra').with(
         unless: '/sbin/chkconfig --list cassandra'
       ).
         that_requires('Package[cassandra]').
@@ -168,9 +170,9 @@ describe 'cassandra' do
         operatingsystemmajrelease: '8',
         osfamily: 'Debian',
         os: {
-          'family'  => 'Debian',
+          'family' => 'Debian',
           'release' => {
-            'full'  => '8.11',
+            'full' => '8.11',
             'major' => '8',
             'minor' => '11'
           }
@@ -179,28 +181,28 @@ describe 'cassandra' do
     end
 
     it do
-      is_expected.to contain_class('cassandra')
-      is_expected.to contain_group('cassandra').with_ensure('present')
+      expect(subject).to contain_class('cassandra')
+      expect(subject).to contain_group('cassandra').with_ensure('present')
 
-      is_expected.to contain_package('cassandra').with(
+      expect(subject).to contain_package('cassandra').with(
         ensure: 'present',
         name: 'cassandra'
       ).that_notifies('Exec[cassandra_reload_systemctl]')
 
-      is_expected.to contain_exec('cassandra_reload_systemctl').only_with(
+      expect(subject).to contain_exec('cassandra_reload_systemctl').only_with(
         command: '/bin/systemctl daemon-reload',
         onlyif: 'test -x /bin/systemctl',
         path: ['/usr/bin', '/bin'],
         refreshonly: true
       )
 
-      is_expected.to contain_service('cassandra').with(
+      expect(subject).to contain_service('cassandra').with(
         ensure: nil,
         name: 'cassandra',
         enable: 'true'
       )
 
-      is_expected.to contain_exec('CASSANDRA-2356 sleep').
+      expect(subject).to contain_exec('CASSANDRA-2356 sleep').
         with(
           command: '/bin/sleep 5',
           refreshonly: true,
@@ -209,7 +211,7 @@ describe 'cassandra' do
         that_subscribes_to('Package[cassandra]').
         that_comes_before('Service[cassandra]')
 
-      is_expected.to contain_user('cassandra').
+      expect(subject).to contain_user('cassandra').
         with(
           ensure: 'present',
           comment: 'Cassandra database,,,',
@@ -220,14 +222,14 @@ describe 'cassandra' do
         ).
         that_requires('Group[cassandra]')
 
-      is_expected.to contain_file('/etc/cassandra').with(
+      expect(subject).to contain_file('/etc/cassandra').with(
         ensure: 'directory',
         group: 'cassandra',
         owner: 'cassandra',
         mode: '0755'
       )
 
-      is_expected.to contain_file('/etc/cassandra/cassandra.yaml').
+      expect(subject).to contain_file('/etc/cassandra/cassandra.yaml').
         with(
           ensure: 'file',
           owner: 'cassandra',
@@ -237,7 +239,7 @@ describe 'cassandra' do
         that_comes_before('Package[cassandra]').
         that_requires(['User[cassandra]', 'File[/etc/cassandra]'])
 
-      is_expected.to contain_file('/etc/cassandra/cassandra-rackdc.properties').
+      expect(subject).to contain_file('/etc/cassandra/cassandra-rackdc.properties').
         with(
           ensure: 'file',
           owner: 'cassandra',
@@ -247,7 +249,7 @@ describe 'cassandra' do
         that_requires(['File[/etc/cassandra]', 'User[cassandra]']).
         that_comes_before('Package[cassandra]')
 
-      is_expected.to contain_service('cassandra').
+      expect(subject).to contain_service('cassandra').
         that_subscribes_to(
           [
             'File[/etc/cassandra/cassandra.yaml]',
@@ -266,10 +268,10 @@ describe 'cassandra' do
         lsbdistid: 'Ubuntu',
         lsbdistrelease: '16.04',
         os: {
-          'name'    => 'Ubuntu',
-          'family'  => 'Debian',
+          'name' => 'Ubuntu',
+          'family' => 'Debian',
           'release' => {
-            'full'  => '16.04',
+            'full' => '16.04',
             'major' => '16.04'
           }
         }
@@ -278,12 +280,12 @@ describe 'cassandra' do
 
     let :params do
       {
-        cassandra_9822: true
+        cassandra_9822: true # rubocop:disable Naming/VariableNumber
       }
     end
 
     it do
-      is_expected.to contain_file('/etc/init.d/cassandra').with(
+      expect(subject).to contain_file('/etc/init.d/cassandra').with(
         source: 'puppet:///modules/cassandra/CASSANDRA-9822/cassandra',
         mode: '0555'
       ).that_comes_before('Package[cassandra]')
@@ -296,9 +298,9 @@ describe 'cassandra' do
         operatingsystemmajrelease: '7',
         osfamily: 'RedHat',
         os: {
-          'family'  => 'RedHat',
+          'family' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -316,10 +318,10 @@ describe 'cassandra' do
     end
 
     it do
-      is_expected.to contain_file('/etc/dse/cassandra/cassandra.yaml').that_notifies('Service[cassandra]')
-      is_expected.to contain_file('/etc/dse/cassandra')
+      expect(subject).to contain_file('/etc/dse/cassandra/cassandra.yaml').that_notifies('Service[cassandra]')
+      expect(subject).to contain_file('/etc/dse/cassandra')
 
-      is_expected.to contain_file('/etc/dse/cassandra/cassandra-rackdc.properties').
+      expect(subject).to contain_file('/etc/dse/cassandra/cassandra-rackdc.properties').
         with(
           ensure: 'file',
           owner: 'cassandra',
@@ -328,11 +330,11 @@ describe 'cassandra' do
         ).
         that_notifies('Service[cassandra]')
 
-      is_expected.to contain_package('cassandra').with(
+      expect(subject).to contain_package('cassandra').with(
         ensure: '4.7.0-1',
         name: 'dse-full'
       )
-      is_expected.to contain_service('cassandra').with_name('dse')
+      expect(subject).to contain_service('cassandra').with_name('dse')
     end
   end
 
@@ -342,9 +344,9 @@ describe 'cassandra' do
         operatingsystemmajrelease: '16',
         osfamily: 'Darwin',
         os: {
-          'family'  => 'Darwin',
+          'family' => 'Darwin',
           'release' => {
-            'full'  => '16.0.0',
+            'full' => '16.0.0',
             'major' => '16',
             'minor' => '0'
           }
@@ -363,9 +365,9 @@ describe 'cassandra' do
     end
 
     it do
-      is_expected.to contain_file('/etc/cassandra/cassandra.yaml').with('mode' => '0755')
-      is_expected.to contain_service('cassandra').with(provider: 'base')
-      is_expected.to have_resource_count(6)
+      expect(subject).to contain_file('/etc/cassandra/cassandra.yaml').with('mode' => '0755')
+      expect(subject).to contain_service('cassandra').with(provider: 'base')
+      expect(subject).to have_resource_count(6)
     end
   end
 
@@ -375,9 +377,9 @@ describe 'cassandra' do
         operatingsystemmajrelease: '8',
         osfamily: 'Debian',
         os: {
-          'family'  => 'Debian',
+          'family' => 'Debian',
           'release' => {
-            'full'  => '8.11',
+            'full' => '8.11',
             'major' => '8',
             'minor' => '11'
           }
@@ -393,7 +395,7 @@ describe 'cassandra' do
     end
 
     it do
-      is_expected.to contain_service('cassandra').
+      expect(subject).to contain_service('cassandra').
         with(ensure: 'stopped',
              name: 'cassandra',
              enable: 'false')
@@ -406,9 +408,9 @@ describe 'cassandra' do
         operatingsystemmajrelease: '8',
         osfamily: 'Debian',
         os: {
-          'family'  => 'Debian',
+          'family' => 'Debian',
           'release' => {
-            'full'  => '8.11',
+            'full' => '8.11',
             'major' => '8',
             'minor' => '11'
           }
@@ -417,7 +419,7 @@ describe 'cassandra' do
     end
 
     it do
-      is_expected.to contain_file('/etc/cassandra/cassandra-rackdc.properties').
+      expect(subject).to contain_file('/etc/cassandra/cassandra-rackdc.properties').
         with_content(%r{^dc=DC1}).
         with_content(%r{^rack=RAC1$}).
         with_content(%r{^#dc_suffix=$}).
@@ -431,9 +433,9 @@ describe 'cassandra' do
         operatingsystemmajrelease: '7',
         osfamily: 'RedHat',
         os: {
-          'family'  => 'RedHat',
+          'family' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -442,7 +444,7 @@ describe 'cassandra' do
     end
 
     it do
-      is_expected.to contain_file('/etc/cassandra/default.conf/cassandra-rackdc.properties').
+      expect(subject).to contain_file('/etc/cassandra/default.conf/cassandra-rackdc.properties').
         with_content(%r{^dc=DC1}).
         with_content(%r{^rack=RAC1$}).
         with_content(%r{^#dc_suffix=$}).
@@ -456,9 +458,9 @@ describe 'cassandra' do
         operatingsystemmajrelease: '7',
         osfamily: 'RedHat',
         os: {
-          'family'  => 'RedHat',
+          'family' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -477,7 +479,7 @@ describe 'cassandra' do
     end
 
     it do
-      is_expected.to contain_file('/etc/cassandra/default.conf/cassandra-topology.properties').
+      expect(subject).to contain_file('/etc/cassandra/default.conf/cassandra-topology.properties').
         with_content(%r{^dc=NYC$}).
         with_content(%r{^rack=R101$}).
         with_content(%r{^dc_suffix=_1_cassandra$}).
