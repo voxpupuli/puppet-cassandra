@@ -4,11 +4,6 @@ class cassandra::params {
   case $facts['os']['family'] {
     'Debian': {
       case $facts['os']['release']['major'] {
-        '12.04': {
-          $net_ipv4_tcp_rmem = '4096 87380 16777216'
-          $net_ipv4_tcp_wmem = '4096 65536 16777216'
-          $java_package = 'openjdk-7-jre-headless'
-        }
         '18.04': {
           $net_ipv4_tcp_rmem = '4096 87380 16777216'
           $net_ipv4_tcp_wmem = '4096 65536 16777216'
