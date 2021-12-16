@@ -103,14 +103,6 @@ class TestManifests
           ensure => absent,
         }
       }
-      'ubuntu-12.04': {
-        package {['python-software-properties', 'iptables', 'sudo']:} ->
-        exec {'/usr/bin/apt-add-repository ppa:brightbox/ruby-ng':} ->
-        exec {'/usr/bin/apt-get update': } ->
-        package {'ruby2.0': } ->
-        exec { '/bin/rm /usr/bin/ruby': } ->
-        exec { '/usr/sbin/update-alternatives --install /usr/bin/ruby ruby /usr/bin/ruby2.0 1000': }
-      }
       'ubuntu-16.04': {
         package { ['locales-all', 'net-tools', 'sudo', 'ufw']: } ->
         file { '/usr/sbin/policy-rc.d':
@@ -484,12 +476,7 @@ class TestManifests
 end
 
 hosts.each do |host|
-  case host.name
-  when 'ubuntu1604'
-    host.install_package('puppet')
-  else
-    install_puppet_on(host)
-  end
+  install_puppet_on(host)
 end
 
 RSpec.configure do |c|
