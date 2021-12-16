@@ -76,21 +76,6 @@ class TestManifests
     }
 
     case downcase("${::operatingsystem}-${::operatingsystemmajrelease}") {
-      'centos-6': {
-        package { ['gcc', 'tar', 'yum-utils', 'centos-release-scl']: } ->
-        exec { 'yum-config-manager --enable rhel-server-rhscl-7-rpms': } ->
-        package { 'ruby200': } ->
-        package { 'python27-python':
-          ensure => '2.7.8-18.el6',
-        } ->
-        exec { 'cp /opt/rh/python27/enable /etc/profile.d/python.sh': } ->
-        exec { 'echo "\n" >> /etc/profile.d/python.sh': } ->
-        exec { 'echo "export PYTHONPATH=/usr/lib/python2.7/site-packages" >> /etc/profile.d/python.sh': } ->
-        exec { '/bin/cp /opt/rh/ruby200/enable /etc/profile.d/ruby.sh': } ->
-        exec { '/bin/rm /usr/bin/ruby /usr/bin/gem': } ->
-        exec { '/usr/sbin/alternatives --install /usr/bin/ruby ruby /opt/rh/ruby200/root/usr/bin/ruby 1000': } ->
-        exec { '/usr/sbin/alternatives --install /usr/bin/gem gem /opt/rh/ruby200/root/usr/bin/gem 1000': }
-      }
       'centos-7': {
         package { ['gcc', 'tar', 'initscripts']: }
       }
