@@ -27,20 +27,9 @@ class cassandra::params {
       $scl_name = 'nodefault'
     }
     'RedHat': {
-      case $facts['os']['release']['major'] {
-        '6': {
-          $net_ipv4_tcp_rmem = '4096 87380 16777216'
-          $net_ipv4_tcp_wmem = '4096 65536 16777216'
-          $sysctl_file = '/etc/sysctl.conf'
-        }
-        '7': {
-          $net_ipv4_tcp_rmem = '4096, 87380, 16777216'
-          $net_ipv4_tcp_wmem = '4096, 65536, 16777216'
-          $sysctl_file = '/etc/sysctl.d/10-cassandra.conf'
-        }
-        default: {}
-      }
-
+      $net_ipv4_tcp_rmem = '4096, 87380, 16777216'
+      $net_ipv4_tcp_wmem = '4096, 65536, 16777216'
+      $sysctl_file = '/etc/sysctl.d/10-cassandra.conf'
       $cassandra_pkg = 'cassandra22'
       $config_path = '/etc/cassandra/default.conf'
       $java_package = 'java-1.8.0-openjdk-headless'
