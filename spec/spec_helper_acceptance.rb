@@ -94,9 +94,6 @@ class TestManifests
       'centos-7': {
         package { ['gcc', 'tar', 'initscripts']: }
       }
-      'debian-7': {
-        package { ['sudo', 'ufw', 'wget']: }
-      }
       'debian-8': {
         package { ['locales-all', 'net-tools', 'sudo', 'ufw']: } ->
         file { '/usr/sbin/policy-rc.d':
