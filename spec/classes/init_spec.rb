@@ -6,8 +6,8 @@ describe 'cassandra' do
   let :node do
     'foo.example.com'
   end
-  on_supported_os.each do |os, facts|
 
+  on_supported_os.each do |os, facts|
     let :facts do
       facts
     end
@@ -17,7 +17,6 @@ describe 'cassandra' do
       end
 
       context 'Test the default parameters (RedHat)' do
-
         it do
           expect(subject).to contain_package('cassandra').with(
             ensure: 'present',
@@ -77,7 +76,6 @@ describe 'cassandra' do
       end
 
       context 'On RedHat 7 with data directories specified.' do
-
         let :params do
           {
             commitlog_directory: '/var/lib/cassandra/commitlog',
@@ -98,7 +96,6 @@ describe 'cassandra' do
       end
 
       context 'On RedHat 7 with service provider set to init.' do
-
         let :params do
           {
             service_provider: 'init'
@@ -116,7 +113,6 @@ describe 'cassandra' do
       end
 
       context 'On a Debian OS with defaults for all parameters' do
-
         it do
           expect(subject).to contain_class('cassandra')
           expect(subject).to contain_group('cassandra').with_ensure('present')
@@ -198,7 +194,6 @@ describe 'cassandra' do
       end
 
       context 'CASSANDRA-9822 activated on Ubuntu 16.04' do
-
         let :params do
           {
             cassandra_9822: true # rubocop:disable Naming/VariableNumber
@@ -214,7 +209,6 @@ describe 'cassandra' do
       end
 
       context 'Install DSE on a Red Hat family OS.' do
-
         let :params do
           {
             package_ensure: '4.7.0-1',
@@ -265,7 +259,6 @@ describe 'cassandra' do
       end
 
       context 'Ensure cassandra service can be stopped and disabled.' do
-
         let :params do
           {
             service_ensure: 'stopped',
@@ -282,7 +275,6 @@ describe 'cassandra' do
       end
 
       context 'Test the dc and rack properties with defaults (Debian).' do
-
         it do
           expect(subject).to contain_file('/etc/cassandra/cassandra-rackdc.properties').
             with_content(%r{^dc=DC1}).
@@ -293,7 +285,6 @@ describe 'cassandra' do
       end
 
       context 'Test the dc and rack properties with defaults (RedHat).' do
-
         it do
           expect(subject).to contain_file('/etc/cassandra/default.conf/cassandra-rackdc.properties').
             with_content(%r{^dc=DC1}).
