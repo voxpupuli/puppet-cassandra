@@ -6,13 +6,12 @@ describe 'cassandra::schema::permission' do
   let :node do
     'foo.example.com'
   end
-  on_supported_os.each do |os, facts|
 
+  on_supported_os.each do |_os, facts|
     let :facts do
       facts
     end
     context 'with user_name' do
-
       let(:title) { 'foobar' }
       let(:params) do
         {
@@ -24,7 +23,6 @@ describe 'cassandra::schema::permission' do
     end
 
     context 'Set ensure to latest' do
-
       let(:title) { 'foobar' }
       let(:params) do
         {

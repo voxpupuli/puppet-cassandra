@@ -6,13 +6,12 @@ describe 'cassandra::schema::user' do
   let :node do
     'foo.example.com'
   end
-  on_supported_os.each do |os, facts|
 
+  on_supported_os.each do |_os, facts|
     let :facts do
       facts
     end
     context 'Create a supper user on cassandrarelease undef' do
-
       let(:title) { 'akers' }
 
       let(:params) do
@@ -37,7 +36,6 @@ describe 'cassandra::schema::user' do
     end
 
     context 'Create a supper user on cassandrarelease undef with SCL' do
-
       let(:title) { 'akers' }
 
       let(:params) do
@@ -62,7 +60,6 @@ describe 'cassandra::schema::user' do
     end
 
     context 'Create a supper user in cassandrarelease < 2.2' do
-
       let(:title) { 'akers' }
 
       let(:params) do
@@ -87,7 +84,6 @@ describe 'cassandra::schema::user' do
     end
 
     context 'Create a supper user in cassandrarelease < 2.2 with SCL' do
-
       let(:title) { 'akers' }
 
       let(:params) do
@@ -112,7 +108,6 @@ describe 'cassandra::schema::user' do
     end
 
     context 'Create a user in cassandrarelease < 2.2' do
-
       let(:title) { 'akers' }
 
       let(:params) do
@@ -136,7 +131,6 @@ describe 'cassandra::schema::user' do
     end
 
     context 'Create a user in cassandrarelease < 2.2 with SCL' do
-
       let(:title) { 'akers' }
 
       let(:params) do
@@ -160,7 +154,6 @@ describe 'cassandra::schema::user' do
     end
 
     context 'Create a supper user with login in cassandrarelease > 2.2' do
-
       let(:title) { 'akers' }
 
       let(:params) do
@@ -185,7 +178,6 @@ describe 'cassandra::schema::user' do
     end
 
     context 'Create a supper user with login in cassandrarelease > 2.2 with SCL' do
-
       let(:title) { 'akers' }
 
       let(:params) do
@@ -210,7 +202,6 @@ describe 'cassandra::schema::user' do
     end
 
     context 'Create a user without login in cassandrarelease > 2.2' do
-
       let(:title) { 'bob' }
 
       let(:params) do
@@ -235,7 +226,6 @@ describe 'cassandra::schema::user' do
     end
 
     context 'Create a user without login in cassandrarelease > 2.2 with SCL' do
-
       let(:title) { 'bob' }
 
       let(:params) do
@@ -260,7 +250,6 @@ describe 'cassandra::schema::user' do
     end
 
     context 'Drop a user in cassandrarelease > 2.2' do
-
       let(:title) { 'akers' }
 
       let(:params) do
@@ -283,7 +272,6 @@ describe 'cassandra::schema::user' do
     end
 
     context 'Drop a user in cassandrarelease > 2.2 with SCL' do
-
       let(:title) { 'akers' }
 
       let(:params) do
@@ -306,7 +294,6 @@ describe 'cassandra::schema::user' do
     end
 
     context 'Drop a user in cassandrarelease < 2.2' do
-
       let(:title) { 'akers' }
 
       let(:params) do
@@ -329,7 +316,6 @@ describe 'cassandra::schema::user' do
     end
 
     context 'Drop a user in cassandrarelease < 2.2 with SCL' do
-
       let(:title) { 'akers' }
 
       let(:params) do
@@ -352,7 +338,6 @@ describe 'cassandra::schema::user' do
     end
 
     context 'Set ensure to latest' do
-
       let(:title) { 'foobar' }
       let(:params) do
         {

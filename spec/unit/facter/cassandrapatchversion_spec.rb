@@ -24,7 +24,7 @@ describe 'cassandrapatchversion' do
   describe 'Cassandra not installed or not running' do
     it do
       Facter::Util::Resolution.stubs(:exec).with('nodetool version').returns('')
-      expect(Facter.fact(:cassandrapatchversion).value).to be(nil)
+      expect(Facter.fact(:cassandrapatchversion).value).to be_nil
     end
   end
 end
