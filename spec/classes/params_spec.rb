@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe '::cassandra::params' do
+describe 'cassandra::params' do
   let :facts do
     {
       osfamily: 'RedHat',
