@@ -30,7 +30,7 @@ describe 'cassandra::schema' do
 
       read_command = '/usr/bin/cqlsh   -e \'DESC KEYSPACES\' localhost 9042'
 
-      is_expected.to contain_exec('::cassandra::schema connection test').
+      is_expected.to contain_exec('cassandra::schema connection test').
         only_with(command: read_command,
                   returns: 0,
                   tries: 6,
@@ -76,7 +76,7 @@ describe 'cassandra::schema' do
 
       read_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \'DESC KEYSPACES\' localhost 9042"'
 
-      is_expected.to contain_exec('::cassandra::schema connection test').
+      is_expected.to contain_exec('cassandra::schema connection test').
         only_with(command: read_command,
                   returns: 0,
                   tries: 6,
@@ -127,7 +127,7 @@ describe 'cassandra::schema' do
 
       read_command = "/usr/bin/cqlsh --cqlshrc=/root/.puppetcqlshrc  -e 'DESC KEYSPACES' localhost 9042"
 
-      is_expected.to contain_exec('::cassandra::schema connection test').
+      is_expected.to contain_exec('cassandra::schema connection test').
         only_with(command: read_command,
                   returns: 0,
                   tries: 6,
@@ -179,7 +179,7 @@ describe 'cassandra::schema' do
 
       read_command = "/usr/bin/cqlsh --cqlshrc=/root/.puppetcqlshrc  -e 'DESC KEYSPACES' localhost 9042"
 
-      is_expected.to contain_exec('::cassandra::schema connection test').
+      is_expected.to contain_exec('cassandra::schema connection test').
         only_with(command: read_command,
                   returns: 0,
                   tries: 6,
@@ -214,7 +214,7 @@ describe 'cassandra::schema' do
     it do
       read_command = "/usr/bin/cqlsh -u cassandra -p topsecret  -e 'DESC KEYSPACES' localhost 9042"
 
-      is_expected.to contain_exec('::cassandra::schema connection test').
+      is_expected.to contain_exec('cassandra::schema connection test').
         only_with(command: read_command,
                   returns: 0,
                   tries: 6,

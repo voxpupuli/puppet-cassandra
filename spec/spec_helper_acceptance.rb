@@ -235,16 +235,16 @@ class TestManifests
         fail("cassandrarelease: ${package_comparison} != ${package_ensure}")
       }
 
-      if $::cassandramaxheapsize <= 0 {
+      unless $facts['cassandramaxheapsize'] {
         fail('cassandramaxheapsize is not set.')
       }
-      if $::cassandracmsmaxheapsize <= 0 {
+      unless $facts['cassandracmsmaxheapsize'] {
         fail('cassandracmsmaxheapsize is not set.')
       }
-      if $::cassandraheapnewsize <= 0 {
+      unless $facts['cassandraheapnewsize'] {
         fail('cassandraheapnewsize is not set.')
       }
-      if $::cassandracmsheapnewsize <= 0 {
+      unless $facts['cassandracmsheapnewsize'] {
         fail('cassandracmsheapnewsize is not set.')
       }
     EOS
@@ -253,8 +253,8 @@ class TestManifests
   def firewall_pp
     pp = if @roles.include? 'firewall'
            <<-EOS
-            class { '::cassandra::firewall_ports':
-              require => Class['::cassandra'],
+            class { 'cassandra::firewall_ports':
+              require => Class['cassandra'],
             }
           EOS
          else
