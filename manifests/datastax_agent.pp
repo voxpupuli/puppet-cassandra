@@ -115,6 +115,6 @@ class cassandra::datastax_agent (
     $full_settings = {
       '' => $settings,
     }
-    create_ini_settings($full_settings, $defaults)
+    inifile::create_ini_settings($full_settings, $defaults)
   }
 }

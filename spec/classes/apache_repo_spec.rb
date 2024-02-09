@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 describe 'cassandra::apache_repo' do
   context 'On a RedHat OS with defaults for all parameters' do
@@ -5,9 +7,9 @@ describe 'cassandra::apache_repo' do
       {
         osfamily: 'RedHat',
         os: {
-          'family'  => 'RedHat',
+          'family' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -22,16 +24,16 @@ describe 'cassandra::apache_repo' do
     end
 
     it do
-      is_expected.to have_resource_count(1)
+      expect(subject).to have_resource_count(1)
 
-      is_expected.to contain_class('cassandra::apache_repo').only_with(
-        'descr'   => 'Repo for Apache Cassandra',
-        'key_id'  => 'A26E528B271F19B9E5D8E19EA278B781FE4B2BDA',
+      expect(subject).to contain_class('cassandra::apache_repo').only_with(
+        'descr' => 'Repo for Apache Cassandra',
+        'key_id' => 'A26E528B271F19B9E5D8E19EA278B781FE4B2BDA',
         'key_url' => 'https://www.apache.org/dist/cassandra/KEYS',
         'release' => '311x'
       )
 
-      is_expected.to contain_yumrepo('cassandra_apache').with(
+      expect(subject).to contain_yumrepo('cassandra_apache').with(
         ensure: 'present',
         descr: 'Repo for Apache Cassandra',
         baseurl: 'http://www.apache.org/dist/cassandra/redhat/311x',
@@ -49,10 +51,10 @@ describe 'cassandra::apache_repo' do
         lsbdistid: 'Debian',
         lsbdistrelease: '9',
         os: {
-          'family'  => 'Debian',
-          'name'    => 'Debian',
+          'family' => 'Debian',
+          'name' => 'Debian',
           'release' => {
-            'full'  => '9.9',
+            'full' => '9.9',
             'major' => '9',
             'minor' => '9'
           }
@@ -61,22 +63,22 @@ describe 'cassandra::apache_repo' do
     end
 
     it do
-      is_expected.to contain_class('apt')
-      is_expected.to contain_class('apt::update')
+      expect(subject).to contain_class('apt')
+      expect(subject).to contain_class('apt::update')
 
-      is_expected.to contain_apt__key('apache.cassandra').with(
+      expect(subject).to contain_apt__key('apache.cassandra').with(
         id: 'A26E528B271F19B9E5D8E19EA278B781FE4B2BDA',
         source: 'https://www.apache.org/dist/cassandra/KEYS'
       )
 
-      is_expected.to contain_apt__source('cassandra.sources').with(
+      expect(subject).to contain_apt__source('cassandra.sources').with(
         location: 'http://www.apache.org/dist/cassandra/debian',
         comment: 'Repo for Apache Cassandra',
         release: 'main',
         include: { 'src' => false }
       ).that_notifies('Exec[update-apache-cassandra-repo]')
 
-      is_expected.to contain_exec('update-apache-cassandra-repo').with(
+      expect(subject).to contain_exec('update-apache-cassandra-repo').with(
         refreshonly: true,
         command: '/bin/true'
       )

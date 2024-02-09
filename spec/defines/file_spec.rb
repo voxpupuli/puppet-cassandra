@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'cassandra::file' do
@@ -10,7 +12,7 @@ describe 'cassandra::file' do
           'family' => 'Debian',
           'name' => 'Debian',
           'release' => {
-            'full'  => '8.11',
+            'full' => '8.11',
             'major' => '8',
             'minor' => '11'
           }
@@ -25,7 +27,7 @@ describe 'cassandra::file' do
         config_path: '/etc/cassandra',
         'file_lines' => {
           'MAX_HEAP_SIZE 4GB' => {
-            'line'  => 'MAX_HEAP_SIZE="4G"',
+            'line' => 'MAX_HEAP_SIZE="4G"',
             'match' => '^#MAX_HEAP_SIZE="4G"$'
           }
         }
@@ -33,12 +35,12 @@ describe 'cassandra::file' do
     end
 
     it do
-      is_expected.to contain_class('cassandra')
-      is_expected.to contain_class('cassandra::params')
-      is_expected.to contain_class('stdlib')
-      is_expected.to contain_cassandra__file('cassandra-env.sh')
+      expect(subject).to contain_class('cassandra')
+      expect(subject).to contain_class('cassandra::params')
+      expect(subject).to contain_class('stdlib')
+      expect(subject).to contain_cassandra__file('cassandra-env.sh')
 
-      is_expected.to contain_file_line('MAX_HEAP_SIZE 4GB').with(
+      expect(subject).to contain_file_line('MAX_HEAP_SIZE 4GB').with(
         path: '/etc/cassandra/cassandra-env.sh',
         line: 'MAX_HEAP_SIZE="4G"',
         match: '^#MAX_HEAP_SIZE="4G"$'
