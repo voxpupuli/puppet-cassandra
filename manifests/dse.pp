@@ -49,9 +49,9 @@ class cassandra::dse (
   $config_file      = '/etc/dse/dse.yaml',
   $config_file_mode = '0644',
   $dse_yaml_tmpl    = 'cassandra/dse.yaml.erb',
-  $file_lines       = undef,
+  Hash $file_lines       = {},
   $service_refresh  = true,
-  $settings         = undef,
+  Hash $settings         = {},
 ) {
   include cassandra
   include stdlib
@@ -62,7 +62,7 @@ class cassandra::dse (
     $notifications = []
   }
 
-  if is_hash($file_lines) {
+  if $file_lines  != {} {
     $default_file_line = {
       require => Package['cassandra'],
       notify  => $notifications,
@@ -71,7 +71,7 @@ class cassandra::dse (
     create_resources(file_line, $file_lines, $default_file_line)
   }
 
-  if is_hash($settings) {
+  if $settings != {} {
     file { $config_file:
       ensure  => file,
       owner   => 'cassandra',
