@@ -13,7 +13,7 @@ define cassandra::private::firewall_ports::rule (
 
   if size($ports) > 0 {
     firewall { "${rule_number} - Cassandra (${rule_description}) - ${source}":
-      action => 'accept',
+      jump => 'accept',
       dport  => $ports,
       proto  => 'tcp',
       source => $source,
