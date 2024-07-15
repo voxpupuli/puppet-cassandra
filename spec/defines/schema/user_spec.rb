@@ -8,6 +8,10 @@ describe 'cassandra::schema::user' do
   # Title is essential to set the username.
   let(:title) { 'bob' }
 
+# As much as possible, parameters have been left default.
+# This will serve as a massive red flag should defaults unexpectedly change.
+# In the past parameters were often overriden, which both duplicated the default values
+# and would prevent detection of an accidental change from default values.
   let(:params) do
     {
       'password' => 'Niner2',

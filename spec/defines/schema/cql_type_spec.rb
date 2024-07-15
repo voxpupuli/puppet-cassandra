@@ -44,7 +44,7 @@ describe 'cassandra::schema::cql_type' do
       exec_command += '(firstname text, lastname text)" localhost 9042'
       expect(subject).to contain_exec(exec_command).
         only_with(unless: read_command,
-                  require: 'Exec[::cassandra::schema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 
@@ -89,7 +89,7 @@ describe 'cassandra::schema::cql_type' do
       exec_command += '(firstname text, lastname text)\" localhost 9042"'
       expect(subject).to contain_exec(exec_command).
         only_with(unless: read_command,
-                  require: 'Exec[::cassandra::schema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 
@@ -127,7 +127,7 @@ describe 'cassandra::schema::cql_type' do
       exec_command = '/usr/bin/cqlsh   -e "DROP type Excalibur.address" localhost 9042'
       expect(subject).to contain_exec(exec_command).
         only_with(onlyif: read_command,
-                  require: 'Exec[::cassandra::schema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 
@@ -165,7 +165,7 @@ describe 'cassandra::schema::cql_type' do
       exec_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"DROP type Excalibur.address\" localhost 9042"'
       expect(subject).to contain_exec(exec_command).
         only_with(onlyif: read_command,
-                  require: 'Exec[::cassandra::schema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 

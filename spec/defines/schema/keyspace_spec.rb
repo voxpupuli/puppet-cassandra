@@ -44,7 +44,7 @@ describe 'cassandra::schema::keyspace' do
       exec_command += 'AND DURABLE_WRITES = true" localhost 9042'
       expect(subject).to contain_exec(exec_command).
         only_with(unless: read_command,
-                  require: 'Exec[::cassandra::schema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 
@@ -88,7 +88,7 @@ describe 'cassandra::schema::keyspace' do
       exec_command += 'AND DURABLE_WRITES = true\" localhost 9042"'
       expect(subject).to contain_exec(exec_command).
         only_with(unless: read_command,
-                  require: 'Exec[::cassandra::schema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 
@@ -133,7 +133,7 @@ describe 'cassandra::schema::keyspace' do
       exec_command += 'AND DURABLE_WRITES = true" localhost 9042'
       expect(subject).to contain_exec(exec_command).
         only_with(unless: read_command,
-                  require: 'Exec[::cassandra::schema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 
@@ -178,7 +178,7 @@ describe 'cassandra::schema::keyspace' do
       exec_command += 'AND DURABLE_WRITES = true\" localhost 9042"'
       expect(subject).to contain_exec(exec_command).
         only_with(unless: read_command,
-                  require: 'Exec[::cassandra::schema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 
@@ -214,7 +214,7 @@ describe 'cassandra::schema::keyspace' do
       exec_command = '/usr/bin/cqlsh   -e "DROP KEYSPACE foobar" localhost 9042'
       expect(subject).to contain_exec(exec_command).
         only_with(onlyif: read_command,
-                  require: 'Exec[::cassandra::schema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 
@@ -250,7 +250,7 @@ describe 'cassandra::schema::keyspace' do
       exec_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"DROP KEYSPACE foobar\" localhost 9042"'
       expect(subject).to contain_exec(exec_command).
         only_with(onlyif: read_command,
-                  require: 'Exec[::cassandra::schema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 
