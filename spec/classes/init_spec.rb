@@ -8,7 +8,6 @@ describe 'cassandra' do
   end
 
   on_supported_os.each do |os, os_facts|
-
     let(:facts) do
       os_facts
     end
@@ -16,14 +15,13 @@ describe 'cassandra' do
     context 'on an unsupported OS' do
       let(:facts) do
         super().merge({
-                        "os" => {
-                          "family" => "fakeLinux",
+                        'os' => {
+                          'family' => 'fakeLinux',
                         }
                       })
       end
+
       it { is_expected.to raise_error(Puppet::Error) }
-
-
 
       context 'with fail_on_non_supported_os => false' do
         let :params do
@@ -46,49 +44,48 @@ describe 'cassandra' do
     end
 
     context "on #{os}" do
+      let(:facts) do
+        super().merge({
+                        cassandrarelease: '4.0.0',
+                      })
+      end
 
-    let(:facts) do
-      super().merge({
-                       :cassandrarelease => '4.0.0',
-                     })
-    end
-
-      package_name = case os_facts[:os]["family"]
-                     when "RedHat" then "cassandra22"
-                     else "cassandra"
+      package_name = case os_facts[:os]['family']
+                     when 'RedHat' then 'cassandra22'
+                     else 'cassandra'
                      end
 
-      systemctl_path = case os_facts[:os]["family"]
-                       when "RedHat" then "/usr/bin/systemctl"
-                       else "/bin/systemctl"
+      systemctl_path = case os_facts[:os]['family']
+                       when 'RedHat' then '/usr/bin/systemctl'
+                       else '/bin/systemctl'
                        end
 
-      systemctl_command = systemctl_path + " daemon-reload"
-      systemctl_onlyif = "test -x " + systemctl_path
+      systemctl_command = "#{systemctl_path} daemon-reload"
+      systemctl_onlyif = "test -x #{systemctl_path}"
 
-      config_path = case os_facts[:os]["family"]
-                    when "Debian" then "/etc/cassandra"
-                    when "RedHat" then "/etc/cassandra/default.conf"
-                    else "/bin/false"
+      config_path = case os_facts[:os]['family']
+                    when 'Debian' then '/etc/cassandra'
+                    when 'RedHat' then '/etc/cassandra/default.conf'
+                    else '/bin/false'
                     end
 
-      config_file_requires = case os_facts[:os]["family"]
-                             when "RedHat" then 'Package[cassandra]'
-                             when "Debian" then ['User[cassandra]', 'File[/etc/cassandra]']
+      config_file_requires = case os_facts[:os]['family']
+                             when 'RedHat' then 'Package[cassandra]'
+                             when 'Debian' then ['User[cassandra]', 'File[/etc/cassandra]']
                              end
 
-      config_path_requires = case os_facts[:os]["family"]
-                             when "RedHat" then 'Package[cassandra]'
+      config_path_requires = case os_facts[:os]['family']
+                             when 'RedHat' then 'Package[cassandra]'
                              else []
                              end
 
-      config_file_before = case os_facts[:os]["family"]
-                           when "RedHat" then []
-                           else "Package[cassandra]"
+      config_file_before = case os_facts[:os]['family']
+                           when 'RedHat' then []
+                           else 'Package[cassandra]'
                            end
 
-      config_file = config_path + "/cassandra.yaml"
-      snitch_properties_file = config_path + "/cassandra-rackdc.properties"
+      config_file = "#{config_path}/cassandra.yaml"
+      snitch_properties_file = "#{config_path}/cassandra-rackdc.properties"
 
       context 'with default parameters' do
         it 'installs the cassandra package' do
@@ -99,18 +96,15 @@ describe 'cassandra' do
         end
 
         it 'contains reload_systemctl executable' do
-
           expect(subject).to contain_exec('cassandra_reload_systemctl').only_with(
             command: systemctl_command,
             onlyif: systemctl_onlyif,
             path: ['/usr/bin', '/bin'],
             refreshonly: true
           )
-
         end
 
         it 'contains cassandra class' do
-
           expect(subject).to contain_class('cassandra').only_with(
             baseline_settings: {},
             cassandra_2356_sleep_seconds: 5,
@@ -143,15 +137,15 @@ describe 'cassandra' do
           expect(subject).to contain_group('cassandra').with_ensure('present')
 
           expect(subject).to contain_user('cassandra').
-                               with(
-                                 ensure: 'present',
-                                 comment: 'Cassandra database,,,',
-                                 gid: 'cassandra',
-                                 home: '/var/lib/cassandra',
-                                 shell: '/bin/false',
-                                 managehome: true
-                               ).
-                               that_requires('Group[cassandra]')
+            with(
+              ensure: 'present',
+              comment: 'Cassandra database,,,',
+              gid: 'cassandra',
+              home: '/var/lib/cassandra',
+              shell: '/bin/false',
+              managehome: true
+            ).
+            that_requires('Group[cassandra]')
         end
 
         it 'creates cassandra service' do
@@ -170,52 +164,50 @@ describe 'cassandra' do
 
         it 'contains CASSANDRA-2356 sleep' do
           expect(subject).to contain_exec('CASSANDRA-2356 sleep').
-                               with(
-                                 command: '/bin/sleep 5',
-                                 refreshonly: true,
-                                 user: 'root'
-                               ).
-                               that_subscribes_to('Package[cassandra]').
-                               that_comes_before('Service[cassandra]')
+            with(
+              command: '/bin/sleep 5',
+              refreshonly: true,
+              user: 'root'
+            ).
+            that_subscribes_to('Package[cassandra]').
+            that_comes_before('Service[cassandra]')
         end
 
         it 'creates config file and path' do
-          expect(subject).to contain_file(config_path)
-                               .with(
-                                 ensure: 'directory',
-                                 group: 'cassandra',
-                                 owner: 'cassandra',
-                                 mode: '0755'
-                               ).that_requires(config_path_requires)
+          expect(subject).to contain_file(config_path).
+            with(
+              ensure: 'directory',
+              group: 'cassandra',
+              owner: 'cassandra',
+              mode: '0755'
+            ).that_requires(config_path_requires)
 
-
-          expect(subject).to contain_file(config_file)
-                               .with(
-                                 ensure: 'file',
-                                 owner: 'cassandra',
-                                 group: 'cassandra',
-                                 mode: '0644'
-                               ).
-                               that_comes_before(config_file_before).
-                               that_requires(config_file_requires)
+          expect(subject).to contain_file(config_file).
+            with(
+              ensure: 'file',
+              owner: 'cassandra',
+              group: 'cassandra',
+              mode: '0644'
+            ).
+            that_comes_before(config_file_before).
+            that_requires(config_file_requires)
         end
 
         it 'creates rackdc.properties correctly' do
           expect(subject).to contain_file(snitch_properties_file).
-                               with(
-                                 ensure: 'file',
-                                 owner: 'cassandra',
-                                 group: 'cassandra',
-                                 mode: '0644'
-                               ).
-                               that_requires(['File[/etc/cassandra]', 'User[cassandra]']).
-                               that_comes_before('Package[cassandra]').
-                               with_content(%r{^dc=DC1}).
-                               with_content(%r{^rack=RAC1$}).
-                               with_content(%r{^#dc_suffix=$}).
-                               with_content(%r{^# prefer_local=true$})
+            with(
+              ensure: 'file',
+              owner: 'cassandra',
+              group: 'cassandra',
+              mode: '0644'
+            ).
+            that_requires(['File[/etc/cassandra]', 'User[cassandra]']).
+            that_comes_before('Package[cassandra]').
+            with_content(%r{^dc=DC1}).
+            with_content(%r{^rack=RAC1$}).
+            with_content(%r{^#dc_suffix=$}).
+            with_content(%r{^# prefer_local=true$})
         end
-
       end
 
       context 'with data directories specified' do
@@ -238,7 +230,7 @@ describe 'cassandra' do
         end
       end
 
-      if os_facts[:os]["family"] == 'RedHat'
+      if os_facts[:os]['family'] == 'RedHat'
         context 'with service provider set to init' do
           let :params do
             {
@@ -246,13 +238,13 @@ describe 'cassandra' do
             }
           end
 
-          it 'executes chkconfig'do
+          it 'executes chkconfig' do
             expect(subject).to have_resource_count(9)
             expect(subject).to contain_exec('/sbin/chkconfig --add cassandra').with(
-                                 unless: '/sbin/chkconfig --list cassandra'
-                               ).
-                                 that_requires('Package[cassandra]').
-                                 that_comes_before('Service[cassandra]')
+              unless: '/sbin/chkconfig --list cassandra'
+            ).
+              that_requires('Package[cassandra]').
+              that_comes_before('Service[cassandra]')
           end
         end
       end
@@ -260,7 +252,7 @@ describe 'cassandra' do
       context 'with CASSANDRA-9822 => true' do
         let :params do
           {
-            'cassandra_9822' => true # rubocop:disable Naming/VariableNumber
+            'cassandra_9822' => true
           }
         end
 
@@ -287,13 +279,13 @@ describe 'cassandra' do
           expect(subject).to contain_file('/etc/dse/cassandra')
 
           expect(subject).to contain_file('/etc/dse/cassandra/cassandra-rackdc.properties').
-                               with(
-                                 ensure: 'file',
-                                 owner: 'cassandra',
-                                 group: 'cassandra',
-                                 mode: '0644'
-                               ).
-                               that_notifies('Service[cassandra]')
+            with(
+              ensure: 'file',
+              owner: 'cassandra',
+              group: 'cassandra',
+              mode: '0644'
+            ).
+            that_notifies('Service[cassandra]')
 
           expect(subject).to contain_package('cassandra').with(
             ensure: '4.7.0-1',
@@ -313,18 +305,15 @@ describe 'cassandra' do
 
         it 'stops and disables cassandra service' do
           expect(subject).to contain_service('cassandra').
-                               with(ensure: 'stopped',
-                                    name: 'cassandra',
-                                    enable: 'false')
+            with(ensure: 'stopped',
+                 name: 'cassandra',
+                 enable: 'false')
         end
       end
 
-      context 'with default parameters' do
-      end
-
-      if os_facts[:os]["family"] == 'RedHat'
+      if os_facts[:os]['family'] == 'RedHat'
         context 'with rackdc parameters' do
-          snitch_properties_file = config_path + '/cassandra-topology.properties'
+          snitch_properties_file = "#{config_path}/cassandra-topology.properties"
           let :params do
             {
               snitch_properties_file: snitch_properties_file,
@@ -337,16 +326,13 @@ describe 'cassandra' do
 
           it 'configures rackdc correctly' do
             expect(subject).to contain_file(snitch_properties_file).
-                                 with_content(%r{^dc=NYC$}).
-                                 with_content(%r{^rack=R101$}).
-                                 with_content(%r{^dc_suffix=_1_cassandra$}).
-                                 with_content(%r{^prefer_local=true$})
+              with_content(%r{^dc=NYC$}).
+              with_content(%r{^rack=R101$}).
+              with_content(%r{^dc_suffix=_1_cassandra$}).
+              with_content(%r{^prefer_local=true$})
           end
         end
       end
-
     end
-
   end
 end
-
