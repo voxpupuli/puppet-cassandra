@@ -7,6 +7,8 @@
 # @param superuser [boolean] If the user is to be a super-user on the system.
 # @param login [boolean] Allows the role to log in.
 # @param user_name [string] The name of the user.
+# @param use_scl   Use Red Hat software collections
+# @param scl_name  Name of the software collection to use
 # @example
 #   cassandra::schema::user { 'akers':
 #     password  => 'Niner2',

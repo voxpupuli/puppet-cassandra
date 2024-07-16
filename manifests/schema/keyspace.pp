@@ -7,6 +7,8 @@
 # @param keyspace_name [string] The name of the keyspace to be created.
 # @param replication_map [hash] Needed if the keyspace is to be present.
 #   Optional if it is to be absent.
+# @param use_scl   Use Red Hat software collections
+# @param scl_name  Name of the software collection to use
 # @example
 #   $network_topology_strategy = {
 #     keyspace_class => 'NetworkTopologyStrategy',

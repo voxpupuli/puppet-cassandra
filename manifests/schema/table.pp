@@ -6,6 +6,8 @@
 # @param options [array] Options to be added to the table creation.
 # @param table [string] The name of the table.  Defaults to the name of the
 #   resource.
+# @param use_scl  Use Red Hat software collections
+# @param scl_name Name of the software collection to use
 # @example
 #   cassandra::schema::table { 'users':
 #     keyspace => 'mykeyspace',

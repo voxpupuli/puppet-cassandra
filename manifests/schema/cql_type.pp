@@ -3,6 +3,8 @@
 # @param ensure [present|absent] ensure the data type is created, or is dropped.
 # @param fields [hash] A hash of the fields that will be components for the data type.
 # @param cql_type_name [string] The name of the CQL type to be created.
+# @param use_scl   Use Red Hat software collections
+# @param scl_name  Name of the software collection to use
 # @example
 #   cassandra::schema::cql_type { 'fullname':
 #     keyspace => 'mykeyspace',

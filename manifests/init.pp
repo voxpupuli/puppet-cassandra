@@ -25,7 +25,7 @@
 # @param commitlog_directory_mode [string]  The mode for the
 #   `commitlog_directory` is ignored unless `commitlog_directory` is
 #   specified.
-# @param manage_config_file [boolean] Whether or not to manage the cassandra configuration
+# @param manage_config_file Whether or not to manage the cassandra configuration
 #   file.
 # @param config_file_mode [string] The permissions mode of the cassandra configuration
 #   file.
