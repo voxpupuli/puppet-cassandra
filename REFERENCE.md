@@ -15,7 +15,7 @@
 * [`cassandra::java`](#cassandra--java): A class to install Java and JNA packages.
 * [`cassandra::optutils`](#cassandra--optutils): A class to install the optional Cassandra tools package.
 * [`cassandra::params`](#cassandra--params): This class is meant to be called from the locp-cassandra module. It sets variables according to platform.
-* [`cassandra::schema`](#cassandra--schema): A class to maintain the database schema.  Please note that cqlsh expects Python 2.7 to be installed. This may be a problem of older distributions (CentOS 6 for example).
+* [`cassandra::schema`](#cassandra--schema): A class to maintain the database schema.
 * [`cassandra::system::swapoff`](#cassandra--system--swapoff): Disable swap on the node as suggested at http://docs.datastax.com/en/landing_page/doc/landing_page/recommendedSettingsLinux.html
 * [`cassandra::system::sysctl`](#cassandra--system--sysctl): Set Sysctl (kernel runtime parameters) as suggested in http://docs.datastax.com/en/landing_page/doc/landing_page/recommendedSettingsLinux.htm
 * [`cassandra::system::transparent_hugepage`](#cassandra--system--transparent_hugepage): Disable Transparant Huge Pages as suggested in http://docs.datastax.com/en/landing_page/doc/landing_page/recommendedSettingsLinux.html.
@@ -776,12 +776,12 @@ Default value: `'cassandra/dse.yaml.erb'`
 
 ##### <a name="-cassandra--dse--file_lines"></a>`file_lines`
 
-Data type: `hash`
+Data type: `Hash`
 
 A hash of values that are passed to
 `create_resources` as a `file_line` resource.
 
-Default value: `undef`
+Default value: `{}`
 
 ##### <a name="-cassandra--dse--service_refresh"></a>`service_refresh`
 
@@ -794,13 +794,13 @@ Default value: `true`
 
 ##### <a name="-cassandra--dse--settings"></a>`settings`
 
-Data type: `hash`
+Data type: `Hash`
 
 Unless this attribute is set to a hash (which is
 then placed as YAML inside `dse.yaml`) then the `dse.yaml` is left
 unchanged.
 
-Default value: `undef`
+Default value: `{}`
 
 ### <a name="cassandra--firewall_ports"></a>`cassandra::firewall_ports`
 
@@ -1028,7 +1028,9 @@ It sets variables according to platform.
 
 ### <a name="cassandra--schema"></a>`cassandra::schema`
 
-A class to maintain the database schema.  Please note that cqlsh expects Python 2.7 to be installed. This may be a problem of older distributions (CentOS 6 for example).
+A class to maintain the database schema.
+
+* **Note** cqlsh expects Python 2.7. This may be a problem on older distributions (CentOS 6 for example).
 
 #### Parameters
 
@@ -1580,7 +1582,7 @@ Default value: `$title`
 
 Data type: `Boolean`
 
-
+Use Red Hat software collections
 
 Default value: `$cassandra::params::use_scl`
 
@@ -1588,7 +1590,7 @@ Default value: `$cassandra::params::use_scl`
 
 Data type: `String[1]`
 
-
+Name of the software collection to use
 
 Default value: `$cassandra::params::scl_name`
 
@@ -1669,7 +1671,7 @@ The name of the table that the index is to be associated with.
 
 Data type: `Boolean`
 
-
+Use Red Hat software collections
 
 Default value: `$cassandra::params::use_scl`
 
@@ -1677,7 +1679,7 @@ Default value: `$cassandra::params::use_scl`
 
 Data type: `String[1]`
 
-
+Name of the software collection to use
 
 Default value: `$cassandra::params::scl_name`
 
@@ -1760,7 +1762,7 @@ Default value: `{}`
 
 Data type: `Boolean`
 
-
+Use Red Hat software collections
 
 Default value: `$cassandra::params::use_scl`
 
@@ -1768,7 +1770,7 @@ Default value: `$cassandra::params::use_scl`
 
 Data type: `String[1]`
 
-
+Name of the software collection to use
 
 Default value: `$cassandra::params::scl_name`
 
@@ -1790,9 +1792,9 @@ The following parameters are available in the `cassandra::schema::permission` de
 * [`ensure`](#-cassandra--schema--permission--ensure)
 * [`keyspace_name`](#-cassandra--schema--permission--keyspace_name)
 * [`permission_name`](#-cassandra--schema--permission--permission_name)
-* [`table_name`](#-cassandra--schema--permission--table_name)
 * [`use_scl`](#-cassandra--schema--permission--use_scl)
 * [`scl_name`](#-cassandra--schema--permission--scl_name)
+* [`table_name`](#-cassandra--schema--permission--table_name)
 
 ##### <a name="-cassandra--schema--permission--user_name"></a>`user_name`
 
@@ -1826,6 +1828,22 @@ Data type: `string`
 
 Can be one of the following:
 
+Default value: `'ALL'`
+
+##### <a name="-cassandra--schema--permission--use_scl"></a>`use_scl`
+
+Data type: `Boolean`
+
+Use Red Hat software collections
+
+Default value: `$cassandra::params::use_scl`
+
+##### <a name="-cassandra--schema--permission--scl_name"></a>`scl_name`
+
+Data type: `String[1]`
+
+Name of the software collection to use
+
 * 'ALTER' - ALTER KEYSPACE, ALTER TABLE, CREATE INDEX, DROP INDEX.
 * 'AUTHORIZE' - GRANT, REVOKE.
 * 'CREATE' - CREATE KEYSPACE, CREATE TABLE.
@@ -1836,7 +1854,7 @@ Can be one of the following:
 If the permission_name is set to 'ALL', this will set all of the specific
 permissions listed.
 
-Default value: `'ALL'`
+Default value: `$cassandra::params::scl_name`
 
 ##### <a name="-cassandra--schema--permission--table_name"></a>`table_name`
 
@@ -1847,22 +1865,6 @@ keyspace.  If left unspecified, the procedure will be applied to all
 tables within the keyspace.
 
 Default value: `undef`
-
-##### <a name="-cassandra--schema--permission--use_scl"></a>`use_scl`
-
-Data type: `Boolean`
-
-
-
-Default value: `$cassandra::params::use_scl`
-
-##### <a name="-cassandra--schema--permission--scl_name"></a>`scl_name`
-
-Data type: `String[1]`
-
-
-
-Default value: `$cassandra::params::scl_name`
 
 ### <a name="cassandra--schema--table"></a>`cassandra::schema::table`
 
@@ -1940,7 +1942,7 @@ Default value: `$title`
 
 Data type: `Boolean`
 
-
+Use Red Hat software collections
 
 Default value: `$cassandra::params::use_scl`
 
@@ -1948,7 +1950,7 @@ Default value: `$cassandra::params::use_scl`
 
 Data type: `String[1]`
 
-
+Name of the software collection to use
 
 Default value: `$cassandra::params::scl_name`
 
@@ -2030,7 +2032,7 @@ Default value: `$title`
 
 Data type: `Boolean`
 
-
+Use Red Hat software collections
 
 Default value: `$cassandra::params::use_scl`
 
@@ -2038,7 +2040,7 @@ Default value: `$cassandra::params::use_scl`
 
 Data type: `String[1]`
 
-
+Name of the software collection to use
 
 Default value: `$cassandra::params::scl_name`
 
