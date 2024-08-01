@@ -38,16 +38,7 @@ describe 'cassandra::datastax_agent' do
 
       expect(subject).to contain_package('datastax-agent').with(
         ensure: 'present',
-        notify: 'Exec[datastax_agent_reload_systemctl]'
-      ).that_notifies('Exec[datastax_agent_reload_systemctl]')
-
-      expect(subject).to contain_exec('datastax_agent_reload_systemctl').only_with(
-        command: '/usr/bin/systemctl daemon-reload',
-        onlyif: 'test -x /usr/bin/systemctl',
-        path: ['/usr/bin', '/bin'],
-        refreshonly: true,
-        notify: 'Service[datastax-agent]'
-      ).that_notifies('Service[datastax-agent]')
+      )
 
       expect(subject).to contain_file('/var/lib/datastax-agent/conf/address.yaml').
         with(
@@ -80,14 +71,6 @@ describe 'cassandra::datastax_agent' do
       }
     end
 
-    it do
-      expect(subject).to contain_exec('datastax_agent_reload_systemctl').with(
-        command: '/bin/systemctl daemon-reload',
-        onlyif: 'test -x /bin/systemctl',
-        path: ['/usr/bin', '/bin'],
-        refreshonly: true
-      ).that_notifies('Service[datastax-agent]')
-    end
   end
 
   context 'Test that the JAVA_HOME can be set.' do

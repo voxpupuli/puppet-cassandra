@@ -124,9 +124,6 @@
 #   attribute.
 # @param snitch_properties_file [string] The name of the snitch properties file.  The
 #   full path name would be *config_path*/*snitch_properties_file*.
-# @param systemctl [string] The full path to the systemctl command.  Only
-#   needed when the package is installed.  Will silently continue if the
-#   executable does not exist.
 class cassandra (
   $baseline_settings            = {},
   $cassandra_2356_sleep_seconds = 5,
@@ -158,7 +155,6 @@ class cassandra (
   $service_refresh              = true,
   $settings                     = {},
   $snitch_properties_file       = 'cassandra-rackdc.properties',
-  $systemctl                    = $cassandra::params::systemctl,
 ) inherits cassandra::params {
   if $service_provider != undef {
     Service {
@@ -248,14 +244,6 @@ class cassandra (
   package { 'cassandra':
     ensure => $package_ensure,
     name   => $package_name,
-    notify => Exec['cassandra_reload_systemctl'],
-  }
-
-  exec { 'cassandra_reload_systemctl':
-    command     => "${systemctl} daemon-reload",
-    onlyif      => "test -x ${systemctl}",
-    path        => ['/usr/bin', '/bin'],
-    refreshonly => true,
   }
 
   file { $config_path:

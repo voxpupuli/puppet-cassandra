@@ -22,7 +22,6 @@ class cassandra::params {
       $jna_package_name = 'libjna-java'
       $optutils_package_name = 'cassandra-tools'
       $sysctl_file = '/etc/sysctl.d/10-cassandra.conf'
-      $systemctl = '/bin/systemctl'
       $use_scl = false
       $scl_name = 'nodefault'
     }
@@ -35,7 +34,6 @@ class cassandra::params {
       $java_package = 'java-1.8.0-openjdk-headless'
       $jna_package_name = 'jna'
       $optutils_package_name = 'cassandra22-tools'
-      $systemctl = '/usr/bin/systemctl'
       $use_scl = false
       $scl_name = 'nodefault'
     }

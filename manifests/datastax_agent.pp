@@ -68,15 +68,6 @@ class cassandra::datastax_agent (
   package { $package_name:
     ensure  => $package_ensure,
     require => Class['cassandra'],
-    notify  => Exec['datastax_agent_reload_systemctl'],
-  }
-
-  exec { 'datastax_agent_reload_systemctl':
-    command     => "${cassandra::params::systemctl} daemon-reload",
-    onlyif      => "test -x ${cassandra::params::systemctl}",
-    path        => ['/usr/bin', '/bin'],
-    refreshonly => true,
-    notify      => Service['datastax-agent'],
   }
 
   file { $address_config_file:

@@ -91,17 +91,7 @@ describe 'cassandra' do
         it 'installs the cassandra package' do
           expect(subject).to contain_package('cassandra').with(
             ensure: 'present',
-            name: package_name
-          ).that_notifies('Exec[cassandra_reload_systemctl]')
-        end
-
-        it 'contains reload_systemctl executable' do
-          expect(subject).to contain_exec('cassandra_reload_systemctl').only_with(
-            command: systemctl_command,
-            onlyif: systemctl_onlyif,
-            path: ['/usr/bin', '/bin'],
-            refreshonly: true
-          )
+            name: package_name)
         end
 
         it 'contains cassandra class' do
