@@ -192,8 +192,6 @@ describe 'cassandra' do
         end
       end
 
-
-
       context 'with data directories specified' do
         let :params do
           {
@@ -213,7 +211,6 @@ describe 'cassandra' do
           expect(subject).to contain_file('/var/lib/cassandra/saved_caches')
         end
       end
-
 
       context 'with package_name => dse-full' do
         let :params do
@@ -262,7 +259,6 @@ describe 'cassandra' do
         end
       end
 
-
       if os_facts[:os]['family'] != 'RedHat'
         context 'with CASSANDRA-9822 => true' do
           let :params do
@@ -280,31 +276,29 @@ describe 'cassandra' do
         end
       end
 
-
       context 'on RedHat with rackdc parameters' do
         snitch_properties_file = 'cassandra-topology.properties'
         dc_rack_properties_file_nondefault = "#{config_path}/#{snitch_properties_file}"
         let :params do
           {
-           snitch_properties_file: snitch_properties_file,
-              dc: 'NYC',
-              rack: 'R101',
-              dc_suffix: '_1_cassandra',
-              prefer_local: 'true'
-            }
-          end
+            snitch_properties_file: snitch_properties_file,
+            dc: 'NYC',
+            rack: 'R101',
+            dc_suffix: '_1_cassandra',
+            prefer_local: 'true'
+          }
+        end
 
         it 'configures rackdc correctly' do
           expect(subject).to contain_file(dc_rack_properties_file_nondefault).
-           that_requires(dc_rack_properties_file_require).
-              that_comes_before(dc_rack_properties_file_before).
-              with_content(%r{^dc=NYC$}).
-              with_content(%r{^rack=R101$}).
-              with_content(%r{^dc_suffix=_1_cassandra$}).
-              with_content(%r{^prefer_local=true$})
-          end
+            that_requires(dc_rack_properties_file_require).
+            that_comes_before(dc_rack_properties_file_before).
+            with_content(%r{^dc=NYC$}).
+            with_content(%r{^rack=R101$}).
+            with_content(%r{^dc_suffix=_1_cassandra$}).
+            with_content(%r{^prefer_local=true$})
+        end
       end
-
     end
   end
 end
