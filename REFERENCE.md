@@ -72,7 +72,6 @@ The following parameters are available in the `cassandra` class:
 * [`service_refresh`](#-cassandra--service_refresh)
 * [`settings`](#-cassandra--settings)
 * [`snitch_properties_file`](#-cassandra--snitch_properties_file)
-* [`systemctl`](#-cassandra--systemctl)
 
 ##### <a name="-cassandra--baseline_settings"></a>`baseline_settings`
 
@@ -405,16 +404,6 @@ The name of the snitch properties file.  The
 full path name would be *config_path*/*snitch_properties_file*.
 
 Default value: `'cassandra-rackdc.properties'`
-
-##### <a name="-cassandra--systemctl"></a>`systemctl`
-
-Data type: `string`
-
-The full path to the systemctl command.  Only
-needed when the package is installed.  Will silently continue if the
-executable does not exist.
-
-Default value: `$cassandra::params::systemctl`
 
 ### <a name="cassandra--apache_repo"></a>`cassandra::apache_repo`
 
