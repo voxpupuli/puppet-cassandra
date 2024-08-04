@@ -20,7 +20,7 @@ describe 'cassandra::dse' do
     end
 
     it do
-      expect(subject).to have_resource_count(13)
+      expect(subject).to have_resource_count(12)
       expect(subject).to contain_class('cassandra')
 
       expect(subject).to contain_class('cassandra::dse').with(

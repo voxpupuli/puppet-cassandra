@@ -62,7 +62,7 @@ class cassandra::dse (
     $notifications = []
   }
 
-  if $file_lines  != {} {
+  if $file_lines != {} {
     $default_file_line = {
       require => Package['cassandra'],
       notify  => $notifications,

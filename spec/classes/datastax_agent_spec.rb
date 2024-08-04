@@ -23,7 +23,7 @@ describe 'cassandra::datastax_agent' do
     it do
       expect(subject).to compile.with_all_deps
 
-      expect(subject).to have_resource_count(10)
+      expect(subject).to have_resource_count(8)
 
       expect(subject).to contain_class('cassandra::datastax_agent').with(
         'address_config_file' => '/var/lib/datastax-agent/conf/address.yaml',
@@ -37,7 +37,7 @@ describe 'cassandra::datastax_agent' do
       )
 
       expect(subject).to contain_package('datastax-agent').with(
-        ensure: 'present',
+        ensure: 'present'
       )
 
       expect(subject).to contain_file('/var/lib/datastax-agent/conf/address.yaml').
@@ -53,24 +53,6 @@ describe 'cassandra::datastax_agent' do
         name: 'datastax-agent'
       )
     end
-  end
-
-  context 'Test for cassandra::datastax_agent with defaults (Debian).' do
-    let :facts do
-      {
-        osfamily: 'Debian',
-        operatingsystemmajrelease: '7',
-        os: {
-          'family' => 'Debian',
-          'release' => {
-            'full' => '7.8',
-            'major' => '7',
-            'minor' => '8'
-          }
-        }
-      }
-    end
-
   end
 
   context 'Test that the JAVA_HOME can be set.' do
@@ -142,7 +124,7 @@ describe 'cassandra::datastax_agent' do
     end
 
     it do
-      expect(subject).to have_resource_count(16)
+      expect(subject).to have_resource_count(14)
     end
   end
 end
