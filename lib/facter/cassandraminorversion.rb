@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Extract the minor version from the cassandrarelease fact.
-# @caveats
+# @note
 #   Requires that the cassandrarelease has been successfully retrieved.
 # @return [integer] The minor version of the Cassandra instance.
 # @see cassandrarelease

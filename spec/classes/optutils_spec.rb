@@ -20,7 +20,7 @@ describe 'cassandra::optutils' do
     end
 
     it do
-      expect(subject).to have_resource_count(7)
+      expect(subject).to have_resource_count(6)
       expect(subject).to contain_package('cassandra22-tools').with(ensure: 'present')
 
       expect(subject).to contain_class('cassandra::optutils').with(

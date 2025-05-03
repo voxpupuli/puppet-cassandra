@@ -23,7 +23,7 @@ describe 'cassandra::datastax_agent' do
     it do
       expect(subject).to compile.with_all_deps
 
-      expect(subject).to have_resource_count(10)
+      expect(subject).to have_resource_count(8)
 
       expect(subject).to contain_class('cassandra::datastax_agent').with(
         'address_config_file' => '/var/lib/datastax-agent/conf/address.yaml',
@@ -37,17 +37,8 @@ describe 'cassandra::datastax_agent' do
       )
 
       expect(subject).to contain_package('datastax-agent').with(
-        ensure: 'present',
-        notify: 'Exec[datastax_agent_reload_systemctl]'
-      ).that_notifies('Exec[datastax_agent_reload_systemctl]')
-
-      expect(subject).to contain_exec('datastax_agent_reload_systemctl').only_with(
-        command: '/usr/bin/systemctl daemon-reload',
-        onlyif: 'test -x /usr/bin/systemctl',
-        path: ['/usr/bin', '/bin'],
-        refreshonly: true,
-        notify: 'Service[datastax-agent]'
-      ).that_notifies('Service[datastax-agent]')
+        ensure: 'present'
+      )
 
       expect(subject).to contain_file('/var/lib/datastax-agent/conf/address.yaml').
         with(
@@ -61,32 +52,6 @@ describe 'cassandra::datastax_agent' do
         enable: true,
         name: 'datastax-agent'
       )
-    end
-  end
-
-  context 'Test for cassandra::datastax_agent with defaults (Debian).' do
-    let :facts do
-      {
-        osfamily: 'Debian',
-        operatingsystemmajrelease: '7',
-        os: {
-          'family' => 'Debian',
-          'release' => {
-            'full' => '7.8',
-            'major' => '7',
-            'minor' => '8'
-          }
-        }
-      }
-    end
-
-    it do
-      expect(subject).to contain_exec('datastax_agent_reload_systemctl').with(
-        command: '/bin/systemctl daemon-reload',
-        onlyif: 'test -x /bin/systemctl',
-        path: ['/usr/bin', '/bin'],
-        refreshonly: true
-      ).that_notifies('Service[datastax-agent]')
     end
   end
 
@@ -159,7 +124,7 @@ describe 'cassandra::datastax_agent' do
     end
 
     it do
-      expect(subject).to have_resource_count(16)
+      expect(subject).to have_resource_count(14)
     end
   end
 end

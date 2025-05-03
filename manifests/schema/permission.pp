@@ -14,6 +14,8 @@
 #   permissions on.  If set to 'ALL' then the permission will be applied to
 #   all of the keyspaces.
 # @param permission_name [string] Can be one of the following:
+# @param use_scl  Use Red Hat software collections
+# @param scl_name Name of the software collection to use
 #
 #   * 'ALTER' - ALTER KEYSPACE, ALTER TABLE, CREATE INDEX, DROP INDEX.
 #   * 'AUTHORIZE' - GRANT, REVOKE.

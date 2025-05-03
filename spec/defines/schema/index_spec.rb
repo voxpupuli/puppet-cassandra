@@ -39,7 +39,7 @@ describe 'cassandra::schema::index' do
       exec_command = '/usr/bin/cqlsh   -e "CREATE INDEX IF NOT EXISTS user_index ON mykeyspace.users (lname)" localhost 9042'
       expect(subject).to contain_exec(exec_command).
         only_with(unless: read_command,
-                  require: 'Exec[::cassandra::schema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 
@@ -79,7 +79,7 @@ describe 'cassandra::schema::index' do
       exec_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"CREATE INDEX IF NOT EXISTS user_index ON mykeyspace.users (lname)\" localhost 9042"'
       expect(subject).to contain_exec(exec_command).
         only_with(unless: read_command,
-                  require: 'Exec[::cassandra::schema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 
@@ -119,7 +119,7 @@ describe 'cassandra::schema::index' do
       exec_command = '/usr/bin/cqlsh   -e "CREATE CUSTOM INDEX IF NOT EXISTS user_index ON Excelsior.users (email) USING \'path.to.the.IndexClass\'" localhost 9042'
       expect(subject).to contain_exec(exec_command).
         only_with(unless: read_command,
-                  require: 'Exec[::cassandra::schema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 
@@ -159,7 +159,7 @@ describe 'cassandra::schema::index' do
       exec_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"CREATE CUSTOM INDEX IF NOT EXISTS user_index ON Excelsior.users (email) USING \'path.to.the.IndexClass\'\" localhost 9042"'
       expect(subject).to contain_exec(exec_command).
         only_with(unless: read_command,
-                  require: 'Exec[::cassandra::schema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 
@@ -202,7 +202,7 @@ describe 'cassandra::schema::index' do
       exec_command += '\'storage\': \'/mnt/ssd/indexes/\'}" localhost 9042'
       expect(subject).to contain_exec(exec_command).
         only_with(unless: read_command,
-                  require: 'Exec[::cassandra::schema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 
@@ -245,7 +245,7 @@ describe 'cassandra::schema::index' do
       exec_command += '\'storage\': \'/mnt/ssd/indexes/\'}\" localhost 9042"'
       expect(subject).to contain_exec(exec_command).
         only_with(unless: read_command,
-                  require: 'Exec[::cassandra::schema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 
@@ -285,7 +285,7 @@ describe 'cassandra::schema::index' do
       exec_command = '/usr/bin/cqlsh   -e "DROP INDEX Excelsior.user_index" localhost 9042'
       expect(subject).to contain_exec(exec_command).
         only_with(onlyif: read_command,
-                  require: 'Exec[::cassandra::schema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 
@@ -325,7 +325,7 @@ describe 'cassandra::schema::index' do
       exec_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"DROP INDEX Excelsior.user_index\" localhost 9042"'
       expect(subject).to contain_exec(exec_command).
         only_with(onlyif: read_command,
-                  require: 'Exec[::cassandra::schema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 

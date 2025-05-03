@@ -9,6 +9,8 @@
 #   with.
 # @param options [string] Any options to be added to the index.
 # @param table [string] The name of the table that the index is to be associated with.
+# @param use_scl   Use Red Hat software collections
+# @param scl_name  Name of the software collection to use
 define cassandra::schema::index (
   $keyspace,
   $table,

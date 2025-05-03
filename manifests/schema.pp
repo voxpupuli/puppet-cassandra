@@ -1,5 +1,6 @@
 #
-# @summary A class to maintain the database schema.  Please note that cqlsh expects Python 2.7 to be installed. This may be a problem of older distributions (CentOS 6 for example).
+# @summary A class to maintain the database schema.
+# @note cqlsh expects Python 2.7. This may be a problem on older distributions (CentOS 6 for example).
 #
 # @param connection_tries [integer] How many times do try to connect to
 #   Cassandra.  See also `connection_try_sleep`.

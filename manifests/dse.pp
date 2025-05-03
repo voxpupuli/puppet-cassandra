@@ -3,11 +3,11 @@
 # @param config_file [string] The full path to the DSE configuration file.
 # @param config_file_mode [string] The mode for the DSE configuration file.
 # @param dse_yaml_tmpl [string] A path to a template for the `dse.yaml` file.
-# @param file_lines [hash] A hash of values that are passed to
+# @param file_lines A hash of values that are passed to
 #   `create_resources` as a `file_line` resource.
 # @param service_refresh [boolean] Whether or not the Cassandra service
 #   should be refreshed if the DSE configuration files are changed.
-# @param settings [hash] Unless this attribute is set to a hash (which is
+# @param settings Unless this attribute is set to a hash (which is
 #   then placed as YAML inside `dse.yaml`) then the `dse.yaml` is left
 #   unchanged.
 # @example Configure a cluster with LDAP authentication
@@ -49,9 +49,9 @@ class cassandra::dse (
   $config_file      = '/etc/dse/dse.yaml',
   $config_file_mode = '0644',
   $dse_yaml_tmpl    = 'cassandra/dse.yaml.erb',
-  $file_lines       = undef,
+  Hash $file_lines       = {},
   $service_refresh  = true,
-  $settings         = undef,
+  Hash $settings         = {},
 ) {
   include cassandra
   include stdlib
@@ -62,7 +62,7 @@ class cassandra::dse (
     $notifications = []
   }
 
-  if is_hash($file_lines) {
+  if $file_lines != {} {
     $default_file_line = {
       require => Package['cassandra'],
       notify  => $notifications,
@@ -71,7 +71,7 @@ class cassandra::dse (
     create_resources(file_line, $file_lines, $default_file_line)
   }
 
-  if is_hash($settings) {
+  if $settings != {} {
     file { $config_file:
       ensure  => file,
       owner   => 'cassandra',
