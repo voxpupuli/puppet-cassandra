@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'beaker-rspec'
 require 'pry'
 
@@ -7,11 +9,12 @@ class TestManifests
     @roles = roles
     @version = version
 
-    if version == 2.1
+    case version
+    when 2.1
       init21
-    elsif version == 2.2
+    when 2.2
       init22
-    elsif version == 3.0
+    when 3.0
       init30(operatingsystemmajrelease)
     end
   end
@@ -73,40 +76,14 @@ class TestManifests
     }
 
     case downcase("${::operatingsystem}-${::operatingsystemmajrelease}") {
-      'centos-6': {
-        package { ['gcc', 'tar', 'yum-utils', 'centos-release-scl']: } ->
-        exec { 'yum-config-manager --enable rhel-server-rhscl-7-rpms': } ->
-        package { 'ruby200': } ->
-        package { 'python27-python':
-          ensure => '2.7.8-18.el6',
-        } ->
-        exec { 'cp /opt/rh/python27/enable /etc/profile.d/python.sh': } ->
-        exec { 'echo "\n" >> /etc/profile.d/python.sh': } ->
-        exec { 'echo "export PYTHONPATH=/usr/lib/python2.7/site-packages" >> /etc/profile.d/python.sh': } ->
-        exec { '/bin/cp /opt/rh/ruby200/enable /etc/profile.d/ruby.sh': } ->
-        exec { '/bin/rm /usr/bin/ruby /usr/bin/gem': } ->
-        exec { '/usr/sbin/alternatives --install /usr/bin/ruby ruby /opt/rh/ruby200/root/usr/bin/ruby 1000': } ->
-        exec { '/usr/sbin/alternatives --install /usr/bin/gem gem /opt/rh/ruby200/root/usr/bin/gem 1000': }
-      }
       'centos-7': {
         package { ['gcc', 'tar', 'initscripts']: }
-      }
-      'debian-7': {
-        package { ['sudo', 'ufw', 'wget']: }
       }
       'debian-8': {
         package { ['locales-all', 'net-tools', 'sudo', 'ufw']: } ->
         file { '/usr/sbin/policy-rc.d':
           ensure => absent,
         }
-      }
-      'ubuntu-12.04': {
-        package {['python-software-properties', 'iptables', 'sudo']:} ->
-        exec {'/usr/bin/apt-add-repository ppa:brightbox/ruby-ng':} ->
-        exec {'/usr/bin/apt-get update': } ->
-        package {'ruby2.0': } ->
-        exec { '/bin/rm /usr/bin/ruby': } ->
-        exec { '/usr/sbin/update-alternatives --install /usr/bin/ruby ruby /usr/bin/ruby2.0 1000': }
       }
       'ubuntu-16.04': {
         package { ['locales-all', 'net-tools', 'sudo', 'ufw']: } ->
@@ -251,18 +228,17 @@ class TestManifests
   end
 
   def firewall_pp
-    pp = if @roles.include? 'firewall'
-           <<-EOS
-            class { 'cassandra::firewall_ports':
-              require => Class['cassandra'],
+    if @roles.include? 'firewall'
+      <<-EOS
+            class { '::cassandra::firewall_ports':
+              require => Class['::cassandra'],
             }
-          EOS
-         else
-           <<-EOS
+      EOS
+    else
+      <<-EOS
             # Firewall test skipped
-          EOS
-         end
-    pp
+      EOS
+    end
   end
 
   def permissions_revoke_pp
@@ -448,7 +424,7 @@ class TestManifests
   end
 
   def schema_drop_type_pp
-    pp = <<-EOS
+    <<-EOS
       #{cassandra_install_pp}
       $cql_types = {
        'fullname' => {
@@ -462,11 +438,10 @@ class TestManifests
        cqlsh_password => 'Niner2',
       }
     EOS
-    pp
   end
 
   def schema_drop_user_pp
-    pp = <<-EOS
+    <<-EOS
       #{cassandra_install_pp}
       class { 'cassandra::schema':
         cqlsh_password      => 'Niner2',
@@ -479,17 +454,11 @@ class TestManifests
         },
       }
     EOS
-    pp
   end
 end
 
 hosts.each do |host|
-  case host.name
-  when 'ubuntu1604'
-    host.install_package('puppet')
-  else
-    install_puppet_on(host)
-  end
+  install_puppet_on(host)
 end
 
 RSpec.configure do |c|

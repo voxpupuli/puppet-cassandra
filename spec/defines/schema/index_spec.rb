@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'cassandra::schema::index' do
@@ -10,7 +12,7 @@ describe 'cassandra::schema::index' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -31,11 +33,11 @@ describe 'cassandra::schema::index' do
     end
 
     it do
-      is_expected.to compile
-      is_expected.to contain_cassandra__schema__index('user_index')
+      expect(subject).to compile
+      expect(subject).to contain_cassandra__schema__index('user_index')
       read_command = '/usr/bin/cqlsh   -e "DESC INDEX mykeyspace.user_index" localhost 9042'
       exec_command = '/usr/bin/cqlsh   -e "CREATE INDEX IF NOT EXISTS user_index ON mykeyspace.users (lname)" localhost 9042'
-      is_expected.to contain_exec(exec_command).
+      expect(subject).to contain_exec(exec_command).
         only_with(unless: read_command,
                   require: 'Exec[::cassandra::schema connection test]')
     end
@@ -50,7 +52,7 @@ describe 'cassandra::schema::index' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -71,11 +73,11 @@ describe 'cassandra::schema::index' do
     end
 
     it do
-      is_expected.to compile
-      is_expected.to contain_cassandra__schema__index('user_index')
+      expect(subject).to compile
+      expect(subject).to contain_cassandra__schema__index('user_index')
       read_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"DESC INDEX mykeyspace.user_index\" localhost 9042"'
       exec_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"CREATE INDEX IF NOT EXISTS user_index ON mykeyspace.users (lname)\" localhost 9042"'
-      is_expected.to contain_exec(exec_command).
+      expect(subject).to contain_exec(exec_command).
         only_with(unless: read_command,
                   require: 'Exec[::cassandra::schema connection test]')
     end
@@ -90,7 +92,7 @@ describe 'cassandra::schema::index' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -112,10 +114,10 @@ describe 'cassandra::schema::index' do
     end
 
     it do
-      is_expected.to compile
+      expect(subject).to compile
       read_command = '/usr/bin/cqlsh   -e "DESC INDEX Excelsior.user_index" localhost 9042'
       exec_command = '/usr/bin/cqlsh   -e "CREATE CUSTOM INDEX IF NOT EXISTS user_index ON Excelsior.users (email) USING \'path.to.the.IndexClass\'" localhost 9042'
-      is_expected.to contain_exec(exec_command).
+      expect(subject).to contain_exec(exec_command).
         only_with(unless: read_command,
                   require: 'Exec[::cassandra::schema connection test]')
     end
@@ -130,7 +132,7 @@ describe 'cassandra::schema::index' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -152,10 +154,10 @@ describe 'cassandra::schema::index' do
     end
 
     it do
-      is_expected.to compile
+      expect(subject).to compile
       read_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"DESC INDEX Excelsior.user_index\" localhost 9042"'
       exec_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"CREATE CUSTOM INDEX IF NOT EXISTS user_index ON Excelsior.users (email) USING \'path.to.the.IndexClass\'\" localhost 9042"'
-      is_expected.to contain_exec(exec_command).
+      expect(subject).to contain_exec(exec_command).
         only_with(unless: read_command,
                   require: 'Exec[::cassandra::schema connection test]')
     end
@@ -170,7 +172,7 @@ describe 'cassandra::schema::index' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -193,12 +195,12 @@ describe 'cassandra::schema::index' do
     end
 
     it do
-      is_expected.to compile
+      expect(subject).to compile
       read_command = '/usr/bin/cqlsh   -e "DESC INDEX Excelsior.user_index" localhost 9042'
       exec_command =  '/usr/bin/cqlsh   -e "CREATE CUSTOM INDEX IF NOT EXISTS user_index ON '
       exec_command += 'Excelsior.users (email) USING \'path.to.the.IndexClass\' WITH OPTIONS = {'
       exec_command += '\'storage\': \'/mnt/ssd/indexes/\'}" localhost 9042'
-      is_expected.to contain_exec(exec_command).
+      expect(subject).to contain_exec(exec_command).
         only_with(unless: read_command,
                   require: 'Exec[::cassandra::schema connection test]')
     end
@@ -213,7 +215,7 @@ describe 'cassandra::schema::index' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -236,12 +238,12 @@ describe 'cassandra::schema::index' do
     end
 
     it do
-      is_expected.to compile
+      expect(subject).to compile
       read_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"DESC INDEX Excelsior.user_index\" localhost 9042"'
       exec_command =  '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"CREATE CUSTOM INDEX IF NOT EXISTS user_index ON '
       exec_command += 'Excelsior.users (email) USING \'path.to.the.IndexClass\' WITH OPTIONS = {'
       exec_command += '\'storage\': \'/mnt/ssd/indexes/\'}\" localhost 9042"'
-      is_expected.to contain_exec(exec_command).
+      expect(subject).to contain_exec(exec_command).
         only_with(unless: read_command,
                   require: 'Exec[::cassandra::schema connection test]')
     end
@@ -256,7 +258,7 @@ describe 'cassandra::schema::index' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -278,10 +280,10 @@ describe 'cassandra::schema::index' do
     end
 
     it do
-      is_expected.to compile
+      expect(subject).to compile
       read_command = '/usr/bin/cqlsh   -e "DESC INDEX Excelsior.user_index" localhost 9042'
       exec_command = '/usr/bin/cqlsh   -e "DROP INDEX Excelsior.user_index" localhost 9042'
-      is_expected.to contain_exec(exec_command).
+      expect(subject).to contain_exec(exec_command).
         only_with(onlyif: read_command,
                   require: 'Exec[::cassandra::schema connection test]')
     end
@@ -296,7 +298,7 @@ describe 'cassandra::schema::index' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -318,10 +320,10 @@ describe 'cassandra::schema::index' do
     end
 
     it do
-      is_expected.to compile
+      expect(subject).to compile
       read_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"DESC INDEX Excelsior.user_index\" localhost 9042"'
       exec_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"DROP INDEX Excelsior.user_index\" localhost 9042"'
-      is_expected.to contain_exec(exec_command).
+      expect(subject).to contain_exec(exec_command).
         only_with(onlyif: read_command,
                   require: 'Exec[::cassandra::schema connection test]')
     end
@@ -336,7 +338,7 @@ describe 'cassandra::schema::index' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
