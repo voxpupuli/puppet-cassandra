@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Extract the release string from the running Cassandra instance.
 #
 # @resolution

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 describe 'cassandra::dse' do
   context 'with defaults for all parameters' do
@@ -9,7 +11,7 @@ describe 'cassandra::dse' do
           'family' => 'RedHat',
           'name' => 'Redhat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -18,10 +20,10 @@ describe 'cassandra::dse' do
     end
 
     it do
-      is_expected.to have_resource_count(13)
-      is_expected.to contain_class('cassandra')
+      expect(subject).to have_resource_count(13)
+      expect(subject).to contain_class('cassandra')
 
-      is_expected.to contain_class('cassandra::dse').with(
+      expect(subject).to contain_class('cassandra::dse').with(
         config_file_mode: '0644',
         config_file: '/etc/dse/dse.yaml'
       )

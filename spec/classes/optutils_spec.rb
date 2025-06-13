@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 describe 'cassandra::optutils' do
   context 'On a RedHat OS with defaults for all parameters' do
@@ -9,7 +11,7 @@ describe 'cassandra::optutils' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -18,10 +20,10 @@ describe 'cassandra::optutils' do
     end
 
     it do
-      is_expected.to have_resource_count(7)
-      is_expected.to contain_package('cassandra22-tools').with(ensure: 'present')
+      expect(subject).to have_resource_count(7)
+      expect(subject).to contain_package('cassandra22-tools').with(ensure: 'present')
 
-      is_expected.to contain_class('cassandra::optutils').with(
+      expect(subject).to contain_class('cassandra::optutils').with(
         package_ensure: 'present',
         package_name: 'cassandra22-tools'
       )
@@ -37,7 +39,7 @@ describe 'cassandra::optutils' do
           'family' => 'Debian',
           'name' => 'Debian',
           'release' => {
-            'full'  => '7.8',
+            'full' => '7.8',
             'major' => '7',
             'minor' => '8'
           }
@@ -46,9 +48,9 @@ describe 'cassandra::optutils' do
     end
 
     it do
-      is_expected.to contain_package('cassandra-tools').with(ensure: 'present')
+      expect(subject).to contain_package('cassandra-tools').with(ensure: 'present')
 
-      is_expected.to contain_class('cassandra::optutils').with(
+      expect(subject).to contain_class('cassandra::optutils').with(
         package_ensure: 'present',
         package_name: 'cassandra-tools'
       )
@@ -61,9 +63,9 @@ describe 'cassandra::optutils' do
         operatingsystemmajrelease: '7',
         osfamily: 'Debian',
         os: {
-          'family'  => 'Debian',
+          'family' => 'Debian',
           'release' => {
-            'full'  => '7.8',
+            'full' => '7.8',
             'major' => '7',
             'minor' => '8'
           }
@@ -79,7 +81,7 @@ describe 'cassandra::optutils' do
     end
 
     it do
-      is_expected.to contain_package('foobar-java').with(ensure: 42)
+      expect(subject).to contain_package('foobar-java').with(ensure: 42)
     end
   end
 
@@ -89,9 +91,9 @@ describe 'cassandra::optutils' do
         operatingsystemmajrelease: '7',
         osfamily: 'Debian',
         os: {
-          'family'  => 'Debian',
+          'family' => 'Debian',
           'release' => {
-            'full'  => '7.8',
+            'full' => '7.8',
             'major' => '7',
             'minor' => '8'
           }

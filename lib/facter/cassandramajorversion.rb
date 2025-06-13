@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Extract the major version from the cassandrarelease fact.
 # @caveats
 #   Requires that the cassandrarelease has been successfully retrieved.

@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 describe 'cassandra::firewall_ports' do
   context 'Run with defaults.' do
     it do
-      is_expected.to have_resource_count(2)
-      is_expected.to contain_firewall('200 - Cassandra (Public) - 0.0.0.0/0')
+      expect(subject).to have_resource_count(2)
+      expect(subject).to contain_firewall('200 - Cassandra (Public) - 0.0.0.0/0')
 
-      is_expected.to contain_class('cassandra::firewall_ports').with(
+      expect(subject).to contain_class('cassandra::firewall_ports').with(
         client_ports: [9042, 9160],
         client_subnets: ['0.0.0.0/0'],
         inter_node_ports: [7000, 7001, 7199],
@@ -17,7 +19,7 @@ describe 'cassandra::firewall_ports' do
         opscenter_subnets: ['0.0.0.0/0']
       )
 
-      is_expected.to contain_cassandra__private__firewall_ports__rule('200_Public_0.0.0.0/0').with(ports: [8888, 22])
+      expect(subject).to contain_cassandra__private__firewall_ports__rule('200_Public_0.0.0.0/0').with(ports: [8888, 22])
     end
   end
 end
