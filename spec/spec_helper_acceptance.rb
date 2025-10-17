@@ -1,7 +1,13 @@
 # frozen_string_literal: true
 
-require 'beaker-rspec'
-require 'pry'
+require 'voxpupuli/acceptance/spec_helper_acceptance'
+
+configure_beaker do |host|
+  install_puppet_module_via_pmt_on(host, 'puppetlabs-apt') if fact_on(host, 'os.family') == 'Debian'
+  install_puppet_module_via_pmt_on(host, 'puppetlabs-firewall')
+  install_puppet_module_via_pmt_on(host, 'puppetlabs-inifile')
+  install_puppet_module_via_pmt_on(host, 'puppetlabs-stdlib')
+end
 
 class TestManifests
   def initialize(roles, version, operatingsystemmajrelease)
@@ -65,7 +71,7 @@ class TestManifests
        logoutput => true,
     }
 
-    notify { "${::hostname}:${::operatingsystem}-${::operatingsystemmajrelease}": }
+    notify { "${facts['networking']['hostname']}:${facts['os']['name']}-${facts['os']['release']['major']}": }
 
     file { '/etc/dse':
       ensure => directory,
@@ -75,7 +81,7 @@ class TestManifests
       content => "#export DSE_HOME\n# export HADOOP_LOG_DIR=<log_dir>",
     }
 
-    case downcase("${::operatingsystem}-${::operatingsystemmajrelease}") {
+    case downcase("${facts['os']['name']}-${facts['os']['release']['major']}") {
       'centos-7': {
         package { ['gcc', 'tar', 'initscripts']: }
       }
@@ -97,7 +103,7 @@ class TestManifests
 
   def cassandra_install_pp
     <<-EOS
-    if $::osfamily == 'Debian' {
+    if $osfamily == 'Debian' {
       class { 'cassandra::apache_repo':
         release => '#{@debian_release}',
         before  => Class['cassandra', 'cassandra::optutils'],
@@ -107,7 +113,7 @@ class TestManifests
       $cassandra_package = 'cassandra'
       $cassandra_optutils_package = 'cassandra-tools'
     } else {
-      if #{@version} >= 3.0 and $::operatingsystemmajrelease >= 7 {
+      if #{@version} >= 3.0 and $operatingsystemmajrelease >= 7 {
         yumrepo { 'datastax':
           ensure => absent,
         } ->
@@ -454,44 +460,5 @@ class TestManifests
         },
       }
     EOS
-  end
-end
-
-hosts.each do |host|
-  install_puppet_on(host)
-end
-
-RSpec.configure do |c|
-  module_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
-  c.formatter = :documentation
-
-  # Configure all nodes in nodeset
-  c.before :suite do
-    # Install modules
-    puppet_module_install(source: module_root, module_name: 'cassandra')
-    hosts.each do |host|
-      on host, puppet('module', 'install',
-                      'puppetlabs-apt'), acceptable_exit_codes: [0, 1]
-      on host, puppet('module', 'install',
-                      'puppetlabs-firewall'), acceptable_exit_codes: [0, 1]
-      on host, puppet('module', 'install',
-                      'puppetlabs-inifile'), acceptable_exit_codes: [0, 1]
-      on host, puppet('module', 'install',
-                      'puppetlabs-stdlib'), acceptable_exit_codes: [0, 1]
-      # Install hiera
-      write_hiera_config_on(host,
-                            [
-                              'environments/%{environment}/data/fqdn/%{fqdn}',
-                              'environments/%{environment}/data/osfamily/%{osfamily}/%{lsbdistcodename}',
-                              'environments/%{environment}/data/osfamily/%{osfamily}/%{lsbmajdistrelease}',
-                              'environments/%{environment}/data/osfamily/%{osfamily}/%{architecture}',
-                              'environments/%{environment}/data/osfamily/%{osfamily}/common',
-                              # 'environments/%{environment}/data/modules/%{cname}',
-                              'environments/%{environment}/data/modules/%{caller_module_name}',
-                              'environments/%{environment}/data/modules/%{module_name}',
-                              'environments/%{environment}/data/common'
-                            ])
-      copy_hiera_data_to(host, './spec/acceptance/hieradata/')
-    end
   end
 end
