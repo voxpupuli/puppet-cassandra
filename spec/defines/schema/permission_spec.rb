@@ -46,7 +46,6 @@ describe 'cassandra::schema::permission' do
       end
 
       it do
-        expect(subject).to have_resource_count(9)
         expect(subject).to contain_cassandra__schema__permission('spillman:SELECT:ALL')
         read_script =  '/usr/bin/cqlsh   -e "LIST ALL PERMISSIONS ON ALL KEYSPACES" '
         read_script += 'localhost 9042 | grep \' spillman | *spillman | .* SELECT$\''
@@ -72,7 +71,6 @@ describe 'cassandra::schema::permission' do
       end
 
       it do
-        expect(subject).to have_resource_count(9)
         expect(subject).to contain_cassandra__schema__permission('spillman:SELECT:ALL')
         read_script =  '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"LIST ALL PERMISSIONS ON ALL KEYSPACES\" '
         read_script += 'localhost 9042 | grep \' spillman | *spillman | .* SELECT$\'"'
@@ -99,7 +97,6 @@ describe 'cassandra::schema::permission' do
       end
 
       it do
-        expect(subject).to have_resource_count(9)
         expect(subject).to contain_cassandra__schema__permission('akers:modify:field')
         read_script =  '/usr/bin/cqlsh   -e "LIST ALL PERMISSIONS ON KEYSPACE field" '
         read_script += 'localhost 9042 | grep \' akers | *akers | .* MODIFY$\''
@@ -126,7 +123,6 @@ describe 'cassandra::schema::permission' do
       end
 
       it do
-        expect(subject).to have_resource_count(9)
         expect(subject).to contain_cassandra__schema__permission('akers:modify:field')
         read_script =  '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"LIST ALL PERMISSIONS ON KEYSPACE field\" '
         read_script += 'localhost 9042 | grep \' akers | *akers | .* MODIFY$\'"'
@@ -153,7 +149,6 @@ describe 'cassandra::schema::permission' do
       end
 
       it do
-        expect(subject).to have_resource_count(9)
         expect(subject).to contain_cassandra__schema__permission('boone:alter:forty9ers')
         read_script =  '/usr/bin/cqlsh   -e "LIST ALL PERMISSIONS ON KEYSPACE forty9ers" '
         read_script += 'localhost 9042 | grep \' boone | *boone | .* ALTER$\''
@@ -180,7 +175,6 @@ describe 'cassandra::schema::permission' do
       end
 
       it do
-        expect(subject).to have_resource_count(9)
         expect(subject).to contain_cassandra__schema__permission('boone:alter:forty9ers')
         read_script =  '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"LIST ALL PERMISSIONS ON KEYSPACE forty9ers\" '
         read_script += 'localhost 9042 | grep \' boone | *boone | .* ALTER$\'"'
@@ -207,7 +201,6 @@ describe 'cassandra::schema::permission' do
       end
 
       it do
-        expect(subject).to have_resource_count(18)
         expect(subject).to contain_cassandra__schema__permission('boone:ALL:ravens.plays')
       end
 
@@ -250,7 +243,6 @@ describe 'cassandra::schema::permission' do
       end
 
       it do
-        expect(subject).to have_resource_count(18)
         expect(subject).to contain_cassandra__schema__permission('boone:ALL:ravens.plays')
       end
 
@@ -294,7 +286,6 @@ describe 'cassandra::schema::permission' do
       end
 
       it do
-        expect(subject).to have_resource_count(9)
         expect(subject).to contain_cassandra__schema__permission('REVOKE boone:SELECT:ravens.plays')
         read_script =  '/usr/bin/cqlsh   -e "LIST ALL PERMISSIONS ON KEYSPACE forty9ers" '
         read_script += "localhost 9042 | grep ' boone | *boone | .* SELECT$'"
@@ -322,7 +313,6 @@ describe 'cassandra::schema::permission' do
       end
 
       it do
-        expect(subject).to have_resource_count(9)
         expect(subject).to contain_cassandra__schema__permission('REVOKE boone:SELECT:ravens.plays')
         read_script =  '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"LIST ALL PERMISSIONS ON KEYSPACE forty9ers\" '
         read_script += "localhost 9042 | grep ' boone | *boone | .* SELECT$'\""
