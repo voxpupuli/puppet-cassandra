@@ -133,7 +133,7 @@ describe 'cassandra::schema::keyspace' do
       exec_command += 'AND DURABLE_WRITES = true" localhost 9042'
       expect(subject).to contain_exec(exec_command).
         only_with(unless: read_command,
-                  require: 'Exec[cassandraschema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 
@@ -178,7 +178,7 @@ describe 'cassandra::schema::keyspace' do
       exec_command += 'AND DURABLE_WRITES = true\" localhost 9042"'
       expect(subject).to contain_exec(exec_command).
         only_with(unless: read_command,
-                  require: 'Exec[cassandrahema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 
