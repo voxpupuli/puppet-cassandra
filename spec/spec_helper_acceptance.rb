@@ -230,8 +230,8 @@ class TestManifests
   def firewall_pp
     if @roles.include? 'firewall'
       <<-EOS
-            class { '::cassandra::firewall_ports':
-              require => Class['::cassandra'],
+            class { 'cassandra::firewall_ports':
+              require => Class['cassandra'],
             }
       EOS
     else
