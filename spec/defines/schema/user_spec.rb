@@ -156,6 +156,8 @@ describe 'cassandra::schema::user' do
     context 'Create a supper user with login in cassandrarelease > 2.2' do
       let(:title) { 'akers' }
 
+      let(:facts) { super().merge({ cassandrarelease: '3.0' }) }
+
       let(:params) do
         {
           use_scl: false,
@@ -179,6 +181,8 @@ describe 'cassandra::schema::user' do
 
     context 'Create a supper user with login in cassandrarelease > 2.2 with SCL' do
       let(:title) { 'akers' }
+
+      let(:facts) { super().merge({ cassandrarelease: '3.0' }) }
 
       let(:params) do
         {
@@ -204,6 +208,8 @@ describe 'cassandra::schema::user' do
     context 'Create a user without login in cassandrarelease > 2.2' do
       let(:title) { 'bob' }
 
+      let(:facts) { super().merge({ cassandrarelease: '3.0' }) }
+
       let(:params) do
         {
           use_scl: false,
@@ -227,6 +233,8 @@ describe 'cassandra::schema::user' do
 
     context 'Create a user without login in cassandrarelease > 2.2 with SCL' do
       let(:title) { 'bob' }
+
+      let(:facts) { super().merge({ cassandrarelease: '3.0' }) }
 
       let(:params) do
         {
@@ -252,6 +260,8 @@ describe 'cassandra::schema::user' do
     context 'Drop a user in cassandrarelease > 2.2' do
       let(:title) { 'akers' }
 
+      let(:facts) { super().merge({ cassandrarelease: '3.0' }) }
+
       let(:params) do
         {
           use_scl: false,
@@ -273,6 +283,8 @@ describe 'cassandra::schema::user' do
 
     context 'Drop a user in cassandrarelease > 2.2 with SCL' do
       let(:title) { 'akers' }
+
+      let(:facts) { super().merge({ cassandrarelease: '3.0' }) }
 
       let(:params) do
         {
