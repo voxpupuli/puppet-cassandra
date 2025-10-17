@@ -62,7 +62,7 @@ class cassandra::dse (
     $notifications = []
   }
 
-  if is_hash($file_lines) {
+  if $file_lines =~ Hash {
     $default_file_line = {
       require => Package['cassandra'],
       notify  => $notifications,
@@ -71,7 +71,7 @@ class cassandra::dse (
     create_resources(file_line, $file_lines, $default_file_line)
   }
 
-  if is_hash($settings) {
+  if $settings =~ Hash {
     file { $config_file:
       ensure  => file,
       owner   => 'cassandra',
