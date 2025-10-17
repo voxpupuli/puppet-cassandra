@@ -55,7 +55,7 @@ describe 'cassandra::schema::permission' do
         expect(subject).to contain_exec(script_command).
           only_with(command: exec_command,
                     unless: read_script,
-                    require: 'Exec[::cassandra::schema connection test]')
+                    require: 'Exec[cassandra::schema connection test]')
       end
     end
 
@@ -81,7 +81,7 @@ describe 'cassandra::schema::permission' do
         expect(subject).to contain_exec(script_command).
           only_with(command: exec_command,
                     unless: read_script,
-                    require: 'Exec[::cassandra::schema connection test]')
+                    require: 'Exec[cassandra::schema connection test]')
       end
     end
 
@@ -108,7 +108,7 @@ describe 'cassandra::schema::permission' do
         expect(subject).to contain_exec(script_command).
           only_with(command: exec_command,
                     unless: read_script,
-                    require: 'Exec[::cassandra::schema connection test]')
+                    require: 'Exec[cassandra::schema connection test]')
       end
     end
 
@@ -135,7 +135,7 @@ describe 'cassandra::schema::permission' do
         expect(subject).to contain_exec(script_command).
           only_with(command: exec_command,
                     unless: read_script,
-                    require: 'Exec[::cassandra::schema connection test]')
+                    require: 'Exec[cassandra::schema connection test]')
       end
     end
 
@@ -162,7 +162,7 @@ describe 'cassandra::schema::permission' do
         expect(subject).to contain_exec(script_command).
           only_with(command: exec_command,
                     unless: read_script,
-                    require: 'Exec[::cassandra::schema connection test]')
+                    require: 'Exec[cassandra::schema connection test]')
       end
     end
 
@@ -189,7 +189,7 @@ describe 'cassandra::schema::permission' do
         expect(subject).to contain_exec(script_command).
           only_with(command: exec_command,
                     unless: read_script,
-                    require: 'Exec[::cassandra::schema connection test]')
+                    require: 'Exec[cassandra::schema connection test]')
       end
     end
 
@@ -231,7 +231,7 @@ describe 'cassandra::schema::permission' do
           expect(subject).to contain_exec(script_command).
             only_with(command: exec_command,
                       unless: read_script,
-                      require: 'Exec[::cassandra::schema connection test]')
+                      require: 'Exec[cassandra::schema connection test]')
         end
       end
     end
@@ -274,7 +274,7 @@ describe 'cassandra::schema::permission' do
           expect(subject).to contain_exec(script_command).
             only_with(command: exec_command,
                       unless: read_script,
-                      require: 'Exec[::cassandra::schema connection test]')
+                      require: 'Exec[cassandra::schema connection test]')
         end
       end
     end
@@ -303,7 +303,7 @@ describe 'cassandra::schema::permission' do
         expect(subject).to contain_exec(script_command).
           only_with(command: exec_command,
                     onlyif: read_script,
-                    require: 'Exec[::cassandra::schema connection test]')
+                    require: 'Exec[cassandra::schema connection test]')
       end
     end
 
@@ -331,7 +331,7 @@ describe 'cassandra::schema::permission' do
         expect(subject).to contain_exec(script_command).
           only_with(command: exec_command,
                     onlyif: read_script,
-                    require: 'Exec[::cassandra::schema connection test]')
+                    require: 'Exec[cassandra::schema connection test]')
       end
     end
   end

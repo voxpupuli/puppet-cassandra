@@ -55,7 +55,7 @@ describe 'cassandra::schema::table' do
       exec_command += 'WITH COMPACT STORAGE AND ID=\'5a1c395e-b41f-11e5-9f22-ba0be0483c18\'" localhost 9042'
       expect(subject).to contain_exec(exec_command).
         only_with(unless: read_command,
-                  require: 'Exec[::cassandra::schema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 
@@ -111,7 +111,7 @@ describe 'cassandra::schema::table' do
       exec_command += 'WITH COMPACT STORAGE AND ID=\'5a1c395e-b41f-11e5-9f22-ba0be0483c18\'\" localhost 9042"'
       expect(subject).to contain_exec(exec_command).
         only_with(unless: read_command,
-                  require: 'Exec[::cassandra::schema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 
@@ -149,7 +149,7 @@ describe 'cassandra::schema::table' do
       exec_command = '/usr/bin/cqlsh   -e "DROP TABLE IF EXISTS Excelsior.users" localhost 9042'
       expect(subject).to contain_exec(exec_command).
         only_with(onlyif: read_command,
-                  require: 'Exec[::cassandra::schema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 
@@ -186,7 +186,7 @@ describe 'cassandra::schema::table' do
       exec_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"DROP TABLE IF EXISTS Excelsior.users\" localhost 9042"'
       expect(subject).to contain_exec(exec_command).
         only_with(onlyif: read_command,
-                  require: 'Exec[::cassandra::schema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 

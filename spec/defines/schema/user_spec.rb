@@ -31,7 +31,7 @@ describe 'cassandra::schema::user' do
         expect(subject).to contain_exec('Create user (akers)').
           only_with(command: exec_command,
                     unless: read_command,
-                    require: 'Exec[::cassandra::schema connection test]')
+                    require: 'Exec[cassandra::schema connection test]')
       end
     end
 
@@ -55,7 +55,7 @@ describe 'cassandra::schema::user' do
         expect(subject).to contain_exec('Create user (akers)').
           only_with(command: exec_command,
                     unless: read_command,
-                    require: 'Exec[::cassandra::schema connection test]')
+                    require: 'Exec[cassandra::schema connection test]')
       end
     end
 
@@ -79,7 +79,7 @@ describe 'cassandra::schema::user' do
         expect(subject).to contain_exec('Create user (akers)').
           only_with(command: exec_command,
                     unless: read_command,
-                    require: 'Exec[::cassandra::schema connection test]')
+                    require: 'Exec[cassandra::schema connection test]')
       end
     end
 
@@ -103,7 +103,7 @@ describe 'cassandra::schema::user' do
         expect(subject).to contain_exec('Create user (akers)').
           only_with(command: exec_command,
                     unless: read_command,
-                    require: 'Exec[::cassandra::schema connection test]')
+                    require: 'Exec[cassandra::schema connection test]')
       end
     end
 
@@ -126,7 +126,7 @@ describe 'cassandra::schema::user' do
         expect(subject).to contain_exec('Create user (akers)').
           only_with(command: exec_command,
                     unless: read_command,
-                    require: 'Exec[::cassandra::schema connection test]')
+                    require: 'Exec[cassandra::schema connection test]')
       end
     end
 
@@ -149,7 +149,7 @@ describe 'cassandra::schema::user' do
         expect(subject).to contain_exec('Create user (akers)').
           only_with(command: exec_command,
                     unless: read_command,
-                    require: 'Exec[::cassandra::schema connection test]')
+                    require: 'Exec[cassandra::schema connection test]')
       end
     end
 
@@ -173,7 +173,7 @@ describe 'cassandra::schema::user' do
         expect(subject).to contain_exec('Create user (akers)').
           only_with(command: exec_command,
                     unless: read_command,
-                    require: 'Exec[::cassandra::schema connection test]')
+                    require: 'Exec[cassandra::schema connection test]')
       end
     end
 
@@ -197,7 +197,7 @@ describe 'cassandra::schema::user' do
         expect(subject).to contain_exec('Create user (akers)').
           only_with(command: exec_command,
                     unless: read_command,
-                    require: 'Exec[::cassandra::schema connection test]')
+                    require: 'Exec[cassandra::schema connection test]')
       end
     end
 
@@ -221,7 +221,7 @@ describe 'cassandra::schema::user' do
         expect(subject).to contain_exec('Create user (bob)').
           only_with(command: exec_command,
                     unless: read_command,
-                    require: 'Exec[::cassandra::schema connection test]')
+                    require: 'Exec[cassandra::schema connection test]')
       end
     end
 
@@ -245,7 +245,7 @@ describe 'cassandra::schema::user' do
         expect(subject).to contain_exec('Create user (bob)').
           only_with(command: exec_command,
                     unless: read_command,
-                    require: 'Exec[::cassandra::schema connection test]')
+                    require: 'Exec[cassandra::schema connection test]')
       end
     end
 
@@ -267,7 +267,7 @@ describe 'cassandra::schema::user' do
         expect(subject).to contain_exec('Delete user (akers)').
           only_with(command: exec_command,
                     onlyif: read_command,
-                    require: 'Exec[::cassandra::schema connection test]')
+                    require: 'Exec[cassandra::schema connection test]')
       end
     end
 
@@ -289,7 +289,7 @@ describe 'cassandra::schema::user' do
         expect(subject).to contain_exec('Delete user (akers)').
           only_with(command: exec_command,
                     onlyif: read_command,
-                    require: 'Exec[::cassandra::schema connection test]')
+                    require: 'Exec[cassandra::schema connection test]')
       end
     end
 
@@ -311,7 +311,7 @@ describe 'cassandra::schema::user' do
         expect(subject).to contain_exec('Delete user (akers)').
           only_with(command: exec_command,
                     onlyif: read_command,
-                    require: 'Exec[::cassandra::schema connection test]')
+                    require: 'Exec[cassandra::schema connection test]')
       end
     end
 
@@ -333,7 +333,7 @@ describe 'cassandra::schema::user' do
         expect(subject).to contain_exec('Delete user (akers)').
           only_with(command: exec_command,
                     onlyif: read_command,
-                    require: 'Exec[::cassandra::schema connection test]')
+                    require: 'Exec[cassandra::schema connection test]')
       end
     end
 
