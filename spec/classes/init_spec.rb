@@ -7,15 +7,51 @@ describe 'cassandra' do
     'foo.example.com'
   end
 
+  context 'on an unsupported OS with default parameters' do
+    let(:facts) do
+      {
+        os: {
+          family: 'Unknown',
+          release: { full: '1.0' }
+        }
+      }
+    end
+
+    it { is_expected.to raise_error(Puppet::Error) }
+  end
+
+  context 'on an unsupported OS pleading tolerance' do
+    let(:facts) do
+      {
+        os: {
+          family: 'Unknown',
+          release: { full: '1.0' }
+        }
+      }
+    end
+    let :params do
+      {
+        config_file_mode: '0755',
+        config_path: '/etc/cassandra',
+        fail_on_non_supported_os: false,
+        package_name: 'cassandra',
+        service_provider: 'base',
+        systemctl: '/bin/true'
+      }
+    end
+
+    it do
+      expect(subject).to contain_file('/etc/cassandra/cassandra.yaml').with('mode' => '0755')
+      expect(subject).to contain_service('cassandra').with(provider: 'base')
+      expect(subject).to have_resource_count(6)
+    end
+  end
+
   on_supported_os.each do |os, facts|
     let :facts do
       facts
     end
     context "on #{os}" do
-      context 'On an unknown OS with defaults for all parameters' do
-        it { is_expected.to raise_error(Puppet::Error) }
-      end
-
       context 'Test the default parameters (RedHat)' do
         it do
           expect(subject).to contain_package('cassandra').with(
@@ -236,25 +272,6 @@ describe 'cassandra' do
             name: 'dse-full'
           )
           expect(subject).to contain_service('cassandra').with_name('dse')
-        end
-      end
-
-      context 'On an unsupported OS pleading tolerance' do
-        let :params do
-          {
-            config_file_mode: '0755',
-            config_path: '/etc/cassandra',
-            fail_on_non_supported_os: false,
-            package_name: 'cassandra',
-            service_provider: 'base',
-            systemctl: '/bin/true'
-          }
-        end
-
-        it do
-          expect(subject).to contain_file('/etc/cassandra/cassandra.yaml').with('mode' => '0755')
-          expect(subject).to contain_service('cassandra').with(provider: 'base')
-          expect(subject).to have_resource_count(6)
         end
       end
 
