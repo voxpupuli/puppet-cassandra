@@ -1,0 +1,6 @@
+---
+cassandra::config_path: '/etc/cassandra'
+cassandra::systemctl: '/bin/systemctl'
+
+cassandra::java::jna_package_name: 'libjna-java'
+cassandra::java::package_name: 'openjdk-8-jre-headless'

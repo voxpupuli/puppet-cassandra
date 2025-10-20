@@ -36,7 +36,6 @@ describe 'cassandra::file' do
 
     it do
       expect(subject).to contain_class('cassandra')
-      expect(subject).to contain_class('cassandra::params')
       expect(subject).to contain_class('stdlib')
       expect(subject).to contain_cassandra__file('cassandra-env.sh')
 

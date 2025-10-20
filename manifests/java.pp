@@ -15,14 +15,14 @@
 #   resources that will be passed to the create_resources function.
 #   This is ignored on non-Red Hat systems.
 class cassandra::java (
+  $jna_package_name,
+  $package_name,
   $aptkey           = undef,
   $aptsource        = undef,
   $jna_ensure       = present,
-  $jna_package_name = $cassandra::params::jna_package_name,
   $package_ensure   = present,
-  $package_name     = $cassandra::params::java_package,
   $yumrepo          = undef,
-) inherits cassandra::params {
+) {
   if $facts['os']['family'] == 'RedHat' and $yumrepo != undef {
     $yumrepo_defaults = {
       'before' => Package[$package_name],

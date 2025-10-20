@@ -26,10 +26,10 @@ define cassandra::schema::keyspace (
   $durable_writes  = true,
   $keyspace_name   = $title,
   $replication_map = {},
-  Boolean $use_scl = $cassandra::params::use_scl,
-  String[1] $scl_name = $cassandra::params::scl_name,
+  Boolean $use_scl = $cassandra::schema::use_scl,
+  String[1] $scl_name = $cassandra::schema::scl_name,
 ) {
-  include 'cassandra::schema'
+  include cassandra::schema
 
   if $use_scl {
     $quote = '\"'

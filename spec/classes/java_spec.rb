@@ -45,7 +45,7 @@ describe 'cassandra::java' do
 
     it do
       expect(subject).to contain_class('cassandra::java')
-      expect(subject).to contain_package('openjdk-7-jre-headless')
+      expect(subject).to contain_package('openjdk-8-jre-headless')
       expect(subject).to contain_package('libjna-java')
       expect(subject).to have_resource_count(2)
     end
@@ -76,7 +76,7 @@ describe 'cassandra::java' do
     end
 
     it do
-      expect(subject).to contain_package('openjdk-7-jre-headless').with_ensure('2.1.13')
+      expect(subject).to contain_package('openjdk-8-jre-headless').with_ensure('2.1.13')
     end
   end
 
@@ -189,7 +189,7 @@ describe 'cassandra::java' do
           id: 'DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
           server: 'keyserver.ubuntu.com'
         ).
-        that_comes_before('Package[openjdk-7-jre-headless]')
+        that_comes_before('Package[openjdk-8-jre-headless]')
       expect(subject).to contain_apt__source('openjdk-r').
         with(
           comment: 'OpenJDK builds (all archs)',
@@ -202,7 +202,7 @@ describe 'cassandra::java' do
           refreshonly: true,
           command: '/bin/true'
         ).
-        that_comes_before('Package[openjdk-7-jre-headless]')
+        that_comes_before('Package[openjdk-8-jre-headless]')
     end
   end
 end
