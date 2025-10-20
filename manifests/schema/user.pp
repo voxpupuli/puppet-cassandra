@@ -26,69 +26,38 @@ define cassandra::schema::user (
   include cassandra::schema
 
   $quote = '"'
-  if $facts['cassandrarelease'] {
-    if versioncmp($facts['cassandrarelease'], '2.2') < 0 {
-      $operate_with_roles = false
-    } else {
-      $operate_with_roles = true
-    }
-  } else {
-    $operate_with_roles = false
-  }
-
-  if $operate_with_roles {
-    $read_script = 'LIST ROLES'
-  } else {
-    $read_script = 'LIST USERS'
-  }
+  $read_script = 'LIST ROLES'
   $str_match = '\s'
   $read_command = "${cassandra::schema::cqlsh_opts} -e ${quote}${read_script}${quote} ${cassandra::schema::cqlsh_conn} | grep '${str_match}*${user_name} |'"
 
   if $ensure == present {
-    if $operate_with_roles {
-      # we are running cassandra > 2.2
-      $create_script1 = "CREATE ROLE IF NOT EXISTS ${user_name}"
+    $create_script1 = "CREATE ROLE IF NOT EXISTS ${user_name}"
 
+    if $password != undef {
+      $create_script2 = "${create_script1} WITH PASSWORD = '${password}'"
+    } else {
+      $create_script2 = $create_script1
+    }
+
+    if $superuser {
       if $password != undef {
-        $create_script2 = "${create_script1} WITH PASSWORD = '${password}'"
+        $create_script3 = "${create_script2} AND SUPERUSER = true"
       } else {
-        $create_script2 = $create_script1
-      }
-
-      if $superuser {
-        if $password != undef {
-          $create_script3 = "${create_script2} AND SUPERUSER = true"
-        } else {
-          $create_script3 = "${create_script2} WITH SUPERUSER = true"
-        }
-      } else {
-        $create_script3 = $create_script2
-      }
-
-      if $login {
-        if $superuser or $password != undef {
-          $create_script = "${create_script3} AND LOGIN = true"
-        }
-        else {
-          $create_script = "${create_script3} WITH LOGIN = true"
-        }
-      } else {
-        $create_script = $create_script3
+        $create_script3 = "${create_script2} WITH SUPERUSER = true"
       }
     } else {
-      $create_script1 = "CREATE USER IF NOT EXISTS ${user_name}"
+      $create_script3 = $create_script2
+    }
 
-      if $password != undef {
-        $create_script2 = "${create_script1} WITH PASSWORD '${password}'"
-      } else {
-        $create_script2 = $create_script1
+    if $login {
+      if $superuser or $password != undef {
+        $create_script = "${create_script3} AND LOGIN = true"
       }
-
-      if $superuser {
-        $create_script = "${create_script2} SUPERUSER"
-      } else {
-        $create_script = "${create_script2} NOSUPERUSER"
+      else {
+        $create_script = "${create_script3} WITH LOGIN = true"
       }
+    } else {
+      $create_script = $create_script3
     }
 
     $create_command = "${cassandra::schema::cqlsh_opts} -e ${quote}${create_script}${quote} ${cassandra::schema::cqlsh_conn}"
@@ -98,11 +67,7 @@ define cassandra::schema::user (
       require => Exec['cassandra::schema connection test'],
     }
   } elsif $ensure == absent {
-    if $operate_with_roles {
-      $delete_script = "DROP ROLE ${user_name}"
-    } else {
-      $delete_script = "DROP USER ${user_name}"
-    }
+    $delete_script = "DROP ROLE ${user_name}"
     $delete_command = "${cassandra::schema::cqlsh_opts} -e ${quote}${delete_script}${quote} ${cassandra::schema::cqlsh_conn}"
     exec { "Delete user (${user_name})":
       command => $delete_command,
