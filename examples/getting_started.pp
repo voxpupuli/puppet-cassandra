@@ -1,7 +1,7 @@
 #############################################################################
 # This is for placing in the getting started section of the README file.
 #############################################################################
-# Install Cassandra 2.2.5 onto a system and create a basic keyspace, table
+# Install Cassandra onto a system and create a basic keyspace, table
 # and index.  The node itself becomes a seed for the cluster.
 #
 #############################################################################

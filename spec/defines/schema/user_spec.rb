@@ -11,75 +11,9 @@ describe 'cassandra::schema::user' do
     let :facts do
       facts
     end
-    context 'Create a supper user on cassandrarelease undef' do
+
+    context 'Create a super user with login' do
       let(:title) { 'akers' }
-
-      let(:params) do
-        {
-          password: 'Niner2',
-          superuser: true
-        }
-      end
-
-      it do
-        expect(subject).to contain_cassandra__schema__user('akers').with_ensure('present')
-        read_command = '/usr/bin/cqlsh   -e "LIST USERS" localhost 9042 | grep \'\s*akers |\''
-        exec_command =  '/usr/bin/cqlsh   -e "CREATE USER IF NOT EXISTS akers'
-        exec_command += ' WITH PASSWORD \'Niner2\' SUPERUSER" localhost 9042'
-        expect(subject).to contain_exec('Create user (akers)').
-          only_with(command: exec_command,
-                    unless: read_command,
-                    require: 'Exec[cassandra::schema connection test]')
-      end
-    end
-
-    context 'Create a supper user in cassandrarelease < 2.2' do
-      let(:title) { 'akers' }
-
-      let(:params) do
-        {
-          password: 'Niner2',
-          superuser: true
-        }
-      end
-
-      it do
-        expect(subject).to contain_cassandra__schema__user('akers').with_ensure('present')
-        read_command = '/usr/bin/cqlsh   -e "LIST USERS" localhost 9042 | grep \'\s*akers |\''
-        exec_command =  '/usr/bin/cqlsh   -e "CREATE USER IF NOT EXISTS akers'
-        exec_command += ' WITH PASSWORD \'Niner2\' SUPERUSER" localhost 9042'
-        expect(subject).to contain_exec('Create user (akers)').
-          only_with(command: exec_command,
-                    unless: read_command,
-                    require: 'Exec[cassandra::schema connection test]')
-      end
-    end
-
-    context 'Create a user in cassandrarelease < 2.2' do
-      let(:title) { 'akers' }
-
-      let(:params) do
-        {
-          password: 'Niner2'
-        }
-      end
-
-      it do
-        expect(subject).to contain_cassandra__schema__user('akers').with_ensure('present')
-        read_command = '/usr/bin/cqlsh   -e "LIST USERS" localhost 9042 | grep \'\s*akers |\''
-        exec_command =  '/usr/bin/cqlsh   -e "CREATE USER IF NOT EXISTS akers'
-        exec_command += ' WITH PASSWORD \'Niner2\' NOSUPERUSER" localhost 9042'
-        expect(subject).to contain_exec('Create user (akers)').
-          only_with(command: exec_command,
-                    unless: read_command,
-                    require: 'Exec[cassandra::schema connection test]')
-      end
-    end
-
-    context 'Create a supper user with login in cassandrarelease > 2.2' do
-      let(:title) { 'akers' }
-
-      let(:facts) { super().merge({ cassandrarelease: '3.0' }) }
 
       let(:params) do
         {
@@ -100,10 +34,8 @@ describe 'cassandra::schema::user' do
       end
     end
 
-    context 'Create a user without login in cassandrarelease > 2.2' do
+    context 'Create a user without login' do
       let(:title) { 'bob' }
-
-      let(:facts) { super().merge({ cassandrarelease: '3.0' }) }
 
       let(:params) do
         {
@@ -124,10 +56,8 @@ describe 'cassandra::schema::user' do
       end
     end
 
-    context 'Drop a user in cassandrarelease > 2.2' do
+    context 'Drop a user' do
       let(:title) { 'akers' }
-
-      let(:facts) { super().merge({ cassandrarelease: '3.0' }) }
 
       let(:params) do
         {
@@ -139,26 +69,6 @@ describe 'cassandra::schema::user' do
       it do
         read_command = '/usr/bin/cqlsh   -e "LIST ROLES" localhost 9042 | grep \'\s*akers |\''
         exec_command = '/usr/bin/cqlsh   -e "DROP ROLE akers" localhost 9042'
-        expect(subject).to contain_exec('Delete user (akers)').
-          only_with(command: exec_command,
-                    onlyif: read_command,
-                    require: 'Exec[cassandra::schema connection test]')
-      end
-    end
-
-    context 'Drop a user in cassandrarelease < 2.2' do
-      let(:title) { 'akers' }
-
-      let(:params) do
-        {
-          password: 'Niner2',
-          ensure: 'absent'
-        }
-      end
-
-      it do
-        read_command = '/usr/bin/cqlsh   -e "LIST USERS" localhost 9042 | grep \'\s*akers |\''
-        exec_command = '/usr/bin/cqlsh   -e "DROP USER akers" localhost 9042'
         expect(subject).to contain_exec('Delete user (akers)').
           only_with(command: exec_command,
                     onlyif: read_command,
