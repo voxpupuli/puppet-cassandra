@@ -1,5 +1,5 @@
 # Cassandra pre-requisites
-require cassandra::datastax_repo
+require cassandra::apache_repo
 require cassandra::system::transparent_hugepage
 
 class { 'cassandra::system::swapoff':

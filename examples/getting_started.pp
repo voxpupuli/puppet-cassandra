@@ -7,7 +7,7 @@
 #############################################################################
 
 # Cassandra pre-requisites
-require cassandra::datastax_repo
+require cassandra::apache_repo
 require cassandra::system::sysctl
 require cassandra::system::transparent_hugepage
 require cassandra::java
@@ -49,24 +49,7 @@ class { 'cassandra':
     'start_native_transport'      => true,
   },
   service_ensure         => running,
-  require                => Class['cassandra::datastax_repo', 'cassandra::system::sysctl', 'cassandra::java'],
-}
-
-class { 'cassandra::datastax_agent':
-  settings => {
-    'agent_alias'     => {
-      'setting' => 'agent_alias',
-      'value'   => 'foobar',
-    },
-    'stomp_interface' => {
-      'setting' => 'stomp_interface',
-      'value'   => 'localhost',
-    },
-    'async_pool_size' => {
-      'ensure' => absent,
-    },
-  },
-  require  => Class['cassandra'],
+  require                => Class['cassandra::apache_repo', 'cassandra::system::sysctl', 'cassandra::java'],
 }
 
 class { 'cassandra::optutils':
