@@ -35,7 +35,6 @@ describe 'cassandra' do
         config_path: '/etc/cassandra',
         fail_on_non_supported_os: false,
         package_name: 'cassandra',
-        service_provider: 'base',
         systemctl: '/bin/true'
       }
     end
@@ -87,8 +86,6 @@ describe 'cassandra' do
 
             expect(subject).to contain_class('cassandra').only_with(
               baseline_settings: {},
-              cassandra_2356_sleep_seconds: 5,
-              cassandra_9822: false, # rubocop:disable Naming/VariableNumber
               cassandra_yaml_tmpl: 'cassandra/cassandra.yaml.erb',
               commitlog_directory_mode: '0750',
               manage_config_file: true,
@@ -105,7 +102,6 @@ describe 'cassandra' do
               saved_caches_directory_mode: '0750',
               service_enable: true,
               service_name: 'cassandra',
-              service_provider: nil,
               service_refresh: true,
               settings: {},
               snitch_properties_file: 'cassandra-rackdc.properties',
@@ -224,21 +220,6 @@ describe 'cassandra' do
               with_content(%r{^rack=RAC1$}).
               with_content(%r{^#dc_suffix=$}).
               with_content(%r{^# prefer_local=true$})
-          end
-        end
-
-        context 'with CASSANDRA-9822 activated' do
-          let :params do
-            {
-              cassandra_9822: true # rubocop:disable Naming/VariableNumber
-            }
-          end
-
-          it do
-            expect(subject).to contain_file('/etc/init.d/cassandra').with(
-              source: 'puppet:///modules/cassandra/CASSANDRA-9822/cassandra',
-              mode: '0555'
-            ).that_comes_before('Package[cassandra]')
           end
         end
 

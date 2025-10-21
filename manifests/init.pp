@@ -5,16 +5,6 @@
 #   are merged with the `settings` hash.  The values of the `settings`
 #   hash overriding the values in this hash.  This is most useful when used
 #   with hiera.
-# @param cassandra_2356_sleep_seconds [boolean]
-#   This will provide a workaround for
-#   [CASSANDRA-2356](https://issues.apache.org/jira/browse/CASSANDRA-2356) by
-#   sleeping for the specifed number of seconds after an event involving the
-#   Cassandra package.  This option is silently ignored on the Red Hat family
-#   of operating systems as this bug only affects Debian systems.
-# @param cassandra_9822 [boolean] If set to true, this will apply a patch to the init
-#   file for the Cassandra service as a workaround for
-#   [CASSANDRA-9822](https://issues.apache.org/jira/browse/CASSANDRA-9822).
-#   This this bug only affects Debian systems.
 # @param cassandra_yaml_tmpl [string] The path to the Puppet template for the
 #   Cassandra configuration file.  This allows the user to supply their own
 #   customized template.`
@@ -83,9 +73,6 @@
 # @param service_ensure [string] Ensure the Cassandra service is running.  Valid values
 #   are running or stopped.
 # @param service_name [string] The name of the service that runs the Cassandra software.
-# @param service_provider [string] The name of the provider that runs the service.
-#   If left as *undef* then the OS family specific default will
-#   be used, otherwise the specified value will be used instead.
 # @param service_refresh [boolean] If set to true, changes to the Cassandra config file
 #   or the data directories will ensure that Cassandra service is refreshed
 #   after the changes.  Setting this flag to false will disable this
@@ -131,8 +118,6 @@ class cassandra (
   $config_path,
   $systemctl,
   $baseline_settings            = {},
-  $cassandra_2356_sleep_seconds = 5,
-  $cassandra_9822               = false,
   $cassandra_yaml_tmpl          = 'cassandra/cassandra.yaml.erb',
   $commitlog_directory          = undef,
   $commitlog_directory_mode     = '0750',
@@ -155,17 +140,10 @@ class cassandra (
   $service_enable               = true,
   $service_ensure               = undef,
   $service_name                 = 'cassandra',
-  $service_provider             = undef,
   $service_refresh              = true,
   $settings                     = {},
   $snitch_properties_file       = 'cassandra-rackdc.properties',
 ) {
-  if $service_provider != undef {
-    Service {
-      provider => $service_provider,
-    }
-  }
-
   $config_file = "${config_path}/cassandra.yaml"
   $dc_rack_properties_file = "${config_path}/${snitch_properties_file}"
 
@@ -188,23 +166,6 @@ class cassandra (
       $data_dir_require = File[$config_file]
       $data_dir_before = Package['cassandra']
 
-      if $cassandra_9822 {
-        file { '/etc/init.d/cassandra':
-          source => 'puppet:///modules/cassandra/CASSANDRA-9822/cassandra',
-          mode   => '0555',
-          before => Package['cassandra'],
-        }
-      }
-      # Sleep after package install and before service resource to prevent
-      # possible duplicate processes arising from CASSANDRA-2356.
-      exec { 'CASSANDRA-2356 sleep':
-        command     => "/bin/sleep ${cassandra_2356_sleep_seconds}",
-        refreshonly => true,
-        user        => 'root',
-        subscribe   => Package['cassandra'],
-        before      => Service['cassandra'],
-      }
-
       group { 'cassandra':
         ensure => present,
       }
@@ -220,7 +181,6 @@ class cassandra (
         managehome => true,
         require    => Group['cassandra'],
       }
-      # End of CASSANDRA-2356 specific resources.
     }
     default: {
       $config_file_before  = [Package['cassandra']]

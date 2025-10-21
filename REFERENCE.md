@@ -34,8 +34,6 @@ configuration file.
 The following parameters are available in the `cassandra` class:
 
 * [`baseline_settings`](#-cassandra--baseline_settings)
-* [`cassandra_2356_sleep_seconds`](#-cassandra--cassandra_2356_sleep_seconds)
-* [`cassandra_9822`](#-cassandra--cassandra_9822)
 * [`cassandra_yaml_tmpl`](#-cassandra--cassandra_yaml_tmpl)
 * [`commitlog_directory`](#-cassandra--commitlog_directory)
 * [`commitlog_directory_mode`](#-cassandra--commitlog_directory_mode)
@@ -59,7 +57,6 @@ The following parameters are available in the `cassandra` class:
 * [`service_enable`](#-cassandra--service_enable)
 * [`service_ensure`](#-cassandra--service_ensure)
 * [`service_name`](#-cassandra--service_name)
-* [`service_provider`](#-cassandra--service_provider)
 * [`service_refresh`](#-cassandra--service_refresh)
 * [`settings`](#-cassandra--settings)
 * [`snitch_properties_file`](#-cassandra--snitch_properties_file)
@@ -75,29 +72,6 @@ hash overriding the values in this hash.  This is most useful when used
 with hiera.
 
 Default value: `{}`
-
-##### <a name="-cassandra--cassandra_2356_sleep_seconds"></a>`cassandra_2356_sleep_seconds`
-
-Data type: `boolean`
-
-This will provide a workaround for
-[CASSANDRA-2356](https://issues.apache.org/jira/browse/CASSANDRA-2356) by
-sleeping for the specifed number of seconds after an event involving the
-Cassandra package.  This option is silently ignored on the Red Hat family
-of operating systems as this bug only affects Debian systems.
-
-Default value: `5`
-
-##### <a name="-cassandra--cassandra_9822"></a>`cassandra_9822`
-
-Data type: `boolean`
-
-If set to true, this will apply a patch to the init
-file for the Cassandra service as a workaround for
-[CASSANDRA-9822](https://issues.apache.org/jira/browse/CASSANDRA-9822).
-This this bug only affects Debian systems.
-
-Default value: `false`
 
 ##### <a name="-cassandra--cassandra_yaml_tmpl"></a>`cassandra_yaml_tmpl`
 
@@ -325,16 +299,6 @@ Data type: `string`
 The name of the service that runs the Cassandra software.
 
 Default value: `'cassandra'`
-
-##### <a name="-cassandra--service_provider"></a>`service_provider`
-
-Data type: `string`
-
-The name of the provider that runs the service.
-If left as *undef* then the OS family specific default will
-be used, otherwise the specified value will be used instead.
-
-Default value: `undef`
 
 ##### <a name="-cassandra--service_refresh"></a>`service_refresh`
 
