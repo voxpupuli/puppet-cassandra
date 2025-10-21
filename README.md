@@ -75,11 +75,6 @@ Module to install, configure and manage Cassandra.
 * Optionally configures files in the `/etc/dse` directory if one is using
   DataStax Enterprise.
 
-#### What the cassandra::firewall_ports class affects
-
-* Optionally configures the firewall for the Cassandra related network
-  ports.
-
 #### What the cassandra::java class affects
 
 * Optionally installs a JRE/JDK package (e.g. java-1.7.0-openjdk) and the
