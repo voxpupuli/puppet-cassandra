@@ -2,10 +2,6 @@
 # Specify different storage locations
 #############################################################################
 
-# Cassandra pre-requisites
-include cassandra::apache_repo
-include cassandra::java
-
 # Specify the storage locations
 $commitlog_directory = '/appdata/cassandra/commitlog'
 $data_file_directory = '/appdata/cassandra/data'
@@ -52,5 +48,4 @@ class { 'cassandra':
     'start_native_transport'      => true,
   },
   service_ensure         => running,
-  require                => Class['cassandra::apache_repo', 'cassandra::java'],
 }

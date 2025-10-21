@@ -6,11 +6,16 @@
 
 ### Classes
 
-* [`cassandra`](#cassandra): A class for installing the Cassandra package and manipulate settings in the configuration file.
-* [`cassandra::apache_repo`](#cassandra--apache_repo): An optional class that will allow a suitable repository to be configured from which packages for Apache Cassandra can be downloaded.
-* [`cassandra::java`](#cassandra--java): A class to install Java and JNA packages.
-* [`cassandra::optutils`](#cassandra--optutils): A class to install the optional Cassandra tools package.
+#### Public Classes
+
+* [`cassandra`](#cassandra): Class to manage installation and configuration of Cassandra.
 * [`cassandra::schema`](#cassandra--schema): A class to maintain the database schema.  Please note that cqlsh expects Python 2.7 to be installed. This may be a problem of older distributions (CentOS 6 for example).
+
+#### Private Classes
+
+* `cassandra::config`: This class is called from cassandra to manage the configuration.
+* `cassandra::install`: This class is called from cassandra for install.
+* `cassandra::service`: This class is called from cassandra to manage the service.
 
 ### Defined types
 
@@ -26,81 +31,286 @@
 
 ### <a name="cassandra"></a>`cassandra`
 
-A class for installing the Cassandra package and manipulate settings in the
-configuration file.
+Class to manage installation and configuration of Cassandra.
 
 #### Parameters
 
 The following parameters are available in the `cassandra` class:
 
-* [`baseline_settings`](#-cassandra--baseline_settings)
-* [`cassandra_yaml_tmpl`](#-cassandra--cassandra_yaml_tmpl)
-* [`commitlog_directory`](#-cassandra--commitlog_directory)
-* [`commitlog_directory_mode`](#-cassandra--commitlog_directory_mode)
-* [`manage_config_file`](#-cassandra--manage_config_file)
-* [`config_file_mode`](#-cassandra--config_file_mode)
 * [`config_path`](#-cassandra--config_path)
-* [`data_file_directories`](#-cassandra--data_file_directories)
-* [`data_file_directories_mode`](#-cassandra--data_file_directories_mode)
-* [`dc`](#-cassandra--dc)
-* [`dc_suffix`](#-cassandra--dc_suffix)
-* [`fail_on_non_supported_os`](#-cassandra--fail_on_non_supported_os)
-* [`hints_directory`](#-cassandra--hints_directory)
-* [`hints_directory_mode`](#-cassandra--hints_directory_mode)
+* [`repo_config`](#-cassandra--repo_config)
+* [`manage_repo`](#-cassandra--manage_repo)
 * [`package_ensure`](#-cassandra--package_ensure)
 * [`package_name`](#-cassandra--package_name)
-* [`prefer_local`](#-cassandra--prefer_local)
-* [`rack`](#-cassandra--rack)
-* [`rackdc_tmpl`](#-cassandra--rackdc_tmpl)
+* [`tools_ensure`](#-cassandra--tools_ensure)
+* [`tools_package`](#-cassandra--tools_package)
+* [`java_ensure`](#-cassandra--java_ensure)
+* [`java_package`](#-cassandra--java_package)
+* [`jna_ensure`](#-cassandra--jna_ensure)
+* [`jna_package`](#-cassandra--jna_package)
+* [`manage_user`](#-cassandra--manage_user)
+* [`user`](#-cassandra--user)
+* [`group`](#-cassandra--group)
+* [`system_user`](#-cassandra--system_user)
+* [`system_group`](#-cassandra--system_group)
+* [`uid`](#-cassandra--uid)
+* [`gid`](#-cassandra--gid)
+* [`manage_homedir`](#-cassandra--manage_homedir)
+* [`homedir`](#-cassandra--homedir)
+* [`shell`](#-cassandra--shell)
+* [`commitlog_directory`](#-cassandra--commitlog_directory)
+* [`commitlog_directory_mode`](#-cassandra--commitlog_directory_mode)
+* [`data_file_directories`](#-cassandra--data_file_directories)
+* [`data_file_directories_mode`](#-cassandra--data_file_directories_mode)
+* [`hints_directory`](#-cassandra--hints_directory)
+* [`hints_directory_mode`](#-cassandra--hints_directory_mode)
 * [`saved_caches_directory`](#-cassandra--saved_caches_directory)
 * [`saved_caches_directory_mode`](#-cassandra--saved_caches_directory_mode)
+* [`manage_config_file`](#-cassandra--manage_config_file)
+* [`config_file_mode`](#-cassandra--config_file_mode)
+* [`config_template_file`](#-cassandra--config_template_file)
+* [`manage_snitch_file`](#-cassandra--manage_snitch_file)
+* [`snitch_file_mode`](#-cassandra--snitch_file_mode)
+* [`snitch_template_file`](#-cassandra--snitch_template_file)
+* [`snitch_properties_file`](#-cassandra--snitch_properties_file)
+* [`baseline_settings`](#-cassandra--baseline_settings)
+* [`settings`](#-cassandra--settings)
+* [`dc`](#-cassandra--dc)
+* [`dc_suffix`](#-cassandra--dc_suffix)
+* [`prefer_local`](#-cassandra--prefer_local)
+* [`rack`](#-cassandra--rack)
 * [`service_enable`](#-cassandra--service_enable)
 * [`service_ensure`](#-cassandra--service_ensure)
 * [`service_name`](#-cassandra--service_name)
 * [`service_refresh`](#-cassandra--service_refresh)
-* [`settings`](#-cassandra--settings)
-* [`snitch_properties_file`](#-cassandra--snitch_properties_file)
-* [`systemctl`](#-cassandra--systemctl)
+* [`manage_service`](#-cassandra--manage_service)
 
-##### <a name="-cassandra--baseline_settings"></a>`baseline_settings`
+##### <a name="-cassandra--config_path"></a>`config_path`
 
-Data type: `hash`
+Data type: `Stdlib::Absolutepath`
 
-If set, this is a baseline of settings that
-are merged with the `settings` hash.  The values of the `settings`
-hash overriding the values in this hash.  This is most useful when used
-with hiera.
+Path to cassandra configuration files.
 
-Default value: `{}`
+##### <a name="-cassandra--repo_config"></a>`repo_config`
 
-##### <a name="-cassandra--cassandra_yaml_tmpl"></a>`cassandra_yaml_tmpl`
+Data type: `Hash`
 
-Data type: `string`
+A hash of repository attributes for configuring the cassandra package repositories.
+Examples/defaults for yumrepo can be found at data/RedHat.yaml, and for apt at data/Debian.yaml
 
-The path to the Puppet template for the
-Cassandra configuration file.  This allows the user to supply their own
-customized template.`
+##### <a name="-cassandra--manage_repo"></a>`manage_repo`
 
-Default value: `'cassandra/cassandra.yaml.erb'`
+Data type: `Boolean`
+
+Whether to manage the package repository.
+
+Default value: `true`
+
+##### <a name="-cassandra--package_ensure"></a>`package_ensure`
+
+Data type: `Stdlib::Ensure::Package`
+
+Ensure state of the Cassandra package.
+
+Default value: `'installed'`
+
+##### <a name="-cassandra--package_name"></a>`package_name`
+
+Data type: `String[1]`
+
+The name of the Cassandra package.
+
+Default value: `'cassandra'`
+
+##### <a name="-cassandra--tools_ensure"></a>`tools_ensure`
+
+Data type: `Stdlib::Ensure::Package`
+
+Ensure state of the Cassandra tools package.
+
+Default value: `'installed'`
+
+##### <a name="-cassandra--tools_package"></a>`tools_package`
+
+Data type: `String[1]`
+
+The name of the Cassandra tools package.
+
+Default value: `'cassandra-tools'`
+
+##### <a name="-cassandra--java_ensure"></a>`java_ensure`
+
+Data type: `Stdlib::Ensure::Package`
+
+Ensure state of the Java package.
+
+Default value: `'installed'`
+
+##### <a name="-cassandra--java_package"></a>`java_package`
+
+Data type: `Optional[String[1]]`
+
+The name of the Java package.
+
+Default value: `undef`
+
+##### <a name="-cassandra--jna_ensure"></a>`jna_ensure`
+
+Data type: `Stdlib::Ensure::Package`
+
+Ensure state of the JNA package.
+
+Default value: `'installed'`
+
+##### <a name="-cassandra--jna_package"></a>`jna_package`
+
+Data type: `Optional[String[1]]`
+
+The name of the JNA package.
+
+Default value: `undef`
+
+##### <a name="-cassandra--manage_user"></a>`manage_user`
+
+Data type: `Boolean`
+
+Whether to manage the Cassandra user and group.
+
+Default value: `false`
+
+##### <a name="-cassandra--user"></a>`user`
+
+Data type: `String[1]`
+
+The name of the Cassandra user.
+
+Default value: `'cassandra'`
+
+##### <a name="-cassandra--group"></a>`group`
+
+Data type: `String[1]`
+
+The name of the Cassandra group.
+
+Default value: `'cassandra'`
+
+##### <a name="-cassandra--system_user"></a>`system_user`
+
+Data type: `Boolean`
+
+Whether to create a system user.
+
+Default value: `true`
+
+##### <a name="-cassandra--system_group"></a>`system_group`
+
+Data type: `Boolean`
+
+Whether to create a system group.
+
+Default value: `true`
+
+##### <a name="-cassandra--uid"></a>`uid`
+
+Data type: `Optional[Integer]`
+
+The UID of the Cassandra user.
+
+Default value: `undef`
+
+##### <a name="-cassandra--gid"></a>`gid`
+
+Data type: `Optional[Integer]`
+
+The GID of the Cassandra group.
+
+Default value: `undef`
+
+##### <a name="-cassandra--manage_homedir"></a>`manage_homedir`
+
+Data type: `Boolean`
+
+Whether to manage the home directory of the Cassandra user.
+
+Default value: `true`
+
+##### <a name="-cassandra--homedir"></a>`homedir`
+
+Data type: `Stdlib::Absolutepath`
+
+The home directory of the Cassandra user.
+
+Default value: `'/var/lib/cassandra'`
+
+##### <a name="-cassandra--shell"></a>`shell`
+
+Data type: `Stdlib::Absolutepath`
+
+The login shell of the Cassandra user.
+
+Default value: `'/bin/false'`
 
 ##### <a name="-cassandra--commitlog_directory"></a>`commitlog_directory`
 
-Data type: `string`
+Data type: `Optional[Stdlib::Absolutepath]`
 
-The path to the commitlog directory.
-If set, the directory will be managed as a Puppet resource.  Do not
-specify a value here and in the `settings` hash as they are mutually
-exclusive.
+Path to the commitlog directory.
 
 Default value: `undef`
 
 ##### <a name="-cassandra--commitlog_directory_mode"></a>`commitlog_directory_mode`
 
-Data type: `string`
+Data type: `Stdlib::Filemode`
 
-The mode for the
-`commitlog_directory` is ignored unless `commitlog_directory` is
-specified.
+Permissions mode for the `commitlog_directory`.
+
+Default value: `'0750'`
+
+##### <a name="-cassandra--data_file_directories"></a>`data_file_directories`
+
+Data type: `Optional[Array[Stdlib::Absolutepath]]`
+
+Path(s) to the date directory or directories.
+
+Default value: `undef`
+
+##### <a name="-cassandra--data_file_directories_mode"></a>`data_file_directories_mode`
+
+Data type: `Stdlib::Filemode`
+
+Permissions mode for the `data_file_directories`.
+
+Default value: `'0750'`
+
+##### <a name="-cassandra--hints_directory"></a>`hints_directory`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Path to the hints directory.
+
+Default value: `undef`
+
+##### <a name="-cassandra--hints_directory_mode"></a>`hints_directory_mode`
+
+Data type: `Stdlib::Filemode`
+
+Permissions mode for the `hints_directory`.
+
+Default value: `'0750'`
+
+##### <a name="-cassandra--saved_caches_directory"></a>`saved_caches_directory`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Path to the saved caches directory.
+
+Default value: `undef`
+
+##### <a name="-cassandra--saved_caches_directory_mode"></a>`saved_caches_directory_mode`
+
+Data type: `Stdlib::Filemode`
+
+Permissions mode for the `saved_caches_directory`.
 
 Default value: `'0750'`
 
@@ -108,439 +318,153 @@ Default value: `'0750'`
 
 Data type: `Boolean`
 
-Whether or not to manage the cassandra configuration
-file.
+Whether or not to manage the cassandra configuration  file.
 
 Default value: `true`
 
 ##### <a name="-cassandra--config_file_mode"></a>`config_file_mode`
 
-Data type: `string`
+Data type: `Stdlib::Filemode`
 
-The permissions mode of the cassandra configuration
-file.
+Permissions mode for the cassandra configuration file.
 
 Default value: `'0644'`
 
-##### <a name="-cassandra--config_path"></a>`config_path`
+##### <a name="-cassandra--config_template_file"></a>`config_template_file`
 
-Data type: `string`
+Data type: `String[1]`
 
-The path to the cassandra configuration file.
+The template file to use for the cassandra configuration file.
 
-##### <a name="-cassandra--data_file_directories"></a>`data_file_directories`
+Default value: `'cassandra/cassandra.yaml.epp'`
 
-Data type: `array`
+##### <a name="-cassandra--manage_snitch_file"></a>`manage_snitch_file`
 
-The path(s) to the date directory or
-directories.
-If set, the directories will be managed as a Puppet resource.  Do not
-specify a value here and in the `settings` hash as they are mutually
-exclusive.
+Data type: `Boolean`
 
-Default value: `undef`
+Whether or not to manage the snitch properties file.
 
-##### <a name="-cassandra--data_file_directories_mode"></a>`data_file_directories_mode`
+Default value: `true`
 
-Data type: `string`
+##### <a name="-cassandra--snitch_file_mode"></a>`snitch_file_mode`
 
-The mode for the
-`data_file_directories` is ignored unless `data_file_directories` is
-specified.
+Data type: `Stdlib::Filemode`
 
-Default value: `'0750'`
+Permissions mode for the snitch properties file.
+
+Default value: `'0644'`
+
+##### <a name="-cassandra--snitch_template_file"></a>`snitch_template_file`
+
+Data type: `String[1]`
+
+The template file to use for the snitch properties file.
+
+Default value: `'cassandra/cassandra-rackdc.properties.epp'`
+
+##### <a name="-cassandra--snitch_properties_file"></a>`snitch_properties_file`
+
+Data type:
+
+```puppet
+Enum[
+    'cassandra-rackdc.properties',
+    'cassandra-topology.properties'
+  ]
+```
+
+The name of the snitch properties file.
+
+Default value: `'cassandra-rackdc.properties'`
+
+##### <a name="-cassandra--baseline_settings"></a>`baseline_settings`
+
+Data type: `Hash`
+
+This will be merged with the `settings` hash.
+The values of the `settings` hash will override the values in this hash.
+
+Default value: `{}`
+
+##### <a name="-cassandra--settings"></a>`settings`
+
+Data type: `Hash`
+
+A hash that is passed to `to_yaml` which dumps the results to the Cassandra configuring file.
+
+Default value: `{}`
 
 ##### <a name="-cassandra--dc"></a>`dc`
 
-Data type: `string`
+Data type: `String[1]`
 
-Sets the value for dc in *config_path*/*snitch_properties_file*
-http://docs.datastax.com/en/cassandra/2.1/cassandra/architecture/architectureSnitchesAbout_c.html
-for more details.
+Sets the value for dc in `config_path`/`snitch_properties_file`.
 
 Default value: `'DC1'`
 
 ##### <a name="-cassandra--dc_suffix"></a>`dc_suffix`
 
-Data type: `string`
+Data type: `Optional[String[1]]`
 
-Sets the value for dc_suffix in
-*config_path*/*snitch_properties_file* see
-http://docs.datastax.com/en/cassandra/2.1/cassandra/architecture/architectureSnitchesAbout_c.html
-for more details.  If the value is *undef* then no change will be made to
-the snitch properties file for this setting.
+Sets the value for dc_suffix in `config_path`/`snitch_properties_file`.
 
 Default value: `undef`
-
-##### <a name="-cassandra--fail_on_non_supported_os"></a>`fail_on_non_supported_os`
-
-Data type: `boolean`
-
-A flag that dictates if the module should
-fail if it is not RedHat or Debian.  If you set this option to false then
-you must also at least set the `config_path` attribute as well.
-
-Default value: `true`
-
-##### <a name="-cassandra--hints_directory"></a>`hints_directory`
-
-Data type: `string`
-
-The path to the hints directory.
-If set, the directory will be managed as a Puppet resource.  Do not
-specify a value here and in the `settings` hash as they are mutually
-exclusive.  Do not set this option in Cassandra versions before 3.0.0.
-
-Default value: `undef`
-
-##### <a name="-cassandra--hints_directory_mode"></a>`hints_directory_mode`
-
-Data type: `string`
-
-The mode for the
-`hints_directory` is ignored unless `hints_directory` is
-specified.
-
-Default value: `'0750'`
-
-##### <a name="-cassandra--package_ensure"></a>`package_ensure`
-
-Data type: `present|latest|string`
-
-The status of the package specified in
-**package_name**.  Can be *present*, *latest* or a specific version
-number.
-
-Default value: `'present'`
-
-##### <a name="-cassandra--package_name"></a>`package_name`
-
-Data type: `string`
-
-The name of the Cassandra package which must be available
-from a repository.
-
-Default value: `'cassandra'`
 
 ##### <a name="-cassandra--prefer_local"></a>`prefer_local`
 
-Data type: `boolean`
+Data type: `Optional[Boolean]`
 
-Sets the value for prefer_local in
-*config_path*/*snitch_properties_file* see
-http://docs.datastax.com/en/cassandra/2.1/cassandra/architecture/architectureSnitchesAbout_c.html
-for more details.  Valid values are true, false or *undef*.  If the value
-is *undef* then change will be made to the snitch properties file for
-this setting.
+Sets the value for prefer_local in `config_path`/`snitch_properties_file`.
 
 Default value: `undef`
 
 ##### <a name="-cassandra--rack"></a>`rack`
 
-Data type: `string`
+Data type: `String[1]`
 
-Sets the value for rack in
-*config_path*/*snitch_properties_file* see
-http://docs.datastax.com/en/cassandra/2.1/cassandra/architecture/architectureSnitchesAbout_c.html
-for more details.
+Sets the value for rack in `config_path`/`snitch_properties_file`.
 
 Default value: `'RAC1'`
 
-##### <a name="-cassandra--rackdc_tmpl"></a>`rackdc_tmpl`
-
-Data type: `string`
-
-The template for creating the snitch properties file.
-
-Default value: `'cassandra/cassandra-rackdc.properties.erb'`
-
-##### <a name="-cassandra--saved_caches_directory"></a>`saved_caches_directory`
-
-Data type: `string`
-
-The path to the saved caches directory.
-If set, the directory will be managed as a Puppet resource.  Do not
-specify a value here and in the `settings` hash as they are mutually
-exclusive.
-
-Default value: `undef`
-
-##### <a name="-cassandra--saved_caches_directory_mode"></a>`saved_caches_directory_mode`
-
-Data type: `string`
-
-The mode for the
-`saved_caches_directory` is ignored unless `saved_caches_directory` is
-specified.
-
-Default value: `'0750'`
-
 ##### <a name="-cassandra--service_enable"></a>`service_enable`
 
-Data type: `boolean`
+Data type: `Boolean`
 
-enable the Cassandra service to start at boot time.
+Whether to enable the Cassandra service at boot time.
 
 Default value: `true`
 
 ##### <a name="-cassandra--service_ensure"></a>`service_ensure`
 
-Data type: `string`
+Data type: `Stdlib::Ensure::Service`
 
-Ensure the Cassandra service is running.  Valid values
-are running or stopped.
+Ensure state of the Cassandra service.
 
-Default value: `undef`
+Default value: `'running'`
 
 ##### <a name="-cassandra--service_name"></a>`service_name`
 
-Data type: `string`
+Data type: `String[1]`
 
-The name of the service that runs the Cassandra software.
+The name of the Cassandra service.
 
 Default value: `'cassandra'`
 
 ##### <a name="-cassandra--service_refresh"></a>`service_refresh`
 
-Data type: `boolean`
+Data type: `Boolean`
 
-If set to true, changes to the Cassandra config file
-or the data directories will ensure that Cassandra service is refreshed
-after the changes.  Setting this flag to false will disable this
-behaviour, therefore allowing the changes to be made but allow the user
-to control when the service is restarted.
+Whether to refresh the service when configuration changes.
 
 Default value: `true`
 
-##### <a name="-cassandra--settings"></a>`settings`
+##### <a name="-cassandra--manage_service"></a>`manage_service`
 
-Data type: `hash`
+Data type: `Boolean`
 
-A hash that is passed to `to_yaml` which dumps the results
-to the Cassandra configuring file.  The minimum required settings for
-Cassandra 2.X are as follows:
 
-```puppet
-  {
-    'authenticator'               => 'PasswordAuthenticator',
-    'cluster_name'                => 'MyCassandraCluster',
-    'commitlog_directory'         => '/var/lib/cassandra/commitlog',
-    'commitlog_sync'              => 'periodic',
-    'commitlog_sync_period_in_ms' => 10000,
-    'data_file_directories'       => ['/var/lib/cassandra/data'],
-    'endpoint_snitch'             => 'GossipingPropertyFileSnitch',
-    'listen_address'              => $::ipaddress,
-    'partitioner'                 => 'org.apache.cassandra.dht.Murmur3Partitioner',
-    'saved_caches_directory'      => '/var/lib/cassandra/saved_caches',
-    'seed_provider'               => [
-      {
-        'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
-        'parameters' => [
-          {
-            'seeds' => $::ipaddress,
-          },
-        ],
-      },
-    ],
-    'start_native_transport'      => true,
-  }
-```
-For Cassandra 3.X you will also need to specify the `hints_directory`
-attribute.
 
-Default value: `{}`
-
-##### <a name="-cassandra--snitch_properties_file"></a>`snitch_properties_file`
-
-Data type: `string`
-
-The name of the snitch properties file.  The
-full path name would be *config_path*/*snitch_properties_file*.
-
-Default value: `'cassandra-rackdc.properties'`
-
-##### <a name="-cassandra--systemctl"></a>`systemctl`
-
-Data type: `string`
-
-The full path to the systemctl command.  Only
-needed when the package is installed.  Will silently continue if the
-executable does not exist.
-
-### <a name="cassandra--apache_repo"></a>`cassandra::apache_repo`
-
-An optional class that will allow a suitable repository to be configured
-from which packages for Apache Cassandra can be downloaded.
-
-#### Parameters
-
-The following parameters are available in the `cassandra::apache_repo` class:
-
-* [`descr`](#-cassandra--apache_repo--descr)
-* [`key_id`](#-cassandra--apache_repo--key_id)
-* [`key_url`](#-cassandra--apache_repo--key_url)
-* [`pkg_url`](#-cassandra--apache_repo--pkg_url)
-* [`release`](#-cassandra--apache_repo--release)
-
-##### <a name="-cassandra--apache_repo--descr"></a>`descr`
-
-Data type: `string`
-
-On the Red Hat family, this is passed as the `descr`
-attribute to a `yumrepo` resource.  On the Debian family, it is passed as
-the `comment` attribute to an `apt::source` resource.
-
-Default value: `'Repo for Apache Cassandra'`
-
-##### <a name="-cassandra--apache_repo--key_id"></a>`key_id`
-
-Data type: `string`
-
-On the Debian family, this is passed as the `id`
-attribute to an `apt::key` resource.  On the Red Hat family, it is
-ignored.
-
-Default value: `'A26E528B271F19B9E5D8E19EA278B781FE4B2BDA'`
-
-##### <a name="-cassandra--apache_repo--key_url"></a>`key_url`
-
-Data type: `string`
-
-On the Debian family, this is passed as the
-`source` attribute to an `apt::key` resource.  On the Red Hat family,
-it is set to the `gpgkey` attribute on the `yumrepo` resource.
-
-Default value: `'https://www.apache.org/dist/cassandra/KEYS'`
-
-##### <a name="-cassandra--apache_repo--pkg_url"></a>`pkg_url`
-
-Data type: `string`
-
-On the Red Hat family, leaving this as default will
-set the `baseurl` on the `yumrepo` resource to
-'http://www.apache.org/dist/cassandra/redhat' with whatever is set in the
-'release' attribute appended.
-On the Debian family, leaving this as the default
-will set the `location` attribute on an `apt::source` to
-'http://www.apache.org/dist/cassandra/debian'.
-
-Default value: `undef`
-
-##### <a name="-cassandra--apache_repo--release"></a>`release`
-
-Data type: `string`
-
-On the Debian family, this is passed as the `release`
-attribute to an `apt::source` resource.  On the Red Hat family, it is the
-major version number of Cassandra, without dot, and with an appended 'x'
-(e.g. '311x')
-
-Default value: `'main'`
-
-### <a name="cassandra--java"></a>`cassandra::java`
-
-A class to install Java and JNA packages.
-
-#### Parameters
-
-The following parameters are available in the `cassandra::java` class:
-
-* [`aptkey`](#-cassandra--java--aptkey)
-* [`aptsource`](#-cassandra--java--aptsource)
-* [`jna_ensure`](#-cassandra--java--jna_ensure)
-* [`jna_package_name`](#-cassandra--java--jna_package_name)
-* [`package_ensure`](#-cassandra--java--package_ensure)
-* [`package_name`](#-cassandra--java--package_name)
-* [`yumrepo`](#-cassandra--java--yumrepo)
-
-##### <a name="-cassandra--java--aptkey"></a>`aptkey`
-
-Data type: `hash`
-
-If supplied, this should be a hash of `apt::key`
-resources that will be passed to the create_resources function.
-This is ignored on non-Debian systems.
-
-Default value: `undef`
-
-##### <a name="-cassandra--java--aptsource"></a>`aptsource`
-
-Data type: `hash`
-
-If supplied, this should be a hash of
-`apt::source` resources that will be passed to the create_resources
-function.  This is ignored on non-Red Hat`
-
-Default value: `undef`
-
-##### <a name="-cassandra--java--jna_ensure"></a>`jna_ensure`
-
-Data type: `string`
-
-Is passed to the package reference for the JNA
-package.  Valid values are `present` or a version number.
-
-Default value: `present`
-
-##### <a name="-cassandra--java--jna_package_name"></a>`jna_package_name`
-
-Data type: `string`
-
-The name of the JNA package.
-
-##### <a name="-cassandra--java--package_ensure"></a>`package_ensure`
-
-Data type: `string`
-
-Is passed to the package reference for the JRE/JDK
-package.  Valid values are `present` or a version number.
-
-Default value: `present`
-
-##### <a name="-cassandra--java--package_name"></a>`package_name`
-
-Data type: `string`
-
-The name of the Java package to be installed.
-
-##### <a name="-cassandra--java--yumrepo"></a>`yumrepo`
-
-Data type: `hash`
-
-If supplied, this should be a hash of *yumrepo*
-resources that will be passed to the create_resources function.
-This is ignored on non-Red Hat systems.
-
-Default value: `undef`
-
-### <a name="cassandra--optutils"></a>`cassandra::optutils`
-
-A class to install the optional Cassandra tools package.
-
-#### Parameters
-
-The following parameters are available in the `cassandra::optutils` class:
-
-* [`package_ensure`](#-cassandra--optutils--package_ensure)
-* [`package_name`](#-cassandra--optutils--package_name)
-
-##### <a name="-cassandra--optutils--package_ensure"></a>`package_ensure`
-
-Data type: `string`
-
-Can be `present`, `latest` or a specific
-version number.
-
-Default value: `'present'`
-
-##### <a name="-cassandra--optutils--package_name"></a>`package_name`
-
-Data type: `string`
-
-The name of the optional utilities package to
-be installed.
-
-Default value: `'cassandra-tools'`
+Default value: `true`
 
 ### <a name="cassandra--schema"></a>`cassandra::schema`
 
