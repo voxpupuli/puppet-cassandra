@@ -1,5 +1,5 @@
 # Cassandra pre-requisites
-include cassandra::datastax_repo
+include cassandra::apache_repo
 include cassandra::java
 
 class { 'cassandra':
@@ -31,5 +31,5 @@ class { 'cassandra':
     'start_native_transport'      => true,
   },
   service_ensure => running,
-  require        => Class['cassandra::datastax_repo', 'cassandra::java'],
+  require        => Class['cassandra::apache_repo', 'cassandra::java'],
 }

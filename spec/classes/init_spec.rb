@@ -120,37 +120,6 @@ describe 'cassandra' do
           end
         end
 
-        context 'with install DSE' do
-          let :params do
-            {
-              package_ensure: '4.7.0-1',
-              package_name: 'dse-full',
-              config_path: '/etc/dse/cassandra',
-              service_name: 'dse'
-            }
-          end
-
-          it do
-            expect(subject).to contain_file('/etc/dse/cassandra/cassandra.yaml').that_notifies('Service[cassandra]')
-            expect(subject).to contain_file('/etc/dse/cassandra')
-
-            expect(subject).to contain_file('/etc/dse/cassandra/cassandra-rackdc.properties').
-              with(
-                ensure: 'file',
-                owner: 'cassandra',
-                group: 'cassandra',
-                mode: '0644'
-              ).
-              that_notifies('Service[cassandra]')
-
-            expect(subject).to contain_package('cassandra').with(
-              ensure: '4.7.0-1',
-              name: 'dse-full'
-            )
-            expect(subject).to contain_service('cassandra').with_name('dse')
-          end
-        end
-
         context 'with dc and rack properties.' do
           let :params do
             {

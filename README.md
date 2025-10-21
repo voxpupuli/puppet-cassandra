@@ -14,9 +14,7 @@
   - [Setup](#setup)
     - [What Cassandra affects](#what-cassandra-affects)
       - [What the Cassandra class affects](#what-the-cassandra-class-affects)
-      - [What the cassandra::datastax\_agent class affects](#what-the-cassandradatastax_agent-class-affects)
-      - [What the cassandra::datastax\_repo class affects](#what-the-cassandradatastax_repo-class-affects)
-      - [What the cassandra::dse class affects](#what-the-cassandradse-class-affects)
+      - [What the cassandra::apache\_repo class affects](#what-the-cassandraapache_repo-class-affects)
       - [What the cassandra::java class affects](#what-the-cassandrajava-class-affects)
       - [What the cassandra::optutils class affects](#what-the-cassandraoptutils-class-affects)
     - [Beginning with Cassandra](#beginning-with-cassandra)
@@ -25,8 +23,6 @@
     - [Setup a keyspace and users](#setup-a-keyspace-and-users)
     - [Create a Cluster in a Single Data Center](#create-a-cluster-in-a-single-data-center)
     - [Create a Cluster in Multiple Data Centers](#create-a-cluster-in-multiple-data-centers)
-    - [DataStax Enterprise](#datastax-enterprise)
-    - [Apache Cassandra](#apache-cassandra)
   - [Reference](#reference)
   - [Limitations](#limitations)
   - [Development](#development)
@@ -46,22 +42,12 @@ Module to install, configure and manage Cassandra.
 - Configures settings in `${config_path}/cassandra.yaml`.
 - Optionally ensures that the Cassandra service is enabled and running.
 
-#### What the cassandra::datastax_agent class affects
-
-- Optionally installs the DataStax agent.
-- Optionally sets JAVA_HOME in **/etc/default/datastax-agent**.
-
-#### What the cassandra::datastax_repo class affects
+#### What the cassandra::apache_repo class affects
 
 - Optionally configures a Yum repository to install the Cassandra packages
   from (on Red Hat).
 - Optionally configures an Apt repository to install the Cassandra packages
   from (on Debian).
-
-#### What the cassandra::dse class affects
-
-- Optionally configures files in the `/etc/dse` directory if one is using
-  DataStax Enterprise.
 
 #### What the cassandra::java class affects
 
@@ -82,7 +68,7 @@ called of cassandra.
 
 ```puppet
 # Cassandra pre-requisites
-include cassandra::datastax_repo
+include cassandra::apache_repo
 include cassandra::java
 
 class { 'cassandra':
@@ -106,7 +92,7 @@ class { 'cassandra':
       },
     ],
   },
-  require  => Class['cassandra::datastax_repo', 'cassandra::java'],
+  require  => Class['cassandra::apache_repo', 'cassandra::java'],
 }
 ```
 
@@ -257,16 +243,15 @@ to false.
 
 In this initial example, we are going to expand the example by:
 
-- Ensuring that the software is installed via the DataStax Community
-  repository by including `cassandra::datastax_repo`.  This needs to be
-  executed before the Cassandra package is installed.
+- Ensuring that the software is installed by including `cassandra::apache_repo`.
+  This needs to be executed before the Cassandra package is installed.
 - That a suitable Java Runtime environment (JRE) is installed with Java Native
   Access (JNA) by including `cassandra::java`.  This need to be executed
   before the Cassandra service is started.
 
 ```puppet
 node /^node\d+$/ {
-  class { 'cassandra::datastax_repo':
+  class { 'cassandra::apache_repo':
     before => Class['cassandra']
   }
 
@@ -392,87 +377,6 @@ node /^node[345]$/ {
 We don't need to specify the rack name (with the rack attribute) as RAC1 is
 the default value.  Again, do not forget to either set auto_bootstrap to
 true or not set the attribute at all after initializing the cluster.
-
-### DataStax Enterprise
-
-After configuring the relevant repository, the following snippet works on
-CentOS 7 to install DSE Cassandra 4.7.0, set the HADOOP_LOG_DIR, set the
-DSE_HOME and configure DataStax Enterprise to use LDAP for authentication:
-
-```puppet
-class { 'cassandra::datastax_repo':
-  descr   => 'DataStax Repo for DataStax Enterprise',
-  pkg_url => 'https://username:password@rpm.datastax.com/enterprise',
-  before  => Class['cassandra'],
-}
-
-class { 'cassandra':
-  cluster_name    => 'MyCassandraCluster',
-  config_path     => '/etc/dse/cassandra',
-  package_ensure  => '4.7.0-1',
-  package_name    => 'dse-full',
-  service_name    => 'dse',
-  ...
-}
-
-class { 'cassandra::dse':
-  file_lines => {
-    'Set HADOOP_LOG_DIR directory' => {
-      ensure => present,
-      path   => '/etc/dse/dse-env.sh',
-      line   => 'export HADOOP_LOG_DIR=/var/log/hadoop',
-      match  => '^# export HADOOP_LOG_DIR=<log_dir>',
-    },
-    'Set DSE_HOME'                 => {
-      ensure => present,
-      path   => '/etc/dse/dse-env.sh',
-      line   => 'export DSE_HOME=/usr/share/dse',
-      match  => '^#export DSE_HOME',
-    },
-  },
-  settings   => {
-    ldap_options => {
-      server_host                => localhost,
-      server_port                => 389,
-      search_dn                  => 'cn=Admin',
-      search_password            => secret,
-      use_ssl                    => false,
-      use_tls                    => false,
-      truststore_type            => jks,
-      user_search_base           => 'ou=users,dc=example,dc=com',
-      user_search_filter         => '(uid={0})',
-      credentials_validity_in_ms => 0,
-      connection_pool            => {
-        max_active => 8,
-        max_idle   => 8,
-      }
-    }
-  }
-}
-```
-
-### Apache Cassandra
-
-DataStax announced in late October 2016 that it was no longer supporting
-the community edition of Cassandra or DSC as it was known (see
-[Take a bow Planet Cassandra](http://www.datastax.com/2016/10/take-a-bow-planet-cassandra)
-for details).  However, the following snippet of code running on Ubuntu
-14.04 worked fine without having to change any of the `::cassandra` class
-settings:
-
-```puppet
-require cassandra::java
-include cassandra::optutils
-
-class { 'cassandra::apache_repo':
-  release => '310x',
-  before  => Class['cassandra', 'cassandra::optutils'],
-}
-
-class { 'cassandra':
-  ...
-}
-```
 
 ## Reference
 
