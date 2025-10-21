@@ -11,7 +11,6 @@
 * [`cassandra::java`](#cassandra--java): A class to install Java and JNA packages.
 * [`cassandra::optutils`](#cassandra--optutils): A class to install the optional Cassandra tools package.
 * [`cassandra::schema`](#cassandra--schema): A class to maintain the database schema.  Please note that cqlsh expects Python 2.7 to be installed. This may be a problem of older distributions (CentOS 6 for example).
-* [`cassandra::system::sysctl`](#cassandra--system--sysctl): Set Sysctl (kernel runtime parameters) as suggested in http://docs.datastax.com/en/landing_page/doc/landing_page/recommendedSettingsLinux.htm
 
 ### Defined types
 
@@ -746,120 +745,6 @@ Data type: `hash`
 Creates new `cassandra::schema::user` resources.
 
 Default value: `{}`
-
-### <a name="cassandra--system--sysctl"></a>`cassandra::system::sysctl`
-
-Set Sysctl (kernel runtime parameters) as suggested in
-http://docs.datastax.com/en/landing_page/doc/landing_page/recommendedSettingsLinux.html
-
-If any of the values is set into the target file, the sysctl command will
-be called with the provided file name as an argument.
-
-#### Examples
-
-##### Basic requirement
-
-```puppet
-require cassandra::system::sysctl
-```
-
-#### Parameters
-
-The following parameters are available in the `cassandra::system::sysctl` class:
-
-* [`sysctl_args`](#-cassandra--system--sysctl--sysctl_args)
-* [`sysctl_file`](#-cassandra--system--sysctl--sysctl_file)
-* [`net_core_optmem_max`](#-cassandra--system--sysctl--net_core_optmem_max)
-* [`net_core_rmem_default`](#-cassandra--system--sysctl--net_core_rmem_default)
-* [`net_core_rmem_max`](#-cassandra--system--sysctl--net_core_rmem_max)
-* [`net_core_wmem_default`](#-cassandra--system--sysctl--net_core_wmem_default)
-* [`net_core_wmem_max`](#-cassandra--system--sysctl--net_core_wmem_max)
-* [`net_ipv4_tcp_rmem`](#-cassandra--system--sysctl--net_ipv4_tcp_rmem)
-* [`net_ipv4_tcp_wmem`](#-cassandra--system--sysctl--net_ipv4_tcp_wmem)
-* [`vm_max_map_count`](#-cassandra--system--sysctl--vm_max_map_count)
-
-##### <a name="-cassandra--system--sysctl--sysctl_args"></a>`sysctl_args`
-
-Data type: `string`
-
-Passed to the `sysctl` command
-
-Default value: `'-p'`
-
-##### <a name="-cassandra--system--sysctl--sysctl_file"></a>`sysctl_file`
-
-Data type: `string`
-
-Path to the file to insert the settings into.
-
-Default value: `'/etc/sysctl.d/10-cassandra.conf'`
-
-##### <a name="-cassandra--system--sysctl--net_core_optmem_max"></a>`net_core_optmem_max`
-
-Data type: `integer`
-
-The value to set for
-net.core.optmem_max
-
-Default value: `40960`
-
-##### <a name="-cassandra--system--sysctl--net_core_rmem_default"></a>`net_core_rmem_default`
-
-Data type: `integer`
-
-The value to set for
-net.core.rmem_default.
-
-Default value: `16777216`
-
-##### <a name="-cassandra--system--sysctl--net_core_rmem_max"></a>`net_core_rmem_max`
-
-Data type: `integer`
-
-The value to set for net_core_rmem_max.
-
-Default value: `16777216`
-
-##### <a name="-cassandra--system--sysctl--net_core_wmem_default"></a>`net_core_wmem_default`
-
-Data type: `integer`
-
-The value to set for
-net.core.wmem_default.
-
-Default value: `16777216`
-
-##### <a name="-cassandra--system--sysctl--net_core_wmem_max"></a>`net_core_wmem_max`
-
-Data type: `integer`
-
-The value to set for net.core.wmem_max.
-
-Default value: `16777216`
-
-##### <a name="-cassandra--system--sysctl--net_ipv4_tcp_rmem"></a>`net_ipv4_tcp_rmem`
-
-Data type: `string`
-
-The value to set for net.ipv4.tcp_rmem.
-
-Default value: `'4096, 87380, 16777216'`
-
-##### <a name="-cassandra--system--sysctl--net_ipv4_tcp_wmem"></a>`net_ipv4_tcp_wmem`
-
-Data type: `string`
-
-The value to set for net.ipv4.tcp_wmem.
-
-Default value: `'4096, 65536, 16777216'`
-
-##### <a name="-cassandra--system--sysctl--vm_max_map_count"></a>`vm_max_map_count`
-
-Data type: `integer`
-
-The value to set for vm.max_map_count.
-
-Default value: `1048575`
 
 ## Defined types
 
