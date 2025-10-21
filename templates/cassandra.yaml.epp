@@ -1,0 +1,2 @@
+# This file is managed by Puppet. Manual changes will be lost.
+<%= $settings.stdlib::to_yaml() %>

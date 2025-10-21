@@ -1,9 +1,5 @@
 # The defaults as set by the 1.Y.Z template.
 
-# Cassandra pre-requisites
-include cassandra::apache_repo
-include cassandra::java
-
 class { 'cassandra':
   settings => {
     'authenticator'                            => 'AllowAllAuthenticator',
@@ -97,5 +93,4 @@ class { 'cassandra':
     'truncate_request_timeout_in_ms'           => 60000,
     'write_request_timeout_in_ms'              => 2000,
   },
-  require  => Class['cassandra::apache_repo', 'cassandra::java'],
 }

@@ -14,9 +14,7 @@
   - [Setup](#setup)
     - [What Cassandra affects](#what-cassandra-affects)
       - [What the Cassandra class affects](#what-the-cassandra-class-affects)
-      - [What the cassandra::apache\_repo class affects](#what-the-cassandraapache_repo-class-affects)
-      - [What the cassandra::java class affects](#what-the-cassandrajava-class-affects)
-      - [What the cassandra::optutils class affects](#what-the-cassandraoptutils-class-affects)
+    - [Requirements](#requirements)
     - [Beginning with Cassandra](#beginning-with-cassandra)
     - [Hiera](#hiera)
   - [Usage](#usage)
@@ -38,25 +36,21 @@ Module to install, configure and manage Cassandra.
 
 #### What the Cassandra class affects
 
+- Optionally configures a repository to install the Cassandra packages.
 - Installs the Cassandra package.
-- Configures settings in `${config_path}/cassandra.yaml`.
+- Installs the Cassandra support tools
+- Optionally configures settings in `${config_path}/cassandra.yaml`.
+- Optionally installs a JRE/JDK package (e.g. java-1.8.0-openjdk-headless) and the Java Native Access (JNA).
 - Optionally ensures that the Cassandra service is enabled and running.
 
-#### What the cassandra::apache_repo class affects
+### Requirements
 
-- Optionally configures a Yum repository to install the Cassandra packages
-  from (on Red Hat).
-- Optionally configures an Apt repository to install the Cassandra packages
-  from (on Debian).
+You need a compatible version of Java installed.
+You can use [puppetlabs/java](https://github.com/puppetlabs/puppetlabs-java) module or set `cassandra::java_package`.
 
-#### What the cassandra::java class affects
+On Debian systems there's a soft dependency on the [puppetlabs/apt](https://github.com/puppetlabs/puppetlabs-apt) module.
 
-- Optionally installs a JRE/JDK package (e.g. java-1.7.0-openjdk) and the
-  Java Native Access (JNA).
-
-#### What the cassandra::optutils class affects
-
-- Optionally installs the Cassandra support tools (e.g. cassandra22-tools).
+When using `cassandra::schema` resources you also need a compatible version of Python installed.
 
 ### Beginning with Cassandra
 
@@ -67,10 +61,6 @@ credentials will default to a user called cassandra with a password
 called of cassandra.
 
 ```puppet
-# Cassandra pre-requisites
-include cassandra::apache_repo
-include cassandra::java
-
 class { 'cassandra':
   baseline_settings => {
     authenticator               => 'AllowAllAuthenticator',
@@ -92,7 +82,6 @@ class { 'cassandra':
       },
     ],
   },
-  require  => Class['cassandra::apache_repo', 'cassandra::java'],
 }
 ```
 
@@ -236,31 +225,16 @@ node3 (seed 2) | 110.82.156.3   |
 node4          | 110.82.156.4   |
 node5          | 110.82.156.5   |
 
-Each node is configured to use the GossipingPropertyFileSnitch and 256 virtual
-nodes (vnodes).  The name of the cluster is _MyCassandraCluster_.  Also,
-while building the initial cluster, we are setting the auto_bootstrap
-to false.
+Each node is configured to use the GossipingPropertyFileSnitch and 256 virtual nodes (vnodes).
+The name of the cluster is 'MyCassandraCluster'.
+Also, while building the initial cluster, we are setting the auto_bootstrap to false.
 
-In this initial example, we are going to expand the example by:
-
-- Ensuring that the software is installed by including `cassandra::apache_repo`.
-  This needs to be executed before the Cassandra package is installed.
-- That a suitable Java Runtime environment (JRE) is installed with Java Native
-  Access (JNA) by including `cassandra::java`.  This need to be executed
-  before the Cassandra service is started.
+In this example, we are going to expand the example by:
 
 ```puppet
 node /^node\d+$/ {
-  class { 'cassandra::apache_repo':
-    before => Class['cassandra']
-  }
-
-  class { 'cassandra::java':
-    before => Class['cassandra']
-  }
-
   class { 'cassandra':
-    settings       => {
+    settings => {
       'authenticator'               => 'AllowAllAuthenticator',
       'auto_bootstrap'              => false,
       'cluster_name'                => 'MyCassandraCluster',

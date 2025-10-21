@@ -1,6 +1,10 @@
 ---
 cassandra::config_path: '/etc/cassandra'
-cassandra::systemctl: '/bin/systemctl'
-
-cassandra::java::jna_package_name: 'libjna-java'
-cassandra::java::package_name: 'openjdk-8-jre-headless'
+cassandra::repo_config:
+  cassandra:
+    location: https://debian.cassandra.apache.org
+    release: 50x
+    repos: main
+    key:
+      name: apache-cassandra.asc
+      source: https://downloads.apache.org/cassandra/KEYS

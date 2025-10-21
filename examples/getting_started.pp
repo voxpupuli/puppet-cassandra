@@ -6,10 +6,6 @@
 #
 #############################################################################
 
-# Cassandra pre-requisites
-require cassandra::apache_repo
-require cassandra::java
-
 # Create a cluster called MyCassandraCluster which uses the
 # GossipingPropertyFileSnitch.  In this very basic example
 # the node itself becomes a seed for the cluster.
@@ -42,12 +38,6 @@ class { 'cassandra':
     'start_native_transport'      => true,
   },
   service_ensure         => running,
-  require                => Class['cassandra::apache_repo', 'cassandra::java'],
-}
-
-class { 'cassandra::optutils':
-  package_name => 'cassandra30-tools',
-  require      => Class['cassandra'],
 }
 
 class { 'cassandra::schema':

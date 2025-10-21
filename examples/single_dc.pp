@@ -1,7 +1,3 @@
-# Cassandra pre-requisites
-include cassandra::apache_repo
-include cassandra::java
-
 class { 'cassandra':
   package_name   => 'cassandra30',
   settings       => {
@@ -31,5 +27,4 @@ class { 'cassandra':
     'start_native_transport'      => true,
   },
   service_ensure => running,
-  require        => Class['cassandra::apache_repo', 'cassandra::java'],
 }

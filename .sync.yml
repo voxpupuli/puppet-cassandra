@@ -1,6 +1,0 @@
----
-Gemfile:
-  optional:
-    ':test':
-      - gem: net-ftp
-        version: '~> 0.3'
