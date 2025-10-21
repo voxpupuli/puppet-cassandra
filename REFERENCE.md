@@ -11,7 +11,6 @@
 * [`cassandra::java`](#cassandra--java): A class to install Java and JNA packages.
 * [`cassandra::optutils`](#cassandra--optutils): A class to install the optional Cassandra tools package.
 * [`cassandra::schema`](#cassandra--schema): A class to maintain the database schema.  Please note that cqlsh expects Python 2.7 to be installed. This may be a problem of older distributions (CentOS 6 for example).
-* [`cassandra::system::swapoff`](#cassandra--system--swapoff): Disable swap on the node as suggested at http://docs.datastax.com/en/landing_page/doc/landing_page/recommendedSettingsLinux.html
 * [`cassandra::system::sysctl`](#cassandra--system--sysctl): Set Sysctl (kernel runtime parameters) as suggested in http://docs.datastax.com/en/landing_page/doc/landing_page/recommendedSettingsLinux.htm
 * [`cassandra::system::transparent_hugepage`](#cassandra--system--transparent_hugepage): Disable Transparant Huge Pages as suggested in http://docs.datastax.com/en/landing_page/doc/landing_page/recommendedSettingsLinux.html.
 
@@ -748,45 +747,6 @@ Data type: `hash`
 Creates new `cassandra::schema::user` resources.
 
 Default value: `{}`
-
-### <a name="cassandra--system--swapoff"></a>`cassandra::system::swapoff`
-
-Disable swap on the node as suggested at
-http://docs.datastax.com/en/landing_page/doc/landing_page/recommendedSettingsLinux.html
-
-#### Parameters
-
-The following parameters are available in the `cassandra::system::swapoff` class:
-
-* [`device`](#-cassandra--system--swapoff--device)
-* [`mount`](#-cassandra--system--swapoff--mount)
-* [`path`](#-cassandra--system--swapoff--path)
-
-##### <a name="-cassandra--system--swapoff--device"></a>`device`
-
-Data type: `string`
-
-If provided a mount resource will be created to
-ensure that the device is absent from /etc/fstab to permanently disable swap.
-
-Default value: `undef`
-
-##### <a name="-cassandra--system--swapoff--mount"></a>`mount`
-
-Data type: `string`
-
-The name of the swap mount point.  Ignored unless
-`device` has been set.
-
-Default value: `'swap'`
-
-##### <a name="-cassandra--system--swapoff--path"></a>`path`
-
-Data type: `string`
-
-The full path to the file to check if swap is enabled.
-
-Default value: `'/proc/swaps'`
 
 ### <a name="cassandra--system--sysctl"></a>`cassandra::system::sysctl`
 
