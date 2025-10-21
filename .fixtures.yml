@@ -2,6 +2,5 @@ fixtures:
   repositories:
     apt: https://github.com/puppetlabs/puppetlabs-apt.git
     translate: https://github.com/puppetlabs/puppetlabs-translate.git
-    inifile: https://github.com/puppetlabs/puppetlabs-inifile.git
     stdlib: https://github.com/puppetlabs/puppetlabs-stdlib.git
     yumrepo_core: https://github.com/puppetlabs/puppetlabs-yumrepo_core.git

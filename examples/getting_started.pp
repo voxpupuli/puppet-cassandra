@@ -8,7 +8,6 @@
 
 # Cassandra pre-requisites
 require cassandra::apache_repo
-require cassandra::system::sysctl
 require cassandra::java
 
 # Create a cluster called MyCassandraCluster which uses the
@@ -43,7 +42,7 @@ class { 'cassandra':
     'start_native_transport'      => true,
   },
   service_ensure         => running,
-  require                => Class['cassandra::apache_repo', 'cassandra::system::sysctl', 'cassandra::java'],
+  require                => Class['cassandra::apache_repo', 'cassandra::java'],
 }
 
 class { 'cassandra::optutils':
