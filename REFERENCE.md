@@ -12,7 +12,6 @@
 * [`cassandra::optutils`](#cassandra--optutils): A class to install the optional Cassandra tools package.
 * [`cassandra::schema`](#cassandra--schema): A class to maintain the database schema.  Please note that cqlsh expects Python 2.7 to be installed. This may be a problem of older distributions (CentOS 6 for example).
 * [`cassandra::system::sysctl`](#cassandra--system--sysctl): Set Sysctl (kernel runtime parameters) as suggested in http://docs.datastax.com/en/landing_page/doc/landing_page/recommendedSettingsLinux.htm
-* [`cassandra::system::transparent_hugepage`](#cassandra--system--transparent_hugepage): Disable Transparant Huge Pages as suggested in http://docs.datastax.com/en/landing_page/doc/landing_page/recommendedSettingsLinux.html.
 
 ### Defined types
 
@@ -861,26 +860,6 @@ Data type: `integer`
 The value to set for vm.max_map_count.
 
 Default value: `1048575`
-
-### <a name="cassandra--system--transparent_hugepage"></a>`cassandra::system::transparent_hugepage`
-
-Disable Transparant Huge Pages as suggested in
-http://docs.datastax.com/en/landing_page/doc/landing_page/recommendedSettingsLinux.html.
-
-#### Parameters
-
-The following parameters are available in the `cassandra::system::transparent_hugepage` class:
-
-* [`path`](#-cassandra--system--transparent_hugepage--path)
-
-##### <a name="-cassandra--system--transparent_hugepage--path"></a>`path`
-
-Data type: `string`
-
-The full path to the file for checking/setting
-if Transparent Hugepages is enabled.
-
-Default value: `'/sys/kernel/mm/transparent_hugepage/defrag'`
 
 ## Defined types
 

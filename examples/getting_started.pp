@@ -9,7 +9,6 @@
 # Cassandra pre-requisites
 require cassandra::apache_repo
 require cassandra::system::sysctl
-require cassandra::system::transparent_hugepage
 require cassandra::java
 
 # Create a cluster called MyCassandraCluster which uses the

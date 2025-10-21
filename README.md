@@ -391,8 +391,6 @@ all of it, please go to
 be used to create a new resource if it does not currently exist.  If a change
 is made to the Puppet manifest but the resource already exits, this change
 will not be reflected.
-- At the moment the `cassandra::system::transparent_hugepage` does not
-persist between reboots.
 
 ## Development
 
