@@ -11,7 +11,6 @@
 * [`cassandra::datastax_agent`](#cassandra--datastax_agent): A class for installing the DataStax Agent and to point it at an OpsCenter instance.
 * [`cassandra::datastax_repo`](#cassandra--datastax_repo): An optional class that will allow a suitable repository to be configured from which packages for DataStax Community can be downloaded.  Chang
 * [`cassandra::dse`](#cassandra--dse): A class for configuring DataStax Enterprise (DSE) specific settings.
-* [`cassandra::firewall_ports`](#cassandra--firewall_ports): An optional class to configure incoming network ports on the host that are relevant to the Cassandra installation.  If firewalls are being ma
 * [`cassandra::java`](#cassandra--java): A class to install Java and JNA packages.
 * [`cassandra::optutils`](#cassandra--optutils): A class to install the optional Cassandra tools package.
 * [`cassandra::schema`](#cassandra--schema): A class to maintain the database schema.  Please note that cqlsh expects Python 2.7 to be installed. This may be a problem of older distributions (CentOS 6 for example).
@@ -22,7 +21,6 @@
 ### Defined types
 
 * [`cassandra::file`](#cassandra--file): A defined type for altering files relative to the configuration directory.
-* [`cassandra::private::firewall_ports::rule`](#cassandra--private--firewall_ports--rule): A defined type to be used as a macro for setting host based firewall rules.  This is not intended to be used by a user (who should use the AP
 * [`cassandra::schema::cql_type`](#cassandra--schema--cql_type): Create or drop user defined data types within the schema.
 * [`cassandra::schema::index`](#cassandra--schema--index): Create or drop indexes within the schema.
 * [`cassandra::schema::keyspace`](#cassandra--schema--keyspace): Create or drop keyspaces within the schema.
@@ -797,116 +795,6 @@ unchanged.
 
 Default value: `undef`
 
-### <a name="cassandra--firewall_ports"></a>`cassandra::firewall_ports`
-
-An optional class to configure incoming network ports on the host that are
-relevant to the Cassandra installation.  If firewalls are being managed
-already, simply do not include this module in your manifest.
-
-IMPORTANT: The full list of which ports should be configured is assessed at
-evaluation time of the configuration. Therefore if one is to use this class,
-it must be the final cassandra class included in the manifest.
-
-#### Parameters
-
-The following parameters are available in the `cassandra::firewall_ports` class:
-
-* [`client_ports`](#-cassandra--firewall_ports--client_ports)
-* [`client_subnets`](#-cassandra--firewall_ports--client_subnets)
-* [`inter_node_ports`](#-cassandra--firewall_ports--inter_node_ports)
-* [`inter_node_subnets`](#-cassandra--firewall_ports--inter_node_subnets)
-* [`public_ports`](#-cassandra--firewall_ports--public_ports)
-* [`public_subnets`](#-cassandra--firewall_ports--public_subnets)
-* [`ssh_port`](#-cassandra--firewall_ports--ssh_port)
-* [`opscenter_ports`](#-cassandra--firewall_ports--opscenter_ports)
-* [`opscenter_subnets`](#-cassandra--firewall_ports--opscenter_subnets)
-
-##### <a name="-cassandra--firewall_ports--client_ports"></a>`client_ports`
-
-Data type: `array`
-
-Only has any effect if the `cassandra` class is defined on the node.
-Allow these TCP ports to be opened for traffic coming from the client
-subnets.
-
-Default value: `[9042, 9160]`
-
-##### <a name="-cassandra--firewall_ports--client_subnets"></a>`client_subnets`
-
-Data type: `array`
-
-Only has any effect if the `cassandra` class is defined on the node.
-An array of the list of subnets that are to allowed connection to
-cassandra::native_transport_port and cassandra::rpc_port.
-
-Default value: `['0.0.0.0/0']`
-
-##### <a name="-cassandra--firewall_ports--inter_node_ports"></a>`inter_node_ports`
-
-Data type: `array`
-
-Only has any effect if the `cassandra` class is defined on the node.
-Allow these TCP ports to be opened for traffic between the Cassandra nodes.
-
-Default value: `[7000, 7001, 7199]`
-
-##### <a name="-cassandra--firewall_ports--inter_node_subnets"></a>`inter_node_subnets`
-
-Data type: `array`
-
-Only has any effect if the `cassandra` class is defined on the node.
-An array of the list of subnets that are to allowed connection to
-`cassandra::storage_port`, `cassandra::ssl_storage_port` and port 7199
-for cassandra JMX monitoring.
-
-Default value: `['0.0.0.0/0']`
-
-##### <a name="-cassandra--firewall_ports--public_ports"></a>`public_ports`
-
-Data type: `array`
-
-Allow these TCP ports to be opened for traffic
-coming from public subnets the port specified in `$ssh_port` will be
-appended to this list.
-
-Default value: `[8888]`
-
-##### <a name="-cassandra--firewall_ports--public_subnets"></a>`public_subnets`
-
-Data type: `array`
-
-An array of the list of subnets that are to allowed connection to
-cassandra::firewall_ports::ssh_port.
-
-Default value: `['0.0.0.0/0']`
-
-##### <a name="-cassandra--firewall_ports--ssh_port"></a>`ssh_port`
-
-Data type: `integer`
-
-Which port does SSH operate on.
-
-Default value: `22`
-
-##### <a name="-cassandra--firewall_ports--opscenter_ports"></a>`opscenter_ports`
-
-Data type: `array`
-
-Only has any effect if the `cassandra::datastax_agent` is defined.
-Allow these TCP ports to be opened for traffic coming to or from OpsCenter
-appended to this list.
-
-Default value: `[9042, 9160, 61620, 61621]`
-
-##### <a name="-cassandra--firewall_ports--opscenter_subnets"></a>`opscenter_subnets`
-
-Data type: `array`
-
-A list of subnets that are to be allowed connection to
-port 61621 for nodes built with cassandra::datastax_agent.
-
-Default value: `['0.0.0.0/0']`
-
 ### <a name="cassandra--java"></a>`cassandra::java`
 
 A class to install Java and JNA packages.
@@ -1456,25 +1344,6 @@ Is the Cassandra service is to be notified
 if the environment file is changed.
 
 Default value: `true`
-
-### <a name="cassandra--private--firewall_ports--rule"></a>`cassandra::private::firewall_ports::rule`
-
-A defined type to be used as a macro for setting host based firewall
-rules.  This is not intended to be used by a user (who should use the
-API provided by cassandra::firewall_ports instead) but is documented
-here for completeness.
-
-#### Parameters
-
-The following parameters are available in the `cassandra::private::firewall_ports::rule` defined type:
-
-* [`ports`](#-cassandra--private--firewall_ports--rule--ports)
-
-##### <a name="-cassandra--private--firewall_ports--rule--ports"></a>`ports`
-
-Data type: `integer`
-
-The number(s) of the port(s) to be opened.
 
 ### <a name="cassandra--schema--cql_type"></a>`cassandra::schema::cql_type`
 
