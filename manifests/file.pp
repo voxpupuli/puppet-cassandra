@@ -1,84 +1,58 @@
-# A defined type for altering files relative to the configuration directory.
-# @param file [string] The name of the file relative to the `config_path`.
-# @param config_path [string] The path to the configuration directory.
-# @param file_lines [string] If set, then the [create_resources]
-#   (https://docs.puppet.com/puppet/latest/reference/function.html#createresources)
-#   will be used to create an array of [file_line]
-#   (https://forge.puppet.com/puppetlabs/stdlib#file_line) resources.
-# @param service_refresh [boolean] Is the Cassandra service is to be notified
-#   if the environment file is changed.
-# @example
-#   if $::memorysize_mb < 24576.0 {
-#     $max_heap_size_in_mb = floor($::memorysize_mb / 2)
-#   } elsif $::memorysize_mb < 8192.0 {
-#     $max_heap_size_in_mb = floor($::memorysize_mb / 4)
-#   } else {
-#     $max_heap_size_in_mb = 8192
-#   }
+# @summary A defined type for altering files relative to the configuration directory.
 #
-#   $heap_new_size = $::processorcount * 100
-#
-#   cassandra::file { "Set Java/Cassandra max heap size to ${max_heap_size_in_mb}.":
+# @example Set max_heap_size in cassandra-env.sh
+#   cassandra::file { "Set Java/Cassandra max heap size to 500.":
 #     file       => 'cassandra-env.sh',
 #     file_lines => {
 #       'MAX_HEAP_SIZE' => {
-#         line  => "MAX_HEAP_SIZE='${max_heap_size_in_mb}M'",
+#         line  => 'MAX_HEAP_SIZE=500M',
 #         match => '^#?MAX_HEAP_SIZE=.*',
 #       },
 #     }
 #   }
 #
-#   cassandra::file { "Set Java/Cassandra heap new size to ${heap_new_size}.":
+# @example Set heap_newsize in cassandra-env.sh
+#   cassandra::file { "Set Java/Cassandra heap new size to 300.":
 #     file       => 'cassandra-env.sh',
 #     file_lines => {
 #       'HEAP_NEWSIZE'  => {
-#         line  => "HEAP_NEWSIZE='${heap_new_size}M'",
+#         line  => 'HEAP_NEWSIZE=300M',
 #         match => '^#?HEAP_NEWSIZE=.*',
 #       }
 #     }
 #   }
-#   $tmpdir = '/var/lib/cassandra/tmp'
 #
-#   file { $tmpdir:
-#     ensure => directory,
-#     owner  => 'cassandra',
-#     group  => 'cassandra',
-#   }
-#
+# @example Set java.io.tmpdir in jvm.options
 #   cassandra::file { 'Set java.io.tmpdir':
 #     file       => 'jvm.options',
 #     file_lines => {
 #       'java.io.tmpdir' => {
-#         line => "-Djava.io.tmpdir=${tmpdir}",
+#         line => '-Djava.io.tmpdir=/var/lib/cassandra/tmp',
 #       },
 #     },
-#     require    => File[$tmpdir],
 #   }
+#
+# @param file_lines
+#   will be used to create an array of [file_line]
+# @param file
+#   Name of the file relative to `cassandra::config_path`.
+#
 define cassandra::file (
-  $file             = $title,
-  $config_path      = $cassandra::config_path,
-  $file_lines       = undef,
-  $service_refresh  = true,
+  Hash $file_lines,
+  String[1] $file = $title,
 ) {
   include cassandra
-  include stdlib
 
-  $path = "${config_path}/${file}"
+  $_notify = $cassandra::service_refresh ? {
+    true    => Service[$cassandra::service_name],
+    default => undef,
+  }
 
-  if $file_lines != undef {
-    if $service_refresh {
-      $default_file_line = {
-        path    => $path,
-        require => Package['cassandra'],
-        notify  => Service['cassandra'],
-      }
-    } else {
-      $default_file_line = {
-        path    => $path,
-        require => Package['cassandra'],
-      }
+  $file_lines.each | String $_line, Hash $_params | {
+    file_line { $_line:
+      *      => $_params,
+      path   => "${$cassandra::config_path}/${file}" ,
+      notify => $_notify,
     }
-
-    create_resources(file_line, $file_lines, $default_file_line)
   }
 }

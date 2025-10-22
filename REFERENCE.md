@@ -642,54 +642,44 @@ A defined type for altering files relative to the configuration directory.
 
 #### Examples
 
-##### 
+##### Set max_heap_size in cassandra-env.sh
 
 ```puppet
-if $::memorysize_mb < 24576.0 {
-  $max_heap_size_in_mb = floor($::memorysize_mb / 2)
-} elsif $::memorysize_mb < 8192.0 {
-  $max_heap_size_in_mb = floor($::memorysize_mb / 4)
-} else {
-  $max_heap_size_in_mb = 8192
-}
-
-$heap_new_size = $::processorcount * 100
-
-cassandra::file { "Set Java/Cassandra max heap size to ${max_heap_size_in_mb}.":
+cassandra::file { "Set Java/Cassandra max heap size to 500.":
   file       => 'cassandra-env.sh',
   file_lines => {
     'MAX_HEAP_SIZE' => {
-      line  => "MAX_HEAP_SIZE='${max_heap_size_in_mb}M'",
+      line  => 'MAX_HEAP_SIZE=500M',
       match => '^#?MAX_HEAP_SIZE=.*',
     },
   }
 }
+```
 
-cassandra::file { "Set Java/Cassandra heap new size to ${heap_new_size}.":
+##### Set heap_newsize in cassandra-env.sh
+
+```puppet
+cassandra::file { "Set Java/Cassandra heap new size to 300.":
   file       => 'cassandra-env.sh',
   file_lines => {
     'HEAP_NEWSIZE'  => {
-      line  => "HEAP_NEWSIZE='${heap_new_size}M'",
+      line  => 'HEAP_NEWSIZE=300M',
       match => '^#?HEAP_NEWSIZE=.*',
     }
   }
 }
-$tmpdir = '/var/lib/cassandra/tmp'
+```
 
-file { $tmpdir:
-  ensure => directory,
-  owner  => 'cassandra',
-  group  => 'cassandra',
-}
+##### Set java.io.tmpdir in jvm.options
 
+```puppet
 cassandra::file { 'Set java.io.tmpdir':
   file       => 'jvm.options',
   file_lines => {
     'java.io.tmpdir' => {
-      line => "-Djava.io.tmpdir=${tmpdir}",
+      line => '-Djava.io.tmpdir=/var/lib/cassandra/tmp',
     },
   },
-  require    => File[$tmpdir],
 }
 ```
 
@@ -697,46 +687,22 @@ cassandra::file { 'Set java.io.tmpdir':
 
 The following parameters are available in the `cassandra::file` defined type:
 
-* [`file`](#-cassandra--file--file)
-* [`config_path`](#-cassandra--file--config_path)
 * [`file_lines`](#-cassandra--file--file_lines)
-* [`service_refresh`](#-cassandra--file--service_refresh)
-
-##### <a name="-cassandra--file--file"></a>`file`
-
-Data type: `string`
-
-The name of the file relative to the `config_path`.
-
-Default value: `$title`
-
-##### <a name="-cassandra--file--config_path"></a>`config_path`
-
-Data type: `string`
-
-The path to the configuration directory.
-
-Default value: `$cassandra::config_path`
+* [`file`](#-cassandra--file--file)
 
 ##### <a name="-cassandra--file--file_lines"></a>`file_lines`
 
-Data type: `string`
+Data type: `Hash`
 
-If set, then the [create_resources]
-(https://docs.puppet.com/puppet/latest/reference/function.html#createresources)
 will be used to create an array of [file_line]
-(https://forge.puppet.com/puppetlabs/stdlib#file_line) resources.
 
-Default value: `undef`
+##### <a name="-cassandra--file--file"></a>`file`
 
-##### <a name="-cassandra--file--service_refresh"></a>`service_refresh`
+Data type: `String[1]`
 
-Data type: `boolean`
+Name of the file relative to `cassandra::config_path`.
 
-Is the Cassandra service is to be notified
-if the environment file is changed.
-
-Default value: `true`
+Default value: `$title`
 
 ### <a name="cassandra--schema--cql_type"></a>`cassandra::schema::cql_type`
 
