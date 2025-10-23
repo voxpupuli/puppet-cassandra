@@ -1,4 +1,5 @@
-# Grant or revoke permissions.
+# @summary A defined type to grant or revoke permissions.
+#
 # To use this class, a suitable `authenticator` (e.g. PasswordAuthenticator)
 # and `authorizer` (e.g. CassandraAuthorizer) must be set in the Cassandra
 # class.
@@ -6,14 +7,15 @@
 # WARNING: Specifying keyspace 'ALL' and 'ALL' for permissions at the same
 # time is not currently supported by this module.
 #
-# @param user_name [string] The name of the user who is to be granted or
-#   revoked.
-# @param ensure [ present | absent ] Set to present to grant a permission or
-#   absent to revoke it.
-# @param keyspace_name [string] The name of the keyspace to grant/revoke the
-#   permissions on.  If set to 'ALL' then the permission will be applied to
-#   all of the keyspaces.
-# @param permission_name [string] Can be one of the following:
+# @param user_name
+#   The name of the user who is to be granted or revoked.
+# @param ensure
+#   Ensure the permission is granted or revoked.
+# @param keyspace_name
+#   The name of the keyspace to grant/revoke the permissions on.
+#   If set to 'ALL' then the permission will be applied to all of the keyspaces.
+# @param permission_name
+#   Can be one of the following:
 #
 #   * 'ALTER' - ALTER KEYSPACE, ALTER TABLE, CREATE INDEX, DROP INDEX.
 #   * 'AUTHORIZE' - GRANT, REVOKE.
@@ -22,19 +24,27 @@
 #   * 'MODIFY' - INSERT, DELETE, UPDATE, TRUNCATE.
 #   * 'SELECT' - SELECT.
 #
-#   If the permission_name is set to 'ALL', this will set all of the specific
-#   permissions listed.
-# @param table_name [string] The name of a table within the specified
-#   keyspace.  If left unspecified, the procedure will be applied to all
-#   tables within the keyspace.
+#   If the permission_name is set to 'ALL', this will set all of the specific permissions listed.
+# @param table_name
+#   The name of a table within the specified keyspace.
+#   If left unspecified, the procedure will be applied to all tables within the keyspace.
+#
 define cassandra::schema::permission (
-  $user_name,
-  $ensure           = present,
-  $keyspace_name    = 'ALL',
-  $permission_name  = 'ALL',
-  $table_name       = undef,
+  String[1] $user_name,
+  Enum['present', 'absent'] $ensure = present,
+  String[1] $keyspace_name = 'ALL',
+  Enum[
+    'ALL',
+    'ALTER',
+    'AUTHORIZE',
+    'CREATE',
+    'DROP',
+    'MODIFY',
+    'SELECT'
+  ] $permission_name = 'ALL',
+  Optional[String[1]] $table_name = undef,
 ) {
-  include cassandra::schema
+  require cassandra::schema
 
   $quote = '"'
   if upcase($keyspace_name) == 'ALL' and upcase($permission_name) == 'ALL' {
@@ -112,7 +122,7 @@ define cassandra::schema::permission (
       unless  => $read_command,
       require => Exec['cassandra::schema connection test'],
     }
-  } elsif $ensure == absent {
+  } else {
     $delete_script = "REVOKE ${permission_name} ON ${resource} FROM ${user_name}"
     $delete_command = "${cassandra::schema::cqlsh_opts} -e ${quote}${delete_script}${quote} ${cassandra::schema::cqlsh_conn}"
 
@@ -121,7 +131,5 @@ define cassandra::schema::permission (
       onlyif  => $read_command,
       require => Exec['cassandra::schema connection test'],
     }
-  } else {
-    fail("Unknown action (${ensure}) for ensure attribute.")
   }
 }

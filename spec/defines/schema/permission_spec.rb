@@ -3,169 +3,173 @@
 require 'spec_helper'
 
 describe 'cassandra::schema::permission' do
-  let :node do
-    'foo.example.com'
-  end
-
-  on_supported_os.each do |_os, facts|
-    let :facts do
-      facts
-    end
-    context 'with user_name' do
-      let(:title) { 'foobar' }
-      let(:params) do
-        {
-          user_name: 'foobar'
-        }
+  on_supported_os.each do |os, facts|
+    context "on #{os}" do
+      let(:facts) do
+        facts
       end
 
-      it { is_expected.to raise_error(Puppet::Error) }
-    end
+      context 'with user_name and default parameters' do
+        let(:title) { 'foobar' }
+        let(:params) do
+          {
+            user_name: 'foobar'
+          }
+        end
 
-    context 'Set ensure to latest' do
-      let(:title) { 'foobar' }
-      let(:params) do
-        {
-          ensure: 'latest'
-        }
+        it { is_expected.to raise_error(Puppet::Error) }
       end
 
-      it { is_expected.to raise_error(Puppet::Error) }
-    end
+      context 'with ensure latest' do
+        let(:title) { 'foobar' }
+        let(:params) do
+          {
+            ensure: 'latest'
+          }
+        end
 
-    context 'spillman:SELECT:ALL' do
-      let(:title) { 'spillman:SELECT:ALL' }
-
-      let(:params) do
-        {
-          user_name: 'spillman',
-          permission_name: 'SELECT'
-        }
+        it { is_expected.to raise_error(Puppet::Error) }
       end
 
-      it do
-        expect(subject).to contain_cassandra__schema__permission('spillman:SELECT:ALL')
+      context 'with spillman user_name and SELECT permission' do
+        let(:title) { 'spillman:SELECT' }
+
+        let(:params) do
+          {
+            user_name: 'spillman',
+            permission_name: 'SELECT'
+          }
+        end
+
         read_script =  '/usr/bin/cqlsh   -e "LIST ALL PERMISSIONS ON ALL KEYSPACES" '
-        read_script += 'localhost 9042 | grep \' spillman | *spillman | .* SELECT$\''
+        read_script += "localhost 9042 | grep ' spillman | *spillman | .* SELECT$'"
         script_command = 'GRANT SELECT ON ALL KEYSPACES TO spillman'
         exec_command = "/usr/bin/cqlsh   -e \"#{script_command}\" localhost 9042"
-        expect(subject).to contain_exec(script_command).
-          only_with(command: exec_command,
-                    unless: read_script,
-                    require: 'Exec[cassandra::schema connection test]')
-      end
-    end
 
-    context 'akers:modify:field' do
-      let(:title) { 'akers:modify:field' }
-
-      let(:params) do
-        {
-          user_name: 'akers',
-          keyspace_name: 'field',
-          permission_name: 'MODIFY'
-        }
+        it do
+          is_expected.to compile.with_all_deps
+          is_expected.to contain_class('cassandra::schema')
+          is_expected.to contain_exec(script_command).with(
+            command: exec_command,
+            unless: read_script,
+            require: 'Exec[cassandra::schema connection test]'
+          )
+        end
       end
 
-      it do
-        expect(subject).to contain_cassandra__schema__permission('akers:modify:field')
+      context 'with user_name => akers, keyspace_name => field and permission_name => MODIFY' do
+        let(:title) { 'akers:modify:field' }
+
+        let(:params) do
+          {
+            user_name: 'akers',
+            keyspace_name: 'field',
+            permission_name: 'MODIFY'
+          }
+        end
+
         read_script =  '/usr/bin/cqlsh   -e "LIST ALL PERMISSIONS ON KEYSPACE field" '
         read_script += 'localhost 9042 | grep \' akers | *akers | .* MODIFY$\''
         script_command = 'GRANT MODIFY ON KEYSPACE field TO akers'
         exec_command = "/usr/bin/cqlsh   -e \"#{script_command}\" localhost 9042"
-        expect(subject).to contain_exec(script_command).
-          only_with(command: exec_command,
-                    unless: read_script,
-                    require: 'Exec[cassandra::schema connection test]')
-      end
-    end
 
-    context 'boone:alter:forty9ers' do
-      let(:title) { 'boone:alter:forty9ers' }
-
-      let(:params) do
-        {
-          user_name: 'boone',
-          keyspace_name: 'forty9ers',
-          permission_name: 'ALTER'
-        }
+        it do
+          is_expected.to compile.with_all_deps
+          is_expected.to contain_exec(script_command).with(
+            command: exec_command,
+            unless: read_script,
+            require: 'Exec[cassandra::schema connection test]'
+          )
+        end
       end
 
-      it do
-        expect(subject).to contain_cassandra__schema__permission('boone:alter:forty9ers')
+      context 'with user_name => boone, keyspace_name => forty9ers and permission_name => ALTER' do
+        let(:title) { 'boone:alter:forty9ers' }
+
+        let(:params) do
+          {
+            user_name: 'boone',
+            keyspace_name: 'forty9ers',
+            permission_name: 'ALTER'
+          }
+        end
+
         read_script =  '/usr/bin/cqlsh   -e "LIST ALL PERMISSIONS ON KEYSPACE forty9ers" '
         read_script += 'localhost 9042 | grep \' boone | *boone | .* ALTER$\''
         script_command = 'GRANT ALTER ON KEYSPACE forty9ers TO boone'
         exec_command = "/usr/bin/cqlsh   -e \"#{script_command}\" localhost 9042"
-        expect(subject).to contain_exec(script_command).
-          only_with(command: exec_command,
-                    unless: read_script,
-                    require: 'Exec[cassandra::schema connection test]')
-      end
-    end
 
-    context 'boone:ALL:ravens.plays' do
-      let(:title) { 'boone:ALL:ravens.plays' }
-
-      let(:params) do
-        {
-          user_name: 'boone',
-          keyspace_name: 'ravens',
-          table_name: 'plays'
-        }
-      end
-
-      it do
-        expect(subject).to contain_cassandra__schema__permission('boone:ALL:ravens.plays')
-      end
-
-      expected_values = %w[ALTER AUTHORIZE DROP MODIFY SELECT]
-      expected_values.each do |val|
         it do
-          expect(subject).to contain_cassandra__schema__permission("boone:ALL:ravens.plays - #{val}").with(
-            ensure: 'present',
-            user_name: 'boone',
-            keyspace_name: 'ravens',
-            permission_name: val,
-            table_name: 'plays'
+          is_expected.to compile.with_all_deps
+          is_expected.to contain_exec(script_command).with(
+            command: exec_command,
+            unless: read_script,
+            require: 'Exec[cassandra::schema connection test]'
           )
         end
+      end
 
-        read_script =  '/usr/bin/cqlsh   -e "LIST ALL PERMISSIONS ON TABLE ravens.plays" '
-        read_script += "localhost 9042 | grep ' boone | *boone | .* #{val}$'"
-        script_command = "GRANT #{val} ON TABLE ravens.plays TO boone"
-        exec_command = "/usr/bin/cqlsh   -e \"#{script_command}\" localhost 9042"
-        it do
-          expect(subject).to contain_exec(script_command).
-            only_with(command: exec_command,
-                      unless: read_script,
-                      require: 'Exec[cassandra::schema connection test]')
+      context 'with user_name => boone, keyspace_name => ravens and table_name => plays' do
+        let(:title) { 'boone:ALL:ravens.plays' }
+
+        let(:params) do
+          {
+            user_name: 'boone',
+            keyspace_name: 'ravens',
+            table_name: 'plays'
+          }
+        end
+
+        expected_values = %w[ALTER AUTHORIZE DROP MODIFY SELECT]
+        expected_values.each do |val|
+          read_script =  '/usr/bin/cqlsh   -e "LIST ALL PERMISSIONS ON TABLE ravens.plays" '
+          read_script += "localhost 9042 | grep ' boone | *boone | .* #{val}$'"
+          script_command = "GRANT #{val} ON TABLE ravens.plays TO boone"
+          exec_command = "/usr/bin/cqlsh   -e \"#{script_command}\" localhost 9042"
+
+          it do
+            is_expected.to compile.with_all_deps
+            is_expected.to contain_cassandra__schema__permission("boone:ALL:ravens.plays - #{val}").with(
+              ensure: 'present',
+              user_name: 'boone',
+              keyspace_name: 'ravens',
+              permission_name: val,
+              table_name: 'plays'
+            )
+            is_expected.to contain_exec(script_command).with(
+              command: exec_command,
+              unless: read_script,
+              require: 'Exec[cassandra::schema connection test]'
+            )
+          end
         end
       end
-    end
 
-    context 'REVOKE boone:SELECT:ravens.plays' do
-      let(:title) { 'REVOKE boone:SELECT:ravens.plays' }
+      context 'with ensure => absent, user_name => boone, keyspace_name => forty9ers and permission_name => SELECT' do
+        let(:title) { 'REVOKE boone:SELECT:ravens.plays' }
 
-      let(:params) do
-        {
-          ensure: 'absent',
-          user_name: 'boone',
-          keyspace_name: 'forty9ers',
-          permission_name: 'SELECT'
-        }
-      end
+        let(:params) do
+          {
+            ensure: 'absent',
+            user_name: 'boone',
+            keyspace_name: 'forty9ers',
+            permission_name: 'SELECT'
+          }
+        end
 
-      it do
-        expect(subject).to contain_cassandra__schema__permission('REVOKE boone:SELECT:ravens.plays')
         read_script =  '/usr/bin/cqlsh   -e "LIST ALL PERMISSIONS ON KEYSPACE forty9ers" '
         read_script += "localhost 9042 | grep ' boone | *boone | .* SELECT$'"
         script_command = 'REVOKE SELECT ON KEYSPACE forty9ers FROM boone'
         exec_command = "/usr/bin/cqlsh   -e \"#{script_command}\" localhost 9042"
-        expect(subject).to contain_exec(script_command).
-          only_with(command: exec_command,
-                    onlyif: read_script,
-                    require: 'Exec[cassandra::schema connection test]')
+
+        it do
+          is_expected.to compile.with_all_deps
+          is_expected.to contain_exec(script_command).with(
+            command: exec_command,
+            onlyif: read_script,
+            require: 'Exec[cassandra::schema connection test]'
+          )
+        end
       end
     end
   end
