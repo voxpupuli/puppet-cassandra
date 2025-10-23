@@ -1,29 +1,30 @@
-# Create or drop users.
-# To use this class, a suitable `authenticator` (e.g. PasswordAuthenticator)
-# must be set in the Cassandra class.
-# @param ensure [ present | absent ] Valid values can be **present** to
-#   ensure a user is created, or **absent** to remove the user if it exists.
-# @param password [string] A password for the user.
-# @param superuser [boolean] If the user is to be a super-user on the system.
-# @param login [boolean] Allows the role to log in.
-# @param user_name [string] The name of the user.
-# @example
+# @summary A defined type to create or drop a user.
+#
+# @example Basic usage.
 #   cassandra::schema::user { 'akers':
 #     password  => 'Niner2',
 #     superuser => true,
 #   }
 #
-#   cassandra::schema::user { 'lucan':
-#     ensure => absent,
-#   }
+# @param ensure
+#   Ensure the user is created or dropped.
+# @param user_name
+#   The name of the user.
+# @param password
+#   The password for the user.
+# @param login
+#   Allows the user to log in.
+# @param superuser
+#   Whether the user should be a super user.
+#
 define cassandra::schema::user (
-  $ensure    = present,
-  $login     = true,
-  $password  = undef,
-  $superuser = false,
-  $user_name = $title,
+  Enum['present', 'absent'] $ensure = present,
+  String[1] $user_name = $title,
+  Optional[Variant[String[1], Sensitive]] $password = undef,
+  Boolean $login = true,
+  Boolean $superuser = false,
 ) {
-  include cassandra::schema
+  require cassandra::schema
 
   $quote = '"'
   $read_script = 'LIST ROLES'
@@ -66,7 +67,7 @@ define cassandra::schema::user (
       unless  => $read_command,
       require => Exec['cassandra::schema connection test'],
     }
-  } elsif $ensure == absent {
+  } else {
     $delete_script = "DROP ROLE ${user_name}"
     $delete_command = "${cassandra::schema::cqlsh_opts} -e ${quote}${delete_script}${quote} ${cassandra::schema::cqlsh_conn}"
     exec { "Delete user (${user_name})":
@@ -74,7 +75,5 @@ define cassandra::schema::user (
       onlyif  => $read_command,
       require => Exec['cassandra::schema connection test'],
     }
-  } else {
-    fail("Unknown action (${ensure}) for ensure attribute.")
   }
 }

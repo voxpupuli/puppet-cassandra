@@ -9,7 +9,8 @@
 #### Public Classes
 
 * [`cassandra`](#cassandra): Class to manage installation and configuration of Cassandra.
-* [`cassandra::schema`](#cassandra--schema): A class to maintain the database schema.  Please note that cqlsh expects Python 2.7 to be installed. This may be a problem of older distributions (CentOS 6 for example).
+* [`cassandra::schema`](#cassandra--schema): Class to manage database schema resources.
+Please note that cqlsh expects Python to be installed.
 
 #### Private Classes
 
@@ -20,12 +21,12 @@
 ### Defined types
 
 * [`cassandra::file`](#cassandra--file): A defined type for altering files relative to the configuration directory.
-* [`cassandra::schema::cql_type`](#cassandra--schema--cql_type): Create or drop user defined data types within the schema.
-* [`cassandra::schema::index`](#cassandra--schema--index): Create or drop indexes within the schema.
-* [`cassandra::schema::keyspace`](#cassandra--schema--keyspace): Create or drop keyspaces within the schema.
-* [`cassandra::schema::permission`](#cassandra--schema--permission): Grant or revoke permissions. To use this class, a suitable `authenticator` (e.g. PasswordAuthenticator) and `authorizer` (e.g. CassandraAutho
-* [`cassandra::schema::table`](#cassandra--schema--table): Create or drop tables within the schema.
-* [`cassandra::schema::user`](#cassandra--schema--user): Create or drop users. To use this class, a suitable `authenticator` (e.g. PasswordAuthenticator) must be set in the Cassandra class.
+* [`cassandra::schema::cql_type`](#cassandra--schema--cql_type): A defined type to create or drop a user defined data type.
+* [`cassandra::schema::index`](#cassandra--schema--index): A defined type to create or drop an index.
+* [`cassandra::schema::keyspace`](#cassandra--schema--keyspace): A defined type to create or drop a keyspace.
+* [`cassandra::schema::permission`](#cassandra--schema--permission): A defined type to grant or revoke permissions.
+* [`cassandra::schema::table`](#cassandra--schema--table): A defined type to create or drop a table.
+* [`cassandra::schema::user`](#cassandra--schema--user): A defined type to create or drop a user.
 
 ## Classes
 
@@ -468,7 +469,8 @@ Default value: `true`
 
 ### <a name="cassandra--schema"></a>`cassandra::schema`
 
-A class to maintain the database schema.  Please note that cqlsh expects Python 2.7 to be installed. This may be a problem of older distributions (CentOS 6 for example).
+Class to manage database schema resources.
+Please note that cqlsh expects Python to be installed.
 
 #### Parameters
 
@@ -476,15 +478,15 @@ The following parameters are available in the `cassandra::schema` class:
 
 * [`connection_tries`](#-cassandra--schema--connection_tries)
 * [`connection_try_sleep`](#-cassandra--schema--connection_try_sleep)
-* [`cql_types`](#-cassandra--schema--cql_types)
 * [`cqlsh_additional_options`](#-cassandra--schema--cqlsh_additional_options)
 * [`cqlsh_client_config`](#-cassandra--schema--cqlsh_client_config)
 * [`cqlsh_client_tmpl`](#-cassandra--schema--cqlsh_client_tmpl)
 * [`cqlsh_command`](#-cassandra--schema--cqlsh_command)
 * [`cqlsh_host`](#-cassandra--schema--cqlsh_host)
-* [`cqlsh_password`](#-cassandra--schema--cqlsh_password)
 * [`cqlsh_port`](#-cassandra--schema--cqlsh_port)
 * [`cqlsh_user`](#-cassandra--schema--cqlsh_user)
+* [`cqlsh_password`](#-cassandra--schema--cqlsh_password)
+* [`cql_types`](#-cassandra--schema--cql_types)
 * [`indexes`](#-cassandra--schema--indexes)
 * [`keyspaces`](#-cassandra--schema--keyspaces)
 * [`permissions`](#-cassandra--schema--permissions)
@@ -493,64 +495,48 @@ The following parameters are available in the `cassandra::schema` class:
 
 ##### <a name="-cassandra--schema--connection_tries"></a>`connection_tries`
 
-Data type: `integer`
+Data type: `Integer`
 
-How many times do try to connect to
-Cassandra.  See also `connection_try_sleep`.
+How many times to try a connection to Cassandra. Also see `connection_try_sleep`.
 
 Default value: `6`
 
 ##### <a name="-cassandra--schema--connection_try_sleep"></a>`connection_try_sleep`
 
-Data type: `integer`
+Data type: `Integer`
 
-How much time to allow between the
-number of tries specified in `connection_tries`.
+How much time to allow between the number of tries specified in `connection_tries`.
 
 Default value: `30`
 
-##### <a name="-cassandra--schema--cql_types"></a>`cql_types`
-
-Data type: `hash`
-
-Creates new `cassandra::schema::cql_type` resources.
-
-Default value: `{}`
-
 ##### <a name="-cassandra--schema--cqlsh_additional_options"></a>`cqlsh_additional_options`
 
-Data type: `string`
+Data type: `Optional[String[1]]`
 
-Any additional options to be passed
-to the `cqlsh` command.
+Any additional options to be passed to the `cqlsh` command.
 
-Default value: `''`
+Default value: `undef`
 
 ##### <a name="-cassandra--schema--cqlsh_client_config"></a>`cqlsh_client_config`
 
-Data type: `string`
+Data type: `Optional[Stdlib::Absolutepath]`
 
-Set this to a file name
-(e.g. '/root/.puppetcqlshrc') that will then be used to contain the
-the credentials for connecting to Cassandra. This is a more secure option
-than having the credentials appearing on the command line.  This option
-is only available in Cassandra >= 2.1.
+Set this to a file name (e.g. '/root/.puppetcqlshrc')
+This will contain the credentials for connecting to Cassandra.
 
 Default value: `undef`
 
 ##### <a name="-cassandra--schema--cqlsh_client_tmpl"></a>`cqlsh_client_tmpl`
 
-Data type: `string`
+Data type: `String[1]`
 
-The location of the template for configuring
-the credentials for the cqlsh client.  This is ignored unless
-`cqlsh_client_config` is set.
+The location of the template for configuring the credentials for the cqlsh client.
 
 Default value: `'cassandra/cqlshrc.erb'`
 
 ##### <a name="-cassandra--schema--cqlsh_command"></a>`cqlsh_command`
 
-Data type: `string`
+Data type: `Stdlib::Absolutepath`
 
 The full path to the `cqlsh` command.
 
@@ -558,44 +544,47 @@ Default value: `'/usr/bin/cqlsh'`
 
 ##### <a name="-cassandra--schema--cqlsh_host"></a>`cqlsh_host`
 
-Data type: `string`
+Data type: `Variant[Stdlib::Host, Enum['localhost']]`
 
 The host for the `cqlsh` command to connect to.
-See also `cqlsh_port`.
 
 Default value: `'localhost'`
 
-##### <a name="-cassandra--schema--cqlsh_password"></a>`cqlsh_password`
-
-Data type: `string`
-
-If credentials are require for connecting,
-specify the password here.  See also `cqlsh_user`, `cqlsh_client_config`.
-
-Default value: `undef`
-
 ##### <a name="-cassandra--schema--cqlsh_port"></a>`cqlsh_port`
 
-Data type: `integer`
+Data type: `Integer`
 
-The host for the `cqlsh` command to connect to.
-See also `cqlsh_host`.
+The port for the `cqlsh` command to connect to.
 
 Default value: `9042`
 
 ##### <a name="-cassandra--schema--cqlsh_user"></a>`cqlsh_user`
 
-Data type: `string`
+Data type: `String[1]`
 
-If credentials are required for connecting,
-specify the password here. See also `cqlsh_password`,
-`cqlsh_client_config`
+The user for the cqlsh connection.
 
 Default value: `'cassandra'`
 
+##### <a name="-cassandra--schema--cqlsh_password"></a>`cqlsh_password`
+
+Data type: `Optional[Variant[String[1], Sensitive]]`
+
+The password for the cqlsh connection.
+
+Default value: `undef`
+
+##### <a name="-cassandra--schema--cql_types"></a>`cql_types`
+
+Data type: `Hash`
+
+Creates new `cassandra::schema::cql_type` resources.
+
+Default value: `{}`
+
 ##### <a name="-cassandra--schema--indexes"></a>`indexes`
 
-Data type: `hash`
+Data type: `Hash`
 
 Creates new `cassandra::schema::index` resources.
 
@@ -603,7 +592,7 @@ Default value: `{}`
 
 ##### <a name="-cassandra--schema--keyspaces"></a>`keyspaces`
 
-Data type: `hash`
+Data type: `Hash`
 
 Creates new `cassandra::schema::keyspace` resources.
 
@@ -611,16 +600,15 @@ Default value: `{}`
 
 ##### <a name="-cassandra--schema--permissions"></a>`permissions`
 
-Data type: `hash`
+Data type: `Hash`
 
-Creates new `cassandra::schema::permission`
-resources.
+Creates new `cassandra::schema::permission` resources.
 
 Default value: `{}`
 
 ##### <a name="-cassandra--schema--tables"></a>`tables`
 
-Data type: `hash`
+Data type: `Hash`
 
 Creates new `cassandra::schema::table` resources.
 
@@ -628,7 +616,7 @@ Default value: `{}`
 
 ##### <a name="-cassandra--schema--users"></a>`users`
 
-Data type: `hash`
+Data type: `Hash`
 
 Creates new `cassandra::schema::user` resources.
 
@@ -706,11 +694,11 @@ Default value: `$title`
 
 ### <a name="cassandra--schema--cql_type"></a>`cassandra::schema::cql_type`
 
-Create or drop user defined data types within the schema.
+A defined type to create or drop a user defined data type.
 
 #### Examples
 
-##### 
+##### Basic usage.
 
 ```puppet
 cassandra::schema::cql_type { 'fullname':
@@ -733,29 +721,29 @@ The following parameters are available in the `cassandra::schema::cql_type` defi
 
 ##### <a name="-cassandra--schema--cql_type--keyspace"></a>`keyspace`
 
-Data type: `string`
+Data type: `String[1]`
 
 The name of the keyspace that the data type is to be associated with.
 
 ##### <a name="-cassandra--schema--cql_type--ensure"></a>`ensure`
 
-Data type: `present|absent`
+Data type: `Enum['present', 'absent']`
 
-ensure the data type is created, or is dropped.
+Ensure the data type is created or dropped.
 
 Default value: `present`
 
 ##### <a name="-cassandra--schema--cql_type--fields"></a>`fields`
 
-Data type: `hash`
+Data type: `Hash`
 
-A hash of the fields that will be components for the data type.
+A hash of fields that will be components for the data type.
 
 Default value: `{}`
 
 ##### <a name="-cassandra--schema--cql_type--cql_type_name"></a>`cql_type_name`
 
-Data type: `string`
+Data type: `String[1]`
 
 The name of the CQL type to be created.
 
@@ -763,92 +751,79 @@ Default value: `$title`
 
 ### <a name="cassandra--schema--index"></a>`cassandra::schema::index`
 
-Create or drop indexes within the schema.
+A defined type to create or drop an index.
 
 #### Parameters
 
 The following parameters are available in the `cassandra::schema::index` defined type:
 
+* [`keyspace`](#-cassandra--schema--index--keyspace)
+* [`table`](#-cassandra--schema--index--table)
 * [`ensure`](#-cassandra--schema--index--ensure)
 * [`class_name`](#-cassandra--schema--index--class_name)
 * [`index`](#-cassandra--schema--index--index)
 * [`keys`](#-cassandra--schema--index--keys)
-* [`keyspace`](#-cassandra--schema--index--keyspace)
 * [`options`](#-cassandra--schema--index--options)
-* [`table`](#-cassandra--schema--index--table)
+
+##### <a name="-cassandra--schema--index--keyspace"></a>`keyspace`
+
+Data type: `String[1]`
+
+The name of the keyspace that the data type is to be associated with.
+
+##### <a name="-cassandra--schema--index--table"></a>`table`
+
+Data type: `String[1]`
+
+The name of the table that the index is to be associated with.
 
 ##### <a name="-cassandra--schema--index--ensure"></a>`ensure`
 
-Data type: `present|absent`
+Data type: `Enum['present', 'absent']`
 
-Create or dro[ the index.
+Ensure the index is created or dropped.
 
 Default value: `present`
 
 ##### <a name="-cassandra--schema--index--class_name"></a>`class_name`
 
-Data type: `string`
+Data type: `Optional[String[1]]`
 
-The name of the class to be associated with an
-index when creating a custom index.
+The name of the class to be associated with an index when creating a custom index.
 
 Default value: `undef`
 
 ##### <a name="-cassandra--schema--index--index"></a>`index`
 
-Data type: `string`
+Data type: `String[1]`
 
-The name of the index.  Defaults to the name of the
-resource.
+The name of the index.
 
 Default value: `$title`
 
 ##### <a name="-cassandra--schema--index--keys"></a>`keys`
 
-Data type: `string`
+Data type: `Optional[String[1]]`
 
 The columns that the index is being created on.
 
 Default value: `undef`
 
-##### <a name="-cassandra--schema--index--keyspace"></a>`keyspace`
-
-Data type: `string`
-
-The name the keyspace that the index is to be associated
-with.
-
 ##### <a name="-cassandra--schema--index--options"></a>`options`
 
-Data type: `string`
+Data type: `Optional[String[1]]`
 
 Any options to be added to the index.
 
 Default value: `undef`
 
-##### <a name="-cassandra--schema--index--table"></a>`table`
-
-Data type: `string`
-
-The name of the table that the index is to be associated with.
-
 ### <a name="cassandra--schema--keyspace"></a>`cassandra::schema::keyspace`
 
-Create or drop keyspaces within the schema.
+A defined type to create or drop a keyspace.
 
 #### Examples
 
-##### 
-
-```puppet
-$network_topology_strategy = {
-  keyspace_class => 'NetworkTopologyStrategy',
-    dc1            => 3,
-    dc2            => 2
-}
-```
-
-##### 
+##### Basic usage.
 
 ```puppet
 cassandra::schema::keyspace { 'mykeyspace':
@@ -871,26 +846,25 @@ The following parameters are available in the `cassandra::schema::keyspace` defi
 
 ##### <a name="-cassandra--schema--keyspace--ensure"></a>`ensure`
 
-Data type: `present|absent`
+Data type: `Enum['present', 'absent']`
 
-Create or drop the keyspace.
+Ensure the index is created or dropped.
 
 Default value: `present`
 
 ##### <a name="-cassandra--schema--keyspace--durable_writes"></a>`durable_writes`
 
-Data type: `boolean`
+Data type: `Boolean`
 
-When set to false, data written to the
-keyspace bypasses the commit log. Be careful using this option
-because you risk losing data. Set this attribute to false on a keyspace
-using the SimpleStrategy.
+When set to false, data written to the keyspace bypasses the commit log.
+Be careful using this option because you risk losing data.
+Set this attribute to false on a keyspace using the SimpleStrategy.
 
 Default value: `true`
 
 ##### <a name="-cassandra--schema--keyspace--keyspace_name"></a>`keyspace_name`
 
-Data type: `string`
+Data type: `String[1]`
 
 The name of the keyspace to be created.
 
@@ -898,16 +872,14 @@ Default value: `$title`
 
 ##### <a name="-cassandra--schema--keyspace--replication_map"></a>`replication_map`
 
-Data type: `hash`
+Data type: `Hash`
 
-Needed if the keyspace is to be present.
-Optional if it is to be absent.
+Needed if the keyspace is to be present. Optional if it is to be absent.
 
 Default value: `{}`
 
 ### <a name="cassandra--schema--permission"></a>`cassandra::schema::permission`
 
-Grant or revoke permissions.
 To use this class, a suitable `authenticator` (e.g. PasswordAuthenticator)
 and `authorizer` (e.g. CassandraAuthorizer) must be set in the Cassandra
 class.
@@ -927,33 +899,42 @@ The following parameters are available in the `cassandra::schema::permission` de
 
 ##### <a name="-cassandra--schema--permission--user_name"></a>`user_name`
 
-Data type: `string`
+Data type: `String[1]`
 
-The name of the user who is to be granted or
-revoked.
+The name of the user who is to be granted or revoked.
 
 ##### <a name="-cassandra--schema--permission--ensure"></a>`ensure`
 
-Data type: `present | absent`
+Data type: `Enum['present', 'absent']`
 
-Set to present to grant a permission or
-absent to revoke it.
+Ensure the permission is granted or revoked.
 
 Default value: `present`
 
 ##### <a name="-cassandra--schema--permission--keyspace_name"></a>`keyspace_name`
 
-Data type: `string`
+Data type: `String[1]`
 
-The name of the keyspace to grant/revoke the
-permissions on.  If set to 'ALL' then the permission will be applied to
-all of the keyspaces.
+The name of the keyspace to grant/revoke the permissions on.
+If set to 'ALL' then the permission will be applied to all of the keyspaces.
 
 Default value: `'ALL'`
 
 ##### <a name="-cassandra--schema--permission--permission_name"></a>`permission_name`
 
-Data type: `string`
+Data type:
+
+```puppet
+Enum[
+    'ALL',
+    'ALTER',
+    'AUTHORIZE',
+    'CREATE',
+    'DROP',
+    'MODIFY',
+    'SELECT'
+  ]
+```
 
 Can be one of the following:
 
@@ -964,28 +945,26 @@ Can be one of the following:
 * 'MODIFY' - INSERT, DELETE, UPDATE, TRUNCATE.
 * 'SELECT' - SELECT.
 
-If the permission_name is set to 'ALL', this will set all of the specific
-permissions listed.
+If the permission_name is set to 'ALL', this will set all of the specific permissions listed.
 
 Default value: `'ALL'`
 
 ##### <a name="-cassandra--schema--permission--table_name"></a>`table_name`
 
-Data type: `string`
+Data type: `Optional[String[1]]`
 
-The name of a table within the specified
-keyspace.  If left unspecified, the procedure will be applied to all
-tables within the keyspace.
+The name of a table within the specified keyspace.
+If left unspecified, the procedure will be applied to all tables within the keyspace.
 
 Default value: `undef`
 
 ### <a name="cassandra--schema--table"></a>`cassandra::schema::table`
 
-Create or drop tables within the schema.
+A defined type to create or drop a table.
 
 #### Examples
 
-##### 
+##### Basic usage.
 
 ```puppet
 cassandra::schema::table { 'users':
@@ -1004,69 +983,61 @@ cassandra::schema::table { 'users':
 The following parameters are available in the `cassandra::schema::table` defined type:
 
 * [`keyspace`](#-cassandra--schema--table--keyspace)
-* [`columns`](#-cassandra--schema--table--columns)
 * [`ensure`](#-cassandra--schema--table--ensure)
+* [`columns`](#-cassandra--schema--table--columns)
 * [`options`](#-cassandra--schema--table--options)
 * [`table`](#-cassandra--schema--table--table)
 
 ##### <a name="-cassandra--schema--table--keyspace"></a>`keyspace`
 
-Data type: `string`
+Data type: `String[1]`
 
 The name of the keyspace.
 
-##### <a name="-cassandra--schema--table--columns"></a>`columns`
-
-Data type: `hash`
-
-A hash of the columns to be placed in the table.
-Optional if the table is to be absent.
-
-Default value: `{}`
-
 ##### <a name="-cassandra--schema--table--ensure"></a>`ensure`
 
-Data type: `present|absent`
+Data type: `Enum['present', 'absent']`
 
-Ensure a keyspace is created or dropped.
+Ensure the index is created or dropped.
 
 Default value: `present`
 
+##### <a name="-cassandra--schema--table--columns"></a>`columns`
+
+Data type: `Hash`
+
+A hash of the columns to be placed in the table. Optional if the table is to be absent.
+
+Default value: `{}`
+
 ##### <a name="-cassandra--schema--table--options"></a>`options`
 
-Data type: `array`
+Data type: `Array`
 
-Options to be added to the table creation.
+Options to be added with table creation.
 
 Default value: `[]`
 
 ##### <a name="-cassandra--schema--table--table"></a>`table`
 
-Data type: `string`
+Data type: `String[1]`
 
-The name of the table.  Defaults to the name of the
-resource.
+The name of the table.
 
 Default value: `$title`
 
 ### <a name="cassandra--schema--user"></a>`cassandra::schema::user`
 
-Create or drop users.
-To use this class, a suitable `authenticator` (e.g. PasswordAuthenticator)
-must be set in the Cassandra class.
+A defined type to create or drop a user.
 
 #### Examples
 
-##### 
+##### Basic usage.
 
 ```puppet
 cassandra::schema::user { 'akers':
   password  => 'Niner2',
   superuser => true,
-}
-
-cassandra::schema::user { 'lucan':
-  ensure => absent,
 }
 ```
 
@@ -1075,49 +1046,48 @@ cassandra::schema::user { 'lucan':
 The following parameters are available in the `cassandra::schema::user` defined type:
 
 * [`ensure`](#-cassandra--schema--user--ensure)
-* [`password`](#-cassandra--schema--user--password)
-* [`superuser`](#-cassandra--schema--user--superuser)
-* [`login`](#-cassandra--schema--user--login)
 * [`user_name`](#-cassandra--schema--user--user_name)
+* [`password`](#-cassandra--schema--user--password)
+* [`login`](#-cassandra--schema--user--login)
+* [`superuser`](#-cassandra--schema--user--superuser)
 
 ##### <a name="-cassandra--schema--user--ensure"></a>`ensure`
 
-Data type: `present | absent`
+Data type: `Enum['present', 'absent']`
 
-Valid values can be **present** to
-ensure a user is created, or **absent** to remove the user if it exists.
+Ensure the user is created or dropped.
 
 Default value: `present`
 
-##### <a name="-cassandra--schema--user--password"></a>`password`
-
-Data type: `string`
-
-A password for the user.
-
-Default value: `undef`
-
-##### <a name="-cassandra--schema--user--superuser"></a>`superuser`
-
-Data type: `boolean`
-
-If the user is to be a super-user on the system.
-
-Default value: `false`
-
-##### <a name="-cassandra--schema--user--login"></a>`login`
-
-Data type: `boolean`
-
-Allows the role to log in.
-
-Default value: `true`
-
 ##### <a name="-cassandra--schema--user--user_name"></a>`user_name`
 
-Data type: `string`
+Data type: `String[1]`
 
 The name of the user.
 
 Default value: `$title`
+
+##### <a name="-cassandra--schema--user--password"></a>`password`
+
+Data type: `Optional[Variant[String[1], Sensitive]]`
+
+The password for the user.
+
+Default value: `undef`
+
+##### <a name="-cassandra--schema--user--login"></a>`login`
+
+Data type: `Boolean`
+
+Allows the user to log in.
+
+Default value: `true`
+
+##### <a name="-cassandra--schema--user--superuser"></a>`superuser`
+
+Data type: `Boolean`
+
+Whether the user should be a super user.
+
+Default value: `false`
 

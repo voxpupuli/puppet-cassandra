@@ -1,19 +1,6 @@
-# Create or drop keyspaces within the schema.
-# @param ensure [present|absent] Create or drop the keyspace.
-# @param durable_writes [boolean] When set to false, data written to the
-#   keyspace bypasses the commit log. Be careful using this option
-#   because you risk losing data. Set this attribute to false on a keyspace
-#   using the SimpleStrategy.
-# @param keyspace_name [string] The name of the keyspace to be created.
-# @param replication_map [hash] Needed if the keyspace is to be present.
-#   Optional if it is to be absent.
-# @example
-#   $network_topology_strategy = {
-#     keyspace_class => 'NetworkTopologyStrategy',
-#       dc1            => 3,
-#       dc2            => 2
-#   }
-# @example
+# @summary A defined type to create or drop a keyspace.
+#
+# @example Basic usage.
 #   cassandra::schema::keyspace { 'mykeyspace':
 #     replication_map => {
 #       keyspace_class     => 'SimpleStrategy',
@@ -21,13 +8,25 @@
 #     },
 #     durable_writes  => false,
 #   }
+#
+# @param ensure
+#   Ensure the index is created or dropped.
+# @param durable_writes
+#   When set to false, data written to the keyspace bypasses the commit log.
+#   Be careful using this option because you risk losing data.
+#   Set this attribute to false on a keyspace using the SimpleStrategy.
+# @param keyspace_name
+#   The name of the keyspace to be created.
+# @param replication_map
+#   Needed if the keyspace is to be present. Optional if it is to be absent.
+#
 define cassandra::schema::keyspace (
-  $ensure          = present,
-  $durable_writes  = true,
-  $keyspace_name   = $title,
-  $replication_map = {},
+  Enum['present', 'absent'] $ensure = present,
+  Boolean $durable_writes = true,
+  String[1] $keyspace_name = $title,
+  Hash $replication_map = {},
 ) {
-  include cassandra::schema
+  require cassandra::schema
 
   $quote = '"'
   $read_script = "DESC KEYSPACE ${keyspace_name}"
@@ -63,14 +62,12 @@ define cassandra::schema::keyspace (
       unless  => $read_command,
       require => Exec['cassandra::schema connection test'],
     }
-  } elsif $ensure == absent {
+  } else {
     $delete_script = "DROP KEYSPACE ${keyspace_name}"
     $delete_command = "${cassandra::schema::cqlsh_opts} -e ${quote}${delete_script}${quote} ${cassandra::schema::cqlsh_conn}"
     exec { $delete_command:
       onlyif  => $read_command,
       require => Exec['cassandra::schema connection test'],
     }
-  } else {
-    fail("Unknown action (${ensure}) for ensure attribute.")
   }
 }

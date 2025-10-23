@@ -1,12 +1,6 @@
-# Create or drop tables within the schema.
-# @param keyspace [string] The name of the keyspace.
-# @param columns [hash] A hash of the columns to be placed in the table.
-#   Optional if the table is to be absent.
-# @param ensure [present|absent] Ensure a keyspace is created or dropped.
-# @param options [array] Options to be added to the table creation.
-# @param table [string] The name of the table.  Defaults to the name of the
-#   resource.
-# @example
+# @summary A defined type to create or drop a table.
+#
+# @example Basic usage.
 #   cassandra::schema::table { 'users':
 #     keyspace => 'mykeyspace',
 #     columns  => {
@@ -16,14 +10,26 @@
 #       'PRIMARY KEY' => '(userid)',
 #     },
 #   }
+#
+# @param keyspace
+#   The name of the keyspace.
+# @param ensure
+#   Ensure the index is created or dropped.
+# @param columns
+#   A hash of the columns to be placed in the table. Optional if the table is to be absent.
+# @param options
+#   Options to be added with table creation.
+# @param table
+#   The name of the table.
+#
 define cassandra::schema::table (
-  $keyspace,
-  $ensure  = present,
-  $columns = {},
-  $options = [],
-  $table   = $title,
+  String[1] $keyspace,
+  Enum['present', 'absent'] $ensure = present,
+  Hash $columns = {},
+  Array $options = [],
+  String[1] $table = $title,
 ) {
-  include cassandra::schema
+  require cassandra::schema
 
   $quote = '"'
   $read_script = "DESC TABLE ${keyspace}.${table}"
@@ -46,14 +52,12 @@ define cassandra::schema::table (
       unless  => $read_command,
       require => Exec['cassandra::schema connection test'],
     }
-  } elsif $ensure == absent {
+  } else {
     $delete_script = "DROP TABLE IF EXISTS ${keyspace}.${table}"
     $delete_command = "${cassandra::schema::cqlsh_opts} -e ${quote}${delete_script}${quote} ${cassandra::schema::cqlsh_conn}"
     exec { $delete_command:
       onlyif  => $read_command,
       require => Exec['cassandra::schema connection test'],
     }
-  } else {
-    fail("Unknown action (${ensure}) for ensure attribute.")
   }
 }
