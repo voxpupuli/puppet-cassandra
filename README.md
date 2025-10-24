@@ -48,7 +48,7 @@ Module to install, configure and manage Cassandra.
 You need a compatible version of Java installed.
 You can use [puppetlabs/java](https://github.com/puppetlabs/puppetlabs-java) module or set `cassandra::java_package`.
 
-On Debian systems there's a soft dependency on the [puppetlabs/apt](https://github.com/puppetlabs/puppetlabs-apt) module.
+On Debian systems there's a soft dependency on [puppetlabs/apt](https://github.com/puppetlabs/puppetlabs-apt) module.
 
 When using `cassandra::schema` resources you also need a compatible version of Python installed.
 
