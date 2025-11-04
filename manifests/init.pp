@@ -178,14 +178,6 @@ class cassandra (
       $dc_rack_properties_file_before  = []
       $data_dir_require = Package['cassandra']
       $data_dir_before = []
-
-      if $facts['os']['release']['major'] == '7' and $cassandra::service_provider == 'init' {
-        exec { "/sbin/chkconfig --add ${service_name}":
-          unless  => "/sbin/chkconfig --list ${service_name}",
-          require => Package['cassandra'],
-          before  => Service['cassandra'],
-        }
-      }
     }
     'Debian': {
       $config_file_require = [User['cassandra'], File[$config_path]]

@@ -5,16 +5,8 @@ describe 'cassandra::optutils' do
   context 'On a RedHat OS with defaults for all parameters' do
     let :facts do
       {
-        operatingsystemmajrelease: '7',
-        osfamily: 'RedHat',
         os: {
           'family' => 'RedHat',
-          'name' => 'RedHat',
-          'release' => {
-            'full' => '7.6.1810',
-            'major' => '7',
-            'minor' => '6'
-          }
         }
       }
     end
@@ -33,16 +25,8 @@ describe 'cassandra::optutils' do
   context 'On a Debian OS with defaults for all parameters' do
     let :facts do
       {
-        operatingsystemmajrelease: '7',
-        osfamily: 'Debian',
         os: {
           'family' => 'Debian',
-          'name' => 'Debian',
-          'release' => {
-            'full' => '7.8',
-            'major' => '7',
-            'minor' => '8'
-          }
         }
       }
     end
@@ -60,15 +44,8 @@ describe 'cassandra::optutils' do
   context 'With package_name set to foobar' do
     let :facts do
       {
-        operatingsystemmajrelease: '7',
-        osfamily: 'Debian',
         os: {
           'family' => 'Debian',
-          'release' => {
-            'full' => '7.8',
-            'major' => '7',
-            'minor' => '8'
-          }
         }
       }
     end
@@ -88,15 +65,8 @@ describe 'cassandra::optutils' do
   context 'On a Debian OS with package_ensure set' do
     let :facts do
       {
-        operatingsystemmajrelease: '7',
-        osfamily: 'Debian',
         os: {
           'family' => 'Debian',
-          'release' => {
-            'full' => '7.8',
-            'major' => '7',
-            'minor' => '8'
-          }
         }
       }
     end

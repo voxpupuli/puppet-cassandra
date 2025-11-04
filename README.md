@@ -3,24 +3,44 @@
 
 ## Table of Contents
 
-1. [Overview](#overview)
-1. [Setup - The basics of getting started with Cassandra](#setup)
-    * [What Cassandra affects](#what-cassandra-affects)
-    * [Upgrading](#upgrading)
-    * [Beginning with Cassandra](#beginning-with-cassandra)
-1. [Usage - Configuration options and additional functionality](#usage)
-    * [Setup a keyspace and users](#setup-a-keyspace-and-users)
-    * [Create a Cluster in a Single Data Center](#create-a-cluster-in-a-single-data-center)
-    * [Create a Cluster in Multiple Data Centers](#create-a-cluster-in-multiple-data-centers)
-    * [DataStax Enterprise](#datastax-enterprise)
-    * [Apache Cassandra](#apache-cassandra)
-1. [Reference](#reference)
-1. [Limitations - OS compatibility, etc.](#limitations)
-1. [Development](#development)
+- [Cassandra](#cassandra)
+  - [Table of Contents](#table-of-contents)
+  - [Overview](#overview)
+  - [Setup](#setup)
+    - [What Cassandra affects](#what-cassandra-affects)
+      - [What the Cassandra class affects](#what-the-cassandra-class-affects)
+      - [What the cassandra::datastax\_agent class affects](#what-the-cassandradatastax_agent-class-affects)
+      - [What the cassandra::datastax\_repo class affects](#what-the-cassandradatastax_repo-class-affects)
+      - [What the cassandra::dse class affects](#what-the-cassandradse-class-affects)
+      - [What the cassandra::firewall\_ports class affects](#what-the-cassandrafirewall_ports-class-affects)
+      - [What the cassandra::java class affects](#what-the-cassandrajava-class-affects)
+      - [What the cassandra::optutils class affects](#what-the-cassandraoptutils-class-affects)
+    - [Upgrading](#upgrading)
+      - [Changes in 2.0.0](#changes-in-200)
+      - [Changes in 1.19.0](#changes-in-1190)
+      - [Changes in 1.9.2](#changes-in-192)
+      - [Changes in 1.8.0](#changes-in-180)
+      - [Issues when Upgrading to 1.4.0](#issues-when-upgrading-to-140)
+      - [Issues When Upgrading to 1.3.7](#issues-when-upgrading-to-137)
+      - [Changes in 1.0.0](#changes-in-100)
+      - [Changes in 0.4.0](#changes-in-040)
+      - [Changes in 0.3.0](#changes-in-030)
+    - [Beginning with Cassandra](#beginning-with-cassandra)
+    - [Hiera](#hiera)
+  - [Usage](#usage)
+    - [Setup a keyspace and users](#setup-a-keyspace-and-users)
+    - [Create a Cluster in a Single Data Center](#create-a-cluster-in-a-single-data-center)
+    - [Create a Cluster in Multiple Data Centers](#create-a-cluster-in-multiple-data-centers)
+    - [DataStax Enterprise](#datastax-enterprise)
+    - [Apache Cassandra](#apache-cassandra)
+  - [Reference](#reference)
+  - [Limitations](#limitations)
+  - [Development](#development)
+    - [Additional Contributers](#additional-contributers)
 
 ## Overview
 
-A Puppet module to install and manage Cassandra, DataStax Agent & OpsCenter
+Module to install, configure and manage Cassandra.
 
 ## Setup
 

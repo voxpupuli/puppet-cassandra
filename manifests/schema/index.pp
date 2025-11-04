@@ -17,29 +17,17 @@ define cassandra::schema::index (
   $index      = $title,
   $keys       = undef,
   $options    = undef,
-  Boolean $use_scl = $cassandra::schema::use_scl,
-  String[1] $scl_name = $cassandra::schema::scl_name,
 ) {
   include cassandra::schema
 
-  if $use_scl {
-    $quote = '\"'
-  } else {
-    $quote = '"'
-  }
-
+  $quote = '"'
   # Fully qualified index name.
   $fqin = "${keyspace}.${index}"
   # Fully qualified table name.
   $fqtn = "${keyspace}.${table}"
 
   $read_script = "DESC INDEX ${fqin}"
-  $read_command_tmp = "${cassandra::schema::cqlsh_opts} -e ${quote}${read_script}${quote} ${cassandra::schema::cqlsh_conn}"
-  if $use_scl {
-    $read_command = "/usr/bin/scl enable ${scl_name} \"${read_command_tmp}\""
-  } else {
-    $read_command = $read_command_tmp
-  }
+  $read_command = "${cassandra::schema::cqlsh_opts} -e ${quote}${read_script}${quote} ${cassandra::schema::cqlsh_conn}"
 
   if $ensure == present {
     if $class_name != undef {
@@ -60,12 +48,7 @@ define cassandra::schema::index (
       $create_script = $create_part2
     }
 
-    $create_command_tmp = "${cassandra::schema::cqlsh_opts} -e ${quote}${create_script}${quote} ${cassandra::schema::cqlsh_conn}"
-    if $use_scl {
-      $create_command = "/usr/bin/scl enable ${scl_name} \"${create_command_tmp}\""
-    } else {
-      $create_command = $create_command_tmp
-    }
+    $create_command = "${cassandra::schema::cqlsh_opts} -e ${quote}${create_script}${quote} ${cassandra::schema::cqlsh_conn}"
 
     exec { $create_command:
       unless  => $read_command,
@@ -73,12 +56,7 @@ define cassandra::schema::index (
     }
   } elsif $ensure == absent {
     $delete_script = "DROP INDEX ${fqin}"
-    $delete_command_tmp = "${cassandra::schema::cqlsh_opts} -e ${quote}${delete_script}${quote} ${cassandra::schema::cqlsh_conn}"
-    if $use_scl {
-      $delete_command = "/usr/bin/scl enable ${scl_name} \"${delete_command_tmp}\""
-    } else {
-      $delete_command = $delete_command_tmp
-    }
+    $delete_command = "${cassandra::schema::cqlsh_opts} -e ${quote}${delete_script}${quote} ${cassandra::schema::cqlsh_conn}"
     exec { $delete_command:
       onlyif  => $read_command,
       require => Exec['cassandra::schema connection test'],
