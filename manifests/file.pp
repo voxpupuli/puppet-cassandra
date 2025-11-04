@@ -61,7 +61,6 @@ define cassandra::file (
   $service_refresh  = true,
 ) {
   include cassandra
-  include cassandra::params
   include stdlib
 
   $path = "${config_path}/${file}"

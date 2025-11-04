@@ -49,10 +49,10 @@ class cassandra::schema (
   $permissions              = {},
   $tables                   = {},
   $users                    = {},
-  Boolean $use_scl          = $cassandra::params::use_scl,
-  String[1] $scl_name       = $cassandra::params::scl_name,
-) inherits cassandra::params {
-  require 'cassandra'
+  Boolean $use_scl          = false,
+  String[1] $scl_name       = 'nodefault',
+) {
+  require cassandra
 
   # Pass the SCL info to create_resources below as a hash
   $scl = {

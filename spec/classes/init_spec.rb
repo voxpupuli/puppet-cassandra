@@ -59,7 +59,7 @@ describe 'cassandra' do
           it do
             expect(subject).to contain_package('cassandra').with(
               ensure: 'present',
-              name: 'cassandra22'
+              name: 'cassandra'
             ).that_notifies('Exec[cassandra_reload_systemctl]')
 
             expect(subject).to contain_exec('cassandra_reload_systemctl').only_with(
@@ -99,7 +99,7 @@ describe 'cassandra' do
               fail_on_non_supported_os: true,
               hints_directory_mode: '0750',
               package_ensure: 'present',
-              package_name: 'cassandra22',
+              package_name: 'cassandra',
               rack: 'RAC1',
               rackdc_tmpl: 'cassandra/cassandra-rackdc.properties.erb',
               saved_caches_directory_mode: '0750',

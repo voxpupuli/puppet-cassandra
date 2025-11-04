@@ -14,7 +14,6 @@
 * [`cassandra::firewall_ports`](#cassandra--firewall_ports): An optional class to configure incoming network ports on the host that are relevant to the Cassandra installation.  If firewalls are being ma
 * [`cassandra::java`](#cassandra--java): A class to install Java and JNA packages.
 * [`cassandra::optutils`](#cassandra--optutils): A class to install the optional Cassandra tools package.
-* [`cassandra::params`](#cassandra--params): This class is meant to be called from the locp-cassandra module. It sets variables according to platform.
 * [`cassandra::schema`](#cassandra--schema): A class to maintain the database schema.  Please note that cqlsh expects Python 2.7 to be installed. This may be a problem of older distributions (CentOS 6 for example).
 * [`cassandra::system::swapoff`](#cassandra--system--swapoff): Disable swap on the node as suggested at http://docs.datastax.com/en/landing_page/doc/landing_page/recommendedSettingsLinux.html
 * [`cassandra::system::sysctl`](#cassandra--system--sysctl): Set Sysctl (kernel runtime parameters) as suggested in http://docs.datastax.com/en/landing_page/doc/landing_page/recommendedSettingsLinux.htm
@@ -163,8 +162,6 @@ Data type: `string`
 
 The path to the cassandra configuration file.
 
-Default value: `$cassandra::params::config_path`
-
 ##### <a name="-cassandra--data_file_directories"></a>`data_file_directories`
 
 Data type: `array`
@@ -257,7 +254,7 @@ Data type: `string`
 The name of the Cassandra package which must be available
 from a repository.
 
-Default value: `$cassandra::params::cassandra_pkg`
+Default value: `'cassandra'`
 
 ##### <a name="-cassandra--prefer_local"></a>`prefer_local`
 
@@ -413,8 +410,6 @@ Data type: `string`
 The full path to the systemctl command.  Only
 needed when the package is installed.  Will silently continue if the
 executable does not exist.
-
-Default value: `$cassandra::params::systemctl`
 
 ### <a name="cassandra--apache_repo"></a>`cassandra::apache_repo`
 
@@ -963,8 +958,6 @@ Data type: `string`
 
 The name of the JNA package.
 
-Default value: `$cassandra::params::jna_package_name`
-
 ##### <a name="-cassandra--java--package_ensure"></a>`package_ensure`
 
 Data type: `string`
@@ -979,8 +972,6 @@ Default value: `present`
 Data type: `string`
 
 The name of the Java package to be installed.
-
-Default value: `$cassandra::params::java_package`
 
 ##### <a name="-cassandra--java--yumrepo"></a>`yumrepo`
 
@@ -1019,12 +1010,7 @@ Data type: `string`
 The name of the optional utilities package to
 be installed.
 
-Default value: `$cassandra::params::optutils_package_name`
-
-### <a name="cassandra--params"></a>`cassandra::params`
-
-This class is meant to be called from the locp-cassandra module.
-It sets variables according to platform.
+Default value: `'cassandra-tools'`
 
 ### <a name="cassandra--schema"></a>`cassandra::schema`
 
@@ -1202,7 +1188,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$cassandra::params::use_scl`
+Default value: `false`
 
 ##### <a name="-cassandra--schema--scl_name"></a>`scl_name`
 
@@ -1210,15 +1196,12 @@ Data type: `String[1]`
 
 
 
-Default value: `$cassandra::params::scl_name`
+Default value: `'nodefault'`
 
 ### <a name="cassandra--system--swapoff"></a>`cassandra::system::swapoff`
 
 Disable swap on the node as suggested at
 http://docs.datastax.com/en/landing_page/doc/landing_page/recommendedSettingsLinux.html
-
-* **See also**
-  * cassandra::params
 
 #### Parameters
 
@@ -1262,9 +1245,6 @@ http://docs.datastax.com/en/landing_page/doc/landing_page/recommendedSettingsLin
 If any of the values is set into the target file, the sysctl command will
 be called with the provided file name as an argument.
 
-* **See also**
-  * cassandra::params
-
 #### Examples
 
 ##### Basic requirement
@@ -1302,7 +1282,7 @@ Data type: `string`
 
 Path to the file to insert the settings into.
 
-Default value: `$cassandra::params::sysctl_file`
+Default value: `'/etc/sysctl.d/10-cassandra.conf'`
 
 ##### <a name="-cassandra--system--sysctl--net_core_optmem_max"></a>`net_core_optmem_max`
 
@@ -1353,7 +1333,7 @@ Data type: `string`
 
 The value to set for net.ipv4.tcp_rmem.
 
-Default value: `$cassandra::params::net_ipv4_tcp_rmem`
+Default value: `'4096, 87380, 16777216'`
 
 ##### <a name="-cassandra--system--sysctl--net_ipv4_tcp_wmem"></a>`net_ipv4_tcp_wmem`
 
@@ -1361,7 +1341,7 @@ Data type: `string`
 
 The value to set for net.ipv4.tcp_wmem.
 
-Default value: `$cassandra::params::net_ipv4_tcp_wmem`
+Default value: `'4096, 65536, 16777216'`
 
 ##### <a name="-cassandra--system--sysctl--vm_max_map_count"></a>`vm_max_map_count`
 
@@ -1375,9 +1355,6 @@ Default value: `1048575`
 
 Disable Transparant Huge Pages as suggested in
 http://docs.datastax.com/en/landing_page/doc/landing_page/recommendedSettingsLinux.html.
-
-* **See also**
-  * cassandra::params
 
 #### Parameters
 
@@ -1582,7 +1559,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$cassandra::params::use_scl`
+Default value: `$cassandra::schema::use_scl`
 
 ##### <a name="-cassandra--schema--cql_type--scl_name"></a>`scl_name`
 
@@ -1590,7 +1567,7 @@ Data type: `String[1]`
 
 
 
-Default value: `$cassandra::params::scl_name`
+Default value: `$cassandra::schema::scl_name`
 
 ### <a name="cassandra--schema--index"></a>`cassandra::schema::index`
 
@@ -1671,7 +1648,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$cassandra::params::use_scl`
+Default value: `$cassandra::schema::use_scl`
 
 ##### <a name="-cassandra--schema--index--scl_name"></a>`scl_name`
 
@@ -1679,7 +1656,7 @@ Data type: `String[1]`
 
 
 
-Default value: `$cassandra::params::scl_name`
+Default value: `$cassandra::schema::scl_name`
 
 ### <a name="cassandra--schema--keyspace"></a>`cassandra::schema::keyspace`
 
@@ -1762,7 +1739,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$cassandra::params::use_scl`
+Default value: `$cassandra::schema::use_scl`
 
 ##### <a name="-cassandra--schema--keyspace--scl_name"></a>`scl_name`
 
@@ -1770,7 +1747,7 @@ Data type: `String[1]`
 
 
 
-Default value: `$cassandra::params::scl_name`
+Default value: `$cassandra::schema::scl_name`
 
 ### <a name="cassandra--schema--permission"></a>`cassandra::schema::permission`
 
@@ -1854,7 +1831,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$cassandra::params::use_scl`
+Default value: `$cassandra::schema::use_scl`
 
 ##### <a name="-cassandra--schema--permission--scl_name"></a>`scl_name`
 
@@ -1862,7 +1839,7 @@ Data type: `String[1]`
 
 
 
-Default value: `$cassandra::params::scl_name`
+Default value: `$cassandra::schema::scl_name`
 
 ### <a name="cassandra--schema--table"></a>`cassandra::schema::table`
 
@@ -1942,7 +1919,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$cassandra::params::use_scl`
+Default value: `$cassandra::schema::use_scl`
 
 ##### <a name="-cassandra--schema--table--scl_name"></a>`scl_name`
 
@@ -1950,7 +1927,7 @@ Data type: `String[1]`
 
 
 
-Default value: `$cassandra::params::scl_name`
+Default value: `$cassandra::schema::scl_name`
 
 ### <a name="cassandra--schema--user"></a>`cassandra::schema::user`
 
@@ -2032,7 +2009,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$cassandra::params::use_scl`
+Default value: `$cassandra::schema::use_scl`
 
 ##### <a name="-cassandra--schema--user--scl_name"></a>`scl_name`
 
@@ -2040,5 +2017,5 @@ Data type: `String[1]`
 
 
 
-Default value: `$cassandra::params::scl_name`
+Default value: `$cassandra::schema::scl_name`
 

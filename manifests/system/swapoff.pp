@@ -5,7 +5,6 @@
 # @param mount [string] The name of the swap mount point.  Ignored unless
 #   `device` has been set.
 # @param path [string] The full path to the file to check if swap is enabled.
-# @see cassandra::params
 class cassandra::system::swapoff (
   $device  = undef,
   $mount   = 'swap',
