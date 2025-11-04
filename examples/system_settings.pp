@@ -2,17 +2,6 @@
 require cassandra::datastax_repo
 require cassandra::system::transparent_hugepage
 
-case "${facts['os']['name']}-${operatingsystemmajrelease}" {
-  'CentOS-6': {
-    $device = '/dev/mapper/VolGroup-lv_swap'
-    $sysctl_args = '-e -p'
-  }
-  'CentOS-7': {
-    $device = '/dev/mapper/centos-swap'
-  }
-  default: {}
-}
-
 class { 'cassandra::system::swapoff':
   device => $device,
 }

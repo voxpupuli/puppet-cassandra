@@ -1036,8 +1036,6 @@ The following parameters are available in the `cassandra::schema` class:
 * [`permissions`](#-cassandra--schema--permissions)
 * [`tables`](#-cassandra--schema--tables)
 * [`users`](#-cassandra--schema--users)
-* [`use_scl`](#-cassandra--schema--use_scl)
-* [`scl_name`](#-cassandra--schema--scl_name)
 
 ##### <a name="-cassandra--schema--connection_tries"></a>`connection_tries`
 
@@ -1181,22 +1179,6 @@ Data type: `hash`
 Creates new `cassandra::schema::user` resources.
 
 Default value: `{}`
-
-##### <a name="-cassandra--schema--use_scl"></a>`use_scl`
-
-Data type: `Boolean`
-
-
-
-Default value: `false`
-
-##### <a name="-cassandra--schema--scl_name"></a>`scl_name`
-
-Data type: `String[1]`
-
-
-
-Default value: `'nodefault'`
 
 ### <a name="cassandra--system--swapoff"></a>`cassandra::system::swapoff`
 
@@ -1520,8 +1502,6 @@ The following parameters are available in the `cassandra::schema::cql_type` defi
 * [`ensure`](#-cassandra--schema--cql_type--ensure)
 * [`fields`](#-cassandra--schema--cql_type--fields)
 * [`cql_type_name`](#-cassandra--schema--cql_type--cql_type_name)
-* [`use_scl`](#-cassandra--schema--cql_type--use_scl)
-* [`scl_name`](#-cassandra--schema--cql_type--scl_name)
 
 ##### <a name="-cassandra--schema--cql_type--keyspace"></a>`keyspace`
 
@@ -1553,22 +1533,6 @@ The name of the CQL type to be created.
 
 Default value: `$title`
 
-##### <a name="-cassandra--schema--cql_type--use_scl"></a>`use_scl`
-
-Data type: `Boolean`
-
-
-
-Default value: `$cassandra::schema::use_scl`
-
-##### <a name="-cassandra--schema--cql_type--scl_name"></a>`scl_name`
-
-Data type: `String[1]`
-
-
-
-Default value: `$cassandra::schema::scl_name`
-
 ### <a name="cassandra--schema--index"></a>`cassandra::schema::index`
 
 Create or drop indexes within the schema.
@@ -1584,8 +1548,6 @@ The following parameters are available in the `cassandra::schema::index` defined
 * [`keyspace`](#-cassandra--schema--index--keyspace)
 * [`options`](#-cassandra--schema--index--options)
 * [`table`](#-cassandra--schema--index--table)
-* [`use_scl`](#-cassandra--schema--index--use_scl)
-* [`scl_name`](#-cassandra--schema--index--scl_name)
 
 ##### <a name="-cassandra--schema--index--ensure"></a>`ensure`
 
@@ -1642,22 +1604,6 @@ Data type: `string`
 
 The name of the table that the index is to be associated with.
 
-##### <a name="-cassandra--schema--index--use_scl"></a>`use_scl`
-
-Data type: `Boolean`
-
-
-
-Default value: `$cassandra::schema::use_scl`
-
-##### <a name="-cassandra--schema--index--scl_name"></a>`scl_name`
-
-Data type: `String[1]`
-
-
-
-Default value: `$cassandra::schema::scl_name`
-
 ### <a name="cassandra--schema--keyspace"></a>`cassandra::schema::keyspace`
 
 Create or drop keyspaces within the schema.
@@ -1694,8 +1640,6 @@ The following parameters are available in the `cassandra::schema::keyspace` defi
 * [`durable_writes`](#-cassandra--schema--keyspace--durable_writes)
 * [`keyspace_name`](#-cassandra--schema--keyspace--keyspace_name)
 * [`replication_map`](#-cassandra--schema--keyspace--replication_map)
-* [`use_scl`](#-cassandra--schema--keyspace--use_scl)
-* [`scl_name`](#-cassandra--schema--keyspace--scl_name)
 
 ##### <a name="-cassandra--schema--keyspace--ensure"></a>`ensure`
 
@@ -1733,22 +1677,6 @@ Optional if it is to be absent.
 
 Default value: `{}`
 
-##### <a name="-cassandra--schema--keyspace--use_scl"></a>`use_scl`
-
-Data type: `Boolean`
-
-
-
-Default value: `$cassandra::schema::use_scl`
-
-##### <a name="-cassandra--schema--keyspace--scl_name"></a>`scl_name`
-
-Data type: `String[1]`
-
-
-
-Default value: `$cassandra::schema::scl_name`
-
 ### <a name="cassandra--schema--permission"></a>`cassandra::schema::permission`
 
 Grant or revoke permissions.
@@ -1768,8 +1696,6 @@ The following parameters are available in the `cassandra::schema::permission` de
 * [`keyspace_name`](#-cassandra--schema--permission--keyspace_name)
 * [`permission_name`](#-cassandra--schema--permission--permission_name)
 * [`table_name`](#-cassandra--schema--permission--table_name)
-* [`use_scl`](#-cassandra--schema--permission--use_scl)
-* [`scl_name`](#-cassandra--schema--permission--scl_name)
 
 ##### <a name="-cassandra--schema--permission--user_name"></a>`user_name`
 
@@ -1825,22 +1751,6 @@ tables within the keyspace.
 
 Default value: `undef`
 
-##### <a name="-cassandra--schema--permission--use_scl"></a>`use_scl`
-
-Data type: `Boolean`
-
-
-
-Default value: `$cassandra::schema::use_scl`
-
-##### <a name="-cassandra--schema--permission--scl_name"></a>`scl_name`
-
-Data type: `String[1]`
-
-
-
-Default value: `$cassandra::schema::scl_name`
-
 ### <a name="cassandra--schema--table"></a>`cassandra::schema::table`
 
 Create or drop tables within the schema.
@@ -1870,8 +1780,6 @@ The following parameters are available in the `cassandra::schema::table` defined
 * [`ensure`](#-cassandra--schema--table--ensure)
 * [`options`](#-cassandra--schema--table--options)
 * [`table`](#-cassandra--schema--table--table)
-* [`use_scl`](#-cassandra--schema--table--use_scl)
-* [`scl_name`](#-cassandra--schema--table--scl_name)
 
 ##### <a name="-cassandra--schema--table--keyspace"></a>`keyspace`
 
@@ -1913,22 +1821,6 @@ resource.
 
 Default value: `$title`
 
-##### <a name="-cassandra--schema--table--use_scl"></a>`use_scl`
-
-Data type: `Boolean`
-
-
-
-Default value: `$cassandra::schema::use_scl`
-
-##### <a name="-cassandra--schema--table--scl_name"></a>`scl_name`
-
-Data type: `String[1]`
-
-
-
-Default value: `$cassandra::schema::scl_name`
-
 ### <a name="cassandra--schema--user"></a>`cassandra::schema::user`
 
 Create or drop users.
@@ -1959,8 +1851,6 @@ The following parameters are available in the `cassandra::schema::user` defined 
 * [`superuser`](#-cassandra--schema--user--superuser)
 * [`login`](#-cassandra--schema--user--login)
 * [`user_name`](#-cassandra--schema--user--user_name)
-* [`use_scl`](#-cassandra--schema--user--use_scl)
-* [`scl_name`](#-cassandra--schema--user--scl_name)
 
 ##### <a name="-cassandra--schema--user--ensure"></a>`ensure`
 
@@ -2002,20 +1892,4 @@ Data type: `string`
 The name of the user.
 
 Default value: `$title`
-
-##### <a name="-cassandra--schema--user--use_scl"></a>`use_scl`
-
-Data type: `Boolean`
-
-
-
-Default value: `$cassandra::schema::use_scl`
-
-##### <a name="-cassandra--schema--user--scl_name"></a>`scl_name`
-
-Data type: `String[1]`
-
-
-
-Default value: `$cassandra::schema::scl_name`
 

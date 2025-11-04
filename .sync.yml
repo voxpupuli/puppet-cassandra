@@ -2,9 +2,5 @@
 Gemfile:
   optional:
     ':test':
-      - gem: mocha
-        version: '~> 2.7'
       - gem: net-ftp
         version: '~> 0.3'
-spec/spec_helper.rb:
-  mock_with: ':mocha'

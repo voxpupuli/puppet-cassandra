@@ -22,17 +22,10 @@ define cassandra::schema::user (
   $password  = undef,
   $superuser = false,
   $user_name = $title,
-  Boolean $use_scl = $cassandra::schema::use_scl,
-  String[1] $scl_name = $cassandra::schema::scl_name,
 ) {
   include cassandra::schema
 
-  if $use_scl {
-    $quote = '\"'
-  } else {
-    $quote = '"'
-  }
-
+  $quote = '"'
   if $facts['cassandrarelease'] {
     if versioncmp($facts['cassandrarelease'], '2.2') < 0 {
       $operate_with_roles = false
@@ -49,12 +42,7 @@ define cassandra::schema::user (
     $read_script = 'LIST USERS'
   }
   $str_match = '\s'
-  $read_command_tmp = "${cassandra::schema::cqlsh_opts} -e ${quote}${read_script}${quote} ${cassandra::schema::cqlsh_conn} | grep '${str_match}*${user_name} |'"
-  if $use_scl {
-    $read_command = "/usr/bin/scl enable ${scl_name} \"${read_command_tmp}\""
-  } else {
-    $read_command = $read_command_tmp
-  }
+  $read_command = "${cassandra::schema::cqlsh_opts} -e ${quote}${read_script}${quote} ${cassandra::schema::cqlsh_conn} | grep '${str_match}*${user_name} |'"
 
   if $ensure == present {
     if $operate_with_roles {
@@ -103,12 +91,7 @@ define cassandra::schema::user (
       }
     }
 
-    $create_command_tmp = "${cassandra::schema::cqlsh_opts} -e ${quote}${create_script}${quote} ${cassandra::schema::cqlsh_conn}"
-    if $use_scl {
-      $create_command = "/usr/bin/scl enable ${scl_name} \"${create_command_tmp}\""
-    } else {
-      $create_command = $create_command_tmp
-    }
+    $create_command = "${cassandra::schema::cqlsh_opts} -e ${quote}${create_script}${quote} ${cassandra::schema::cqlsh_conn}"
     exec { "Create user (${user_name})":
       command => $create_command,
       unless  => $read_command,
@@ -120,12 +103,7 @@ define cassandra::schema::user (
     } else {
       $delete_script = "DROP USER ${user_name}"
     }
-    $delete_command_tmp = "${cassandra::schema::cqlsh_opts} -e ${quote}${delete_script}${quote} ${cassandra::schema::cqlsh_conn}"
-    if $use_scl {
-      $delete_command = "/usr/bin/scl enable ${scl_name} \"${delete_command_tmp}\""
-    } else {
-      $delete_command = $delete_command_tmp
-    }
+    $delete_command = "${cassandra::schema::cqlsh_opts} -e ${quote}${delete_script}${quote} ${cassandra::schema::cqlsh_conn}"
     exec { "Delete user (${user_name})":
       command => $delete_command,
       onlyif  => $read_command,

@@ -5,15 +5,8 @@ describe 'cassandra::java' do
   context 'On a RedHat OS with defaults for all parameters' do
     let :facts do
       {
-        operatingsystemmajrelease: '7',
-        osfamily: 'RedHat',
         os: {
-          'family' => 'RedHat',
-          'release' => {
-            'full' => '7.6.1810',
-            'major' => '7',
-            'minor' => '6'
-          }
+          'family' => 'RedHat'
         }
       }
     end
@@ -28,17 +21,8 @@ describe 'cassandra::java' do
   context 'On a Debian OS with defaults for all parameters' do
     let :facts do
       {
-        operatingsystemmajrelease: '7',
-        osfamily: 'Debian',
-        lsbdistid: 'Debian',
         os: {
-          'name' => 'Debian',
           'family' => 'Debian',
-          'release' => {
-            'full' => '7.8',
-            'major' => '7',
-            'minor' => '8'
-          }
         }
       }
     end
@@ -54,17 +38,8 @@ describe 'cassandra::java' do
   context 'On a Debian OS with package_ensure set' do
     let :facts do
       {
-        operatingsystemmajrelease: '7',
-        osfamily: 'Debian',
-        lsbdistid: 'Debian',
         os: {
-          'name' => 'Debian',
           'family' => 'Debian',
-          'release' => {
-            'full' => '7.8',
-            'major' => '7',
-            'minor' => '8'
-          }
         }
       }
     end
@@ -83,15 +58,8 @@ describe 'cassandra::java' do
   context 'With package names set to foobar' do
     let :facts do
       {
-        operatingsystemmajrelease: '7',
-        osfamily: 'RedHat',
         os: {
           'family' => 'RedHat',
-          'release' => {
-            'full' => '7.6.1810',
-            'major' => '7',
-            'minor' => '6'
-          }
         }
       }
     end
@@ -114,15 +82,8 @@ describe 'cassandra::java' do
   context 'Ensure that a YUM repo can be specified.' do
     let :facts do
       {
-        operatingsystemmajrelease: '7',
-        osfamily: 'RedHat',
         os: {
           'family' => 'RedHat',
-          'release' => {
-            'full' => '7.6.1810',
-            'major' => '7',
-            'minor' => '6'
-          }
         }
       }
     end
@@ -149,17 +110,8 @@ describe 'cassandra::java' do
   context 'Ensure that Apt key and source can be specified.' do
     let :facts do
       {
-        operatingsystemmajrelease: '7',
-        osfamily: 'Debian',
-        lsbdistid: 'Debian',
         os: {
-          'name' => 'Debian',
           'family' => 'Debian',
-          'release' => {
-            'full' => '7.8',
-            'major' => '7',
-            'minor' => '8'
-          }
         }
       }
     end
