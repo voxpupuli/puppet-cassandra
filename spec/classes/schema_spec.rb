@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 describe 'cassandra::schema' do
   context 'Ensure that a connection test is made.' do
@@ -9,7 +11,7 @@ describe 'cassandra::schema' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -18,7 +20,7 @@ describe 'cassandra::schema' do
     end
 
     it do
-      is_expected.to contain_class('cassandra::schema').
+      expect(subject).to contain_class('cassandra::schema').
         with(connection_tries: 6,
              connection_try_sleep: 30,
              cqlsh_additional_options: '',
@@ -30,7 +32,7 @@ describe 'cassandra::schema' do
 
       read_command = '/usr/bin/cqlsh   -e \'DESC KEYSPACES\' localhost 9042'
 
-      is_expected.to contain_exec('cassandra::schema connection test').
+      expect(subject).to contain_exec('cassandra::schema connection test').
         only_with(command: read_command,
                   returns: 0,
                   tries: 6,
@@ -48,7 +50,7 @@ describe 'cassandra::schema' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -64,7 +66,7 @@ describe 'cassandra::schema' do
     end
 
     it do
-      is_expected.to contain_class('cassandra::schema').
+      expect(subject).to contain_class('cassandra::schema').
         with(connection_tries: 6,
              connection_try_sleep: 30,
              cqlsh_additional_options: '',
@@ -76,7 +78,7 @@ describe 'cassandra::schema' do
 
       read_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \'DESC KEYSPACES\' localhost 9042"'
 
-      is_expected.to contain_exec('cassandra::schema connection test').
+      expect(subject).to contain_exec('cassandra::schema connection test').
         only_with(command: read_command,
                   returns: 0,
                   tries: 6,
@@ -96,7 +98,7 @@ describe 'cassandra::schema' do
           'family' => 'Debian',
           'name' => 'Debian',
           'release' => {
-            'full'  => '7.8',
+            'full' => '7.8',
             'major' => '7',
             'minor' => '8'
           }
@@ -117,17 +119,17 @@ describe 'cassandra::schema' do
     end
 
     it do
-      is_expected.to contain_file('/root/.puppetcqlshrc').with(
+      expect(subject).to contain_file('/root/.puppetcqlshrc').with(
         ensure: 'file',
         group: 0,
         mode: '0600',
         owner: 0,
         content: %r{username = cassandra}
-      ).that_comes_before('Exec[::cassandra::schema connection test]')
+      ).that_comes_before('Exec[cassandra::schema connection test]')
 
       read_command = "/usr/bin/cqlsh --cqlshrc=/root/.puppetcqlshrc  -e 'DESC KEYSPACES' localhost 9042"
 
-      is_expected.to contain_exec('cassandra::schema connection test').
+      expect(subject).to contain_exec('cassandra::schema connection test').
         only_with(command: read_command,
                   returns: 0,
                   tries: 6,
@@ -147,7 +149,7 @@ describe 'cassandra::schema' do
           'family' => 'Debian',
           'name' => 'Debian',
           'release' => {
-            'full'  => '7.8',
+            'full' => '7.8',
             'major' => '7',
             'minor' => '8'
           }
@@ -169,7 +171,7 @@ describe 'cassandra::schema' do
     end
 
     it do
-      is_expected.to contain_file('/root/.puppetcqlshrc').with(
+      expect(subject).to contain_file('/root/.puppetcqlshrc').with(
         ensure: 'file',
         group: 0,
         mode: '0600',
@@ -179,7 +181,7 @@ describe 'cassandra::schema' do
 
       read_command = "/usr/bin/cqlsh --cqlshrc=/root/.puppetcqlshrc  -e 'DESC KEYSPACES' localhost 9042"
 
-      is_expected.to contain_exec('cassandra::schema connection test').
+      expect(subject).to contain_exec('cassandra::schema connection test').
         only_with(command: read_command,
                   returns: 0,
                   tries: 6,
@@ -197,7 +199,7 @@ describe 'cassandra::schema' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -214,7 +216,7 @@ describe 'cassandra::schema' do
     it do
       read_command = "/usr/bin/cqlsh -u cassandra -p topsecret  -e 'DESC KEYSPACES' localhost 9042"
 
-      is_expected.to contain_exec('cassandra::schema connection test').
+      expect(subject).to contain_exec('cassandra::schema connection test').
         only_with(command: read_command,
                   returns: 0,
                   tries: 6,

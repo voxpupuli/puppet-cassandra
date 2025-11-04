@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Returns a value (MB) that might be suitable to set the HEAP_NEWSIZE.
 # See [Tuning Java resources]
 # (https://docs.datastax.com/en/cassandra/2.1/cassandra/operations/ops_tune_jvm_c.html)

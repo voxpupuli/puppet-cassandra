@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Returns a value (MB) that might be suitable to set the MAX_HEAP_SIZE when using
 # the Concurrent Mark Sweep (CMS) Collector.
 # See [Tuning Java resources]

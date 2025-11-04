@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'cassandramajorversion' do
   before { Facter.clear }
+
   after { Facter.clear }
 
   describe 'cassandrarelease DSE' do
@@ -21,7 +24,7 @@ describe 'cassandramajorversion' do
   describe 'Cassandra not installed or not running' do
     it do
       Facter::Util::Resolution.stubs(:exec).with('nodetool version').returns('')
-      expect(Facter.fact(:cassandramajorversion).value).to be(nil)
+      expect(Facter.fact(:cassandramajorversion).value).to be_nil
     end
   end
 end

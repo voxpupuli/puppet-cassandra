@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
 describe 'cassandra' do
@@ -26,16 +28,16 @@ describe 'cassandra' do
 
     describe service('cassandra') do
       it "check Cassandra-#{version} is running and enabled" do
-        is_expected.to be_running
-        is_expected.to be_enabled
+        expect(subject).to be_running
+        expect(subject).to be_enabled
       end
     end
 
     if fact('osfamily') == 'RedHat'
       describe service('datastax-agent') do
         it 'check service status' do
-          is_expected.to be_running
-          is_expected.to be_enabled
+          expect(subject).to be_running
+          expect(subject).to be_enabled
         end
       end
     end
@@ -45,6 +47,7 @@ describe 'cassandra' do
         apply_manifest(t.schema_create_pp, catch_failures: true)
       end
 
+      # rubocop:disable Lint/FloatComparison
       if version != 2.1
         it 'check code is idempotent' do
           expect(apply_manifest(t.schema_create_pp, catch_failures: true).exit_code).to be_zero
@@ -119,6 +122,8 @@ describe 'cassandra' do
     end
 
     next unless version != 3.0
+    # rubocop:enable Lint/FloatComparison
+
     describe "Uninstall #{version}." do
       it 'works with no errors' do
         apply_manifest(t.cassandra_uninstall_pp, catch_failures: true)

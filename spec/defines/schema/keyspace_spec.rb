@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'cassandra::schema::keyspace' do
@@ -10,7 +12,7 @@ describe 'cassandra::schema::keyspace' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -25,7 +27,7 @@ describe 'cassandra::schema::keyspace' do
         ensure: 'present',
         replication_map:
           {
-            'keyspace_class'     => 'SimpleStrategy',
+            'keyspace_class' => 'SimpleStrategy',
             'replication_factor' => 3
           },
         use_scl: false,
@@ -34,15 +36,15 @@ describe 'cassandra::schema::keyspace' do
     end
 
     it do
-      is_expected.to compile
-      is_expected.to contain_class('cassandra::schema')
+      expect(subject).to compile
+      expect(subject).to contain_class('cassandra::schema')
       read_command =  '/usr/bin/cqlsh   -e "DESC KEYSPACE foobar" localhost 9042'
       exec_command =  '/usr/bin/cqlsh   -e "CREATE KEYSPACE IF NOT EXISTS foobar WITH REPLICATION = '
       exec_command += '{ \'class\' : \'SimpleStrategy\', \'replication_factor\' : 3 } '
       exec_command += 'AND DURABLE_WRITES = true" localhost 9042'
-      is_expected.to contain_exec(exec_command).
+      expect(subject).to contain_exec(exec_command).
         only_with(unless: read_command,
-                  require: 'Exec[::cassandra::schema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 
@@ -55,7 +57,7 @@ describe 'cassandra::schema::keyspace' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -70,7 +72,7 @@ describe 'cassandra::schema::keyspace' do
         ensure: 'present',
         replication_map:
           {
-            'keyspace_class'     => 'SimpleStrategy',
+            'keyspace_class' => 'SimpleStrategy',
             'replication_factor' => 3
           },
         use_scl: true,
@@ -79,14 +81,14 @@ describe 'cassandra::schema::keyspace' do
     end
 
     it do
-      is_expected.to compile
+      expect(subject).to compile
       read_command =  '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"DESC KEYSPACE foobar\" localhost 9042"'
       exec_command =  '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"CREATE KEYSPACE IF NOT EXISTS foobar WITH REPLICATION = '
       exec_command += '{ \'class\' : \'SimpleStrategy\', \'replication_factor\' : 3 } '
       exec_command += 'AND DURABLE_WRITES = true\" localhost 9042"'
-      is_expected.to contain_exec(exec_command).
+      expect(subject).to contain_exec(exec_command).
         only_with(unless: read_command,
-                  require: 'Exec[::cassandra::schema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 
@@ -99,7 +101,7 @@ describe 'cassandra::schema::keyspace' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -115,8 +117,8 @@ describe 'cassandra::schema::keyspace' do
         replication_map:
           {
             'keyspace_class' => 'NetworkTopologyStrategy',
-            'dc1'            => '3',
-            'dc2'            => '2'
+            'dc1' => '3',
+            'dc2' => '2'
           },
         use_scl: false,
         scl_name: 'nodefault'
@@ -124,14 +126,14 @@ describe 'cassandra::schema::keyspace' do
     end
 
     it do
-      is_expected.to contain_cassandra__schema__keyspace('foobar')
+      expect(subject).to contain_cassandra__schema__keyspace('foobar')
       read_command =  '/usr/bin/cqlsh   -e "DESC KEYSPACE foobar" localhost 9042'
       exec_command =  '/usr/bin/cqlsh   -e "CREATE KEYSPACE IF NOT EXISTS foobar WITH REPLICATION = '
       exec_command += '{ \'class\' : \'NetworkTopologyStrategy\', \'dc1\': 3, \'dc2\': 2 } '
       exec_command += 'AND DURABLE_WRITES = true" localhost 9042'
-      is_expected.to contain_exec(exec_command).
+      expect(subject).to contain_exec(exec_command).
         only_with(unless: read_command,
-                  require: 'Exec[::cassandra::schema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 
@@ -144,7 +146,7 @@ describe 'cassandra::schema::keyspace' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -160,8 +162,8 @@ describe 'cassandra::schema::keyspace' do
         replication_map:
           {
             'keyspace_class' => 'NetworkTopologyStrategy',
-            'dc1'            => '3',
-            'dc2'            => '2'
+            'dc1' => '3',
+            'dc2' => '2'
           },
         use_scl: true,
         scl_name: 'testscl'
@@ -169,14 +171,14 @@ describe 'cassandra::schema::keyspace' do
     end
 
     it do
-      is_expected.to contain_cassandra__schema__keyspace('foobar')
+      expect(subject).to contain_cassandra__schema__keyspace('foobar')
       read_command =  '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"DESC KEYSPACE foobar\" localhost 9042"'
       exec_command =  '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"CREATE KEYSPACE IF NOT EXISTS foobar WITH REPLICATION = '
       exec_command += '{ \'class\' : \'NetworkTopologyStrategy\', \'dc1\': 3, \'dc2\': 2 } '
       exec_command += 'AND DURABLE_WRITES = true\" localhost 9042"'
-      is_expected.to contain_exec(exec_command).
+      expect(subject).to contain_exec(exec_command).
         only_with(unless: read_command,
-                  require: 'Exec[::cassandra::schema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 
@@ -189,7 +191,7 @@ describe 'cassandra::schema::keyspace' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -207,12 +209,12 @@ describe 'cassandra::schema::keyspace' do
     end
 
     it do
-      is_expected.to compile
+      expect(subject).to compile
       read_command = '/usr/bin/cqlsh   -e "DESC KEYSPACE foobar" localhost 9042'
       exec_command = '/usr/bin/cqlsh   -e "DROP KEYSPACE foobar" localhost 9042'
-      is_expected.to contain_exec(exec_command).
+      expect(subject).to contain_exec(exec_command).
         only_with(onlyif: read_command,
-                  require: 'Exec[::cassandra::schema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 
@@ -225,7 +227,7 @@ describe 'cassandra::schema::keyspace' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }
@@ -243,12 +245,12 @@ describe 'cassandra::schema::keyspace' do
     end
 
     it do
-      is_expected.to compile
+      expect(subject).to compile
       read_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"DESC KEYSPACE foobar\" localhost 9042"'
       exec_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \"DROP KEYSPACE foobar\" localhost 9042"'
-      is_expected.to contain_exec(exec_command).
+      expect(subject).to contain_exec(exec_command).
         only_with(onlyif: read_command,
-                  require: 'Exec[::cassandra::schema connection test]')
+                  require: 'Exec[cassandra::schema connection test]')
     end
   end
 
@@ -261,7 +263,7 @@ describe 'cassandra::schema::keyspace' do
           'family' => 'RedHat',
           'name' => 'RedHat',
           'release' => {
-            'full'  => '7.6.1810',
+            'full' => '7.6.1810',
             'major' => '7',
             'minor' => '6'
           }

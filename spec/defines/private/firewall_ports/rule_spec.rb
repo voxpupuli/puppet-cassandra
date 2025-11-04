@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 describe 'cassandra::private::firewall_ports::rule' do
   context 'Test that rules can be set.' do
@@ -9,13 +11,13 @@ describe 'cassandra::private::firewall_ports::rule' do
     end
 
     it do
-      is_expected.to contain_firewall('200 - Cassandra (Public) - 0.0.0.0/0').with(
-        action: 'accept',
+      expect(subject).to contain_firewall('200 - Cassandra (Public) - 0.0.0.0/0').with(
+        jump: 'accept',
         dport: [8888, 22],
         proto: 'tcp',
         source: '0.0.0.0/0'
       )
-      is_expected.to have_resource_count(2)
+      expect(subject).to have_resource_count(2)
     end
   end
 end

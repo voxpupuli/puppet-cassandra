@@ -1,5 +1,13 @@
-require 'beaker-rspec'
-require 'pry'
+# frozen_string_literal: true
+
+require 'voxpupuli/acceptance/spec_helper_acceptance'
+
+configure_beaker do |host|
+  install_puppet_module_via_pmt_on(host, 'puppetlabs-apt') if fact_on(host, 'os.family') == 'Debian'
+  install_puppet_module_via_pmt_on(host, 'puppetlabs-firewall')
+  install_puppet_module_via_pmt_on(host, 'puppetlabs-inifile')
+  install_puppet_module_via_pmt_on(host, 'puppetlabs-stdlib')
+end
 
 class TestManifests
   def initialize(roles, version, operatingsystemmajrelease)
@@ -7,11 +15,12 @@ class TestManifests
     @roles = roles
     @version = version
 
-    if version == 2.1
+    case version
+    when 2.1
       init21
-    elsif version == 2.2
+    when 2.2
       init22
-    elsif version == 3.0
+    when 3.0
       init30(operatingsystemmajrelease)
     end
   end
@@ -62,7 +71,7 @@ class TestManifests
        logoutput => true,
     }
 
-    notify { "${::hostname}:${::operatingsystem}-${::operatingsystemmajrelease}": }
+    notify { "${facts['networking']['hostname']}:${facts['os']['name']}-${facts['os']['release']['major']}": }
 
     file { '/etc/dse':
       ensure => directory,
@@ -72,41 +81,15 @@ class TestManifests
       content => "#export DSE_HOME\n# export HADOOP_LOG_DIR=<log_dir>",
     }
 
-    case downcase("${::operatingsystem}-${::operatingsystemmajrelease}") {
-      'centos-6': {
-        package { ['gcc', 'tar', 'yum-utils', 'centos-release-scl']: } ->
-        exec { 'yum-config-manager --enable rhel-server-rhscl-7-rpms': } ->
-        package { 'ruby200': } ->
-        package { 'python27-python':
-          ensure => '2.7.8-18.el6',
-        } ->
-        exec { 'cp /opt/rh/python27/enable /etc/profile.d/python.sh': } ->
-        exec { 'echo "\n" >> /etc/profile.d/python.sh': } ->
-        exec { 'echo "export PYTHONPATH=/usr/lib/python2.7/site-packages" >> /etc/profile.d/python.sh': } ->
-        exec { '/bin/cp /opt/rh/ruby200/enable /etc/profile.d/ruby.sh': } ->
-        exec { '/bin/rm /usr/bin/ruby /usr/bin/gem': } ->
-        exec { '/usr/sbin/alternatives --install /usr/bin/ruby ruby /opt/rh/ruby200/root/usr/bin/ruby 1000': } ->
-        exec { '/usr/sbin/alternatives --install /usr/bin/gem gem /opt/rh/ruby200/root/usr/bin/gem 1000': }
-      }
+    case downcase("${facts['os']['name']}-${facts['os']['release']['major']}") {
       'centos-7': {
         package { ['gcc', 'tar', 'initscripts']: }
-      }
-      'debian-7': {
-        package { ['sudo', 'ufw', 'wget']: }
       }
       'debian-8': {
         package { ['locales-all', 'net-tools', 'sudo', 'ufw']: } ->
         file { '/usr/sbin/policy-rc.d':
           ensure => absent,
         }
-      }
-      'ubuntu-12.04': {
-        package {['python-software-properties', 'iptables', 'sudo']:} ->
-        exec {'/usr/bin/apt-add-repository ppa:brightbox/ruby-ng':} ->
-        exec {'/usr/bin/apt-get update': } ->
-        package {'ruby2.0': } ->
-        exec { '/bin/rm /usr/bin/ruby': } ->
-        exec { '/usr/sbin/update-alternatives --install /usr/bin/ruby ruby /usr/bin/ruby2.0 1000': }
       }
       'ubuntu-16.04': {
         package { ['locales-all', 'net-tools', 'sudo', 'ufw']: } ->
@@ -120,7 +103,7 @@ class TestManifests
 
   def cassandra_install_pp
     <<-EOS
-    if $::osfamily == 'Debian' {
+    if $osfamily == 'Debian' {
       class { 'cassandra::apache_repo':
         release => '#{@debian_release}',
         before  => Class['cassandra', 'cassandra::optutils'],
@@ -130,7 +113,7 @@ class TestManifests
       $cassandra_package = 'cassandra'
       $cassandra_optutils_package = 'cassandra-tools'
     } else {
-      if #{@version} >= 3.0 and $::operatingsystemmajrelease >= 7 {
+      if #{@version} >= 3.0 and $operatingsystemmajrelease >= 7 {
         yumrepo { 'datastax':
           ensure => absent,
         } ->
@@ -251,18 +234,17 @@ class TestManifests
   end
 
   def firewall_pp
-    pp = if @roles.include? 'firewall'
-           <<-EOS
+    if @roles.include? 'firewall'
+      <<-EOS
             class { 'cassandra::firewall_ports':
               require => Class['cassandra'],
             }
-          EOS
-         else
-           <<-EOS
+      EOS
+    else
+      <<-EOS
             # Firewall test skipped
-          EOS
-         end
-    pp
+      EOS
+    end
   end
 
   def permissions_revoke_pp
@@ -448,7 +430,7 @@ class TestManifests
   end
 
   def schema_drop_type_pp
-    pp = <<-EOS
+    <<-EOS
       #{cassandra_install_pp}
       $cql_types = {
        'fullname' => {
@@ -462,11 +444,10 @@ class TestManifests
        cqlsh_password => 'Niner2',
       }
     EOS
-    pp
   end
 
   def schema_drop_user_pp
-    pp = <<-EOS
+    <<-EOS
       #{cassandra_install_pp}
       class { 'cassandra::schema':
         cqlsh_password      => 'Niner2',
@@ -479,50 +460,5 @@ class TestManifests
         },
       }
     EOS
-    pp
-  end
-end
-
-hosts.each do |host|
-  case host.name
-  when 'ubuntu1604'
-    host.install_package('puppet')
-  else
-    install_puppet_on(host)
-  end
-end
-
-RSpec.configure do |c|
-  module_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
-  c.formatter = :documentation
-
-  # Configure all nodes in nodeset
-  c.before :suite do
-    # Install modules
-    puppet_module_install(source: module_root, module_name: 'cassandra')
-    hosts.each do |host|
-      on host, puppet('module', 'install',
-                      'puppetlabs-apt'), acceptable_exit_codes: [0, 1]
-      on host, puppet('module', 'install',
-                      'puppetlabs-firewall'), acceptable_exit_codes: [0, 1]
-      on host, puppet('module', 'install',
-                      'puppetlabs-inifile'), acceptable_exit_codes: [0, 1]
-      on host, puppet('module', 'install',
-                      'puppetlabs-stdlib'), acceptable_exit_codes: [0, 1]
-      # Install hiera
-      write_hiera_config_on(host,
-                            [
-                              'environments/%{environment}/data/fqdn/%{fqdn}',
-                              'environments/%{environment}/data/osfamily/%{osfamily}/%{lsbdistcodename}',
-                              'environments/%{environment}/data/osfamily/%{osfamily}/%{lsbmajdistrelease}',
-                              'environments/%{environment}/data/osfamily/%{osfamily}/%{architecture}',
-                              'environments/%{environment}/data/osfamily/%{osfamily}/common',
-                              # 'environments/%{environment}/data/modules/%{cname}',
-                              'environments/%{environment}/data/modules/%{caller_module_name}',
-                              'environments/%{environment}/data/modules/%{module_name}',
-                              'environments/%{environment}/data/common'
-                            ])
-      copy_hiera_data_to(host, './spec/acceptance/hieradata/')
-    end
   end
 end
