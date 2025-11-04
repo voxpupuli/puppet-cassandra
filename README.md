@@ -23,6 +23,7 @@
     - [Create a Cluster in Multiple Data Centers](#create-a-cluster-in-multiple-data-centers)
   - [Reference](#reference)
   - [Limitations](#limitations)
+  - [Migrating to new module version](#migrating-to-new-module-version)
   - [Development](#development)
     - [Additional Contributers](#additional-contributers)
 
@@ -365,6 +366,11 @@ all of it, please go to
 be used to create a new resource if it does not currently exist.  If a change
 is made to the Puppet manifest but the resource already exits, this change
 will not be reflected.
+
+## Migrating to new module version
+
+New version (>3.1) of this module drops some build-in resources like firewall and sysctl but they can be replaced.
+See [examples](./examples)
 
 ## Development
 
