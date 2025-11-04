@@ -6,16 +6,8 @@ describe 'cassandra::datastax_agent' do
   context 'Test for cassandra::datastax_agent with defaults (RedHat).' do
     let :facts do
       {
-        osfamily: 'RedHat',
-        operatingsystemmajrelease: '6',
         os: {
-          'name' => 'RedHat',
-          'family' => 'RedHat',
-          'release' => {
-            'full' => '6.10',
-            'major' => '6',
-            'minor' => '10'
-          }
+          'family' => 'RedHat'
         }
       }
     end
@@ -67,15 +59,8 @@ describe 'cassandra::datastax_agent' do
   context 'Test for cassandra::datastax_agent with defaults (Debian).' do
     let :facts do
       {
-        osfamily: 'Debian',
-        operatingsystemmajrelease: '7',
         os: {
           'family' => 'Debian',
-          'release' => {
-            'full' => '7.8',
-            'major' => '7',
-            'minor' => '8'
-          }
         }
       }
     end
@@ -93,15 +78,8 @@ describe 'cassandra::datastax_agent' do
   context 'Test that the JAVA_HOME can be set.' do
     let :facts do
       {
-        osfamily: 'Debian',
-        operatingsystemmajrelease: '7',
         os: {
           'family' => 'Debian',
-          'release' => {
-            'full' => '7.8',
-            'major' => '7',
-            'minor' => '8'
-          }
         }
       }
     end
@@ -127,15 +105,8 @@ describe 'cassandra::datastax_agent' do
   context 'Test settings.' do
     let :facts do
       {
-        osfamily: 'Debian',
-        operatingsystemmajrelease: '7',
         os: {
           'family' => 'Debian',
-          'release' => {
-            'full' => '7.8',
-            'major' => '7',
-            'minor' => '8'
-          }
         }
       }
     end

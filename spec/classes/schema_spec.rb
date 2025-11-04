@@ -5,16 +5,8 @@ describe 'cassandra::schema' do
   context 'Ensure that a connection test is made.' do
     let :facts do
       {
-        operatingsystemmajrelease: 7,
-        osfamily: 'RedHat',
         os: {
           'family' => 'RedHat',
-          'name' => 'RedHat',
-          'release' => {
-            'full' => '7.6.1810',
-            'major' => '7',
-            'minor' => '6'
-          }
         }
       }
     end
@@ -41,67 +33,13 @@ describe 'cassandra::schema' do
     end
   end
 
-  context 'Ensure that a connection test is made with SCL.' do
-    let :facts do
-      {
-        operatingsystemmajrelease: 7,
-        osfamily: 'RedHat',
-        os: {
-          'family' => 'RedHat',
-          'name' => 'RedHat',
-          'release' => {
-            'full' => '7.6.1810',
-            'major' => '7',
-            'minor' => '6'
-          }
-        }
-      }
-    end
-
-    let :params do
-      {
-        use_scl: true,
-        scl_name: 'testscl'
-      }
-    end
-
-    it do
-      expect(subject).to contain_class('cassandra::schema').
-        with(connection_tries: 6,
-             connection_try_sleep: 30,
-             cqlsh_additional_options: '',
-             cqlsh_command: '/usr/bin/cqlsh',
-             cqlsh_host: 'localhost',
-             cqlsh_password: nil,
-             cqlsh_port: 9042,
-             cqlsh_user: 'cassandra')
-
-      read_command = '/usr/bin/scl enable testscl "/usr/bin/cqlsh   -e \'DESC KEYSPACES\' localhost 9042"'
-
-      expect(subject).to contain_exec('cassandra::schema connection test').
-        only_with(command: read_command,
-                  returns: 0,
-                  tries: 6,
-                  try_sleep: 30,
-                  unless: read_command)
-    end
-  end
-
   context 'Test that users can specify a credentials file.' do
     let :facts do
       {
         id: 0,
         gid: 0,
-        operatingsystemmajrelease: 7,
-        osfamily: 'Debian',
         os: {
           'family' => 'Debian',
-          'name' => 'Debian',
-          'release' => {
-            'full' => '7.8',
-            'major' => '7',
-            'minor' => '8'
-          }
         },
         identity: {
           uid: 0,
@@ -112,9 +50,7 @@ describe 'cassandra::schema' do
 
     let :params do
       {
-        cqlsh_client_config: '/root/.puppetcqlshrc',
-        use_scl: false,
-        scl_name: 'nodefault'
+        cqlsh_client_config: '/root/.puppetcqlshrc'
       }
     end
 
@@ -143,16 +79,8 @@ describe 'cassandra::schema' do
       {
         id: 0,
         gid: 0,
-        operatingsystemmajrelease: 7,
-        osfamily: 'Debian',
         os: {
           'family' => 'Debian',
-          'name' => 'Debian',
-          'release' => {
-            'full' => '7.8',
-            'major' => '7',
-            'minor' => '8'
-          }
         },
         identity: {
           uid: 0,
@@ -164,9 +92,7 @@ describe 'cassandra::schema' do
     let :params do
       {
         cqlsh_client_config: '/root/.puppetcqlshrc',
-        cqlsh_password: 'topsecret',
-        use_scl: false,
-        scl_name: 'nodefault'
+        cqlsh_password: 'topsecret'
       }
     end
 
@@ -193,16 +119,8 @@ describe 'cassandra::schema' do
   context 'Test that users can specify a password.' do
     let :facts do
       {
-        operatingsystemmajrelease: 7,
-        osfamily: 'Redhat',
         os: {
           'family' => 'RedHat',
-          'name' => 'RedHat',
-          'release' => {
-            'full' => '7.6.1810',
-            'major' => '7',
-            'minor' => '6'
-          }
         }
       }
     end

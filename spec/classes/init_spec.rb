@@ -120,43 +120,6 @@ describe 'cassandra' do
           end
         end
 
-        context 'with data directories specified.', if: facts[:os]['release']['major'] == '7' do
-          let :params do
-            {
-              commitlog_directory: '/var/lib/cassandra/commitlog',
-              data_file_directories: ['/var/lib/cassandra/data'],
-              hints_directory: '/var/lib/cassandra/hints',
-              saved_caches_directory: '/var/lib/cassandra/saved_caches',
-              settings: { 'cluster_name' => 'MyCassandraCluster' }
-            }
-          end
-
-          it do
-            expect(subject).to have_resource_count(10)
-            expect(subject).to contain_file('/var/lib/cassandra/commitlog')
-            expect(subject).to contain_file('/var/lib/cassandra/data')
-            expect(subject).to contain_file('/var/lib/cassandra/hints')
-            expect(subject).to contain_file('/var/lib/cassandra/saved_caches')
-          end
-        end
-
-        context 'with service provider set to init.', if: facts[:os]['release']['major'] == '7' do
-          let :params do
-            {
-              service_provider: 'init'
-            }
-          end
-
-          it do
-            expect(subject).to have_resource_count(7)
-            expect(subject).to contain_exec('/sbin/chkconfig --add cassandra').with(
-              unless: '/sbin/chkconfig --list cassandra'
-            ).
-              that_requires('Package[cassandra]').
-              that_comes_before('Service[cassandra]')
-          end
-        end
-
         context 'with install DSE' do
           let :params do
             {

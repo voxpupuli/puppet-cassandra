@@ -4,7 +4,6 @@
 # Install Cassandra 2.2.5 onto a system and create a basic keyspace, table
 # and index.  The node itself becomes a seed for the cluster.
 #
-# Tested on CentOS 7
 #############################################################################
 
 # Cassandra pre-requisites
