@@ -1,6 +1,4 @@
 ---
-Gemfile:
-  optional:
-    ':test':
-      - gem: net-ftp
-        version: '~> 0.3'
+.github/workflows/ci.yml:
+  with:
+    beaker_hypervisor: docker

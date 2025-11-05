@@ -3,85 +3,69 @@
 require 'spec_helper'
 
 describe 'cassandra::schema::cql_type' do
-  context 'CQL TYPE (fullname)' do
-    let :facts do
-      {
-        os: {
-          'family' => 'RedHat',
-        }
-      }
-    end
+  on_supported_os.each do |os, facts|
+    context "on #{os}" do
+      let(:facts) do
+        facts
+      end
 
-    let(:title) { 'fullname' }
+      context 'with CQL TYPE (fullname)' do
+        let(:title) { 'fullname' }
 
-    let(:params) do
-      {
-        'keyspace' => 'Excelsior',
-        fields:
+        let(:params) do
           {
-            'firstname' => 'text',
-            'lastname' => 'text'
-          },
-      }
-    end
+            'keyspace' => 'Excelsior',
+            'fields'   => {
+              'firstname' => 'text',
+              'lastname' => 'text'
+            },
+          }
+        end
 
-    it do
-      expect(subject).to compile
-      expect(subject).to contain_class('cassandra::schema')
-      expect(subject).to contain_cassandra__schema__cql_type('fullname')
-      read_command = '/usr/bin/cqlsh   -e "DESC TYPE Excelsior.fullname" localhost 9042'
-      exec_command =  '/usr/bin/cqlsh   -e "CREATE TYPE IF NOT EXISTS Excelsior.fullname '
-      exec_command += '(firstname text, lastname text)" localhost 9042'
-      expect(subject).to contain_exec(exec_command).
-        only_with(unless: read_command,
-                  require: 'Exec[cassandra::schema connection test]')
-    end
-  end
+        read_command = '/usr/bin/cqlsh   -e "DESC TYPE Excelsior.fullname" localhost 9042'
+        exec_command = '/usr/bin/cqlsh   -e "CREATE TYPE IF NOT EXISTS Excelsior.fullname (firstname text, lastname text)" localhost 9042'
 
-  context 'Set ensure to absent' do
-    let :facts do
-      {
-        os: {
-          'family' => 'RedHat',
-        }
-      }
-    end
+        it do
+          is_expected.to compile.with_all_deps
+          is_expected.to contain_class('cassandra::schema')
+          is_expected.to contain_exec(exec_command).with(
+            unless: read_command,
+            require: 'Exec[cassandra::schema connection test]'
+          )
+        end
+      end
 
-    let(:title) { 'address' }
-    let(:params) do
-      {
-        'ensure' => 'absent',
-        'keyspace' => 'Excalibur'
-      }
-    end
+      context 'with ensure absent' do
+        let(:title) { 'address' }
+        let(:params) do
+          {
+            'ensure' => 'absent',
+            'keyspace' => 'Excalibur'
+          }
+        end
 
-    it do
-      expect(subject).to compile
-      expect(subject).to contain_cassandra__schema__cql_type('address')
-      read_command = '/usr/bin/cqlsh   -e "DESC TYPE Excalibur.address" localhost 9042'
-      exec_command = '/usr/bin/cqlsh   -e "DROP type Excalibur.address" localhost 9042'
-      expect(subject).to contain_exec(exec_command).
-        only_with(onlyif: read_command,
-                  require: 'Exec[cassandra::schema connection test]')
-    end
-  end
+        read_command = '/usr/bin/cqlsh   -e "DESC TYPE Excalibur.address" localhost 9042'
+        exec_command = '/usr/bin/cqlsh   -e "DROP type Excalibur.address" localhost 9042'
 
-  context 'Set ensure to latest' do
-    let :facts do
-      {
-        os: {
-          'family' => 'RedHat',
-        }
-      }
-    end
+        it do
+          is_expected.to compile.with_all_deps
+          is_expected.to contain_exec(exec_command).with(
+            onlyif: read_command,
+            require: 'Exec[cassandra::schema connection test]'
+          )
+        end
+      end
 
-    let(:title) { 'foobar' }
-    let(:params) do
-      {
-        ensure: 'latest'
-      }
-    end
+      context 'with ensure latest' do
+        let(:title) { 'foobar' }
+        let(:params) do
+          {
+            ensure: 'latest'
+          }
+        end
 
-    it { is_expected.to raise_error(Puppet::Error) }
+        it { is_expected.to raise_error(Puppet::Error) }
+      end
+    end
   end
 end

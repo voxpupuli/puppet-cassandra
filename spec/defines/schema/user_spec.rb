@@ -3,178 +3,93 @@
 require 'spec_helper'
 
 describe 'cassandra::schema::user' do
-  let :node do
-    'foo.example.com'
-  end
-
-  on_supported_os.each do |_os, facts|
-    let :facts do
-      facts
-    end
-    context 'Create a supper user on cassandrarelease undef' do
-      let(:title) { 'akers' }
-
-      let(:params) do
-        {
-          password: 'Niner2',
-          superuser: true
-        }
+  on_supported_os.each do |os, facts|
+    context "on #{os}" do
+      let(:facts) do
+        facts
       end
 
-      it do
-        expect(subject).to contain_cassandra__schema__user('akers').with_ensure('present')
-        read_command = '/usr/bin/cqlsh   -e "LIST USERS" localhost 9042 | grep \'\s*akers |\''
-        exec_command =  '/usr/bin/cqlsh   -e "CREATE USER IF NOT EXISTS akers'
-        exec_command += ' WITH PASSWORD \'Niner2\' SUPERUSER" localhost 9042'
-        expect(subject).to contain_exec('Create user (akers)').
-          only_with(command: exec_command,
-                    unless: read_command,
-                    require: 'Exec[cassandra::schema connection test]')
-      end
-    end
+      context 'create a super user with login' do
+        let(:title) { 'akers' }
 
-    context 'Create a supper user in cassandrarelease < 2.2' do
-      let(:title) { 'akers' }
+        let(:params) do
+          {
+            password: 'Niner2',
+            superuser: true
+          }
+        end
 
-      let(:params) do
-        {
-          password: 'Niner2',
-          superuser: true
-        }
-      end
+        read_command = "/usr/bin/cqlsh   -e \"LIST ROLES\" localhost 9042 | grep '\\s*akers |'"
+        exec_command =  '/usr/bin/cqlsh   -e "CREATE ROLE IF NOT EXISTS akers '
+        exec_command += "WITH PASSWORD = 'Niner2' AND SUPERUSER = true AND LOGIN = true\" localhost 9042"
 
-      it do
-        expect(subject).to contain_cassandra__schema__user('akers').with_ensure('present')
-        read_command = '/usr/bin/cqlsh   -e "LIST USERS" localhost 9042 | grep \'\s*akers |\''
-        exec_command =  '/usr/bin/cqlsh   -e "CREATE USER IF NOT EXISTS akers'
-        exec_command += ' WITH PASSWORD \'Niner2\' SUPERUSER" localhost 9042'
-        expect(subject).to contain_exec('Create user (akers)').
-          only_with(command: exec_command,
-                    unless: read_command,
-                    require: 'Exec[cassandra::schema connection test]')
-      end
-    end
-
-    context 'Create a user in cassandrarelease < 2.2' do
-      let(:title) { 'akers' }
-
-      let(:params) do
-        {
-          password: 'Niner2'
-        }
+        it do
+          is_expected.to compile.with_all_deps
+          is_expected.to contain_class('cassandra::schema')
+          is_expected.to contain_exec('Create user (akers)').with(
+            command: exec_command,
+            unless: read_command,
+            require: 'Exec[cassandra::schema connection test]'
+          )
+        end
       end
 
-      it do
-        expect(subject).to contain_cassandra__schema__user('akers').with_ensure('present')
-        read_command = '/usr/bin/cqlsh   -e "LIST USERS" localhost 9042 | grep \'\s*akers |\''
-        exec_command =  '/usr/bin/cqlsh   -e "CREATE USER IF NOT EXISTS akers'
-        exec_command += ' WITH PASSWORD \'Niner2\' NOSUPERUSER" localhost 9042'
-        expect(subject).to contain_exec('Create user (akers)').
-          only_with(command: exec_command,
-                    unless: read_command,
-                    require: 'Exec[cassandra::schema connection test]')
-      end
-    end
+      context 'create a user without login' do
+        let(:title) { 'bob' }
 
-    context 'Create a supper user with login in cassandrarelease > 2.2' do
-      let(:title) { 'akers' }
+        let(:params) do
+          {
+            password: 'kaZe89a',
+            login: false
+          }
+        end
 
-      let(:facts) { super().merge({ cassandrarelease: '3.0' }) }
+        read_command = "/usr/bin/cqlsh   -e \"LIST ROLES\" localhost 9042 | grep '\\s*bob |'"
+        exec_command =  '/usr/bin/cqlsh   -e "CREATE ROLE IF NOT EXISTS bob '
+        exec_command += "WITH PASSWORD = 'kaZe89a'\" localhost 9042"
 
-      let(:params) do
-        {
-          password: 'Niner2',
-          superuser: true
-        }
-      end
-
-      it do
-        expect(subject).to contain_cassandra__schema__user('akers').with_ensure('present')
-        read_command = '/usr/bin/cqlsh   -e "LIST ROLES" localhost 9042 | grep \'\s*akers |\''
-        exec_command =  '/usr/bin/cqlsh   -e "CREATE ROLE IF NOT EXISTS akers'
-        exec_command += ' WITH PASSWORD = \'Niner2\' AND SUPERUSER = true AND LOGIN = true" localhost 9042'
-        expect(subject).to contain_exec('Create user (akers)').
-          only_with(command: exec_command,
-                    unless: read_command,
-                    require: 'Exec[cassandra::schema connection test]')
-      end
-    end
-
-    context 'Create a user without login in cassandrarelease > 2.2' do
-      let(:title) { 'bob' }
-
-      let(:facts) { super().merge({ cassandrarelease: '3.0' }) }
-
-      let(:params) do
-        {
-          password: 'kaZe89a',
-          login: false
-        }
+        it do
+          is_expected.to compile.with_all_deps
+          is_expected.to contain_exec('Create user (bob)').with(
+            command: exec_command,
+            unless: read_command,
+            require: 'Exec[cassandra::schema connection test]'
+          )
+        end
       end
 
-      it do
-        expect(subject).to contain_cassandra__schema__user('bob').with_ensure('present')
-        read_command = '/usr/bin/cqlsh   -e "LIST ROLES" localhost 9042 | grep \'\s*bob |\''
-        exec_command =  '/usr/bin/cqlsh   -e "CREATE ROLE IF NOT EXISTS bob'
-        exec_command += ' WITH PASSWORD = \'kaZe89a\'" localhost 9042'
-        expect(subject).to contain_exec('Create user (bob)').
-          only_with(command: exec_command,
-                    unless: read_command,
-                    require: 'Exec[cassandra::schema connection test]')
-      end
-    end
+      context 'drop a user' do
+        let(:title) { 'akers' }
 
-    context 'Drop a user in cassandrarelease > 2.2' do
-      let(:title) { 'akers' }
+        let(:params) do
+          {
+            ensure: 'absent'
+          }
+        end
 
-      let(:facts) { super().merge({ cassandrarelease: '3.0' }) }
-
-      let(:params) do
-        {
-          password: 'Niner2',
-          ensure: 'absent'
-        }
-      end
-
-      it do
-        read_command = '/usr/bin/cqlsh   -e "LIST ROLES" localhost 9042 | grep \'\s*akers |\''
+        read_command = "/usr/bin/cqlsh   -e \"LIST ROLES\" localhost 9042 | grep '\\s*akers |'"
         exec_command = '/usr/bin/cqlsh   -e "DROP ROLE akers" localhost 9042'
-        expect(subject).to contain_exec('Delete user (akers)').
-          only_with(command: exec_command,
-                    onlyif: read_command,
-                    require: 'Exec[cassandra::schema connection test]')
-      end
-    end
 
-    context 'Drop a user in cassandrarelease < 2.2' do
-      let(:title) { 'akers' }
-
-      let(:params) do
-        {
-          password: 'Niner2',
-          ensure: 'absent'
-        }
+        it do
+          is_expected.to compile.with_all_deps
+          is_expected.to contain_exec('Delete user (akers)').with(
+            command: exec_command,
+            onlyif: read_command,
+            require: 'Exec[cassandra::schema connection test]'
+          )
+        end
       end
 
-      it do
-        read_command = '/usr/bin/cqlsh   -e "LIST USERS" localhost 9042 | grep \'\s*akers |\''
-        exec_command = '/usr/bin/cqlsh   -e "DROP USER akers" localhost 9042'
-        expect(subject).to contain_exec('Delete user (akers)').
-          only_with(command: exec_command,
-                    onlyif: read_command,
-                    require: 'Exec[cassandra::schema connection test]')
-      end
-    end
+      context 'Set ensure to latest' do
+        let(:title) { 'foobar' }
+        let(:params) do
+          {
+            ensure: 'latest'
+          }
+        end
 
-    context 'Set ensure to latest' do
-      let(:title) { 'foobar' }
-      let(:params) do
-        {
-          ensure: 'latest'
-        }
+        it { is_expected.to raise_error(Puppet::Error) }
       end
-
-      it { is_expected.to raise_error(Puppet::Error) }
     end
   end
 end
