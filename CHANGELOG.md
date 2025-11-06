@@ -4,6 +4,43 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v4.0.0](https://github.com/voxpupuli/puppet-cassandra/tree/v4.0.0) (2025-11-06)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-cassandra/compare/v3.1.0...v4.0.0)
+
+**Breaking changes:**
+
+- Rework code base; Support Cassandra 4.1 & 5.0 [\#497](https://github.com/voxpupuli/puppet-cassandra/pull/497) ([Joris29](https://github.com/Joris29))
+- Drop puppet, update openvox minimum version to 8.19 [\#489](https://github.com/voxpupuli/puppet-cassandra/pull/489) ([TheMeier](https://github.com/TheMeier))
+- Drop Oracle Linux 6 support [\#482](https://github.com/voxpupuli/puppet-cassandra/pull/482) ([zilchms](https://github.com/zilchms))
+- Drop EL6 support [\#481](https://github.com/voxpupuli/puppet-cassandra/pull/481) ([zilchms](https://github.com/zilchms))
+- Drop Ubuntu 16.04 and 18.04 support [\#480](https://github.com/voxpupuli/puppet-cassandra/pull/480) ([zilchms](https://github.com/zilchms))
+- Drop Puppet 6 support [\#473](https://github.com/voxpupuli/puppet-cassandra/pull/473) ([bastelfreak](https://github.com/bastelfreak))
+
+**Implemented enhancements:**
+
+- Add new supported operating systems [\#495](https://github.com/voxpupuli/puppet-cassandra/pull/495) ([Joris29](https://github.com/Joris29))
+- Allow puppetlabs/apt 10.x [\#486](https://github.com/voxpupuli/puppet-cassandra/pull/486) ([smortex](https://github.com/smortex))
+- metadata.json: Add OpenVox [\#485](https://github.com/voxpupuli/puppet-cassandra/pull/485) ([jstraw](https://github.com/jstraw))
+- add ubuntu 20.04 and 22.04 support [\#479](https://github.com/voxpupuli/puppet-cassandra/pull/479) ([zilchms](https://github.com/zilchms))
+- Add Puppet 8 support [\#475](https://github.com/voxpupuli/puppet-cassandra/pull/475) ([bastelfreak](https://github.com/bastelfreak))
+- Add support for puppetlabs/stdlib 9.x [\#474](https://github.com/voxpupuli/puppet-cassandra/pull/474) ([Guiiix](https://github.com/Guiiix))
+- Allow stdlib 8.0.0 [\#470](https://github.com/voxpupuli/puppet-cassandra/pull/470) ([smortex](https://github.com/smortex))
+
+**Closed issues:**
+
+- Archive the `puppet-cassandra` module [\#490](https://github.com/voxpupuli/puppet-cassandra/issues/490)
+- Apache Cassandra's Debian and RedHat package repositories have moved [\#478](https://github.com/voxpupuli/puppet-cassandra/issues/478)
+- Release new version? [\#476](https://github.com/voxpupuli/puppet-cassandra/issues/476)
+- Enable acceptance tests [\#431](https://github.com/voxpupuli/puppet-cassandra/issues/431)
+
+**Merged pull requests:**
+
+- Replace params.pp with defaults and hieradata [\#496](https://github.com/voxpupuli/puppet-cassandra/pull/496) ([Joris29](https://github.com/Joris29))
+- Drop EoL EL7 & Ubuntu 20.04 support [\#494](https://github.com/voxpupuli/puppet-cassandra/pull/494) ([Joris29](https://github.com/Joris29))
+- Remove legacy top-scope syntax [\#477](https://github.com/voxpupuli/puppet-cassandra/pull/477) ([smortex](https://github.com/smortex))
+- cleanup .fixtures.yml [\#471](https://github.com/voxpupuli/puppet-cassandra/pull/471) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [v3.1.0](https://github.com/voxpupuli/puppet-cassandra/tree/v3.1.0) (2020-09-18)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-cassandra/compare/v3.0.0...v3.1.0)
