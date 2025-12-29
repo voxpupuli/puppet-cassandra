@@ -70,7 +70,7 @@ class { 'cassandra':
             'seeds' => '127.0.0.1',
           },
         ],
-      }
+      },
     ],
     'server_encryption_options'                => {
       'internode_encryption' => 'none',
