@@ -28,7 +28,7 @@ class cassandra::install {
             *      => $_attributes,
             before => [
               Package[$cassandra::package_name],
-              Package[$cassandra::tools_package]
+              Package[$cassandra::tools_package],
             ],
           }
         }
@@ -41,7 +41,7 @@ class cassandra::install {
             *      => $_attributes,
             before => [
               Package[$cassandra::package_name],
-              Package[$cassandra::tools_package]
+              Package[$cassandra::tools_package],
             ],
           }
         }
