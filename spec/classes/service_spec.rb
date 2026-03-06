@@ -19,7 +19,7 @@ describe 'cassandra' do
         context 'with service_ensure is stopped' do
           let(:params) do
             {
-              service_ensure: 'stopped'
+              service_ensure: 'stopped',
             }
           end
 
@@ -29,7 +29,7 @@ describe 'cassandra' do
         context 'with manage_service is false' do
           let(:params) do
             {
-              manage_service: false
+              manage_service: false,
             }
           end
 

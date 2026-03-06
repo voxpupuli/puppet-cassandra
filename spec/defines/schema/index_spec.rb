@@ -16,7 +16,7 @@ describe 'cassandra::schema::index' do
           {
             keys: 'lname',
             keyspace: 'mykeyspace',
-            table: 'users'
+            table: 'users',
           }
         end
 
@@ -28,7 +28,7 @@ describe 'cassandra::schema::index' do
           is_expected.to contain_class('cassandra::schema')
           is_expected.to contain_exec(exec_command).with(
             unless: read_command,
-            require: 'Exec[cassandra::schema connection test]'
+            require: 'Exec[cassandra::schema connection test]',
           )
         end
       end
@@ -41,7 +41,7 @@ describe 'cassandra::schema::index' do
             class_name: 'path.to.the.IndexClass',
             keys: 'email',
             keyspace: 'Excelsior',
-            table: 'users'
+            table: 'users',
           }
         end
 
@@ -52,7 +52,7 @@ describe 'cassandra::schema::index' do
           is_expected.to compile.with_all_deps
           is_expected.to contain_exec(exec_command).with(
             unless: read_command,
-            require: 'Exec[cassandra::schema connection test]'
+            require: 'Exec[cassandra::schema connection test]',
           )
         end
       end
@@ -66,7 +66,7 @@ describe 'cassandra::schema::index' do
             keys: 'email',
             keyspace: 'Excelsior',
             options: "{'storage': '/mnt/ssd/indexes/'}",
-            table: 'users'
+            table: 'users',
           }
         end
 
@@ -78,7 +78,7 @@ describe 'cassandra::schema::index' do
           is_expected.to compile.with_all_deps
           is_expected.to contain_exec(exec_command).with(
             unless: read_command,
-            require: 'Exec[cassandra::schema connection test]'
+            require: 'Exec[cassandra::schema connection test]',
           )
         end
       end
@@ -91,7 +91,7 @@ describe 'cassandra::schema::index' do
             ensure: 'absent',
             keys: 'lname',
             keyspace: 'Excelsior',
-            table: 'users'
+            table: 'users',
           }
         end
 
@@ -102,7 +102,7 @@ describe 'cassandra::schema::index' do
           is_expected.to compile.with_all_deps
           is_expected.to contain_exec(exec_command).with(
             onlyif: read_command,
-            require: 'Exec[cassandra::schema connection test]'
+            require: 'Exec[cassandra::schema connection test]',
           )
         end
       end
@@ -111,7 +111,7 @@ describe 'cassandra::schema::index' do
         let(:title) { 'foobar' }
         let(:params) do
           {
-            ensure: 'latest'
+            ensure: 'latest',
           }
         end
 

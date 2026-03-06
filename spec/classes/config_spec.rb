@@ -20,21 +20,21 @@ describe 'cassandra' do
                 ensure: 'directory',
                 owner: 'cassandra',
                 group: 'cassandra',
-                mode: '0755'
+                mode: '0755',
               )
               is_expected.to contain_file('/etc/cassandra/default.conf/cassandra.yaml').with(
                 ensure: 'file',
                 owner: 'cassandra',
                 group: 'cassandra',
                 mode: '0644',
-                content: %r{--- {}}
+                content: %r{--- {}},
               )
               is_expected.to contain_file('/etc/cassandra/default.conf/cassandra-rackdc.properties').with(
                 ensure: 'file',
                 owner: 'cassandra',
                 group: 'cassandra',
                 mode: '0644',
-                content: %r{dc=DC1}
+                content: %r{dc=DC1},
               )
             end
           end
@@ -49,18 +49,18 @@ describe 'cassandra' do
             end
 
             it do
-              is_expected.to contain_file('/etc/cassandra/default.conf/cassandra-rackdc.properties').
-                with(ensure: 'file', owner: 'cassandra', group: 'cassandra', mode: '0644').
-                with_content(%r{^dc=DC2$}).
-                with_content(%r{^rack=RAC2$}).
-                with_content(%r{^prefer_local=false$})
+              is_expected.to contain_file('/etc/cassandra/default.conf/cassandra-rackdc.properties')
+                .with(ensure: 'file', owner: 'cassandra', group: 'cassandra', mode: '0644')
+                .with_content(%r{^dc=DC2$})
+                .with_content(%r{^rack=RAC2$})
+                .with_content(%r{^prefer_local=false$})
             end
           end
 
           context 'with manage_config_file => false' do
             let(:params) do
               {
-                manage_config_file: false
+                manage_config_file: false,
               }
             end
 
@@ -76,10 +76,10 @@ describe 'cassandra' do
             end
 
             it do
-              is_expected.to contain_file('/etc/cassandra/default.conf/cassandra.yaml').
-                with_content(%r{^authenticator: AllowAllAuthenticator$}).
-                with_content(%r{^cluster_name: Prod Cluster$}).
-                with_content(%r{^num_tokens: 256$})
+              is_expected.to contain_file('/etc/cassandra/default.conf/cassandra.yaml')
+                .with_content(%r{^authenticator: AllowAllAuthenticator$})
+                .with_content(%r{^cluster_name: Prod Cluster$})
+                .with_content(%r{^num_tokens: 256$})
             end
           end
 
@@ -97,11 +97,11 @@ describe 'cassandra' do
             it { is_expected.to contain_file('/var/saved_caches').with(ensure: 'directory', owner: 'cassandra', group: 'cassandra', mode: '0750') }
 
             it do
-              is_expected.to contain_file('/etc/cassandra/default.conf/cassandra.yaml').
-                with_content(%r{^cluster_name: Prod Cluster$}).
-                with_content(%r{^num_tokens: 256$}).
-                with_content(%r{^hints_directory: "/var/hints"$}).
-                with_content(%r{^saved_caches_directory: "/var/saved_caches"$})
+              is_expected.to contain_file('/etc/cassandra/default.conf/cassandra.yaml')
+                .with_content(%r{^cluster_name: Prod Cluster$})
+                .with_content(%r{^num_tokens: 256$})
+                .with_content(%r{^hints_directory: "/var/hints"$})
+                .with_content(%r{^saved_caches_directory: "/var/saved_caches"$})
             end
           end
 
@@ -116,10 +116,10 @@ describe 'cassandra' do
             it { is_expected.not_to contain_file('/tmp/other_hints') }
 
             it do
-              is_expected.to contain_file('/etc/cassandra/default.conf/cassandra.yaml').
-                with_content(%r{^cluster_name: Prod Cluster$}).
-                with_content(%r{^num_tokens: 256$}).
-                with_content(%r{^hints_directory: "/tmp/other_hints"$})
+              is_expected.to contain_file('/etc/cassandra/default.conf/cassandra.yaml')
+                .with_content(%r{^cluster_name: Prod Cluster$})
+                .with_content(%r{^num_tokens: 256$})
+                .with_content(%r{^hints_directory: "/tmp/other_hints"$})
             end
           end
         when 'Debian'
@@ -129,21 +129,21 @@ describe 'cassandra' do
                 ensure: 'directory',
                 owner: 'cassandra',
                 group: 'cassandra',
-                mode: '0755'
+                mode: '0755',
               )
               is_expected.to contain_file('/etc/cassandra/cassandra.yaml').with(
                 ensure: 'file',
                 owner: 'cassandra',
                 group: 'cassandra',
                 mode: '0644',
-                content: %r{--- {}}
+                content: %r{--- {}},
               )
               is_expected.to contain_file('/etc/cassandra/cassandra-rackdc.properties').with(
                 ensure: 'file',
                 owner: 'cassandra',
                 group: 'cassandra',
                 mode: '0644',
-                content: %r{rack=RAC1}
+                content: %r{rack=RAC1},
               )
             end
           end
@@ -158,18 +158,18 @@ describe 'cassandra' do
             end
 
             it do
-              is_expected.to contain_file('/etc/cassandra/cassandra-rackdc.properties').
-                with(ensure: 'file', owner: 'cassandra', group: 'cassandra', mode: '0644').
-                with_content(%r{^dc=DC2$}).
-                with_content(%r{^rack=RAC2$}).
-                with_content(%r{^prefer_local=false$})
+              is_expected.to contain_file('/etc/cassandra/cassandra-rackdc.properties')
+                .with(ensure: 'file', owner: 'cassandra', group: 'cassandra', mode: '0644')
+                .with_content(%r{^dc=DC2$})
+                .with_content(%r{^rack=RAC2$})
+                .with_content(%r{^prefer_local=false$})
             end
           end
 
           context 'with manage_config_file => false' do
             let(:params) do
               {
-                manage_config_file: false
+                manage_config_file: false,
               }
             end
 
@@ -185,10 +185,10 @@ describe 'cassandra' do
             end
 
             it do
-              is_expected.to contain_file('/etc/cassandra/cassandra.yaml').
-                with_content(%r{^authorizer: AllowAllAuthorizer$}).
-                with_content(%r{^cluster_name: Prod Cluster$}).
-                with_content(%r{^num_tokens: 500$})
+              is_expected.to contain_file('/etc/cassandra/cassandra.yaml')
+                .with_content(%r{^authorizer: AllowAllAuthorizer$})
+                .with_content(%r{^cluster_name: Prod Cluster$})
+                .with_content(%r{^num_tokens: 500$})
             end
           end
 
@@ -206,11 +206,11 @@ describe 'cassandra' do
             it { is_expected.to contain_file('/var/saved_caches').with(ensure: 'directory', owner: 'cassandra', group: 'cassandra', mode: '0750') }
 
             it do
-              is_expected.to contain_file('/etc/cassandra/cassandra.yaml').
-                with_content(%r{^cluster_name: Prod Cluster$}).
-                with_content(%r{^num_tokens: 256$}).
-                with_content(%r{^hints_directory: "/var/hints"$}).
-                with_content(%r{^saved_caches_directory: "/var/saved_caches"$})
+              is_expected.to contain_file('/etc/cassandra/cassandra.yaml')
+                .with_content(%r{^cluster_name: Prod Cluster$})
+                .with_content(%r{^num_tokens: 256$})
+                .with_content(%r{^hints_directory: "/var/hints"$})
+                .with_content(%r{^saved_caches_directory: "/var/saved_caches"$})
             end
           end
 
@@ -225,10 +225,10 @@ describe 'cassandra' do
             it { is_expected.not_to contain_file('/tmp/commits') }
 
             it do
-              is_expected.to contain_file('/etc/cassandra/cassandra.yaml').
-                with_content(%r{^cluster_name: Prod Cluster$}).
-                with_content(%r{^num_tokens: 256$}).
-                with_content(%r{^commitlog_directory: "/tmp/commits"$})
+              is_expected.to contain_file('/etc/cassandra/cassandra.yaml')
+                .with_content(%r{^cluster_name: Prod Cluster$})
+                .with_content(%r{^num_tokens: 256$})
+                .with_content(%r{^commitlog_directory: "/tmp/commits"$})
             end
           end
         end
@@ -236,7 +236,7 @@ describe 'cassandra' do
         context 'with data_file_directories => [/var/cassandra/data1, /var/cassandra/data2]' do
           let(:params) do
             {
-              data_file_directories: ['/var/cassandra/data1', '/var/cassandra/data2']
+              data_file_directories: ['/var/cassandra/data1', '/var/cassandra/data2'],
             }
           end
 

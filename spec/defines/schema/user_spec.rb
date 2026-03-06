@@ -15,7 +15,7 @@ describe 'cassandra::schema::user' do
         let(:params) do
           {
             password: 'Niner2',
-            superuser: true
+            superuser: true,
           }
         end
 
@@ -29,7 +29,7 @@ describe 'cassandra::schema::user' do
           is_expected.to contain_exec('Create user (akers)').with(
             command: exec_command,
             unless: read_command,
-            require: 'Exec[cassandra::schema connection test]'
+            require: 'Exec[cassandra::schema connection test]',
           )
         end
       end
@@ -40,7 +40,7 @@ describe 'cassandra::schema::user' do
         let(:params) do
           {
             password: 'kaZe89a',
-            login: false
+            login: false,
           }
         end
 
@@ -53,7 +53,7 @@ describe 'cassandra::schema::user' do
           is_expected.to contain_exec('Create user (bob)').with(
             command: exec_command,
             unless: read_command,
-            require: 'Exec[cassandra::schema connection test]'
+            require: 'Exec[cassandra::schema connection test]',
           )
         end
       end
@@ -63,7 +63,7 @@ describe 'cassandra::schema::user' do
 
         let(:params) do
           {
-            ensure: 'absent'
+            ensure: 'absent',
           }
         end
 
@@ -75,7 +75,7 @@ describe 'cassandra::schema::user' do
           is_expected.to contain_exec('Delete user (akers)').with(
             command: exec_command,
             onlyif: read_command,
-            require: 'Exec[cassandra::schema connection test]'
+            require: 'Exec[cassandra::schema connection test]',
           )
         end
       end
@@ -84,7 +84,7 @@ describe 'cassandra::schema::user' do
         let(:title) { 'foobar' }
         let(:params) do
           {
-            ensure: 'latest'
+            ensure: 'latest',
           }
         end
 

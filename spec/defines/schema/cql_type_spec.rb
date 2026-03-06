@@ -17,7 +17,7 @@ describe 'cassandra::schema::cql_type' do
             'keyspace' => 'Excelsior',
             'fields'   => {
               'firstname' => 'text',
-              'lastname' => 'text'
+              'lastname' => 'text',
             },
           }
         end
@@ -30,7 +30,7 @@ describe 'cassandra::schema::cql_type' do
           is_expected.to contain_class('cassandra::schema')
           is_expected.to contain_exec(exec_command).with(
             unless: read_command,
-            require: 'Exec[cassandra::schema connection test]'
+            require: 'Exec[cassandra::schema connection test]',
           )
         end
       end
@@ -40,7 +40,7 @@ describe 'cassandra::schema::cql_type' do
         let(:params) do
           {
             'ensure' => 'absent',
-            'keyspace' => 'Excalibur'
+            'keyspace' => 'Excalibur',
           }
         end
 
@@ -51,7 +51,7 @@ describe 'cassandra::schema::cql_type' do
           is_expected.to compile.with_all_deps
           is_expected.to contain_exec(exec_command).with(
             onlyif: read_command,
-            require: 'Exec[cassandra::schema connection test]'
+            require: 'Exec[cassandra::schema connection test]',
           )
         end
       end
@@ -60,7 +60,7 @@ describe 'cassandra::schema::cql_type' do
         let(:title) { 'foobar' }
         let(:params) do
           {
-            ensure: 'latest'
+            ensure: 'latest',
           }
         end
 

@@ -18,7 +18,7 @@ describe 'cassandra::schema::keyspace' do
             replication_map:
               {
                 'keyspace_class' => 'SimpleStrategy',
-                'replication_factor' => 3
+                'replication_factor' => 3,
               },
           }
         end
@@ -32,7 +32,7 @@ describe 'cassandra::schema::keyspace' do
           is_expected.to contain_class('cassandra::schema')
           is_expected.to contain_exec(exec_command).with(
             unless: read_command,
-            require: 'Exec[cassandra::schema connection test]'
+            require: 'Exec[cassandra::schema connection test]',
           )
         end
       end
@@ -47,7 +47,7 @@ describe 'cassandra::schema::keyspace' do
               {
                 'keyspace_class' => 'NetworkTopologyStrategy',
                 'dc1' => '3',
-                'dc2' => '2'
+                'dc2' => '2',
               },
           }
         end
@@ -60,7 +60,7 @@ describe 'cassandra::schema::keyspace' do
           is_expected.to compile.with_all_deps
           is_expected.to contain_exec(exec_command).with(
             unless: read_command,
-            require: 'Exec[cassandra::schema connection test]'
+            require: 'Exec[cassandra::schema connection test]',
           )
         end
       end
@@ -69,7 +69,7 @@ describe 'cassandra::schema::keyspace' do
         let(:title) { 'foobar' }
         let(:params) do
           {
-            ensure: 'absent'
+            ensure: 'absent',
           }
         end
 
@@ -79,7 +79,7 @@ describe 'cassandra::schema::keyspace' do
           is_expected.to compile.with_all_deps
           is_expected.to contain_exec(exec_command).with(
             onlyif: read_command,
-            require: 'Exec[cassandra::schema connection test]'
+            require: 'Exec[cassandra::schema connection test]',
           )
         end
       end
@@ -89,7 +89,7 @@ describe 'cassandra::schema::keyspace' do
 
         let(:params) do
           {
-            ensure: 'latest'
+            ensure: 'latest',
           }
         end
 
