@@ -13,7 +13,7 @@ describe 'cassandra::schema::permission' do
         let(:title) { 'foobar' }
         let(:params) do
           {
-            user_name: 'foobar'
+            user_name: 'foobar',
           }
         end
 
@@ -24,7 +24,7 @@ describe 'cassandra::schema::permission' do
         let(:title) { 'foobar' }
         let(:params) do
           {
-            ensure: 'latest'
+            ensure: 'latest',
           }
         end
 
@@ -37,7 +37,7 @@ describe 'cassandra::schema::permission' do
         let(:params) do
           {
             user_name: 'spillman',
-            permission_name: 'SELECT'
+            permission_name: 'SELECT',
           }
         end
 
@@ -52,7 +52,7 @@ describe 'cassandra::schema::permission' do
           is_expected.to contain_exec(script_command).with(
             command: exec_command,
             unless: read_script,
-            require: 'Exec[cassandra::schema connection test]'
+            require: 'Exec[cassandra::schema connection test]',
           )
         end
       end
@@ -64,7 +64,7 @@ describe 'cassandra::schema::permission' do
           {
             user_name: 'akers',
             keyspace_name: 'field',
-            permission_name: 'MODIFY'
+            permission_name: 'MODIFY',
           }
         end
 
@@ -78,7 +78,7 @@ describe 'cassandra::schema::permission' do
           is_expected.to contain_exec(script_command).with(
             command: exec_command,
             unless: read_script,
-            require: 'Exec[cassandra::schema connection test]'
+            require: 'Exec[cassandra::schema connection test]',
           )
         end
       end
@@ -90,7 +90,7 @@ describe 'cassandra::schema::permission' do
           {
             user_name: 'boone',
             keyspace_name: 'forty9ers',
-            permission_name: 'ALTER'
+            permission_name: 'ALTER',
           }
         end
 
@@ -104,7 +104,7 @@ describe 'cassandra::schema::permission' do
           is_expected.to contain_exec(script_command).with(
             command: exec_command,
             unless: read_script,
-            require: 'Exec[cassandra::schema connection test]'
+            require: 'Exec[cassandra::schema connection test]',
           )
         end
       end
@@ -116,7 +116,7 @@ describe 'cassandra::schema::permission' do
           {
             user_name: 'boone',
             keyspace_name: 'ravens',
-            table_name: 'plays'
+            table_name: 'plays',
           }
         end
 
@@ -134,12 +134,12 @@ describe 'cassandra::schema::permission' do
               user_name: 'boone',
               keyspace_name: 'ravens',
               permission_name: val,
-              table_name: 'plays'
+              table_name: 'plays',
             )
             is_expected.to contain_exec(script_command).with(
               command: exec_command,
               unless: read_script,
-              require: 'Exec[cassandra::schema connection test]'
+              require: 'Exec[cassandra::schema connection test]',
             )
           end
         end
@@ -153,7 +153,7 @@ describe 'cassandra::schema::permission' do
             ensure: 'absent',
             user_name: 'boone',
             keyspace_name: 'forty9ers',
-            permission_name: 'SELECT'
+            permission_name: 'SELECT',
           }
         end
 
@@ -167,7 +167,7 @@ describe 'cassandra::schema::permission' do
           is_expected.to contain_exec(script_command).with(
             command: exec_command,
             onlyif: read_script,
-            require: 'Exec[cassandra::schema connection test]'
+            require: 'Exec[cassandra::schema connection test]',
           )
         end
       end

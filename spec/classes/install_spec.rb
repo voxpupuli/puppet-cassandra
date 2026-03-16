@@ -9,8 +9,8 @@ describe 'cassandra' do
         {
           os: {
             family: 'Unknown',
-            release: { full: '1.0' }
-          }
+            release: { full: '1.0' },
+          },
         }
       end
 
@@ -37,7 +37,7 @@ describe 'cassandra' do
                 repo_gpgcheck: 1,
                 gpgcheck: 0,
                 enabled: 1,
-                gpgkey: 'https://downloads.apache.org/cassandra/KEYS'
+                gpgkey: 'https://downloads.apache.org/cassandra/KEYS',
               ).that_comes_before('Package[cassandra]')
             end
           when 'Debian'
@@ -48,8 +48,8 @@ describe 'cassandra' do
                 repos: 'main',
                 key: {
                   'name' => 'apache-cassandra.asc',
-                  'source' => 'https://downloads.apache.org/cassandra/KEYS'
-                }
+                  'source' => 'https://downloads.apache.org/cassandra/KEYS',
+                },
               ).that_comes_before('Package[cassandra]')
             end
 
@@ -65,7 +65,7 @@ describe 'cassandra' do
             {
               manage_user: true,
               user: 'A1234',
-              group: 'A1234'
+              group: 'A1234',
             }
           end
 
@@ -80,7 +80,7 @@ describe 'cassandra' do
               user: 'A1234',
               group: 'A1234',
               uid: 10_000,
-              gid: 10_000
+              gid: 10_000,
             }
           end
 
@@ -92,7 +92,7 @@ describe 'cassandra' do
           let(:params) do
             {
               java_package: 'openjdk-11-jre-headless',
-              java_ensure: 'latest'
+              java_ensure: 'latest',
             }
           end
 
@@ -103,7 +103,7 @@ describe 'cassandra' do
           let(:params) do
             {
               jna_package: 'libjna-java',
-              jna_ensure: '3.0'
+              jna_ensure: '3.0',
             }
           end
 

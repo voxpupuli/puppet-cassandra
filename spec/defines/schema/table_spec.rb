@@ -23,13 +23,13 @@ describe 'cassandra::schema::table' do
                 'top_scores' => 'list<int>',
                 'todo' => 'map<timestamp, text>',
                 'COLLECTION-TYPE' => 'tuple<int, text,text>',
-                'PRIMARY KEY' => '(userid)'
+                'PRIMARY KEY' => '(userid)',
               },
             options:
               [
                 'COMPACT STORAGE',
-                'ID=\'5a1c395e-b41f-11e5-9f22-ba0be0483c18\''
-              ]
+                'ID=\'5a1c395e-b41f-11e5-9f22-ba0be0483c18\'',
+              ],
           }
         end
 
@@ -44,7 +44,7 @@ describe 'cassandra::schema::table' do
           is_expected.to contain_class('cassandra::schema')
           is_expected.to contain_exec(exec_command).with(
             unless: read_command,
-            require: 'Exec[cassandra::schema connection test]'
+            require: 'Exec[cassandra::schema connection test]',
           )
         end
       end
@@ -55,7 +55,7 @@ describe 'cassandra::schema::table' do
         let(:params) do
           {
             keyspace: 'Excelsior',
-            ensure: 'absent'
+            ensure: 'absent',
           }
         end
 
@@ -66,7 +66,7 @@ describe 'cassandra::schema::table' do
           is_expected.to compile.with_all_deps
           is_expected.to contain_exec(exec_command).with(
             onlyif: read_command,
-            require: 'Exec[cassandra::schema connection test]'
+            require: 'Exec[cassandra::schema connection test]',
           )
         end
       end
@@ -75,7 +75,7 @@ describe 'cassandra::schema::table' do
         let(:title) { 'foobar' }
         let(:params) do
           {
-            ensure: 'latest'
+            ensure: 'latest',
           }
         end
 

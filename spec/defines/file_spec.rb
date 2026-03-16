@@ -17,31 +17,31 @@ describe 'cassandra::file' do
             file_lines: {
               'MAX_HEAP_SIZE' => {
                 'line' => 'MAX_HEAP_SIZE=4G',
-                'match' => '^#?MAX_HEAP_SIZE=.*'
+                'match' => '^#?MAX_HEAP_SIZE=.*',
               },
               'HEAP_NEWSIZE' => {
                 'line'  => 'HEAP_NEWSIZE=300M',
-                'match' => '^#?HEAP_NEWSIZE=.*'
-              }
-            }
+                'match' => '^#?HEAP_NEWSIZE=.*',
+              },
+            },
           }
         end
 
         it { is_expected.to compile.with_all_deps }
 
         it do
-          is_expected.to contain_cassandra__file('cassandra-env.sh').
-            with(
+          is_expected.to contain_cassandra__file('cassandra-env.sh')
+            .with(
               file_lines: {
                 'MAX_HEAP_SIZE' => {
                   'line' => 'MAX_HEAP_SIZE=4G',
-                  'match' => '^#?MAX_HEAP_SIZE=.*'
+                  'match' => '^#?MAX_HEAP_SIZE=.*',
                 },
                 'HEAP_NEWSIZE' => {
                   'line'  => 'HEAP_NEWSIZE=300M',
-                  'match' => '^#?HEAP_NEWSIZE=.*'
-                }
-              }
+                  'match' => '^#?HEAP_NEWSIZE=.*',
+                },
+              },
             )
         end
 
@@ -65,23 +65,23 @@ describe 'cassandra::file' do
             file_lines: {
               'MAX_HEAP_SIZE' => {
                 'line' => 'MAX_HEAP_SIZE=20G',
-                'match' => '^#?MAX_HEAP_SIZE=.*'
-              }
-            }
+                'match' => '^#?MAX_HEAP_SIZE=.*',
+              },
+            },
           }
         end
 
         it { is_expected.to compile.with_all_deps }
 
         it do
-          is_expected.to contain_cassandra__file('cassandra-env.sh').
-            with(
+          is_expected.to contain_cassandra__file('cassandra-env.sh')
+            .with(
               file_lines: {
                 'MAX_HEAP_SIZE' => {
                   'line' => 'MAX_HEAP_SIZE=20G',
-                  'match' => '^#?MAX_HEAP_SIZE=.*'
-                }
-              }
+                  'match' => '^#?MAX_HEAP_SIZE=.*',
+                },
+              },
             )
         end
 
@@ -106,9 +106,9 @@ describe 'cassandra::file' do
             file_lines: {
               'HEAP_NEWSIZE' => {
                 'line'  => 'HEAP_NEWSIZE=300M',
-                'match' => '^#?HEAP_NEWSIZE=.*'
-              }
-            }
+                'match' => '^#?HEAP_NEWSIZE=.*',
+              },
+            },
           }
         end
 
@@ -119,16 +119,16 @@ describe 'cassandra::file' do
             ensure: 'directory',
             owner: 'cassandra',
             group: 'cassandra',
-            mode: '0755'
+            mode: '0755',
           )
-          is_expected.to contain_cassandra__file('cassandra-env.sh').
-            with(
+          is_expected.to contain_cassandra__file('cassandra-env.sh')
+            .with(
               file_lines: {
                 'HEAP_NEWSIZE' => {
                   'line'  => 'HEAP_NEWSIZE=300M',
-                  'match' => '^#?HEAP_NEWSIZE=.*'
-                }
-              }
+                  'match' => '^#?HEAP_NEWSIZE=.*',
+                },
+              },
             )
         end
 

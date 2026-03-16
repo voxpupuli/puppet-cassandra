@@ -20,7 +20,7 @@ describe 'cassandra::schema' do
             returns: 0,
             tries: 6,
             try_sleep: 30,
-            unless: read_command
+            unless: read_command,
           )
         end
       end
@@ -32,7 +32,7 @@ describe 'cassandra::schema' do
 
         let(:params) do
           {
-            cqlsh_client_config: '/root/.puppetcqlshrc'
+            cqlsh_client_config: '/root/.puppetcqlshrc',
           }
         end
 
@@ -44,7 +44,7 @@ describe 'cassandra::schema' do
             group: 0,
             mode: '0600',
             owner: 0,
-            content: %r{username = cassandra}
+            content: %r{username = cassandra},
           ).that_comes_before('Exec[cassandra::schema connection test]')
 
           is_expected.to contain_exec('cassandra::schema connection test').with(
@@ -52,7 +52,7 @@ describe 'cassandra::schema' do
             returns: 0,
             tries: 6,
             try_sleep: 30,
-            unless: read_command
+            unless: read_command,
           )
         end
       end
@@ -61,7 +61,7 @@ describe 'cassandra::schema' do
         let(:params) do
           {
             cqlsh_client_config: '/root/.puppetcqlshrc',
-            cqlsh_password: 'topsecret'
+            cqlsh_password: 'topsecret',
           }
         end
 
@@ -71,7 +71,7 @@ describe 'cassandra::schema' do
           is_expected.to contain_file('/root/.puppetcqlshrc').with(
             ensure: 'file',
             mode: '0600',
-            content: %r{password = topsecret}
+            content: %r{password = topsecret},
           )
 
           is_expected.to contain_exec('cassandra::schema connection test').with(
@@ -79,7 +79,7 @@ describe 'cassandra::schema' do
             returns: 0,
             tries: 6,
             try_sleep: 30,
-            unless: read_command
+            unless: read_command,
           )
         end
       end
@@ -87,7 +87,7 @@ describe 'cassandra::schema' do
       context 'with password and without cqlsh_client_config' do
         let(:params) do
           {
-            cqlsh_password: 'topsecret'
+            cqlsh_password: 'topsecret',
           }
         end
 
@@ -99,7 +99,7 @@ describe 'cassandra::schema' do
             returns: 0,
             tries: 6,
             try_sleep: 30,
-            unless: read_command
+            unless: read_command,
           )
         end
       end

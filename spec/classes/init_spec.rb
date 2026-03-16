@@ -20,7 +20,7 @@ describe 'cassandra' do
       context 'with service_refresh => false' do
         let(:params) do
           {
-            service_refresh: false
+            service_refresh: false,
           }
         end
 
