@@ -1090,4 +1090,3 @@ Data type: `Boolean`
 Whether the user should be a super user.
 
 Default value: `false`
-
